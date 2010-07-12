@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{3C34E2F0-44AE-4A32-B715-2C2080418A40}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>cnako2</RootNamespace>
+    <AssemblyName>cnako2</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Libnako\Parser\NakoILWriter.cs" />
+    <Compile Include="Libnako\Parser\NakoNodeCalc.cs" />
+    <Compile Include="Libnako\Parser\NakoNodeConst.cs" />
+    <Compile Include="Libnako\Parser\NakoNodeLet.cs" />
+    <Compile Include="Libnako\Parser\NakoNodeList.cs" />
+    <Compile Include="Libnako\Parser\NakoParserBase.cs" />
+    <Compile Include="Libnako\Parser\NakoParserExcept.cs" />
+    <Compile Include="Libnako\Parser\NakoTokenizerExcept.cs" />
+    <Compile Include="Libnako\Parser\NakoDic.cs" />
+    <Compile Include="Libnako\Parser\NakoHalfFlag.cs" />
+    <Compile Include="Libnako\Parser\NakoJosi.cs" />
+    <Compile Include="Libnako\Parser\NakoLoader.cs" />
+    <Compile Include="Libnako\Parser\NakoNamespace.cs" />
+    <Compile Include="Libnako\Parser\NakoNode.cs" />
+    <Compile Include="Libnako\Parser\NakoToken.cs" />
+    <Compile Include="Libnako\Parser\NakoParser.cs" />
+    <Compile Include="Libnako\Parser\NakoTokenizer.cs" />
+    <Compile Include="Libnako\Parser\NakoTokenierBase.cs" />
+    <Compile Include="Libnako\Parser\NakoTokenList.cs" />
+    <Compile Include="Libnako\Parser\NodeType.cs" />
+    <Compile Include="Libnako\Parser\TokenType.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Libnako\Parser\NodeType.txt" />
+    <Content Include="Libnako\Parser\TokenType.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
