@@ -42,6 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Libnako\Parser\NakoILCode.cs" />
+    <Compile Include="Libnako\Parser\NakoILCodeList.cs" />
+    <Compile Include="Libnako\Parser\NakoILType.cs" />
     <Compile Include="Libnako\Parser\NakoILWriter.cs" />
     <Compile Include="Libnako\Parser\NakoNodeCalc.cs" />
     <Compile Include="Libnako\Parser\NakoNodeConst.cs" />
@@ -49,6 +52,8 @@
     <Compile Include="Libnako\Parser\NakoNodeList.cs" />
     <Compile Include="Libnako\Parser\NakoParserBase.cs" />
     <Compile Include="Libnako\Parser\NakoParserExcept.cs" />
+    <Compile Include="Libnako\Parser\NakoRunner.cs" />
+    <Compile Include="Libnako\Parser\NakoTokenizerBase.cs" />
     <Compile Include="Libnako\Parser\NakoTokenizerExcept.cs" />
     <Compile Include="Libnako\Parser\NakoDic.cs" />
     <Compile Include="Libnako\Parser\NakoHalfFlag.cs" />
@@ -59,7 +64,6 @@
     <Compile Include="Libnako\Parser\NakoToken.cs" />
     <Compile Include="Libnako\Parser\NakoParser.cs" />
     <Compile Include="Libnako\Parser\NakoTokenizer.cs" />
-    <Compile Include="Libnako\Parser\NakoTokenierBase.cs" />
     <Compile Include="Libnako\Parser\NakoTokenList.cs" />
     <Compile Include="Libnako\Parser\NodeType.cs" />
     <Compile Include="Libnako\Parser\TokenType.cs" />
@@ -71,6 +75,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Libnako\Parser\NodeType.txt" />
+    <Content Include="Libnako\Parser\NakoILType.txt" />
     <Content Include="Libnako\Parser\TokenType.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
