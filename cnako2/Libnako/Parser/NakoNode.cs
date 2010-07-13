@@ -62,5 +62,20 @@ namespace Libnako.Parser
         {
             return NodeType.GetNodeName(type);
         }
+
+        public virtual void Eval()
+        {
+            EvalSelf();
+            EvalChildren();
+        }
+
+        protected virtual void EvalSelf()
+        {
+        }
+
+        protected virtual void EvalChildren()
+        {
+            if (!hasChildren()) return;
+        }
     }
 }
