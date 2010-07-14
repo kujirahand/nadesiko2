@@ -9,18 +9,24 @@ namespace Libnako.Parser
     /// </summary>
     public class NakoDic : Dictionary<string, int>
     {
+        /// <summary>
+        /// Singleton でインスタンス管理
+        /// </summary>
+        /// <returns>唯一のNakoDicインスタンス</returns>
+        public static NakoDic Instance
+        {
+            get
+            {
+                if (NakoDic.instance == null)
+                {
+                    NakoDic.instance = new NakoDic();
+                }
+                return NakoDic.instance;
+            }
+        }
         private static NakoDic instance = null;
 
-        public static NakoDic GetInstance()
-        {
-            if (NakoDic.instance == null)
-            {
-                NakoDic.instance = new NakoDic();
-            }
-            return NakoDic.instance;
-        }
-
-        public NakoDic()
+        private NakoDic()
         {
             Init();
         }
