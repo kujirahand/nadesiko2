@@ -12,7 +12,7 @@ namespace Libnako.Parser
 
         public static NakoILCode newNop() {
             NakoILCode c = new NakoILCode();
-            c.type = NakoILType.I_NOP;
+            c.type = NakoILType.NOP;
             return c;
         }
     }

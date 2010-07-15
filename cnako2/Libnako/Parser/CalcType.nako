@@ -3,23 +3,24 @@
 
 R=""
 S=""
+T=""
 N=0
-「NakoILType.txt」を開く
+「CalcType.txt」を開く
 SJIS変換
 反復
 　　対象＝トリム（対象）
-　　もし、対象＝「」ならば
+　　対象のタブを「 」に置換して対象に代入。
+　　もし、対象＝空ならば、
 　　　　R=R&"{~}"
 　　　　続ける
 　　もし、LEFT(対象,2)＝「//」ならば
 　　　R=R&「        {対象}{~}」
 　　違えば
-　　　　NAME=対象の「 」まで切り取る
-　　　　PARAM=対象の「//」まで切り取ってトリム
-　　　　コメント＝対象をトリム
-　　　　NN="= "&Nを(20-(NAMEの文字数))で文字列右寄せ
-　　　　R=R&「        public const int {NAME} {NN}; // {PARAM} {コメント}{~}」
-　　　　S=S&「"{NAME}",」
+　　　　M＝対象から「 」まで切り取る。
+　　　　P＝対象をトリム
+　　　　R=R&「        public const int {M} = {N}; // {P}{~}」
+　　　　S=S&「"{対象}",」
+　　　　T=T&「        case CalcType.{M}: c.type = NakoILType.{M}; break;{~}」
 　　　　N=N+1
 　　もし、N%10 = 9ならば
 　　　　S=S&改行
@@ -31,7 +32,7 @@ using System.Text;
 
 namespace Libnako.Parser
 {
-    public class NakoILType
+    public class CalcType
     {
         // Define Token
 //[[TOKEN_DEFINE]]
@@ -50,13 +51,16 @@ namespace Libnako.Parser
                 return "UNKNOWN";
             }
         }
-
     }
+/*
+[[CASE]]
+*/
 }
 』
 SRC=SRCの「//[[TOKEN_DEFINE]]」をRに置換
 SRC=SRCの「//[[TOKEN_NAME]]」をSに置換
+SRC=SRCの「[[CASE]]」をTに置換
 #SRCをメモ記入。
 SRC=SRCをSJIS_UTF8変換
-SRCを「NakoILType.cs」に保存。
+SRCを「CalcType.cs」に保存。
 終わる

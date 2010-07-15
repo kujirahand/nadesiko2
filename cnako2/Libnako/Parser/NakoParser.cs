@@ -157,8 +157,8 @@ namespace Libnako.Parser
             {
                 tok.Save();
                 node.calc_type = 
-                    Accept(TokenType.T_MUL) ? NakoNodeCalc.CalcType.Mul
-                                            : NakoNodeCalc.CalcType.Div;
+                    Accept(TokenType.T_MUL) ? CalcType.MUL
+                                            : CalcType.DIV;
                 tok.MoveNext();
                 if (!_calc_formula())
                 {
@@ -190,8 +190,8 @@ namespace Libnako.Parser
             if (Accept(TokenType.T_PLUS) || Accept(TokenType.T_MINUS))
             {
                 node.calc_type =
-                    Accept(TokenType.T_PLUS) ? NakoNodeCalc.CalcType.Plus
-                                             : NakoNodeCalc.CalcType.Minus;
+                    Accept(TokenType.T_PLUS) ? CalcType.PLUS
+                                             : CalcType.MINUS;
                 tok.Save();
                 tok.MoveNext();
                 if (!_calc_expr())
@@ -233,12 +233,12 @@ namespace Libnako.Parser
             {
                 switch (tok.CurrentToken.type)
                 {
-                    case TokenType.T_GT: node.calc_type = NakoNodeCalc.CalcType.Gt; break;
-                    case TokenType.T_LT: node.calc_type = NakoNodeCalc.CalcType.Lt; break;
-                    case TokenType.T_GT_EQ: node.calc_type = NakoNodeCalc.CalcType.GtEq; break;
-                    case TokenType.T_LT_EQ: node.calc_type = NakoNodeCalc.CalcType.LtEq; break;
-                    case TokenType.T_EQ: node.calc_type = NakoNodeCalc.CalcType.Eq; break;
-                    case TokenType.T_NOT_EQ: node.calc_type = NakoNodeCalc.CalcType.NotEq; break;
+                    case TokenType.T_GT: node.calc_type = CalcType.GT; break;
+                    case TokenType.T_LT: node.calc_type = CalcType.LT; break;
+                    case TokenType.T_GT_EQ: node.calc_type = CalcType.GT_EQ; break;
+                    case TokenType.T_LT_EQ: node.calc_type = CalcType.LT_EQ; break;
+                    case TokenType.T_EQ: node.calc_type = CalcType.EQ; break;
+                    case TokenType.T_NOT_EQ: node.calc_type = CalcType.NOT_EQ; break;
                 }
                 tok.Save();
                 tok.MoveNext();
@@ -268,7 +268,7 @@ namespace Libnako.Parser
 
             if (Accept(TokenType.T_MINUS))
             {
-                node.calc_type = NakoNodeCalc.CalcType.Neg;
+                node.calc_type = CalcType.NEG;
                 tok.MoveNext();
                 if (!_calc_fact())
                 {

@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Text;
 using Libnako.Parser;
 
+using System.Reflection;
+using System.Reflection.Emit;
+
 namespace cnako
 {
     class Program
     {
         static void Main(string[] args)
         {
+            test();
             NakoTokenizer tok = new NakoTokenizer(null);
             Boolean r;
             tok.Source = "1+2*3";
@@ -38,5 +42,13 @@ namespace cnako
             Console.WriteLine("End.");
             Console.ReadLine();
         }
+
+        static void test()
+        {
+            int a = 30;
+            a++;
+            Console.WriteLine(a);
+        }
     }
+
 }

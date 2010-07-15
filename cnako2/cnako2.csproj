@@ -42,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Libnako\Interpreter\NakoInterpreter.cs" />
+    <Compile Include="Libnako\Parser\CalcType.cs" />
     <Compile Include="Libnako\Parser\NakoILCode.cs" />
     <Compile Include="Libnako\Parser\NakoILCodeList.cs" />
     <Compile Include="Libnako\Parser\NakoILType.cs" />
@@ -52,7 +54,6 @@
     <Compile Include="Libnako\Parser\NakoNodeList.cs" />
     <Compile Include="Libnako\Parser\NakoParserBase.cs" />
     <Compile Include="Libnako\Parser\NakoParserExcept.cs" />
-    <Compile Include="Libnako\Parser\NakoRunner.cs" />
     <Compile Include="Libnako\Parser\NakoTokenizerBase.cs" />
     <Compile Include="Libnako\Parser\NakoTokenizerExcept.cs" />
     <Compile Include="Libnako\Parser\NakoDic.cs" />
@@ -76,8 +77,10 @@
   <ItemGroup>
     <Content Include="Libnako\Parser\NodeType.txt" />
     <Content Include="Libnako\Parser\NakoILType.txt" />
+    <Content Include="Libnako\Parser\CalcType.txt" />
     <Content Include="Libnako\Parser\TokenType.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

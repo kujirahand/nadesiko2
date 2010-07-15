@@ -7,18 +7,9 @@ namespace Libnako.Parser
 {
     public class NakoNodeCalc : NakoNode
     {
-        public enum CalcType { 
-            Nop = 0, Plus, Minus, Mul, Div, Mod, Power, Neg,
-            Eq, NotEq, Gt, GtEq, Lt, LtEq
-        };
-        public static String[] CalcTypeName = new String[] {
-            "Nop", "Plus", "Minus", "Mul", "Div", "Mod", "Power", "Neg",
-            "Eq","NotEq", "Gt", "GtEq", "Lt", "LtEq"
-        };
-
         public NakoNode nodeL;
         public NakoNode nodeR;
-        public CalcType calc_type = CalcType.Nop; 
+        public int calc_type = CalcType.NOP;
 
         public NakoNodeCalc()
         {
@@ -30,7 +21,7 @@ namespace Libnako.Parser
             String r = "";
             r += "(";
             r += base.ToTypeString() + ":";
-            r += CalcTypeName[(int)calc_type] + " ";
+            r += CalcType.GetTypeName((int)calc_type) + " ";
             if (nodeL != null)
             {
                 r += "(";

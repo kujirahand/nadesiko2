@@ -11,3 +11,4 @@ http://sourceforge.net/projects/nunit/
 
 ※NUnitがないとビルドできません。
 
+TestNako プロジェクトの参照設定で nunit.framework に▲で警告マークがついているなら、一度、これを削除して、改めて NUnit を追加し直します。
