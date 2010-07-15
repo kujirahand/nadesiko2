@@ -190,8 +190,8 @@ namespace Libnako.Parser
             if (Accept(TokenType.T_PLUS) || Accept(TokenType.T_MINUS))
             {
                 node.calc_type =
-                    Accept(TokenType.T_PLUS) ? CalcType.PLUS
-                                             : CalcType.MINUS;
+                    Accept(TokenType.T_PLUS) ? CalcType.ADD
+                                             : CalcType.SUB;
                 tok.Save();
                 tok.MoveNext();
                 if (!_calc_expr())

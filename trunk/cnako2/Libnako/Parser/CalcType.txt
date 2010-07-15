@@ -1,12 +1,13 @@
 ﻿//
 NOP		???
 //
-PLUS	+
-MINUS	-
+ADD		+
+SUB		-
 MUL		*
 DIV		/
 MOD		%
 POWER	^
+ADD_STR &
 // comp
 EQ		==
 NOT_EQ	<> !=

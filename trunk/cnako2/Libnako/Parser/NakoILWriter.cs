@@ -34,6 +34,15 @@ namespace Libnako.Parser
                 case NodeType.N_CALC:
                     newCalc((NakoNodeCalc)node);
                     break;
+                case NodeType.N_INT:
+                    result.Add(new NakoILCode(NakoILType.LD_CONST_INT, node.value));
+                    break;
+                case NodeType.N_NUMBER:
+                    result.Add(new NakoILCode(NakoILType.LD_CONST_REAL, node.value));
+                    break;
+                case NodeType.N_STRING:
+                    result.Add(new NakoILCode(NakoILType.LD_CONST_STR, node.value));
+                    break;
             }
             // ---
             if (!node.hasChildren()) return;
@@ -48,13 +57,11 @@ namespace Libnako.Parser
         private void newCalc(NakoNodeCalc node)
         {
             NakoILCode c = new NakoILCode();
-
             switch (node.calc_type)
             {
-                case CalcType.NOP:
-                    throw new Exception("NOP");
-                case CalcType.PLUS:     c.type = NakoILType.ADD; break;
-                case CalcType.MINUS:    c.type = NakoILType.SUB; break;
+                case CalcType.NOP: throw new Exception("NOP");
+                case CalcType.ADD: c.type = NakoILType.ADD; break;
+                case CalcType.SUB: c.type = NakoILType.SUB; break;
                 case CalcType.MUL: c.type = NakoILType.MUL; break;
                 case CalcType.DIV: c.type = NakoILType.DIV; break;
                 case CalcType.MOD: c.type = NakoILType.MOD; break;
@@ -70,6 +77,7 @@ namespace Libnako.Parser
                 case CalcType.XOR: c.type = NakoILType.XOR; break;
                 case CalcType.NEG: c.type = NakoILType.NEG; break;
             }
+            result.Add(c);
         }
     }
 }

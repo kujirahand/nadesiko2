@@ -10,7 +10,18 @@ namespace Libnako.Parser
         public int type = 0;
         public Object value = null;
 
-        public static NakoILCode newNop() {
+        public NakoILCode()
+        {
+        }
+
+        public NakoILCode(int type, Object value)
+        {
+            this.type = type;
+            this.value = value;
+        }
+
+        public static NakoILCode newNop() 
+        {
             NakoILCode c = new NakoILCode();
             c.type = NakoILType.NOP;
             return c;

@@ -3,6 +3,7 @@
 
 R=""
 S=""
+T=""
 N=0
 「NakoILType.txt」を開く
 SJIS変換
@@ -20,6 +21,7 @@ SJIS変換
 　　　　NN="= "&Nを(20-(NAMEの文字数))で文字列右寄せ
 　　　　R=R&「        public const int {NAME} {NN}; // {PARAM} {コメント}{~}」
 　　　　S=S&「"{NAME}",」
+　　　　T=T&「        case NakoILType.{NAME}:{~}」
 　　　　N=N+1
 　　もし、N%10 = 9ならば
 　　　　S=S&改行
@@ -50,12 +52,15 @@ namespace Libnako.Parser
                 return "UNKNOWN";
             }
         }
-
+/*
+[[CASE]]
+*/
     }
 }
 』
 SRC=SRCの「//[[TOKEN_DEFINE]]」をRに置換
 SRC=SRCの「//[[TOKEN_NAME]]」をSに置換
+SRC=SRCの「[[CASE]]」をTに置換
 #SRCをメモ記入。
 SRC=SRCをSJIS_UTF8変換
 SRCを「NakoILType.cs」に保存。
