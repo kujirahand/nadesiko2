@@ -78,6 +78,41 @@ namespace Libnako.Parser
                 return "UNKNOWN";
             }
         }
+/*
+        case NakoILType.NOP:
+        case NakoILType.LD_CONST_INT:
+        case NakoILType.LD_CONST_REAL:
+        case NakoILType.LD_CONST_STR:
+        case NakoILType.LD_GLOBAL:
+        case NakoILType.LD_LOCAL:
+        case NakoILType.ST_GLOBAL:
+        case NakoILType.ST_LOCAL:
+        case NakoILType.NEW_ARR:
+        case NakoILType.ST_ARR_ELEM:
+        case NakoILType.LD_ARR_ELEM:
+        case NakoILType.ADD:
+        case NakoILType.SUB:
+        case NakoILType.MUL:
+        case NakoILType.DIV:
+        case NakoILType.MOD:
+        case NakoILType.POWER:
+        case NakoILType.EQ:
+        case NakoILType.NOT_EQ:
+        case NakoILType.GT:
+        case NakoILType.GT_EQ:
+        case NakoILType.LT:
+        case NakoILType.LT_EQ:
+        case NakoILType.INC:
+        case NakoILType.DEC:
+        case NakoILType.NEG:
+        case NakoILType.AND:
+        case NakoILType.OR:
+        case NakoILType.XOR:
+        case NakoILType.NOT		:
+        case NakoILType.JUMP:
+        case NakoILType.CALL:
+        case NakoILType.RET:
 
+*/
     }
 }
