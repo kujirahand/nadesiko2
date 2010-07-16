@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Libnako.Parser;
+using Libnako.Interpreter;
 
 using System.Reflection;
 using System.Reflection.Emit;
@@ -12,49 +13,20 @@ namespace cnako
     {
         static void Main(string[] args)
         {
-            Boolean r;
-
-            // 1
-            NakoNamespace ns = new NakoNamespace(null);
+            NakoNamespace ns = new NakoNamespace();
             NakoILWriter w = new NakoILWriter();
+            NakoInterpreter runner = new NakoInterpreter();
+            Object o;
+
             ns.source = "1+2*3";
             ns.Tokenize();
             ns.ParseOnlyValue();
-            Console.WriteLine(ns.TopNode.hasChildren());
-            r = ns.TopNode.Children.checkNodeType(new int[] {
-                NodeType.N_CALC
-            });
-            Console.WriteLine(r);
             w.Write(ns.TopNode);
-            Console.WriteLine(w.Result.ToTypeString());
-            //
+            runner.Run(w.Result);
+            o = runner.StackTop;
+            Console.WriteLine(o);
 
 
-            test();
-            NakoTokenizer tok = new NakoTokenizer(null);
-            tok.Source = "1+2*3";
-            tok.Tokenize();
-            r = tok.CheckTokenType(new int[] { 
-                TokenType.T_INT,
-                TokenType.T_PLUS,
-                TokenType.T_INT,
-                TokenType.T_MUL,
-                TokenType.T_INT
-            });
-            Console.WriteLine(r);
-
-            Console.WriteLine(
-                tok.Tokens.toTypeString()
-                );
-            NakoParser parser = new NakoParser(tok.Tokens);
-            
-            parser.ParseOnlyValue();
-            if (parser.topNode.hasChildren())
-            {
-                Console.WriteLine(
-                    parser.topNode.Children.toNodeTypeString()
-                );
-            }
             //
             Console.WriteLine("End.");
             Console.ReadLine();
