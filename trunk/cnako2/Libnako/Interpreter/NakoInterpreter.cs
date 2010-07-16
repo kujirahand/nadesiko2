@@ -15,8 +15,10 @@ namespace Libnako.Interpreter
     {
         protected Stack<Object> stack;
         protected NakoILCodeList list = null;
+        protected NakoVariables globalVar;
+        protected NakoVariables localVar;
 
-        public String PrintLog = "";
+        public String PrintLog;
         public Boolean UseConsoleOut = false;
 
         public NakoInterpreter(NakoILCodeList list = null)
@@ -25,9 +27,12 @@ namespace Libnako.Interpreter
             Init();
         }
 
-        protected void Init()
+        public void Init()
         {
             stack = new Stack<Object>();
+            localVar = new NakoVariables();
+            globalVar = new NakoVariables();
+            PrintLog = "";
         }
 
         public Boolean Run(NakoILCodeList list = null)
@@ -62,10 +67,10 @@ namespace Libnako.Interpreter
                 case NakoILType.LD_CONST_INT:   stack.Push(code.value); break;
                 case NakoILType.LD_CONST_REAL:  stack.Push(code.value); break;
                 case NakoILType.LD_CONST_STR:   stack.Push(code.value); break;
-                case NakoILType.LD_GLOBAL:
-                case NakoILType.LD_LOCAL:
-                case NakoILType.ST_GLOBAL:
-                case NakoILType.ST_LOCAL:
+                case NakoILType.LD_GLOBAL:      ld_global((int)code.value); break;
+                case NakoILType.LD_LOCAL:       ld_local((int)code.value); break;
+                case NakoILType.ST_GLOBAL:      st_global((int)code.value); break;
+                case NakoILType.ST_LOCAL:       st_local((int)code.value); break;
                 case NakoILType.NEW_ARR:
                 case NakoILType.ST_ARR_ELEM:
                 case NakoILType.LD_ARR_ELEM:
@@ -96,6 +101,30 @@ namespace Libnako.Interpreter
                     break;
                 case NakoILType.PRINT: exec_print(); break;
             }
+        }
+
+        private void st_local(int no)
+        {
+            Object p = stack.Pop();
+            localVar.SetValue(no, p);
+        }
+
+        private void st_global(int no)
+        {
+            Object p = stack.Pop();
+            globalVar.SetValue(no, p);
+        }
+
+        private void ld_local(int no)
+        {
+            Object p = localVar.GetValue(no);
+            stack.Push(p);
+        }
+
+        private void ld_global(int no)
+        {
+            Object p = globalVar.GetValue(no);
+            stack.Push(p);
         }
 
         private void exec_print()

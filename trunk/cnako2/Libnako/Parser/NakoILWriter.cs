@@ -19,6 +19,11 @@ namespace Libnako.Parser
         public NakoILWriter(NakoNode topNode = null)
         {
             this.topNode = topNode;
+            Init();
+        }
+
+        public void Init()
+        {
             this.result = new NakoILCodeList();
         }
 
@@ -51,6 +56,15 @@ namespace Libnako.Parser
                 case NodeType.N_PRINT:
                     _print(node);
                     break;
+                case NodeType.N_ST_VARIABLE:
+                    _setVariable((NakoNodeVariable)node);
+                    break;
+                case NodeType.N_LET:
+                    _let((NakoNodeLet)node);
+                    break;
+                case NodeType.N_LD_VARIABLE:
+                    _getVariable((NakoNodeVariable)node);
+                    break;
             }
             // ---
             if (!node.hasChildren()) return;
@@ -62,9 +76,62 @@ namespace Libnako.Parser
             //
         }
 
+        private void _let(NakoNodeLet node)
+        {
+            NakoNodeVariable var = node.nodeVar;
+            NakoNode value = node.Children[0];
+            NakoILCode st = new NakoILCode();
+
+            if (var.useElement)
+            {
+                // TODO: 配列アクセス
+            }
+            else
+            {
+                Write_r(value);
+                if (var.scope == NakoVariableScope.Global)
+                {
+                    st.type = NakoILType.ST_GLOBAL;
+                }
+                else
+                {
+                    st.type = NakoILType.ST_LOCAL;
+                }
+                st.value = var.varNo;
+                result.Add(st);
+            }
+        }
+
+        private void _setVariable(NakoNodeVariable node)
+        {
+            // _let() で処理されるのでここでは何もしない
+        }
+
+        private void _getVariable(NakoNodeVariable node)
+        {
+            NakoILCode ld = new NakoILCode();
+            if (node.useElement)
+            {
+                // TODO: 配列アクセス
+            }
+            else
+            {
+                if (node.scope == NakoVariableScope.Global)
+                {
+                    ld.type = NakoILType.LD_GLOBAL;
+                }
+                else
+                {
+                    ld.type = NakoILType.LD_LOCAL;
+                }
+                ld.value = node.varNo;
+                result.Add(ld);
+            }
+        }
+
         private void _print(NakoNode node)
         {
-            NakoNode v = node.Children.Shift();
+            NakoNode v = node.Children[0];
             Write_r(v);
             result.Add(new NakoILCode(NakoILType.PRINT, null));
         }

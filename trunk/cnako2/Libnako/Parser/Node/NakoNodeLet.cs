@@ -7,8 +7,7 @@ namespace Libnako.Parser
 {
     public class NakoNodeLet : NakoNode
     {
-        public NakoNode nodeVar;
-        public NakoNode nodeValue;
+        public NakoNodeVariable nodeVar;
 
         public NakoNodeLet()
         {

@@ -28,8 +28,8 @@ namespace Libnako.Parser
             while (true)
             {
                 if (tok.IsEOF()) break;
-                if (!_block()) break;
-                tok.MoveNext();
+                if (_block()) continue;
+                throw new NakoParserExcept("ブロックの解析エラー");
             }
         }
 
@@ -70,15 +70,15 @@ namespace Libnako.Parser
             return true;
         }
 
-        // _let : _variable T_EQ _value
+        // _let : _setVariable T_EQ _value
         private Boolean _let()
         {
-            if (!_variable())
+            if (!_setVariable())
             {
                 return false;
             }
             NakoNodeLet node = new NakoNodeLet();
-            node.nodeVar = lastNode;
+            node.nodeVar = (NakoNodeVariable)lastNode;
  
             if (!Accept(TokenType.T_EQ))
             {
@@ -92,16 +92,60 @@ namespace Libnako.Parser
                 tok.Restore();
                 throw new NakoParserExcept("代入文で値がありません。");
             }
-            node.nodeValue = lastNode;
-
+            node.AddChild(lastNode);
             parentNode.AddChild(node);
+            lastNode = node;
 
             tok.RemoveTop();
             return true;
         }
 
+        private void _variable__detectVariable(NakoNodeVariable n, String name)
+        {
+            // local ?
+            if (localVar.ContainsKey(name))
+            {
+                n.scope = NakoVariableScope.Local;
+                n.varNo = localVar[name];
+            }
+            else if (globalVar.ContainsKey(name))
+            {
+                n.scope = NakoVariableScope.Global;
+                n.varNo = globalVar[name];
+            }
+            else
+            {
+                n.scope = NakoVariableScope.Global;
+                n.varNo = globalVar.createName(name);
+            }
+        }
+
+        // _setVariable : T_WORD '[' T_VALUE ']'
+        //              | T_WORD ;
+        private Boolean _setVariable()
+        {
+            if (!Accept(TokenType.T_WORD)) return false;
+
+            // 配列アクセス
+            if (tok.NextTokenType == TokenType.T_BLACKETS_L)
+            {
+                // TODO
+                throw new NakoParserExcept("Not supported");
+            }
+
+            // 変数アクセス
+            NakoNodeVariable n = new NakoNodeVariable();
+            n.type = NodeType.N_ST_VARIABLE;
+            n.Token = tok.CurrentToken;
+            String name = (String)tok.CurrentToken.value;
+            _variable__detectVariable(n, name);
+            lastNode = n;
+            tok.MoveNext();
+            return true;
+        }
+
         // _variable : T_WORD '[' T_VALUE ']'
-        //           | T_WORD
+        //           | T_WORD ;
         private Boolean _variable()
         {
             if (!Accept(TokenType.T_WORD)) return false;
@@ -113,10 +157,13 @@ namespace Libnako.Parser
                 throw new NakoParserExcept("Not supported");
             }
 
-            // 普通の変数アクセス
-            NakoNode n = new NakoNode();
-            n.type = NodeType.N_VARIABLE;
+            // 変数アクセス
+            NakoNodeVariable n = new NakoNodeVariable();
+            n.type = NodeType.N_LD_VARIABLE;
             n.Token = tok.CurrentToken;
+
+            String name = (String)tok.CurrentToken.value;
+            _variable__detectVariable(n, name);
             lastNode = n;
             tok.MoveNext();
             return true;
