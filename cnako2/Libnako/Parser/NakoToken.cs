@@ -26,5 +26,10 @@ namespace Libnako.Parser
             this.level = level;
             this.type = type;
         }
+
+        public String ToStringForDebug()
+        {
+            return "[" + debug_type + ":" + value + "]" + josi + "(" + lineno + ")";
+        }
     }
 }

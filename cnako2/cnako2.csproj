@@ -43,18 +43,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Libnako\Interpreter\NakoInterpreter.cs" />
-    <Compile Include="Libnako\Interpreter\NakoValue.cs" />
+    <Compile Include="Libnako\Interpreter\NakoValueConveter.cs" />
     <Compile Include="Libnako\Interpreter\NakoVariables.cs" />
     <Compile Include="Libnako\Parser\CalcType.cs" />
+    <Compile Include="Libnako\Parser\NakoFuncArg.cs" />
     <Compile Include="Libnako\Parser\NakoILCode.cs" />
     <Compile Include="Libnako\Parser\NakoILCodeList.cs" />
     <Compile Include="Libnako\Parser\NakoILType.cs" />
     <Compile Include="Libnako\Parser\NakoILWriter.cs" />
     <Compile Include="Libnako\Parser\NakoNodeList.cs" />
     <Compile Include="Libnako\Parser\NakoParserBase.cs" />
-    <Compile Include="Libnako\Parser\NakoParserExcept.cs" />
+    <Compile Include="Libnako\Parser\NakoParserException.cs" />
     <Compile Include="Libnako\Parser\NakoTokenizerBase.cs" />
-    <Compile Include="Libnako\Parser\NakoTokenizerExcept.cs" />
     <Compile Include="Libnako\Parser\NakoDic.cs" />
     <Compile Include="Libnako\Parser\NakoHalfFlag.cs" />
     <Compile Include="Libnako\Parser\NakoJosi.cs" />
@@ -64,12 +64,14 @@
     <Compile Include="Libnako\Parser\NakoToken.cs" />
     <Compile Include="Libnako\Parser\NakoParser.cs" />
     <Compile Include="Libnako\Parser\NakoTokenizer.cs" />
+    <Compile Include="Libnako\Parser\NakoTokenizerException.cs" />
     <Compile Include="Libnako\Parser\NakoTokenList.cs" />
     <Compile Include="Libnako\Parser\NakoVariableNames.cs" />
     <Compile Include="Libnako\Parser\NakoVariableType.cs" />
     <Compile Include="Libnako\Parser\NodeType.cs" />
     <Compile Include="Libnako\Parser\Node\NakoNodeCalc.cs" />
     <Compile Include="Libnako\Parser\Node\NakoNodeConst.cs" />
+    <Compile Include="Libnako\Parser\Node\NakoNodeDefFunction.cs" />
     <Compile Include="Libnako\Parser\Node\NakoNodeLet.cs" />
     <Compile Include="Libnako\Parser\Node\NakoNodeVariable.cs" />
     <Compile Include="Libnako\Parser\TokenType.cs" />

@@ -147,7 +147,7 @@ namespace Libnako.Interpreter
 
         private Double ToDouble(Object v)
         {
-            return NakoValue.ToDouble(v);
+            return NakoValueConveter.ToDouble(v);
         }
 
         private Boolean IsBothInt(Object a, Object b)
@@ -158,33 +158,53 @@ namespace Libnako.Interpreter
 
         private Object calc_method_add(Object a, Object b)
         {
-            return (Object) (IsBothInt(a, b) 
-                ? ((int)a + (int)b)
-                : (ToDouble(a) + ToDouble(b)));
+            if (IsBothInt(a, b))
+            {
+                Int32 i = (Int32)a + (Int32)b;
+                return (Object)i;
+            }
+            else
+            {
+                Double d = ToDouble(a) + ToDouble(b);
+                return (Object)d;
+            }
         }
         private Object calc_method_sub(Object a, Object b)
         {
-            return (Object)(IsBothInt(a, b)
-                ? ((int)a - (int)b)
-                : (ToDouble(a) - ToDouble(b)));
+            if (IsBothInt(a, b))
+            {
+                Int32 i = (Int32)a - (Int32)b;
+                return (Object)i;
+            }
+            else
+            {
+                Double d = ToDouble(a) - ToDouble(b);
+                return (Object)d;
+            }
         }
         private Object calc_method_mul(Object a, Object b)
         {
-            return (Object)(IsBothInt(a, b)
-                ? ((int)a * (int)b)
-                : (ToDouble(a) * ToDouble(b)));
+            if (IsBothInt(a, b))
+            {
+                Int32 i = (Int32)a * (Int32)b;
+                return (Object)i;
+            }
+            else
+            {
+                Double d = ToDouble(a) * ToDouble(b);
+                return (Object)d;
+            }
         }
         private Object calc_method_div(Object a, Object b)
         {
-            return (Object)(IsBothInt(a, b)
-                ? ((int)a / (int)b)
-                : (ToDouble(a) / ToDouble(b)));
+            // "1 ÷ 2" のような場合を想定して、割り算は常に実数にすることにした
+            Double d = ToDouble(a) / ToDouble(b);
+            return (Object)d;
         }
         private Object calc_method_mod(Object a, Object b)
         {
-            return (Object)(IsBothInt(a, b)
-                ? ((int)a % (int)b)
-                : (ToDouble(a) % ToDouble(b)));
+            Int32 i = (Int32)a % (Int32)b;
+            return (Object)i;
         }
         private Object calc_method_power(Object a, Object b)
         {
