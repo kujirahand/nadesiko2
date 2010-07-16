@@ -14,50 +14,53 @@ namespace Libnako.Parser
         T_COMMENT = 2,
         T_EOL = 3,
         T_WORD = 4,
-        T_NUMBER = 5,
-        T_INT = 6,
-        T_STRING = 7,
-        T_STRING_EX = 8,
+        T_FUNCTION_NAME = 5,
+        T_NUMBER = 6,
+        T_INT = 7,
+        T_STRING = 8,
+        T_STRING_EX = 9,
         // Flow Controll
-        T_IF = 9,
-        T_WHILE = 10,
-        T_SWITCH = 11,
-        T_FOR = 12,
-        T_FOREACH = 13,
+        T_IF = 10,
+        T_WHILE = 11,
+        T_SWITCH = 12,
+        T_FOR = 13,
+        T_FOREACH = 14,
         //
-        T_THEN = 14,
-        T_KOKOMADE = 15,
+        T_THEN = 15,
+        T_KOKOMADE = 16,
         //
-        T_DEF_FUNCTION = 16,
-        T_DEF_GROUP = 17,
+        T_DEF_FUNCTION = 17,
+        T_DEF_GROUP = 18,
         // Flags
-        T_EQ = 18,
-        T_EQ_EQ = 19,
-        T_NOT_EQ = 20,
-        T_GT = 21,
-        T_GT_EQ = 22,
-        T_LT = 23,
-        T_LT_EQ = 24,
-        T_NOT = 25,
-        T_AND = 26,
-        T_AND_AND = 27,
-        T_PLUS = 28,
-        T_MINUS = 29,
-        T_MUL = 30,
-        T_DIV = 31,
-        T_MOD = 32,
-        T_POWER = 33,
+        T_EQ = 19,
+        T_EQ_EQ = 20,
+        T_NOT_EQ = 21,
+        T_GT = 22,
+        T_GT_EQ = 23,
+        T_LT = 24,
+        T_LT_EQ = 25,
+        T_NOT = 26,
+        T_AND = 27,
+        T_AND_AND = 28,
+        T_OR = 29,
+        T_OR_OR = 30,
+        T_PLUS = 31,
+        T_MINUS = 32,
+        T_MUL = 33,
+        T_DIV = 34,
+        T_MOD = 35,
+        T_POWER = 36,
         // 角カッコ
-        T_BLACKETS_L = 34,
-        T_BLACKETS_R = 35,
+        T_BLACKETS_L = 37,
+        T_BLACKETS_R = 38,
         // 丸括弧
-        T_PARENTHESES_L = 36,
-        T_PARENTHESES_R = 37,
+        T_PARENTHESES_L = 39,
+        T_PARENTHESES_R = 40,
         // 波括弧(中括弧)
-        T_BRANCES_L = 38,
-        T_BRANCES_R = 39,
+        T_BRANCES_L = 41,
+        T_BRANCES_R = 42,
         // DEBUG
-        T_PRINT = 40,
+        T_PRINT = 43,
 
         END_OF_TOKEN
     }
@@ -65,12 +68,13 @@ namespace Libnako.Parser
     {
         // Token Description
         public static String[] TypeName = new String[] {
-"T_UNKNOWN","T_RESERVED","T_COMMENT","T_EOL","T_WORD","T_NUMBER","T_INT","T_STRING","T_STRING_EX",
+"T_UNKNOWN","T_RESERVED","T_COMMENT","T_EOL","T_WORD","T_FUNCTION_NAME","T_NUMBER","T_INT","T_STRING",
+"T_STRING_EX","T_IF","T_WHILE","T_SWITCH","T_FOR","T_FOREACH","T_THEN","T_KOKOMADE","T_DEF_FUNCTION","T_DEF_GROUP",
 
-"T_IF","T_WHILE","T_SWITCH","T_FOR","T_FOREACH","T_THEN","T_KOKOMADE","T_DEF_FUNCTION","T_DEF_GROUP","T_EQ",
-"T_EQ_EQ","T_NOT_EQ","T_GT","T_GT_EQ","T_LT","T_LT_EQ","T_NOT","T_AND","T_AND_AND","T_PLUS",
-"T_MINUS","T_MUL","T_DIV","T_MOD","T_POWER","T_BLACKETS_L","T_BLACKETS_R","T_PARENTHESES_L","T_PARENTHESES_R","T_BRANCES_L",
-"T_BRANCES_R","T_PRINT",
+"T_EQ","T_EQ_EQ","T_NOT_EQ","T_GT","T_GT_EQ","T_LT","T_LT_EQ","T_NOT","T_AND","T_AND_AND",
+"T_OR","T_OR_OR","T_PLUS","T_MINUS","T_MUL","T_DIV","T_MOD","T_POWER","T_BLACKETS_L","T_BLACKETS_R",
+
+"T_PARENTHESES_L","T_PARENTHESES_R","T_BRANCES_L","T_BRANCES_R","T_PRINT",
         };
         // Description Method
         public static String GetTypeName(TokenType t)

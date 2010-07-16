@@ -18,22 +18,88 @@ namespace Libnako.Parser
 
         public void Tokenize()
         {
+            // 1回目の解析 --- トークンをひたすら区切る
+            TokenizeFirst();
+            // 2回目の解析 --- 関数宣言など辞書登録を行う
+            TokenizeAnalize();
+            // 3回目の解析 --- T_WORDを置き換える
+            TokenizeCheckWord();
+        }
+
+
+        /// <summary>
+        /// 関数宣言など辞書登録を行う
+        /// </summary>
+        protected void TokenizeAnalize()
+        {
+            tokens.MoveTop();
+            while (!tokens.IsEOF())
+            {
+                if (tokens.CurrentTokenType == TokenType.T_DEF_FUNCTION)
+                {
+                    TokenizeAnalize_DefFunction();
+                    continue;
+                }
+                tokens.MoveNext();
+            }
+        }
+
+        protected void TokenizeCheckWord()
+        {
+            // 予約語句のチェック
+            tokens.MoveTop();
+            while (!tokens.IsEOF())
+            {
+                if (tokens.CurrentTokenType == TokenType.T_WORD)
+                {
+                    NakoToken token = tokens.CurrentToken;
+                    if (NakoDic.Instance.ContainsKey(token.value))
+                    {
+                        token.type = NakoDic.Instance[token.value];
+                    }
+                }
+                tokens.MoveNext();
+            }
+        }
+        
+        protected void TokenizeAnalize_DefFunction()
+        {
+            tokens.MoveNext(); // skip '*'
+            // 引数宣言をスキップ
+            while (!tokens.IsEOF())
+            {
+                // 行末のトークンが関数名
+                if (tokens.CurrentTokenType == TokenType.T_WORD &&
+                    tokens.NextTokenType == TokenType.T_EOL)
+                {
+                    NakoToken t = tokens.CurrentToken;
+                    NakoDic.Instance[t.value] = TokenType.T_FUNCTION_NAME;
+                    t.type = TokenType.T_FUNCTION_NAME;
+                }
+                tokens.MoveNext();
+            }
+        }
+
+        /// <summary>
+        /// トークンをひたすらぶった切る！
+        /// </summary>
+        protected void TokenizeFirst()
+        {
             // [注意]
             // このメソッドでは Init() を呼んではいけない @see: NakoTokenizer.Tokenize_ExtractSTring()
-            // lineno が途中でセットされる場合がある
+            // 文字列展開中に lineno がセットされる場合がある
             while (!IsEOF())
             {
                 NakoToken token = GetToken();
                 if (token == null) continue;
                 last_token_type = token.type;
-                
+
                 // 文字列の展開があればここで処理してしまう
                 if (token.type == TokenType.T_STRING_EX)
                 {
                     Tokenize_ExtractSTring(token);
                     continue;
                 }
-
                 tokens.Add(token);
             }
         }
@@ -109,6 +175,19 @@ namespace Libnako.Parser
                     {
                         cur++;
                         token.type = TokenType.T_AND;
+                    }
+                    return token;
+                case '|':
+                    nc = NextChar;
+                    if (nc == '|')
+                    {
+                        cur += 2;
+                        token.type = TokenType.T_OR_OR;
+                    }
+                    else
+                    {
+                        cur++;
+                        token.type = TokenType.T_OR;
                     }
                     return token;
                 case '<':
@@ -206,12 +285,13 @@ namespace Libnako.Parser
                     cur++;
                     return token;
                 default:
-                    token = GetToken_NotFlag();
-                    if (token == null)
+                    NakoToken tt = GetToken_NotFlag();
+                    if (tt == null)
                     {
-                        throw new NakoTokenizerExcept("Not Define : " + CurrentChar);
+                        String msg = "未定義の文字列`" + CurrentChar + "'";
+                        throw new NakoTokenizerException(msg, token);
                     }
-                    return token;
+                    return tt;
             }
         }
 
@@ -348,10 +428,6 @@ namespace Libnako.Parser
                 break;
             }
             token.value = s;
-
-            // 予約語句のチェック
-            token.type = NakoDic.Instance.ContainsKey(s) ? NakoDic.Instance[s] : TokenType.T_WORD;
-
             return token;
         }
 
@@ -502,7 +578,7 @@ namespace Libnako.Parser
                             tmp += (Char)i_ex;
                             continue;
                         }
-                        new NakoTokenizerExcept("展開あり文字列内の利用できない￥メソッド:" + str_ex);
+                        new NakoTokenizerException("展開あり文字列内の利用できない`\\'メソッド:" + str_ex, t);
                     }
                     // string
                     NakoToken tt = new NakoToken(TokenType.T_STRING, t.lineno, t.level);
@@ -515,7 +591,7 @@ namespace Libnako.Parser
                     NakoTokenizer tok = new NakoTokenizer(str_ex);
                     tok.lineno = t.lineno;
                     tok.level = t.level;
-                    tok.Tokenize();
+                    tok.TokenizeFirst(); // とりあえず区切るだけ
                     foreach (NakoToken st in tok.tokens)
                     {
                         tokens.Add(st);

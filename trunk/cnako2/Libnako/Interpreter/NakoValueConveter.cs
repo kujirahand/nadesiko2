@@ -5,11 +5,11 @@ using System.Text;
 
 namespace Libnako.Interpreter
 {
-    public class NakoValue
+    public class NakoValueConveter
     {
         protected Object value = null;
 
-        public NakoValue(Object v)
+        public NakoValueConveter(Object v)
         {
             this.value = v;
         }
@@ -38,16 +38,18 @@ namespace Libnako.Interpreter
             Type t = value.GetType();
             if (t == typeof(Int32))
             {
-                return (Int32)value;
+                int tmpi = (Int32)value;
+                Double tmpd = (Double)tmpi;
+                return tmpd;
             }
             if (t == typeof(Double))
             {
-                return (Int32)((Double)value);
+                return (Double)value;
             }
             if (t == typeof(String))
             {
-                Int32 i;
-                if (Int32.TryParse((String)value, out i)) { return i; } else { return 0; }
+                Double i;
+                if (Double.TryParse((String)value, out i)) { return i; } else { return 0; }
             }
             return 0;
         }
