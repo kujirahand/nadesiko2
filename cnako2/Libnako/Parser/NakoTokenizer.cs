@@ -197,8 +197,21 @@ namespace Libnako.Parser
                     token.type = TokenType.T_POWER;
                     cur++;
                     return token;
+                case '(':
+                    token.type = TokenType.T_PARENTHESES_L;
+                    cur++;
+                    return token;
+                case ')':
+                    token.type = TokenType.T_PARENTHESES_R;
+                    cur++;
+                    return token;
                 default:
-                    return GetToken_NotFlag();
+                    token = GetToken_NotFlag();
+                    if (token == null)
+                    {
+                        throw new NakoTokenizerExcept("Not Define : " + CurrentChar);
+                    }
+                    return token;
             }
         }
 
@@ -335,6 +348,10 @@ namespace Libnako.Parser
                 break;
             }
             token.value = s;
+
+            // 予約語句のチェック
+            token.type = NakoDic.Instance.ContainsKey(s) ? NakoDic.Instance[s] : TokenType.T_WORD;
+
             return token;
         }
 

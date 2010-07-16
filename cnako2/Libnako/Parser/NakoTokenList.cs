@@ -44,7 +44,7 @@ namespace Libnako.Parser
             }
         }
 
-        public int CurrentTokenType
+        public TokenType CurrentTokenType
         {
             get {
                 NakoToken t = CurrentToken;
@@ -53,7 +53,7 @@ namespace Libnako.Parser
             }
         }
 
-        public int NextTokenType
+        public TokenType NextTokenType
         {
             get
             {
@@ -84,7 +84,7 @@ namespace Libnako.Parser
             foreach (NakoToken t in this)
             {
                 if (s != "") { s += ","; }
-                s += TokenType.GetTokenName(t.type);
+                s += TokenTypeDescriptor.GetTypeName(t.type);
             }
             return s;
         }
@@ -107,7 +107,7 @@ namespace Libnako.Parser
             return true;
         }
 
-        public Boolean CheckTokenType(int[] checker)
+        public Boolean CheckTokenType(TokenType[] checker)
         {
             // 要素数が異なる
             if (checker.Length != this.Count) return false;

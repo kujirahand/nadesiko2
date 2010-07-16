@@ -111,8 +111,8 @@ namespace Libnako.Interpreter
 
         private void exec_calc(CalcMethodType f)
         {
-            Object a = stack.Pop();
             Object b = stack.Pop();
+            Object a = stack.Pop();
             stack.Push(f(a, b));
         }
 

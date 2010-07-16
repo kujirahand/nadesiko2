@@ -7,14 +7,14 @@ namespace Libnako.Parser
 {
     public class NakoILCode
     {
-        public int type = 0;
+        public NakoILType type = 0;
         public Object value = null;
 
         public NakoILCode()
         {
         }
 
-        public NakoILCode(int type, Object value)
+        public NakoILCode(NakoILType type, Object value)
         {
             this.type = type;
             this.value = value;

@@ -11,7 +11,7 @@ SJIS変換
 　　もし、LEFT(対象,2)＝「//」ならば
 　　　R=R&「        {対象}{~}」
 　　違えば
-　　　　R=R&「        public const int {対象} = {N};{~}」
+　　　　R=R&「        {対象} = {N},{~}」
 　　　　S=S&「"{対象}",」
 　　　　N=N+1
 　　もし、N%10 = 9ならば
@@ -24,26 +24,30 @@ using System.Text;
 
 namespace Libnako.Parser
 {
-    public class TokenType
+    public enum TokenType
     {
         // Define Token
 //[[TOKEN_DEFINE]]
+        END_OF_TOKEN
+    }
+    public class TokenTypeDescriptor
+    {
         // Token Description
-        public static String[] TokenName = new String[] {
+        public static String[] TypeName = new String[] {
 //[[TOKEN_NAME]]
         };
         // Description Method
-        public static String GetTokenName(int no)
+        public static String GetTypeName(TokenType t)
         {
-            if (TokenName.Length > no) {
-                return TokenName[no];
+            int no = (int)t;
+            if (TypeName.Length > no) {
+                return TypeName[no];
             }
             else
             {
                 return "UNKNOWN";
             }
         }
-
     }
 }
 』

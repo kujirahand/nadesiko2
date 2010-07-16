@@ -11,16 +11,16 @@ namespace Libnako.Parser
         public int lineno = 0;
         public int level = 0;
         public string josi = "";
-        protected int _type = 0;
-        public int type
+        protected TokenType _type = 0;
+        public TokenType type
         {
             get { return _type; }
-            set { _type = value; debug_type = TokenType.GetTokenName(value); }
+            set { _type = value; debug_type = TokenTypeDescriptor.GetTypeName(value); }
         }
         // for DEBUG
         public String debug_type = "";
 
-        public NakoToken(int type = 0, int lineno = 0, int level = 0)
+        public NakoToken(TokenType type = 0, int lineno = 0, int level = 0)
         {
             this.lineno = lineno;
             this.level = level;

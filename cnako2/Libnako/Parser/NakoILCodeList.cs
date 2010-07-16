@@ -7,7 +7,7 @@ namespace Libnako.Parser
 {
     public class NakoILCodeList : List<NakoILCode>
     {
-        public Boolean CheckTypes(int[] types)
+        public Boolean CheckTypes(NakoILType[] types)
         {
             if (types.Length != this.Count) return false;
             for (int i = 0; i < types.Length; i++)
@@ -25,7 +25,7 @@ namespace Libnako.Parser
 
                 if (r != "") r += ",";
                 c = this[i];
-                r += NakoILType.GetTypeName(c.type);
+                r += NakoILTypeDescriptor.GetTypeName(c.type);
                 if (c.type == NakoILType.LD_CONST_INT ||
                     c.type == NakoILType.LD_CONST_REAL ||
                     c.type == NakoILType.LD_CONST_STR)

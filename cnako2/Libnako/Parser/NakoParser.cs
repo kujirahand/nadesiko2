@@ -41,9 +41,33 @@ namespace Libnako.Parser
         }
 
         // _statement : _let
+        //            | _print
         private Boolean _statement()
         {
-            return _let();
+            if (_print()) return true;
+            if (_let())   return true;
+            return false;
+        }
+
+        // _print : T_PRINT _value
+        private Boolean _print()
+        {
+            if (tok.CurrentTokenType != TokenType.T_PRINT)
+            {
+                return false;
+            }
+            NakoNode n = new NakoNode();
+            n.Token = tok.CurrentToken;
+            tok.MoveNext();
+            if (!_value())
+            {
+                throw new NakoParserExcept("PRINT の後に値がありません。");
+            }
+            n.type = NodeType.N_PRINT;
+            n.AddChild(this.lastNode);
+            lastNode = n;
+            this.parentNode.AddChild(n);
+            return true;
         }
 
         // _let : _variable T_EQ _value
@@ -117,9 +141,6 @@ namespace Libnako.Parser
         //               | _value
         private Boolean _calc_formula()
         {
-            NakoNodeCalc node = new NakoNodeCalc();
-            node.Token = tok.CurrentToken;
-            
             // Check '(' *** ')'
             if (Accept(TokenType.T_PARENTHESES_L))
             {
@@ -130,11 +151,10 @@ namespace Libnako.Parser
                     tok.Restore();
                     return false;
                 }
-                if (Accept(TokenType.T_PARENTHESE_R))
+                if (Accept(TokenType.T_PARENTHESES_R))
                 {
-                    node.nodeL = this.lastNode;
+                    tok.MoveNext();
                     tok.RemoveTop();
-                    lastNode = node;
                     return true;
                 }
                 tok.Restore();

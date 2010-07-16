@@ -19,7 +19,7 @@ namespace Libnako.Parser
             lastNode = null;
         }
 
-        protected Boolean Accept(int type)
+        protected Boolean Accept(TokenType type)
         {
             return (tok.CurrentTokenType == type);
         }

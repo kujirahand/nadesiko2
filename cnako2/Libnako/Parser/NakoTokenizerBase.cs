@@ -15,7 +15,7 @@ namespace Libnako.Parser
         protected int lineno;
         protected NakoDic dic;
         protected Boolean is_left_side;
-        protected int last_token_type;
+        protected TokenType last_token_type;
 
         protected string source;
         public string Source
@@ -42,7 +42,7 @@ namespace Libnako.Parser
             dic = NakoDic.Instance;
         }
 
-        public Boolean CheckTokenType(int[] checker)
+        public Boolean CheckTokenType(TokenType[] checker)
         {
             return Tokens.CheckTokenType(checker);
         }

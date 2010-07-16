@@ -7,7 +7,7 @@ namespace Libnako.Parser
     /// <summary>
     /// なでしこ単語管理クラス
     /// </summary>
-    public class NakoDic : Dictionary<string, int>
+    public class NakoDic : Dictionary<string, TokenType>
     {
         /// <summary>
         /// Singleton でインスタンス管理
@@ -43,6 +43,7 @@ namespace Libnako.Parser
             this.Add("●", TokenType.T_DEF_FUNCTION);
             this.Add("*", TokenType.T_DEF_FUNCTION);
             this.Add("■", TokenType.T_DEF_GROUP);
+            this.Add("PRINT", TokenType.T_PRINT);
         }
 
     }

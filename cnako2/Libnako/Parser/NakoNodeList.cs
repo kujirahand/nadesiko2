@@ -6,7 +6,19 @@ namespace Libnako.Parser
 {
     public class NakoNodeList : List<NakoNode>
     {
-        public Boolean checkNodeType(int[] checker)
+        public NakoNode Shift()
+        {
+            if (this.Count == 0)
+            {
+                return null;
+            }
+            NakoNode r = this[0];
+            this.RemoveAt(0);
+            return r;
+        }
+
+
+        public Boolean checkNodeType(NodeType[] checker)
         {
             if (checker.Length != this.Count) return false;
             for (int i = 0; i < checker.Length; i++)
@@ -19,7 +31,7 @@ namespace Libnako.Parser
             }
             return true;
         }
-        public String toNodeTypeString(int level = 0)
+        public String toTypeString(int level = 0)
         {
             String r = "";
             foreach (NakoNode n in this)
@@ -33,9 +45,9 @@ namespace Libnako.Parser
             return r;
         }
 
-        public int[] toNodeTypeArray()
+        public NodeType[] toTypeArray()
         {
-            int[] r = new int[this.Count];
+            NodeType[] r = new NodeType[this.Count];
             int i = 0;
             foreach (NakoNode n in this)
             {

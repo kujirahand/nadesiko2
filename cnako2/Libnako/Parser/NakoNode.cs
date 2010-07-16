@@ -6,14 +6,14 @@ namespace Libnako.Parser
 {
     public class NakoNode
     {
-        protected int _type = 0;
-        public int type
+        protected NodeType _type = 0;
+        public NodeType type
         {
             get { return _type; }
             set
             {
                 _type = value;
-                debug_type = NodeType.GetNodeName(_type);
+                debug_type = NodeTypeDescriptor.GetTypeName(_type);
             }
         }
         // for DEBUG
@@ -60,7 +60,7 @@ namespace Libnako.Parser
 
         public virtual String ToTypeString()
         {
-            return NodeType.GetNodeName(type);
+            return NodeTypeDescriptor.GetTypeName(type);
         }
 
         public virtual void Eval()
