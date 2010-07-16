@@ -39,23 +39,4 @@ namespace Libnako.Parser
 
         END_OF_NODE
     }
-    public class NodeTypeDescriptor
-    {
-        public static String[] TypeName = new String[] {
-"N_NOP","N_BLOCK","N_BLOCKS","N_INT","N_NUMBER","N_STRING","N_FORMULA","N_VALUE","N_CALC",
-"N_LD_VARIABLE","N_LET","N_ST_VARIABLE","N_CALL_FUNCTION","N_DEF_FUNCTION","N_PRINT",
-        };
-        // Description Method
-        public static String GetTypeName(NodeType n)
-        {
-            int no = (int)n;
-            if (TypeName.Length > no) {
-                return TypeName[no];
-            }
-            else
-            {
-                return "UNKNOWN";
-            }
-        }
-    }
 }

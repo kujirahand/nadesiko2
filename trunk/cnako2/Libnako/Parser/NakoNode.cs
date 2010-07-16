@@ -13,11 +13,8 @@ namespace Libnako.Parser
             set
             {
                 _type = value;
-                debug_type = NodeTypeDescriptor.GetTypeName(_type);
             }
         }
-        // for DEBUG
-        public String debug_type = "";
 
         public Object value = null;
         public String josi = "";
@@ -60,7 +57,7 @@ namespace Libnako.Parser
 
         public virtual String ToTypeString()
         {
-            return NodeTypeDescriptor.GetTypeName(type);
+            return type.ToString();
         }
 
         public virtual void Eval()

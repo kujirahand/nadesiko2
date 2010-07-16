@@ -25,7 +25,7 @@ namespace Libnako.Parser
 
                 if (r != "") r += ",";
                 c = this[i];
-                r += NakoILTypeDescriptor.GetTypeName(c.type);
+                r += c.type.ToString();
                 if (c.type == NakoILType.LD_CONST_INT ||
                     c.type == NakoILType.LD_CONST_REAL ||
                     c.type == NakoILType.LD_CONST_STR)

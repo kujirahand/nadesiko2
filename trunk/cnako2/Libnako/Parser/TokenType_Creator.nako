@@ -30,25 +30,6 @@ namespace Libnako.Parser
 //[[TOKEN_DEFINE]]
         END_OF_TOKEN
     }
-    public class TokenTypeDescriptor
-    {
-        // Token Description
-        public static String[] TypeName = new String[] {
-//[[TOKEN_NAME]]
-        };
-        // Description Method
-        public static String GetTypeName(TokenType t)
-        {
-            int no = (int)t;
-            if (TypeName.Length > no) {
-                return TypeName[no];
-            }
-            else
-            {
-                return "UNKNOWN";
-            }
-        }
-    }
 }
 』
 SRC=SRCの「//[[TOKEN_DEFINE]]」をRに置換

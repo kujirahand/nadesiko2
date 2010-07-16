@@ -14,11 +14,9 @@ namespace Libnako.Parser
         protected TokenType _type = 0;
         public TokenType type
         {
-            get { return _type; }
-            set { _type = value; debug_type = TokenTypeDescriptor.GetTypeName(value); }
+            get { return _type;  }
+            set { _type = value; }
         }
-        // for DEBUG
-        public String debug_type = "";
 
         public NakoToken(TokenType type = 0, int lineno = 0, int level = 0)
         {
@@ -29,7 +27,7 @@ namespace Libnako.Parser
 
         public String ToStringForDebug()
         {
-            return "[" + debug_type + ":" + value + "]" + josi + "(" + lineno + ")";
+            return "[" + _type.ToString() + ":" + value + "]" + josi + "(" + lineno + ")";
         }
     }
 }

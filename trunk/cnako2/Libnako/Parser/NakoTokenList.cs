@@ -84,7 +84,7 @@ namespace Libnako.Parser
             foreach (NakoToken t in this)
             {
                 if (s != "") { s += ","; }
-                s += TokenTypeDescriptor.GetTypeName(t.type);
+                s += t.type.ToString();
             }
             return s;
         }

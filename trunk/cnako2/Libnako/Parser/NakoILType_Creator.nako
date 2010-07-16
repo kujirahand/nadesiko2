@@ -39,28 +39,9 @@ namespace Libnako.Parser
         // Define Token
 //[[TOKEN_DEFINE]]
     }
-    public class NakoILTypeDescriptor
-    {
-        // Token Description
-        public static String[] TypeName = new String[] {
-//[[TOKEN_NAME]]
-        };
-        // Description Method
-        public static String GetTypeName(NakoILType n)
-        {
-            int no = (int)n;
-            if (TypeName.Length > no) {
-                return TypeName[no];
-            }
-            else
-            {
-                return "UNKNOWN";
-            }
-        }
 /*
 [[CASE]]
 */
-    }
 }
 』
 SRC=SRCの「//[[TOKEN_DEFINE]]」をRに置換

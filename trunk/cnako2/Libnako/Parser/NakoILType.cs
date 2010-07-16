@@ -64,27 +64,6 @@ namespace Libnako.Parser
 
 
     }
-    public class NakoILTypeDescriptor
-    {
-        // Token Description
-        public static String[] TypeName = new String[] {
-"NOP","LD_CONST_INT","LD_CONST_REAL","LD_CONST_STR","LD_GLOBAL","LD_LOCAL","ST_GLOBAL","ST_LOCAL","NEW_ARR",
-"ST_ARR_ELEM","LD_ARR_ELEM","ADD","SUB","MUL","DIV","MOD","POWER","ADD_STR","EQ",
-"NOT_EQ","GT","GT_EQ","LT","LT_EQ","INC","DEC","NEG","AND","OR",
-"XOR","NOT","JUMP","CALL","RET","PRINT",
-        };
-        // Description Method
-        public static String GetTypeName(NakoILType n)
-        {
-            int no = (int)n;
-            if (TypeName.Length > no) {
-                return TypeName[no];
-            }
-            else
-            {
-                return "UNKNOWN";
-            }
-        }
 /*
         case NakoILType.NOP:
         case NakoILType.LD_CONST_INT:
@@ -123,5 +102,4 @@ namespace Libnako.Parser
         case NakoILType.PRINT:
 
 */
-    }
 }
