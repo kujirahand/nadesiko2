@@ -64,29 +64,4 @@ namespace Libnako.Parser
 
         END_OF_TOKEN
     }
-    public class TokenTypeDescriptor
-    {
-        // Token Description
-        public static String[] TypeName = new String[] {
-"T_UNKNOWN","T_RESERVED","T_COMMENT","T_EOL","T_WORD","T_FUNCTION_NAME","T_NUMBER","T_INT","T_STRING",
-"T_STRING_EX","T_IF","T_WHILE","T_SWITCH","T_FOR","T_FOREACH","T_THEN","T_KOKOMADE","T_DEF_FUNCTION","T_DEF_GROUP",
-
-"T_EQ","T_EQ_EQ","T_NOT_EQ","T_GT","T_GT_EQ","T_LT","T_LT_EQ","T_NOT","T_AND","T_AND_AND",
-"T_OR","T_OR_OR","T_PLUS","T_MINUS","T_MUL","T_DIV","T_MOD","T_POWER","T_BLACKETS_L","T_BLACKETS_R",
-
-"T_PARENTHESES_L","T_PARENTHESES_R","T_BRANCES_L","T_BRANCES_R","T_PRINT",
-        };
-        // Description Method
-        public static String GetTypeName(TokenType t)
-        {
-            int no = (int)t;
-            if (TypeName.Length > no) {
-                return TypeName[no];
-            }
-            else
-            {
-                return "UNKNOWN";
-            }
-        }
-    }
 }

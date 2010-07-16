@@ -33,24 +33,6 @@ namespace Libnako.Parser
 //[[TOKEN_DEFINE]]
         END_OF_NODE
     }
-    public class NodeTypeDescriptor
-    {
-        public static String[] TypeName = new String[] {
-//[[TOKEN_NAME]]
-        };
-        // Description Method
-        public static String GetTypeName(NodeType n)
-        {
-            int no = (int)n;
-            if (TypeName.Length > no) {
-                return TypeName[no];
-            }
-            else
-            {
-                return "UNKNOWN";
-            }
-        }
-    }
 }
 』
 SRC=SRCの「//[[TOKEN_DEFINE]]」をRに置換
