@@ -5,37 +5,42 @@ using System.Text;
 
 namespace Libnako.Parser
 {
-    public class NodeType
+    public enum NodeType
     {
         // Define Token
         // NODE
-        public const int N_NOP = 0;
-        public const int N_BLOCK = 1;
-        public const int N_VARIABLE = 2;
-        public const int N_LET = 3;
-        public const int N_FORMULA = 4;
-        public const int N_VALUE = 5;
-        public const int N_INT = 6;
-        public const int N_NUMBER = 7;
-        public const int N_STRING = 8;
-        public const int N_CALC = 9;
+        N_NOP = 0,
+        N_BLOCK = 1,
+        N_VARIABLE = 2,
+        N_LET = 3,
+        N_FORMULA = 4,
+        N_VALUE = 5,
+        N_INT = 6,
+        N_NUMBER = 7,
+        N_STRING = 8,
+        N_CALC = 9,
+        // DEBUG
+        N_PRINT = 10,
 
-        // Token Description
-        public static String[] NodeName = new String[] {
+        END_OF_NODE
+    }
+    public class NodeTypeDescriptor
+    {
+        public static String[] TypeName = new String[] {
 "N_NOP","N_BLOCK","N_VARIABLE","N_LET","N_FORMULA","N_VALUE","N_INT","N_NUMBER","N_STRING",
-"N_CALC",
+"N_CALC","N_PRINT",
         };
         // Description Method
-        public static String GetNodeName(int no)
+        public static String GetTypeName(NodeType n)
         {
-            if (NodeName.Length > no) {
-                return NodeName[no];
+            int no = (int)n;
+            if (TypeName.Length > no) {
+                return TypeName[no];
             }
             else
             {
                 return "UNKNOWN";
             }
         }
-
     }
 }

@@ -30,6 +30,7 @@ namespace Libnako.Parser
 
         protected void Write_r(NakoNode node)
         {
+            if (node == null) return;
             switch (node.type)
             {
                 case NodeType.N_NOP:
@@ -47,6 +48,9 @@ namespace Libnako.Parser
                 case NodeType.N_STRING:
                     result.Add(new NakoILCode(NakoILType.LD_CONST_STR, node.value));
                     break;
+                case NodeType.N_PRINT:
+                    _print(node);
+                    break;
             }
             // ---
             if (!node.hasChildren()) return;
@@ -58,6 +62,13 @@ namespace Libnako.Parser
             //
         }
 
+        private void _print(NakoNode node)
+        {
+            NakoNode v = node.Children.Shift();
+            Write_r(v);
+            result.Add(new NakoILCode(NakoILType.PRINT, null));
+        }
+
         private void newCalc(NakoNodeCalc node)
         {
             NakoILCode c = new NakoILCode();
@@ -67,7 +78,7 @@ namespace Libnako.Parser
             //
             switch (node.calc_type)
             {
-                case CalcType.NOP: throw new Exception("NOP");
+                case CalcType.NOP: c.type = NakoILType.NOP; break; // ( ... )
                 case CalcType.ADD: c.type = NakoILType.ADD; break;
                 case CalcType.SUB: c.type = NakoILType.SUB; break;
                 case CalcType.MUL: c.type = NakoILType.MUL; break;
@@ -87,5 +98,10 @@ namespace Libnako.Parser
             }
             result.Add(c);
         }
+    }
+
+    public class NakoILWriterExcept : Exception
+    {
+        public NakoILWriterExcept(String message) : base(message) { }
     }
 }

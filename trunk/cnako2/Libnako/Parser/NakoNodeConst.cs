@@ -9,7 +9,7 @@ namespace Libnako.Parser
     {
         public override String ToTypeString()
         {
-            String r = NodeType.GetNodeName(type);
+            String r = NodeTypeDescriptor.GetTypeName(type);
             r += "=";
             r += Token.value;
             return r;
