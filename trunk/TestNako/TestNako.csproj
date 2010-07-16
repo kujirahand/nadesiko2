@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestCNako.cs" />
+    <Compile Include="TestNakoILWriter.cs" />
     <Compile Include="TestNakoParser.cs" />
     <Compile Include="TestNakoTokenizer.cs" />
   </ItemGroup>

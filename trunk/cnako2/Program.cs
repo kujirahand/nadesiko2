@@ -12,9 +12,26 @@ namespace cnako
     {
         static void Main(string[] args)
         {
+            Boolean r;
+
+            // 1
+            NakoNamespace ns = new NakoNamespace(null);
+            NakoILWriter w = new NakoILWriter();
+            ns.source = "1+2*3";
+            ns.Tokenize();
+            ns.ParseOnlyValue();
+            Console.WriteLine(ns.TopNode.hasChildren());
+            r = ns.TopNode.Children.checkNodeType(new int[] {
+                NodeType.N_CALC
+            });
+            Console.WriteLine(r);
+            w.Write(ns.TopNode);
+            Console.WriteLine(w.Result.ToTypeString());
+            //
+
+
             test();
             NakoTokenizer tok = new NakoTokenizer(null);
-            Boolean r;
             tok.Source = "1+2*3";
             tok.Tokenize();
             r = tok.CheckTokenType(new int[] { 
