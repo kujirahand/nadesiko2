@@ -22,7 +22,7 @@ namespace TestNako
             ns.Tokenize();
             ns.ParseOnlyValue();
             writer.Write(ns.TopNode);
-            r = writer.Result.CheckTypes(new int[] {
+            r = writer.Result.CheckTypes(new NakoILType[] {
                 NakoILType.NOP,
                 NakoILType.LD_CONST_INT,
                 NakoILType.LD_CONST_INT,
