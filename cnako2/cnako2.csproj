@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Libnako\Interpreter\NakoInterpreter.cs" />
+    <Compile Include="Libnako\Interpreter\NakoValue.cs" />
     <Compile Include="Libnako\Parser\CalcType.cs" />
     <Compile Include="Libnako\Parser\NakoILCode.cs" />
     <Compile Include="Libnako\Parser\NakoILCodeList.cs" />

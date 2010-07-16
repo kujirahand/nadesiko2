@@ -36,36 +36,39 @@ namespace Libnako.Parser
         public const int DIV              = 14; // { args:0, push:1, pop:2 } 
         public const int MOD              = 15; // { args:0, push:1, pop:2 } 
         public const int POWER            = 16; // { args:0, push:1, pop:2 } 
+        public const int ADD_STR          = 17; // { args:0, push:1, pop:2 } 
         // 比較する
-        public const int EQ               = 17; // { args:0, push:1, pop:2 } 
-        public const int NOT_EQ           = 18; // { args:0, push:1, pop:2 } 
-        public const int GT               = 19; // { args:0, push:1, pop:2 } 
-        public const int GT_EQ            = 20; // { args:0, push:1, pop:2 } 
-        public const int LT               = 21; // { args:0, push:1, pop:2 } 
-        public const int LT_EQ            = 22; // { args:0, push:1, pop:2 } 
+        public const int EQ               = 18; // { args:0, push:1, pop:2 } 
+        public const int NOT_EQ           = 19; // { args:0, push:1, pop:2 } 
+        public const int GT               = 20; // { args:0, push:1, pop:2 } 
+        public const int GT_EQ            = 21; // { args:0, push:1, pop:2 } 
+        public const int LT               = 22; // { args:0, push:1, pop:2 } 
+        public const int LT_EQ            = 23; // { args:0, push:1, pop:2 } 
         // スタックトップの値を増減する
-        public const int INC              = 23; // { args:0, push:1, pop:1 } 
-        public const int DEC              = 24; // { args:0, push:1, pop:1 } 
-        public const int NEG              = 25; // { args:0, push:1, pop:1 } 
+        public const int INC              = 24; // { args:0, push:1, pop:1 } 
+        public const int DEC              = 25; // { args:0, push:1, pop:1 } 
+        public const int NEG              = 26; // { args:0, push:1, pop:1 } 
         // 演算
-        public const int AND              = 26; // { args:0, push:1, pop:2 } 
-        public const int OR               = 27; // { args:0, push:1, pop:2 } 
-        public const int XOR              = 28; // { args:0, push:1, pop:2 } 
-        public const int NOT		            = 29; // { args:0, push:1, pop:1 } 
+        public const int AND              = 27; // { args:0, push:1, pop:2 } 
+        public const int OR               = 28; // { args:0, push:1, pop:2 } 
+        public const int XOR              = 29; // { args:0, push:1, pop:2 } 
+        public const int NOT              = 30; // { args:0, push:1, pop:1 } 
 
         // アドレスジャンプ
-        public const int JUMP             = 30; // { args:1, push:0, pop:0 } 
-        public const int CALL             = 31; // { args:1, push:0, pop:0 } 
-        public const int RET              = 32; // { args:0, push:0, pop:0 } 
+        public const int JUMP             = 31; // { args:1, push:0, pop:0 } 
+        public const int CALL             = 32; // { args:1, push:0, pop:0 } 
+        public const int RET              = 33; // { args:0, push:0, pop:0 } 
 
+        // DEBUG用
+        public const int PRINT            = 34; // { args:0, push:0, pop:1 } 
 
 
         // Token Description
         public static String[] TypeName = new String[] {
 "NOP","LD_CONST_INT","LD_CONST_REAL","LD_CONST_STR","LD_GLOBAL","LD_LOCAL","ST_GLOBAL","ST_LOCAL","NEW_ARR",
-"ST_ARR_ELEM","LD_ARR_ELEM","ADD","SUB","MUL","DIV","MOD","POWER","EQ","NOT_EQ",
-"GT","GT_EQ","LT","LT_EQ","INC","DEC","NEG","AND","OR","XOR",
-"NOT		","JUMP","CALL","RET",
+"ST_ARR_ELEM","LD_ARR_ELEM","ADD","SUB","MUL","DIV","MOD","POWER","ADD_STR","EQ",
+"NOT_EQ","GT","GT_EQ","LT","LT_EQ","INC","DEC","NEG","AND","OR",
+"XOR","NOT","JUMP","CALL","RET","PRINT",
         };
         // Description Method
         public static String GetTypeName(int no)
@@ -96,6 +99,7 @@ namespace Libnako.Parser
         case NakoILType.DIV:
         case NakoILType.MOD:
         case NakoILType.POWER:
+        case NakoILType.ADD_STR:
         case NakoILType.EQ:
         case NakoILType.NOT_EQ:
         case NakoILType.GT:
@@ -108,10 +112,11 @@ namespace Libnako.Parser
         case NakoILType.AND:
         case NakoILType.OR:
         case NakoILType.XOR:
-        case NakoILType.NOT		:
+        case NakoILType.NOT:
         case NakoILType.JUMP:
         case NakoILType.CALL:
         case NakoILType.RET:
+        case NakoILType.PRINT:
 
 */
     }

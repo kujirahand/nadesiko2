@@ -8,54 +8,60 @@ namespace Libnako.Interpreter
 {
     delegate Object CalcMethodType(Object a, Object b);
 
+    /// <summary>
+    /// なでしこの中間コード（NakoILCode）を実行するインタプリタ
+    /// </summary>
     public class NakoInterpreter
     {
-        /// <summary>
-        /// Singleton method
-        /// </summary>
-        public static NakoInterpreter Instance
-        {
-            get {
-                if (_instance == null) { _instance = new NakoInterpreter(); }
-                return _instance;
-            }
-
-        }
-        private static NakoInterpreter _instance;
-
         protected Stack<Object> stack;
+        protected NakoILCodeList list = null;
 
+        public String PrintLog = "";
+        public Boolean UseConsoleOut = false;
+
+        public NakoInterpreter(NakoILCodeList list = null)
+        {
+            this.list = list;
+            Init();
+        }
 
         protected void Init()
         {
             stack = new Stack<Object>();
         }
 
-        public Boolean Run()
+        public Boolean Run(NakoILCodeList list = null)
         {
-            return false;
-        }
-
-        public Boolean Run_NakoIL(NakoILCodeList list)
-        {
-            Init();
-            for (int i = 0; i < list.Count; i++)
+            if (list != null)
             {
-                ExecNakoIL(list[i]);
+                Init();
+                this.list = list;
+            }
+            for (int i = 0; i < this.list.Count; i++)
+            {
+                Run_NakoIL(this.list[i]);
             }
             return true;
         }
 
-        protected void ExecNakoIL(NakoILCode code)
+        public Object StackTop
+        {
+            get {
+                if (stack.Count == 0) return null;
+                return stack.Peek();
+            }
+        }
+
+        protected void Run_NakoIL(NakoILCode code)
         {
             switch (code.type)
             {
                 case NakoILType.NOP:
                     /* do nothing */
                     break;
-                case NakoILType.LD_CONST_INT: stack.Push(code.value); break;
-                case NakoILType.LD_CONST_REAL: stack.Push(code.value); break;
-                case NakoILType.LD_CONST_STR: stack.Push(code.value); break;
+                case NakoILType.LD_CONST_INT:   stack.Push(code.value); break;
+                case NakoILType.LD_CONST_REAL:  stack.Push(code.value); break;
+                case NakoILType.LD_CONST_STR:   stack.Push(code.value); break;
                 case NakoILType.LD_GLOBAL:
                 case NakoILType.LD_LOCAL:
                 case NakoILType.ST_GLOBAL:
@@ -64,12 +70,13 @@ namespace Libnako.Interpreter
                 case NakoILType.ST_ARR_ELEM:
                 case NakoILType.LD_ARR_ELEM:
                     break;
-                case NakoILType.ADD: exec_calc(calc_method_add); break;
-                case NakoILType.SUB: exec_calc(calc_method_sub); break;
-                case NakoILType.MUL: exec_calc(calc_method_mul); break;
-                case NakoILType.DIV: exec_calc(calc_method_div); break;
-                case NakoILType.MOD: exec_calc(calc_method_mod); break;
-                case NakoILType.POWER: exec_calc(calc_method_power); break;
+                case NakoILType.ADD:        exec_calc(calc_method_add); break;
+                case NakoILType.SUB:        exec_calc(calc_method_sub); break;
+                case NakoILType.MUL:        exec_calc(calc_method_mul); break;
+                case NakoILType.DIV:        exec_calc(calc_method_div); break;
+                case NakoILType.MOD:        exec_calc(calc_method_mod); break;
+                case NakoILType.POWER:      exec_calc(calc_method_power); break;
+                case NakoILType.ADD_STR:    exec_calc(calc_method_add_str); break;
                 case NakoILType.EQ:
                 case NakoILType.NOT_EQ:
                 case NakoILType.GT:
@@ -87,7 +94,19 @@ namespace Libnako.Interpreter
                 case NakoILType.CALL:
                 case NakoILType.RET:
                     break;
+                case NakoILType.PRINT: exec_print(); break;
             }
+        }
+
+        private void exec_print()
+        {
+            Object o = stack.Pop();
+            String s = o.ToString();
+            if (UseConsoleOut)
+            {
+                Console.Write(s);
+            }
+            PrintLog += s;
         }
 
         private void exec_calc(CalcMethodType f)
@@ -97,29 +116,57 @@ namespace Libnako.Interpreter
             stack.Push(f(a, b));
         }
 
+        private Double ToDouble(Object v)
+        {
+            return NakoValue.ToDouble(v);
+        }
+
+        private Boolean IsBothInt(Object a, Object b)
+        {
+            Boolean r = (a.GetType() == typeof(Int32) && b.GetType() == typeof(Int32));
+            return r;
+        }
+
         private Object calc_method_add(Object a, Object b)
         {
-            return (Object)((float)a + (float)b);
+            return (Object) (IsBothInt(a, b) 
+                ? ((int)a + (int)b)
+                : (ToDouble(a) + ToDouble(b)));
         }
         private Object calc_method_sub(Object a, Object b)
         {
-            return (Object)((float)a - (float)b);
+            return (Object)(IsBothInt(a, b)
+                ? ((int)a - (int)b)
+                : (ToDouble(a) - ToDouble(b)));
         }
         private Object calc_method_mul(Object a, Object b)
         {
-            return (Object)((float)a * (float)b);
+            return (Object)(IsBothInt(a, b)
+                ? ((int)a * (int)b)
+                : (ToDouble(a) * ToDouble(b)));
         }
         private Object calc_method_div(Object a, Object b)
         {
-            return (Object)((float)a / (float)b);
+            return (Object)(IsBothInt(a, b)
+                ? ((int)a / (int)b)
+                : (ToDouble(a) / ToDouble(b)));
         }
         private Object calc_method_mod(Object a, Object b)
         {
-            return (Object)((int)a % (int)b);
+            return (Object)(IsBothInt(a, b)
+                ? ((int)a % (int)b)
+                : (ToDouble(a) % ToDouble(b)));
         }
         private Object calc_method_power(Object a, Object b)
         {
-            return Math.Pow((float)a, (float)b);
+            return (Object)
+                Math.Pow(ToDouble(a), ToDouble(b));
+        }
+        private Object calc_method_add_str(Object a, Object b)
+        {
+            String sa = a.ToString();
+            String sb = b.ToString();
+            return sa + sb;
         }
 
     }

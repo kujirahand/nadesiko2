@@ -26,6 +26,7 @@ MUL            { args:0, push:1, pop:2 }
 DIV            { args:0, push:1, pop:2 }
 MOD            { args:0, push:1, pop:2 }
 POWER          { args:0, push:1, pop:2 }
+ADD_STR        { args:0, push:1, pop:2 }
 // 比較する
 EQ      { args:0, push:1, pop:2 }
 NOT_EQ  { args:0, push:1, pop:2 }
@@ -48,5 +49,7 @@ JUMP    { args:1, push:0, pop:0 }
 CALL    { args:1, push:0, pop:0 }
 RET     { args:0, push:0, pop:0 }
 
+// DEBUG用
+PRINT   { args:0, push:0, pop:1 }
 
 
