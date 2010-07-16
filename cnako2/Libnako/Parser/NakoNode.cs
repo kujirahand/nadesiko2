@@ -54,8 +54,8 @@ namespace Libnako.Parser
             if (children == null)
             {
                 children = new NakoNodeList();
-                children.Add(child);
             }
+            children.Add(child);
         }
 
         public virtual String ToTypeString()

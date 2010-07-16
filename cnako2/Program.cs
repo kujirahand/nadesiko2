@@ -17,19 +17,26 @@ namespace cnako
             NakoILWriter w = new NakoILWriter();
             NakoInterpreter runner = new NakoInterpreter();
             Object o;
+            Boolean r;
 
-            ns.source = "1+2*3";
+            ns.source = "A=5;B=3;C=A+B;PRINT C";
             ns.Tokenize();
-            ns.ParseOnlyValue();
+            _w("token:" + ns.Tokens.toTypeString());
+            ns.Parse();
+            _w("nodes:"+ns.TopNode.Children.toTypeString());
             w.Write(ns.TopNode);
+            _w("IL:"+w.Result.ToTypeString());
             runner.Run(w.Result);
-            o = runner.StackTop;
-            Console.WriteLine(o);
-
+            _w(runner.PrintLog);
 
             //
             Console.WriteLine("End.");
             Console.ReadLine();
+        }
+
+        static void _w(String s)
+        {
+            Console.WriteLine(s);
         }
 
         static void test()

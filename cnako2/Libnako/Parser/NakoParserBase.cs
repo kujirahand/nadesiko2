@@ -10,6 +10,8 @@ namespace Libnako.Parser
         protected NakoNode parentNode;
         protected NakoNode lastNode;
         protected NakoTokenList tok;
+        protected NakoVariableNames globalVar;
+        protected NakoVariableNames localVar;
 
         public NakoParserBase(NakoTokenList tokens)
         {
@@ -17,6 +19,8 @@ namespace Libnako.Parser
             tokens.MoveTop();
             parentNode = topNode = new NakoNode();
             lastNode = null;
+            globalVar = new NakoVariableNames();
+            localVar = new NakoVariableNames();
         }
 
         protected Boolean Accept(TokenType type)
