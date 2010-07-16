@@ -27,9 +27,24 @@ namespace TestNako
         [Test(Description = "Tokenize method")]
         public void TestTokenize()
         {
+            Boolean r;
             NakoTokenizer tok = new NakoTokenizer(null);
             tok.Source = "から";
             Assert.IsTrue(tok.CompareStr("から"));
+            // 2
+            tok.Source = "(1+2)*3";
+            tok.Tokenize();
+            r = tok.Tokens.CheckTokenType(new TokenType[]{
+                TokenType.T_PARENTHESES_L,
+                TokenType.T_INT,
+                TokenType.T_PLUS,
+                TokenType.T_INT,
+                TokenType.T_PARENTHESES_R,
+                TokenType.T_MUL,
+                TokenType.T_INT
+            });
+            Assert.IsTrue(r);
+
         }
 
         [Test(Description = "Tokenize method")]
@@ -40,14 +55,14 @@ namespace TestNako
             Boolean r;
             tok.Source = "1";
             tok.Tokenize();
-            r = tok.CheckTokenType(new int[]{
+            r = tok.CheckTokenType(new TokenType[]{
                 TokenType.T_INT
             });
             Assert.IsTrue(r);
             // 2
             tok.Source = "1+2";
             tok.Tokenize();
-            r = tok.CheckTokenType(new int[]{
+            r = tok.CheckTokenType(new TokenType[]{
                 TokenType.T_INT,
                 TokenType.T_PLUS,
                 TokenType.T_INT
@@ -56,7 +71,7 @@ namespace TestNako
             // 3
             tok.Source = "1+2*3";
             tok.Tokenize();
-            r = tok.CheckTokenType(new int[]{
+            r = tok.CheckTokenType(new TokenType[]{
                 TokenType.T_INT,
                 TokenType.T_PLUS,
                 TokenType.T_INT,
@@ -146,7 +161,7 @@ namespace TestNako
             // 6
             tok.Source = "AからBへファイルコピー";
             tok.Tokenize();
-            Boolean r = tok.CheckTokenType(new int[]{
+            Boolean r = tok.CheckTokenType(new TokenType[]{
                 TokenType.T_WORD,
                 TokenType.T_WORD,
                 TokenType.T_WORD
@@ -216,12 +231,12 @@ namespace TestNako
             // 1
             NakoTokenizer tok = new NakoTokenizer("「ABC」");
             tok.Tokenize();
-            Boolean r = tok.CheckTokenType(new int[]{ TokenType.T_STRING });
+            Boolean r = tok.CheckTokenType(new TokenType[] { TokenType.T_STRING });
             Assert.IsTrue(r);
             // 2
             tok.Source = "「ABC{123}」";
             tok.Tokenize();
-            r = tok.CheckTokenType(new int[] {
+            r = tok.CheckTokenType(new TokenType[] {
                 TokenType.T_STRING,
                 TokenType.T_AND,
                 TokenType.T_INT
@@ -230,7 +245,7 @@ namespace TestNako
             // 3
             tok.Source = "「ABC{`123`}」";
             tok.Tokenize();
-            r = tok.CheckTokenType(new int[] {
+            r = tok.CheckTokenType(new TokenType[] {
                 TokenType.T_STRING,
                 TokenType.T_AND,
                 TokenType.T_STRING
@@ -239,7 +254,7 @@ namespace TestNako
             //4
             tok.Source = "「「ABC{`123`&123}」」";
             tok.Tokenize();
-            r = tok.CheckTokenType(new int[] {
+            r = tok.CheckTokenType(new TokenType[] {
                 TokenType.T_STRING,
                 TokenType.T_AND,
                 TokenType.T_STRING,
