@@ -49,10 +49,8 @@ namespace Libnako.Parser
         // _let : _variable T_EQ _value
         private Boolean _let()
         {
-            tok.Save();
             if (!_variable())
             {
-                tok.Restore();
                 return false;
             }
             NakoNodeLet node = new NakoNodeLet();
@@ -60,13 +58,14 @@ namespace Libnako.Parser
  
             if (!Accept(TokenType.T_EQ))
             {
-                tok.Restore();
                 return false;
             }
+            tok.Save();
             tok.MoveNext();
 
             if (!_value())
             {
+                tok.Restore();
                 throw new NakoParserExcept("代入文で値がありません。");
             }
             node.nodeValue = lastNode;

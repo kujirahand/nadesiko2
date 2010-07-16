@@ -11,17 +11,21 @@ namespace Libnako.Parser
     {
         protected NakoNode topNode = null;
         protected NakoILCodeList result = null;
+        public NakoILCodeList Result
+        {
+            get { return result; }
+        }
 
-        public NakoILWriter(NakoNode topNode)
+        public NakoILWriter(NakoNode topNode = null)
         {
             this.topNode = topNode;
             this.result = new NakoILCodeList();
         }
 
-        public void Write()
+        public void Write(NakoNode topNode = null)
         {
-            Write_r(topNode);
-
+            if (topNode != null) { this.topNode = topNode; }
+            Write_r(this.topNode);
         }
 
         protected void Write_r(NakoNode node)
@@ -57,6 +61,10 @@ namespace Libnako.Parser
         private void newCalc(NakoNodeCalc node)
         {
             NakoILCode c = new NakoILCode();
+            // 
+            Write_r(node.nodeL);
+            Write_r(node.nodeR);
+            //
             switch (node.calc_type)
             {
                 case CalcType.NOP: throw new Exception("NOP");

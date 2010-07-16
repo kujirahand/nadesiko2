@@ -38,12 +38,14 @@ namespace Libnako.Parser
         {
             NakoParser paser = new NakoParser(tokens);
             paser.Parse();
+            this.topNode = paser.topNode;
         }
 
-        public void TokenizeAndParse()
+        public void ParseOnlyValue()
         {
-            this.Tokenize();
-            this.Parse();
+            NakoParser paser = new NakoParser(tokens);
+            paser.ParseOnlyValue();
+            this.topNode = paser.topNode;
         }
     }
 }
