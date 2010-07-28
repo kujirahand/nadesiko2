@@ -10,5 +10,10 @@ namespace Libnako.Parser.Node
         public NakoNode nodeCond;
         public NakoNode nodeTrue;
         public NakoNode nodeFalse;
+
+        public NakoNodeIf()
+        {
+            this.type = NodeType.IF;
+        }
     }
 }
