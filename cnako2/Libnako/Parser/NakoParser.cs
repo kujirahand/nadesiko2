@@ -91,12 +91,32 @@ namespace Libnako.Parser
         // _statement : _let
         //            | _print
         //            | _callfunc
+        //            | _if_stmt
+        //            ;
         private Boolean _statement()
         {
             if (_print())    return true;
             if (_let())      return true;
             if (_callfunc()) return true;
             return false;
+        }
+
+        // _if_stmt : T_IF _value T_THEN _blocks [T_KOKOMADE]
+        //          | T_IF _value T_THEN _blocks ELSE _blocks[T_KOKOMADE]
+        //          ;
+        private Boolean _if_stmt()
+        {
+            if (!Accept(TokenType.T_IF)) return false;
+            /// todo: IF構文
+            tok.MoveNext();
+            NakoToken t = tok.CurrentToken;
+            
+            if (!_value())
+            {
+                throw new NakoParserException("もし文で比較式がありません。", t);
+            }
+            return false;
+
         }
 
         // _callfunc : _value .. T_FUNCTION_NAME

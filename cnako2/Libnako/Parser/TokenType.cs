@@ -57,8 +57,8 @@ namespace Libnako.Parser
         T_PARENTHESES_L = 39,
         T_PARENTHESES_R = 40,
         // 波括弧(中括弧)
-        T_BRANCES_L = 41,
-        T_BRANCES_R = 42,
+        T_BRACES_L = 41,
+        T_BRACES_R = 42,
         // DEBUG
         T_PRINT = 43,
 
