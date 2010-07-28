@@ -11,7 +11,7 @@ namespace Libnako.Parser.Node
 
         public NakoNodeLet()
         {
-            type = NodeType.N_LET;
+            type = NodeType.LET;
         }
     }
 }

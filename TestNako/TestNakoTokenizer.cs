@@ -35,13 +35,13 @@ namespace TestNako
             tok.Source = "(1+2)*3";
             tok.Tokenize();
             r = tok.Tokens.CheckTokenType(new TokenType[]{
-                TokenType.T_PARENTHESES_L,
-                TokenType.T_INT,
-                TokenType.T_PLUS,
-                TokenType.T_INT,
-                TokenType.T_PARENTHESES_R,
-                TokenType.T_MUL,
-                TokenType.T_INT
+                TokenType.PARENTHESES_L,
+                TokenType.INT,
+                TokenType.PLUS,
+                TokenType.INT,
+                TokenType.PARENTHESES_R,
+                TokenType.MUL,
+                TokenType.INT
             });
             Assert.IsTrue(r);
 
@@ -56,27 +56,27 @@ namespace TestNako
             tok.Source = "1";
             tok.Tokenize();
             r = tok.CheckTokenType(new TokenType[]{
-                TokenType.T_INT
+                TokenType.INT
             });
             Assert.IsTrue(r);
             // 2
             tok.Source = "1+2";
             tok.Tokenize();
             r = tok.CheckTokenType(new TokenType[]{
-                TokenType.T_INT,
-                TokenType.T_PLUS,
-                TokenType.T_INT
+                TokenType.INT,
+                TokenType.PLUS,
+                TokenType.INT
             });
             Assert.IsTrue(r);
             // 3
             tok.Source = "1+2*3";
             tok.Tokenize();
             r = tok.CheckTokenType(new TokenType[]{
-                TokenType.T_INT,
-                TokenType.T_PLUS,
-                TokenType.T_INT,
-                TokenType.T_MUL,
-                TokenType.T_INT
+                TokenType.INT,
+                TokenType.PLUS,
+                TokenType.INT,
+                TokenType.MUL,
+                TokenType.INT
             });
             Assert.IsTrue(r);
         }
@@ -106,22 +106,22 @@ namespace TestNako
             // 1
             NakoTokenizer tok = new NakoTokenizer("1234");
             NakoToken t = tok.GetToken_Number();
-            Assert.AreEqual(TokenType.T_INT, t.type);
+            Assert.AreEqual(TokenType.INT, t.type);
             Assert.AreEqual("1234", t.value);
             // 2
             tok.Source = "12.3456";
             t = tok.GetToken_Number();
-            Assert.AreEqual(TokenType.T_NUMBER, t.type);
+            Assert.AreEqual(TokenType.NUMBER, t.type);
             Assert.AreEqual("12.3456", t.value);
             // 3
             tok.Source = "0.123";
             t = tok.GetToken_Number();
-            Assert.AreEqual(TokenType.T_NUMBER, t.type);
+            Assert.AreEqual(TokenType.NUMBER, t.type);
             Assert.AreEqual("0.123", t.value);
             // 4
             tok.Source = "32から";
             t = tok.GetToken_Number();
-            Assert.AreEqual(TokenType.T_INT, t.type);
+            Assert.AreEqual(TokenType.INT, t.type);
             Assert.AreEqual("32", t.value);
             Assert.AreEqual("から", t.josi);
         }
@@ -132,39 +132,39 @@ namespace TestNako
             // 1
             NakoTokenizer tok = new NakoTokenizer("ABC");
             NakoToken t = tok.GetToken_Word();
-            Assert.AreEqual(TokenType.T_WORD, t.type);
+            Assert.AreEqual(TokenType.WORD, t.type);
             Assert.AreEqual("ABC", t.value);
             // 2
             tok.Source = "豆腐から";
             t = tok.GetToken_Word();
-            Assert.AreEqual(TokenType.T_WORD, t.type);
+            Assert.AreEqual(TokenType.WORD, t.type);
             Assert.AreEqual("豆腐", t.value);
             Assert.AreEqual("から", t.josi);
             // 3
             tok.Source = "F_豆腐から";
             t = tok.GetToken_Word();
-            Assert.AreEqual(TokenType.T_WORD, t.type);
+            Assert.AreEqual(TokenType.WORD, t.type);
             Assert.AreEqual("F_豆腐", t.value);
             Assert.AreEqual("から", t.josi);
             // 4
             tok.Source = "F123から";
             t = tok.GetToken_Word();
-            Assert.AreEqual(TokenType.T_WORD, t.type);
+            Assert.AreEqual(TokenType.WORD, t.type);
             Assert.AreEqual("F123", t.value);
             Assert.AreEqual("から", t.josi);
             // 5
             tok.Source = "__から";
             t = tok.GetToken_Word();
-            Assert.AreEqual(TokenType.T_WORD, t.type);
+            Assert.AreEqual(TokenType.WORD, t.type);
             Assert.AreEqual("__", t.value);
             Assert.AreEqual("から", t.josi);
             // 6
             tok.Source = "AからBへファイルコピー";
             tok.Tokenize();
             Boolean r = tok.CheckTokenType(new TokenType[]{
-                TokenType.T_WORD,
-                TokenType.T_WORD,
-                TokenType.T_WORD
+                TokenType.WORD,
+                TokenType.WORD,
+                TokenType.WORD
             });
             Assert.IsTrue(r);
             t = tok.Tokens[0];
@@ -185,42 +185,42 @@ namespace TestNako
             // 1
             NakoTokenizer tok = new NakoTokenizer("「ABC」");
             NakoToken t = tok.GetToken_String();
-            Assert.AreEqual(TokenType.T_STRING_EX, t.type);
+            Assert.AreEqual(TokenType.STRING_EX, t.type);
             Assert.AreEqual("ABC", t.value);
             Assert.AreEqual("", t.josi);
             // 2
             tok.Source = "`豆腐`から";
             t = tok.GetToken_String();
-            Assert.AreEqual(TokenType.T_STRING, t.type);
+            Assert.AreEqual(TokenType.STRING, t.type);
             Assert.AreEqual("豆腐", t.value);
             Assert.AreEqual("から", t.josi);
             // 3
             tok.Source = "「「豆腐」」から";
             t = tok.GetToken_String();
-            Assert.AreEqual(TokenType.T_STRING_EX, t.type);
+            Assert.AreEqual(TokenType.STRING_EX, t.type);
             Assert.AreEqual("豆腐", t.value);
             Assert.AreEqual("から", t.josi);
             // 4
             tok.Source = "『『『F123』』』へ飛ぶ";
             t = tok.GetToken_String();
-            Assert.AreEqual(TokenType.T_STRING, t.type);
+            Assert.AreEqual(TokenType.STRING, t.type);
             Assert.AreEqual("F123", t.value);
             Assert.AreEqual("へ", t.josi);
             // 5
             tok.Source = "「aaa\nbbb\nccc」から「豆腐」へ";
             t = tok.GetToken_String();
-            Assert.AreEqual(TokenType.T_STRING_EX, t.type);
+            Assert.AreEqual(TokenType.STRING_EX, t.type);
             Assert.AreEqual("aaa\nbbb\nccc", t.value);
             Assert.AreEqual("から", t.josi);
             t = tok.GetToken_String();
-            Assert.AreEqual(TokenType.T_STRING_EX, t.type);
+            Assert.AreEqual(TokenType.STRING_EX, t.type);
             Assert.AreEqual("豆腐", t.value);
             Assert.AreEqual("へ", t.josi);
             Assert.AreEqual(2, t.lineno);
             // 6
             tok.Source = "`abc\tabc`";
             t = tok.GetToken_String();
-            Assert.AreEqual(TokenType.T_STRING, t.type);
+            Assert.AreEqual(TokenType.STRING, t.type);
             Assert.AreEqual("abc\tabc", t.value);
             Assert.AreEqual("", t.josi);
         }
@@ -231,35 +231,35 @@ namespace TestNako
             // 1
             NakoTokenizer tok = new NakoTokenizer("「ABC」");
             tok.Tokenize();
-            Boolean r = tok.CheckTokenType(new TokenType[] { TokenType.T_STRING });
+            Boolean r = tok.CheckTokenType(new TokenType[] { TokenType.STRING });
             Assert.IsTrue(r);
             // 2
             tok.Source = "「ABC{123}」";
             tok.Tokenize();
             r = tok.CheckTokenType(new TokenType[] {
-                TokenType.T_STRING,
-                TokenType.T_AND,
-                TokenType.T_INT
+                TokenType.STRING,
+                TokenType.AND,
+                TokenType.INT
             });
             Assert.IsTrue(r);
             // 3
             tok.Source = "「ABC{`123`}」";
             tok.Tokenize();
             r = tok.CheckTokenType(new TokenType[] {
-                TokenType.T_STRING,
-                TokenType.T_AND,
-                TokenType.T_STRING
+                TokenType.STRING,
+                TokenType.AND,
+                TokenType.STRING
             });
             Assert.IsTrue(r);
             //4
             tok.Source = "「「ABC{`123`&123}」」";
             tok.Tokenize();
             r = tok.CheckTokenType(new TokenType[] {
-                TokenType.T_STRING,
-                TokenType.T_AND,
-                TokenType.T_STRING,
-                TokenType.T_AND,
-                TokenType.T_INT
+                TokenType.STRING,
+                TokenType.AND,
+                TokenType.STRING,
+                TokenType.AND,
+                TokenType.INT
             });
             Assert.IsTrue(r);
         }

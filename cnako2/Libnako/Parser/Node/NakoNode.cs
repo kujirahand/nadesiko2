@@ -6,7 +6,7 @@ namespace Libnako.Parser
 {
     public class NakoNode
     {
-        protected NodeType _type = 0;
+        protected NodeType _type = NodeType.NOP;
         public NodeType type
         {
             get { return _type; }

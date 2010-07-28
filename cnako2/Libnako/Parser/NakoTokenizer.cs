@@ -35,7 +35,7 @@ namespace Libnako.Parser
             tokens.MoveTop();
             while (!tokens.IsEOF())
             {
-                if (tokens.CurrentTokenType == TokenType.T_DEF_FUNCTION)
+                if (tokens.CurrentTokenType == TokenType.DEF_FUNCTION)
                 {
                     TokenizeAnalize_DefFunction();
                     continue;
@@ -50,7 +50,7 @@ namespace Libnako.Parser
             tokens.MoveTop();
             while (!tokens.IsEOF())
             {
-                if (tokens.CurrentTokenType == TokenType.T_WORD)
+                if (tokens.CurrentTokenType == TokenType.WORD)
                 {
                     NakoToken token = tokens.CurrentToken;
                     if (NakoDic.Instance.ContainsKey(token.value))
@@ -69,12 +69,12 @@ namespace Libnako.Parser
             while (!tokens.IsEOF())
             {
                 // 行末のトークンが関数名
-                if (tokens.CurrentTokenType == TokenType.T_WORD &&
-                    tokens.NextTokenType == TokenType.T_EOL)
+                if (tokens.CurrentTokenType == TokenType.WORD &&
+                    tokens.NextTokenType == TokenType.EOL)
                 {
                     NakoToken t = tokens.CurrentToken;
-                    NakoDic.Instance[t.value] = TokenType.T_FUNCTION_NAME;
-                    t.type = TokenType.T_FUNCTION_NAME;
+                    NakoDic.Instance[t.value] = TokenType.FUNCTION_NAME;
+                    t.type = TokenType.FUNCTION_NAME;
                 }
                 tokens.MoveNext();
             }
@@ -101,7 +101,7 @@ namespace Libnako.Parser
                 last_token_type = token.type;
 
                 // 文字列の展開があればここで処理してしまう
-                if (token.type == TokenType.T_STRING_EX)
+                if (token.type == TokenType.STRING_EX)
                 {
                     Tokenize_ExtractSTring(token);
                     continue;
@@ -112,7 +112,7 @@ namespace Libnako.Parser
             // レベルが合うまで T_SCOPE_END を差し込む
             while (level > 0)
             {
-                tokens.Add(new NakoToken(TokenType.T_SCOPE_END, lineno, level));
+                tokens.Add(new NakoToken(TokenType.SCOPE_END, lineno, level));
                 level--;
             }
         }
@@ -124,13 +124,13 @@ namespace Libnako.Parser
             if (newIndent > indentCount)
             {
                 level++;
-                NakoToken token = new NakoToken(TokenType.T_SCOPE_BEGIN, lineno, level);
+                NakoToken token = new NakoToken(TokenType.SCOPE_BEGIN, lineno, level);
                 tokens.Add(token);
             }
             else
             {
                 level--;
-                NakoToken token = new NakoToken(TokenType.T_SCOPE_END, lineno, level);
+                NakoToken token = new NakoToken(TokenType.SCOPE_END, lineno, level);
                 tokens.Add(token);
             }
         }
@@ -141,7 +141,7 @@ namespace Libnako.Parser
             if (IsEOF()) return null;
 
             // トークン１文字を取得
-            NakoToken token = new NakoToken(TokenType.T_UNKNOWN, lineno, level);
+            NakoToken token = new NakoToken(TokenType.UNKNOWN, lineno, level);
             Char c = CurrentChar;
             Char nc;
 
@@ -149,7 +149,7 @@ namespace Libnako.Parser
             switch (c) {
                 // Check EOL
                 case '\n':
-                    token.type = TokenType.T_EOL;
+                    token.type = TokenType.EOL;
                     cur++;
                     lineno++;
                     tokens.Add(token);
@@ -170,12 +170,12 @@ namespace Libnako.Parser
                     nc = NextChar;
                     if (nc == '=') {
                         cur += 2;
-                        token.type = TokenType.T_EQ_EQ;
+                        token.type = TokenType.EQ_EQ;
                     }
                     else
                     {
                         cur++;
-                        token.type = TokenType.T_EQ;
+                        token.type = TokenType.EQ;
                     }
                     return token;
                 // Check Flag
@@ -184,12 +184,12 @@ namespace Libnako.Parser
                     if (nc == '&')
                     {
                         cur += 2;
-                        token.type = TokenType.T_AND_AND;
+                        token.type = TokenType.AND_AND;
                     }
                     else
                     {
                         cur++;
-                        token.type = TokenType.T_AND;
+                        token.type = TokenType.AND;
                     }
                     return token;
                 case '|':
@@ -197,12 +197,12 @@ namespace Libnako.Parser
                     if (nc == '|')
                     {
                         cur += 2;
-                        token.type = TokenType.T_OR_OR;
+                        token.type = TokenType.OR_OR;
                     }
                     else
                     {
                         cur++;
-                        token.type = TokenType.T_OR;
+                        token.type = TokenType.OR;
                     }
                     return token;
                 case '<':
@@ -210,17 +210,17 @@ namespace Libnako.Parser
                     if (nc == '=')
                     {
                         cur += 2;
-                        token.type = TokenType.T_LT_EQ;
+                        token.type = TokenType.LT_EQ;
                     }
                     else if (nc == '>')
                     {
                         cur += 2;
-                        token.type = TokenType.T_NOT_EQ;
+                        token.type = TokenType.NOT_EQ;
                     }
                     else
                     {
                         cur++;
-                        token.type = TokenType.T_LT;
+                        token.type = TokenType.LT;
                     }
                     return token;
                 case '>':
@@ -228,17 +228,17 @@ namespace Libnako.Parser
                     if (nc == '=')
                     {
                         cur += 2;
-                        token.type = TokenType.T_GT_EQ;
+                        token.type = TokenType.GT_EQ;
                     }
                     else if (nc == '<')
                     {
                         cur += 2;
-                        token.type = TokenType.T_NOT_EQ;
+                        token.type = TokenType.NOT_EQ;
                     }
                     else
                     {
                         cur++;
-                        token.type = TokenType.T_GT;
+                        token.type = TokenType.GT;
                     }
                     return token;
                 case '!':
@@ -246,12 +246,12 @@ namespace Libnako.Parser
                     if (nc == '=')
                     {
                         cur += 2;
-                        token.type = TokenType.T_NOT_EQ;
+                        token.type = TokenType.NOT_EQ;
                     }
                     else
                     {
                         cur++;
-                        token.type = TokenType.T_NOT;
+                        token.type = TokenType.NOT;
                     }
                     return token;
                 case '「':
@@ -260,43 +260,43 @@ namespace Libnako.Parser
                 case '`':
                     return GetToken_String();
                 case '+':
-                    token.type = TokenType.T_PLUS;
+                    token.type = TokenType.PLUS;
                     cur++;
                     return token;
                 case '-':
-                    token.type = TokenType.T_MINUS;
+                    token.type = TokenType.MINUS;
                     cur++;
                     return token;
                 case '*':
-                    if (last_token_type == TokenType.T_EOL ||
-                        last_token_type == TokenType.T_UNKNOWN)
+                    if (last_token_type == TokenType.EOL ||
+                        last_token_type == TokenType.UNKNOWN)
                     {
-                        token.type = TokenType.T_DEF_FUNCTION;
+                        token.type = TokenType.DEF_FUNCTION;
                     }
                     else
                     {
-                        token.type = TokenType.T_MUL;
+                        token.type = TokenType.MUL;
                     }
                     cur++;
                     return token;
                 case '/':
-                    token.type = TokenType.T_DIV;
+                    token.type = TokenType.DIV;
                     cur++;
                     return token;
                 case '%':
-                    token.type = TokenType.T_MOD;
+                    token.type = TokenType.MOD;
                     cur++;
                     return token;
                 case '^':
-                    token.type = TokenType.T_POWER;
+                    token.type = TokenType.POWER;
                     cur++;
                     return token;
                 case '(':
-                    token.type = TokenType.T_PARENTHESES_L;
+                    token.type = TokenType.PARENTHESES_L;
                     cur++;
                     return token;
                 case ')':
-                    token.type = TokenType.T_PARENTHESES_R;
+                    token.type = TokenType.PARENTHESES_R;
                     cur++;
                     return token;
                 default:
@@ -313,7 +313,7 @@ namespace Libnako.Parser
         public NakoToken GetToken_String()
         {
             if (IsEOF()) return null;
-            NakoToken token = new NakoToken(TokenType.T_STRING, lineno, level);
+            NakoToken token = new NakoToken(TokenType.STRING, lineno, level);
             Char c = CurrentChar;
             Char nc = NextChar;
             String eos = "」";
@@ -377,7 +377,7 @@ namespace Libnako.Parser
             // Extract ?
             if (is_extract)
             {
-                token.type = TokenType.T_STRING_EX;
+                token.type = TokenType.STRING_EX;
             }
             token.value = str;
             CheckJosi(token);
@@ -417,7 +417,7 @@ namespace Libnako.Parser
 
         public NakoToken GetToken_Word()
         {
-            NakoToken token = new NakoToken(TokenType.T_WORD, lineno, level);
+            NakoToken token = new NakoToken(TokenType.WORD, lineno, level);
             String s = "";
             while (!IsEOF())
             {
@@ -475,7 +475,7 @@ namespace Libnako.Parser
 
         public NakoToken GetToken_Number()
         {
-            NakoToken token = new NakoToken(TokenType.T_INT, lineno, level);
+            NakoToken token = new NakoToken(TokenType.INT, lineno, level);
             String s = "";
             while (!IsEOF())
             {
@@ -487,7 +487,7 @@ namespace Libnako.Parser
             if (CurrentChar == '.' && IsNumber(NextChar))
             {
                 s += CurrentChar;
-                token.type = TokenType.T_NUMBER;
+                token.type = TokenType.NUMBER;
                 cur++;
                 while (!IsEOF())
                 {
@@ -551,7 +551,7 @@ namespace Libnako.Parser
                     }
                     else
                     {
-                        tokens.Add(new NakoToken(TokenType.T_AND, t.lineno, t.level));
+                        tokens.Add(new NakoToken(TokenType.AND, t.lineno, t.level));
                     }
                     Char eoc = (c == '{') ? '}' : '｝';
                     i++;
@@ -596,12 +596,12 @@ namespace Libnako.Parser
                         new NakoTokenizerException("展開あり文字列内の利用できない`\\'メソッド:" + str_ex, t);
                     }
                     // string
-                    NakoToken tt = new NakoToken(TokenType.T_STRING, t.lineno, t.level);
+                    NakoToken tt = new NakoToken(TokenType.STRING, t.lineno, t.level);
                     tt.value = tmp;
                     tokens.Add(tt);
                     tmp = "";
                     // &
-                    tokens.Add(new NakoToken(TokenType.T_AND, t.lineno, t.level));
+                    tokens.Add(new NakoToken(TokenType.AND, t.lineno, t.level));
                     // 再帰的にトークン解析を行う
                     NakoTokenizer tok = new NakoTokenizer(str_ex);
                     tok.lineno = t.lineno;
@@ -622,10 +622,10 @@ namespace Libnako.Parser
                 if (!is_first)
                 {
                     // &
-                    tokens.Add(new NakoToken(TokenType.T_AND, t.lineno, t.level));
+                    tokens.Add(new NakoToken(TokenType.AND, t.lineno, t.level));
                 }
                 // string
-                NakoToken t3 = new NakoToken(TokenType.T_STRING, t.lineno, t.level);
+                NakoToken t3 = new NakoToken(TokenType.STRING, t.lineno, t.level);
                 t3.value = tmp;
                 tokens.Add(t3);
             }
@@ -633,7 +633,7 @@ namespace Libnako.Parser
                 // 必要なら空文字列を追加
                 if (is_first)
                 {
-                    NakoToken t4 = new NakoToken(TokenType.T_STRING, t.lineno, t.level);
+                    NakoToken t4 = new NakoToken(TokenType.STRING, t.lineno, t.level);
                     t4.value = "";
                     tokens.Add(t4);
                 }

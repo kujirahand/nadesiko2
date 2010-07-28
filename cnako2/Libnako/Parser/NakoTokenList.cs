@@ -48,7 +48,7 @@ namespace Libnako.Parser
         {
             get {
                 NakoToken t = CurrentToken;
-                if (t == null) return TokenType.T_UNKNOWN;
+                if (t == null) return TokenType.UNKNOWN;
                 return t.type;
             }
         }
@@ -58,7 +58,7 @@ namespace Libnako.Parser
             get
             {
                 NakoToken t = NextToken;
-                if (t == null) return TokenType.T_UNKNOWN;
+                if (t == null) return TokenType.UNKNOWN;
                 return t.type;
             }
         }

@@ -35,7 +35,7 @@ namespace Libnako.Parser
             level = 0;
             lineno = 0;
             indentCount = 0;
-            last_token_type = TokenType.T_UNKNOWN;
+            last_token_type = TokenType.UNKNOWN;
             tokens = new NakoTokenList();
             dic = NakoDic.Instance;
         }
