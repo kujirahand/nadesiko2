@@ -40,9 +40,6 @@ namespace Libnako.Parser
             this.Add("繰り返す", TokenType.T_FOR);
             this.Add("間", TokenType.T_WHILE);
             this.Add("条件分岐", TokenType.T_SWITCH);
-            this.Add("●", TokenType.T_DEF_FUNCTION);
-            this.Add("*", TokenType.T_DEF_FUNCTION);
-            this.Add("■", TokenType.T_DEF_GROUP);
             this.Add("PRINT", TokenType.T_PRINT);
         }
 

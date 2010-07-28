@@ -43,7 +43,6 @@ namespace Libnako.Parser
             cur.Tokenize();
             cur.Parse();
             namespaceList.Add(cur);
-            //
         }
 
         /// <summary>
@@ -58,12 +57,12 @@ namespace Libnako.Parser
                 // 二重で取り込みはしない
                 return;
             }
+            String src;
             files.Add(filename2);
-            StreamReader sr = new StreamReader(
-                filename,
-                Encoding.UTF8);
-            string src = sr.ReadToEnd();
-            sr.Close();
+            using (StreamReader sr = new StreamReader(filename, Encoding.UTF8))
+            {
+                src = sr.ReadToEnd();
+            }
             this.Parse(src, filename);
         }
 
