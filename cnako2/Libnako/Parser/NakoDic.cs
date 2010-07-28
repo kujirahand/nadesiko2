@@ -36,6 +36,7 @@ namespace Libnako.Parser
             this.Add("ナデシコ", TokenType.RESERVED);
             this.Add("もし", TokenType.IF);
             this.Add("ならば", TokenType.THEN);
+            this.Add("違えば", TokenType.ELSE);
             this.Add("ここまで", TokenType.KOKOMADE);
             this.Add("繰り返す", TokenType.FOR);
             this.Add("間", TokenType.WHILE);

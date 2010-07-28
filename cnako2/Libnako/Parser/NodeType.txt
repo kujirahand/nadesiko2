@@ -4,6 +4,7 @@ NOP
 // Blocks
 BLOCK
 BLOCKS
+IF
 
 // Const
 INT

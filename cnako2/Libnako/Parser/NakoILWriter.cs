@@ -66,6 +66,9 @@ namespace Libnako.Parser
                 case NodeType.LD_VARIABLE:
                     _getVariable((NakoNodeVariable)node);
                     return;
+                case NodeType.IF:
+                    _if((NakoNodeIf)node);
+                    return;
             }
             // ---
             if (!node.hasChildren()) return;
@@ -75,6 +78,14 @@ namespace Libnako.Parser
                 Write_r(n);
             }
             //
+        }
+
+        private void _if(NakoNodeIf node)
+        {
+            // TODO: if の実装
+            // ラベルジャンプを行う
+            Write_r(node.nodeCond);
+
         }
 
         private void _let(NakoNodeLet node)
