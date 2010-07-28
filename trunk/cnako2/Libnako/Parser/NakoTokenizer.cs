@@ -88,6 +88,12 @@ namespace Libnako.Parser
             // [注意]
             // このメソッドでは Init() を呼んではいけない @see: NakoTokenizer.Tokenize_ExtractSTring()
             // 文字列展開中に lineno がセットされる場合がある
+
+            // はじめにインデントを数える
+            this.indentCount = this.CountIndent();
+            this.level = 0;
+            
+            // 繰り返しトークンを取得する
             while (!IsEOF())
             {
                 NakoToken token = GetToken();
@@ -133,17 +139,20 @@ namespace Libnako.Parser
                         if (newIndent > indentCount)
                         {
                             level++;
+                            token.type = TokenType.T_SCOPE_BEGIN;
                         }
                         else
                         {
                             level--;
+                            token.type = TokenType.T_SCOPE_END;
                         }
+                        is_left_side = false;
+                        return token;
                     }
                     else
                     {
                         cur++; // skip
                     }
-                    is_left_side = false;
                     return null;
                 // 句読点
                 case ';':

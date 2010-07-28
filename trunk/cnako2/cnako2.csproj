@@ -60,7 +60,6 @@
     <Compile Include="Libnako\Parser\NakoJosi.cs" />
     <Compile Include="Libnako\Parser\NakoLoader.cs" />
     <Compile Include="Libnako\Parser\NakoNamespace.cs" />
-    <Compile Include="Libnako\Parser\NakoNode.cs" />
     <Compile Include="Libnako\Parser\NakoToken.cs" />
     <Compile Include="Libnako\Parser\NakoParser.cs" />
     <Compile Include="Libnako\Parser\NakoTokenizer.cs" />
@@ -69,6 +68,7 @@
     <Compile Include="Libnako\Parser\NakoVariableNames.cs" />
     <Compile Include="Libnako\Parser\NakoVariableType.cs" />
     <Compile Include="Libnako\Parser\NodeType.cs" />
+    <Compile Include="Libnako\Parser\Node\NakoNode.cs" />
     <Compile Include="Libnako\Parser\Node\NakoNodeCalc.cs" />
     <Compile Include="Libnako\Parser\Node\NakoNodeConst.cs" />
     <Compile Include="Libnako\Parser\Node\NakoNodeDefFunction.cs" />

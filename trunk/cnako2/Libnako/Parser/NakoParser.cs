@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Libnako.Parser.Node;
 
 namespace Libnako.Parser
 {
@@ -162,7 +163,7 @@ namespace Libnako.Parser
 
             if (!Accept(TokenType.T_EOL))
             {
-                throw new NakoParserException("関数の定義で開業がありません。", t);
+                throw new NakoParserException("関数の定義で改行がありません。", t);
             }
             tok.MoveNext(); // T_EOL
 

@@ -19,7 +19,7 @@ namespace cnako
             Object o;
             Boolean r;
 
-            ns.source = "A=10; B=20; C=A+B; PRINT C";
+            ns.source = "A=10; PRINT C";
             ns.Tokenize();
             _w("token:" + ns.Tokens.toTypeString());
             ns.Parse();
