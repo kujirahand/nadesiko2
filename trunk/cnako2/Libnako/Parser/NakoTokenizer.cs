@@ -108,6 +108,31 @@ namespace Libnako.Parser
                 }
                 tokens.Add(token);
             }
+
+            // レベルが合うまで T_SCOPE_END を差し込む
+            while (level > 0)
+            {
+                tokens.Add(new NakoToken(TokenType.T_SCOPE_END, lineno, level));
+                level--;
+            }
+        }
+
+        private void CheckScope()
+        {
+            int newIndent = CountIndent();
+            if (newIndent == indentCount) return;
+            if (newIndent > indentCount)
+            {
+                level++;
+                NakoToken token = new NakoToken(TokenType.T_SCOPE_BEGIN, lineno, level);
+                tokens.Add(token);
+            }
+            else
+            {
+                level--;
+                NakoToken token = new NakoToken(TokenType.T_SCOPE_END, lineno, level);
+                tokens.Add(token);
+            }
         }
 
         public NakoToken GetToken()
@@ -127,32 +152,13 @@ namespace Libnako.Parser
                     token.type = TokenType.T_EOL;
                     cur++;
                     lineno++;
-                    is_left_side = true;
+                    tokens.Add(token);
+                    CheckScope();
                     return token;
                 // Check Indent
                 case ' ':
                 case '\t':
-                    if (is_left_side)
-                    {
-                        int newIndent = CountIndent();
-                        if (newIndent == indentCount) return null;
-                        if (newIndent > indentCount)
-                        {
-                            level++;
-                            token.type = TokenType.T_SCOPE_BEGIN;
-                        }
-                        else
-                        {
-                            level--;
-                            token.type = TokenType.T_SCOPE_END;
-                        }
-                        is_left_side = false;
-                        return token;
-                    }
-                    else
-                    {
-                        cur++; // skip
-                    }
+                    cur++; // skip
                     return null;
                 // 句読点
                 case ';':

@@ -14,7 +14,6 @@ namespace Libnako.Parser
         protected int indentCount;
         protected int lineno;
         protected NakoDic dic;
-        protected Boolean is_left_side;
         protected TokenType last_token_type;
 
         protected string source;
@@ -36,7 +35,6 @@ namespace Libnako.Parser
             level = 0;
             lineno = 0;
             indentCount = 0;
-            is_left_side = true;
             last_token_type = TokenType.T_UNKNOWN;
             tokens = new NakoTokenList();
             dic = NakoDic.Instance;
