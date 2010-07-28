@@ -20,7 +20,7 @@ namespace TestNako
             ns.ParseOnlyValue();
             Assert.IsTrue(ns.TopNode.hasChildren());
             Boolean r = ns.TopNode.Children.checkNodeType(new NodeType[] {
-                NodeType.N_CALC
+                NodeType.CALC
             });
             // 2
             ns.source = "(1+2)*3";
@@ -28,7 +28,7 @@ namespace TestNako
             ns.ParseOnlyValue();
             Assert.IsTrue(ns.TopNode.hasChildren());
             r = ns.TopNode.Children.checkNodeType(new NodeType[] {
-                NodeType.N_CALC
+                NodeType.CALC
             });
             // 3
             ns.source = "A=5";
@@ -36,7 +36,7 @@ namespace TestNako
             ns.Parse();
             Assert.IsTrue(ns.TopNode.hasChildren());
             r = ns.TopNode.Children.checkNodeType(new NodeType[] {
-                NodeType.N_LET
+                NodeType.LET
             });
         }
     }

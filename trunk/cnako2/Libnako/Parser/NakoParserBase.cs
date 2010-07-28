@@ -15,6 +15,7 @@ namespace Libnako.Parser
         protected NakoVariableNames globalVar;
         protected NakoVariableNames localVar;
         internal Stack<NakoParserFrame> frameStack;
+        internal Stack<NakoParserNodeState> stateStack;
 
         public NakoParserBase(NakoTokenList tokens)
         {
@@ -22,6 +23,7 @@ namespace Libnako.Parser
             tokens.MoveTop();
             parentNode = topNode = new NakoNode();
             frameStack = new Stack<NakoParserFrame>();
+            stateStack = new Stack<NakoParserNodeState>();
             lastNode = null;
             globalVar = new NakoVariableNames();
             localVar = new NakoVariableNames();
@@ -48,7 +50,29 @@ namespace Libnako.Parser
             parentNode = f.parentNode;
             localVar = f.localVar;
         }
+
+        protected void PushNodeState()
+        {
+            NakoParserNodeState s = new NakoParserNodeState();
+            s.lastNode = this.lastNode;
+            s.parentNode = this.parentNode;
+            stateStack.Push(s);
+        }
+
+        protected void PopNodeState()
+        {
+            NakoParserNodeState s = stateStack.Pop();
+            this.lastNode = s.lastNode;
+            this.parentNode = s.parentNode;
+        }
     }
+
+    internal class NakoParserNodeState
+    {
+        public NakoNode parentNode;
+        public NakoNode lastNode;
+    }
+
     internal class NakoParserFrame
     {
         public NakoVariableNames localVar;

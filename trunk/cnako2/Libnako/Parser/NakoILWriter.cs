@@ -39,31 +39,31 @@ namespace Libnako.Parser
             if (node == null) return;
             switch (node.type)
             {
-                case NodeType.N_NOP:
+                case NodeType.NOP:
                     result.Add(NakoILCode.newNop());
                     break;
-                case NodeType.N_CALC:
+                case NodeType.CALC:
                     newCalc((NakoNodeCalc)node);
                     return;
-                case NodeType.N_INT:
+                case NodeType.INT:
                     result.Add(new NakoILCode(NakoILType.LD_CONST_INT, node.value));
                     return;
-                case NodeType.N_NUMBER:
+                case NodeType.NUMBER:
                     result.Add(new NakoILCode(NakoILType.LD_CONST_REAL, node.value));
                     return;
-                case NodeType.N_STRING:
+                case NodeType.STRING:
                     result.Add(new NakoILCode(NakoILType.LD_CONST_STR, node.value));
                     return;
-                case NodeType.N_PRINT:
+                case NodeType.PRINT:
                     _print(node);
                     return;
-                case NodeType.N_ST_VARIABLE:
+                case NodeType.ST_VARIABLE:
                     _setVariable((NakoNodeVariable)node);
                     return;
-                case NodeType.N_LET:
+                case NodeType.LET:
                     _let((NakoNodeLet)node);
                     return;
-                case NodeType.N_LD_VARIABLE:
+                case NodeType.LD_VARIABLE:
                     _getVariable((NakoNodeVariable)node);
                     return;
             }

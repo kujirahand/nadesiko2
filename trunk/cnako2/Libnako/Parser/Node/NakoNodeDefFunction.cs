@@ -13,7 +13,7 @@ namespace Libnako.Parser.Node
 
         public NakoNodeDefFunction()
         {
-            type = NodeType.N_DEF_FUNCTION;
+            type = NodeType.DEF_FUNCTION;
             localVar = new NakoVariableNames();
         }
 

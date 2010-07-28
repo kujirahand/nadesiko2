@@ -9,33 +9,33 @@ namespace Libnako.Parser
     {
         // Define Token
         // NODE
-        N_NOP = 0,
+        NOP = 0,
 
         // Blocks
-        N_BLOCK = 1,
-        N_BLOCKS = 2,
+        BLOCK = 1,
+        BLOCKS = 2,
 
         // Const
-        N_INT = 3,
-        N_NUMBER = 4,
-        N_STRING = 5,
+        INT = 3,
+        NUMBER = 4,
+        STRING = 5,
 
         // Value
-        N_FORMULA = 6,
-        N_VALUE = 7,
-        N_CALC = 8,
-        N_LD_VARIABLE = 9,
+        FORMULA = 6,
+        VALUE = 7,
+        CALC = 8,
+        LD_VARIABLE = 9,
 
         // Let
-        N_LET = 10,
-        N_ST_VARIABLE = 11,
+        LET = 10,
+        ST_VARIABLE = 11,
 
         // Function
-        N_CALL_FUNCTION = 12,
-        N_DEF_FUNCTION = 13,
+        CALL_FUNCTION = 12,
+        DEF_FUNCTION = 13,
 
         // DEBUG
-        N_PRINT = 14,
+        PRINT = 14,
 
         END_OF_NODE
     }

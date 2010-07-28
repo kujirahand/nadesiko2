@@ -13,7 +13,7 @@ namespace Libnako.Parser.Node
 
         public NakoNodeCalc()
         {
-            type = NodeType.N_CALC;
+            type = NodeType.CALC;
         }
 
         public override String ToTypeString()

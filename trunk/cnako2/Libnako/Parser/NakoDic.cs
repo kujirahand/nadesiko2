@@ -33,14 +33,14 @@ namespace Libnako.Parser
 
         public void Init()
         {
-            this.Add("ナデシコ", TokenType.T_RESERVED);
-            this.Add("もし", TokenType.T_IF);
-            this.Add("ならば", TokenType.T_THEN);
-            this.Add("ここまで", TokenType.T_KOKOMADE);
-            this.Add("繰り返す", TokenType.T_FOR);
-            this.Add("間", TokenType.T_WHILE);
-            this.Add("条件分岐", TokenType.T_SWITCH);
-            this.Add("PRINT", TokenType.T_PRINT);
+            this.Add("ナデシコ", TokenType.RESERVED);
+            this.Add("もし", TokenType.IF);
+            this.Add("ならば", TokenType.THEN);
+            this.Add("ここまで", TokenType.KOKOMADE);
+            this.Add("繰り返す", TokenType.FOR);
+            this.Add("間", TokenType.WHILE);
+            this.Add("条件分岐", TokenType.SWITCH);
+            this.Add("PRINT", TokenType.PRINT);
         }
 
     }
