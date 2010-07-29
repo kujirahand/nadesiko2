@@ -63,7 +63,9 @@ namespace Libnako.Parser
             return true;
         }
 
-        // _blocks : _block ... 
+        // _blocks : empty
+        //         | _statement ... 
+        //         | _eol
         //         ;
         private Boolean _blocks()
         {
@@ -74,10 +76,17 @@ namespace Libnako.Parser
 
             while (!tok.IsEOF())
             {
+                // ブロックを抜けるキーワードをチェック
+                if (Accept(TokenType.SCOPE_END)) return true;
+                if (Accept(TokenType.KOKOMADE)) return true;
+
+                // ブロック要素を繰り返し評価
                 t = tok.CurrentToken;
                 if (_statement()) continue;
                 if (_eol()) continue;
-                throw new NakoParserException("ブロックの解析エラー", t);
+
+                //throw new NakoParserException("ブロックの解析エラー", t);
+                return true;
             }
             return true;
         }
@@ -103,17 +112,15 @@ namespace Libnako.Parser
         {
             if (tok.IsEOF()) return true;
             if (_def_function()) return true;
-            if (_if_stmt()) return true;
             if (_let()) return true;
             if (_callfunc()) return true;
             if (_print()) return true;
+            if (_if_stmt()) return true;
             return false;
         }
 
-        // _if_stmt : IF _value THEN [_statement]
-        //          | IF _value THEN [_statement] ELSE [_statement]
-        //          | IF _value THEN EOL [_scope]
-        //          | IF _value THEN EOL [_scope] ELSE [_scope]
+        // _if_stmt : IF _value THEN [EOL] (_scope|_statement)
+        //          | IF _value THEN [EOL] (_scope|_statement) ELSE (_scope|_statement)
         //          ;
         private Boolean _if_stmt()
         {
@@ -130,46 +137,30 @@ namespace Libnako.Parser
             }
             ifnode.nodeCond = this.lastNode;
             
-            // THEN
+            // THEN (日本語では、助詞なのでたぶんないはずだが...)
             if (Accept(TokenType.THEN)) tok.MoveNext();
-            
-            // 単文のとき
-            if (!Accept(TokenType.EOL))
-            {
-                // TRUE
-                this.PushNodeState();
-                ifnode.nodeTrue = this.parentNode = this.lastNode = new NakoNode();
-                _statement(); // true でも false でも OK
-                this.PopNodeState();
-                // FALSE
-                if (Accept(TokenType.ELSE))
-                {
-                    tok.MoveNext(); // skip ELSE
-                    this.PushNodeState();
-                    ifnode.nodeFalse = this.parentNode = this.lastNode = new NakoNode();
-                    _statement(); // true でも false でも OK
-                    this.PopNodeState();
-                }
-            }
-            else
-            {
-                tok.MoveNext(); // skip EOL
+            while (Accept(TokenType.EOL)) tok.MoveNext();
 
-                // _scope
-                // TRUE
+            // TRUE
+            this.PushNodeState();
+            ifnode.nodeTrue = this.parentNode = this.lastNode = new NakoNode();
+            if (Accept(TokenType.SCOPE_BEGIN)){
+                _scope();
+            } else{ 
+                _statement(); 
+            }
+            this.PopNodeState();
+
+            // FALSE
+            if (Accept(TokenType.ELSE))
+            {
+                tok.MoveNext(); // skip ELSE
+                while (Accept(TokenType.EOL)) tok.MoveNext();
+                    
                 this.PushNodeState();
-                ifnode.nodeTrue = this.parentNode = this.lastNode = new NakoNode();
-                _scope(); // true でも false でも OK
+                ifnode.nodeFalse = this.parentNode = this.lastNode = new NakoNode();
+                if (Accept(TokenType.SCOPE_BEGIN)) { _scope(); } else { _statement(); }
                 this.PopNodeState();
-                // FALSE
-                if (Accept(TokenType.ELSE))
-                {
-                    tok.MoveNext(); // skip ELSE
-                    this.PushNodeState();
-                    ifnode.nodeFalse = this.parentNode = this.lastNode = new NakoNode();
-                    _scope(); // true でも false でも OK
-                    this.PopNodeState();
-                }
             }
             this.parentNode.AddChild(ifnode);
             this.lastNode = ifnode;

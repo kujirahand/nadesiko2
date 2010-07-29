@@ -110,15 +110,18 @@ namespace Libnako.Parser.Tokenizer
             }
 
             // レベルが合うまで T_SCOPE_END を差し込む
-            while (level > 0)
-            {
-                tokens.Add(new NakoToken(TokenType.SCOPE_END, lineno, level));
-                level--;
-            }
+            CheckScope();
         }
+
+        private Stack<int> indentStack = null;
 
         private void CheckScope()
         {
+            if (indentStack == null) {
+                indentStack = new Stack<int>();
+                indentStack.Push(indentCount); // set default indentCount == 0
+            }
+
             int newIndent = CountIndent();
             if (newIndent == indentCount) return;
             if (newIndent > indentCount)
@@ -126,13 +129,27 @@ namespace Libnako.Parser.Tokenizer
                 level++;
                 NakoToken token = new NakoToken(TokenType.SCOPE_BEGIN, lineno, level);
                 tokens.Add(token);
+                indentStack.Push(newIndent);
             }
             else
             {
-                level--;
-                NakoToken token = new NakoToken(TokenType.SCOPE_END, lineno, level);
-                tokens.Add(token);
+                NakoToken t = new NakoToken(TokenType.SCOPE_END, lineno, level);
+                // 連続で POP する可能性がある
+                while (true)
+                {
+                    int chk = indentStack.Peek();
+                    if (chk == newIndent) break;
+                    if (chk < newIndent)
+                    {
+                        throw new NakoTokenizerException("インデントレベルが間違っています。", t);
+                    }
+                    level--;
+                    indentStack.Pop();
+                    NakoToken token = new NakoToken(TokenType.SCOPE_END, lineno, level);
+                    tokens.Add(token);
+                }
             }
+            indentCount = newIndent;
         }
 
         public NakoToken GetToken()
@@ -154,7 +171,7 @@ namespace Libnako.Parser.Tokenizer
                     lineno++;
                     tokens.Add(token);
                     CheckScope();
-                    return token;
+                    return null;
                 // Check Indent
                 case ' ':
                 case '\t':
