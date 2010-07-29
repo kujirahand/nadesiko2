@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Libnako.Parser.Node;
+using Libnako.Parser.Tokenizer;
 
 namespace Libnako.Parser
 {
@@ -74,9 +75,7 @@ namespace Libnako.Parser
             while (!tok.IsEOF())
             {
                 t = tok.CurrentToken;
-                // ブロックレベルの変更を検出
-                if (t.level < tBlockTop.level) return true;
-                if (_block()) continue;
+                if (_statement()) continue;
                 if (_eol()) continue;
                 throw new NakoParserException("ブロックの解析エラー", t);
             }
@@ -94,28 +93,20 @@ namespace Libnako.Parser
             return false;
         }
 
-        // _block : empty 
-        //        | _statement
-        //        | _def_function
-        //        | _if_stmt
-        //        ;
-        private Boolean _block()
-        {
-            if (tok.IsEOF()) return true;
-            if (_def_function()) return true;
-            if (_if_stmt()) return true;
-            return _statement();
-        }
-
         // _statement : _let
+        //            | _def_function
+        //            | _if_stmt
         //            | _print
         //            | _callfunc
         //            ;
         private Boolean _statement()
         {
+            if (tok.IsEOF()) return true;
+            if (_def_function()) return true;
+            if (_if_stmt()) return true;
             if (_let()) return true;
-            if (_print()) return true;
             if (_callfunc()) return true;
+            if (_print()) return true;
             return false;
         }
 
@@ -160,25 +151,28 @@ namespace Libnako.Parser
                     this.PopNodeState();
                 }
             }
-            tok.MoveNext(); // skip EOL
-
-            // _scope
-            // TRUE
-            this.PushNodeState();
-            ifnode.nodeTrue = this.parentNode = this.lastNode = new NakoNode();
-            _scope(); // true でも false でも OK
-            this.PopNodeState();
-            // FALSE
-            if (Accept(TokenType.ELSE))
+            else
             {
-                tok.MoveNext(); // skip ELSE
+                tok.MoveNext(); // skip EOL
+
+                // _scope
+                // TRUE
                 this.PushNodeState();
-                ifnode.nodeFalse = this.parentNode = this.lastNode = new NakoNode();
+                ifnode.nodeTrue = this.parentNode = this.lastNode = new NakoNode();
                 _scope(); // true でも false でも OK
                 this.PopNodeState();
+                // FALSE
+                if (Accept(TokenType.ELSE))
+                {
+                    tok.MoveNext(); // skip ELSE
+                    this.PushNodeState();
+                    ifnode.nodeFalse = this.parentNode = this.lastNode = new NakoNode();
+                    _scope(); // true でも false でも OK
+                    this.PopNodeState();
+                }
             }
-
             this.parentNode.AddChild(ifnode);
+            this.lastNode = ifnode;
             return true;
 
         }
@@ -402,6 +396,21 @@ namespace Libnako.Parser
         // _value : _calc_formula | _calc_value ;
         private Boolean _value()
         {
+            // TODO:
+            // _value は再帰が多くコストが高いのであり得る値だけチェックする
+            switch (tok.CurrentTokenType)
+            {
+                case TokenType.PARENTHESES_L:
+                case TokenType.INT:
+                case TokenType.NUMBER:
+                case TokenType.WORD:
+                case TokenType.FUNCTION_NAME:
+                case TokenType.STRING:
+                    break;
+                default:
+                    return false;
+            }
+
             if (_calc_fact()) return true;
             return false;
         }
@@ -550,7 +559,6 @@ namespace Libnako.Parser
             NakoNodeCalc node = new NakoNodeCalc();
             if (!_calc_term())
             {
-                tok.Restore();
                 return false;
             }
 

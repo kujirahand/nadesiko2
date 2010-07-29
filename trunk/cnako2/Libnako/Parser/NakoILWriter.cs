@@ -16,6 +16,8 @@ namespace Libnako.Parser
         {
             get { return result; }
         }
+        protected Dictionary<NakoILCode, int> labels = null;
+
 
         public NakoILWriter(NakoNode topNode = null)
         {
@@ -26,12 +28,62 @@ namespace Libnako.Parser
         public void Init()
         {
             this.result = new NakoILCodeList();
+            this.labels = new Dictionary<NakoILCode, int>();
         }
 
         public void Write(NakoNode topNode = null)
         {
             if (topNode != null) { this.topNode = topNode; }
             Write_r(this.topNode);
+            FixLabel();
+        }
+
+        public void FixLabel()
+        {
+            // 現在のラベル位置を調べる
+            for (int i = 0; i < result.Count; i++)
+            {
+                NakoILCode code = result[i];
+                if (code.type != NakoILType.NOP) continue;
+                if (labels.ContainsKey(code))
+                {
+                    labels[code] = i;
+                }
+            }
+            // JUMP/BRANCH_TRUE/BRANCH_FALSE を解決する
+            for (int i = 0; i < result.Count; i++)
+            {
+                NakoILCode code = result[i];
+                switch (code.type)
+                {
+                    case NakoILType.JUMP:
+                    case NakoILType.BRANCH_TRUE:
+                    case NakoILType.BRANCH_FALSE:
+                        break;
+                    default:
+                        continue;
+                }
+                if (!(code.value is NakoILCode)) continue;
+                if (code.value is NakoILCode)
+                {
+                    if (labels.ContainsKey( (NakoILCode)code.value) )
+                    {
+                        code.value = (Object)labels[(NakoILCode)code.value];
+                        continue;
+                    }
+                    throw new NakoILWriterException("ラベルが解決できません");
+                }
+            }
+            
+        }
+
+        protected void Write_list(NakoNodeList list)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                NakoNode node = list[i];
+                Write_r(node);
+            }
         }
 
         protected void Write_r(NakoNode node)
@@ -72,21 +124,46 @@ namespace Libnako.Parser
             }
             // ---
             if (!node.hasChildren()) return;
-            for (int i = 0; i < node.Children.Count; i++)
-            {
-                NakoNode n = node.Children[i];
-                Write_r(n);
-            }
-            //
+            Write_list(node.Children);
+        }
+
+        protected NakoILCode createLABEL(String labelName = "")
+        {
+            NakoILCode r = NakoILCode.newNop();
+            r.value = labelName;
+            labels[r] = -1;
+            return r;
+        }
+        protected NakoILCode createJUMP(NakoILCode label)
+        {
+            NakoILCode r = new NakoILCode(NakoILType.JUMP, label);
+            return r;
         }
 
         private void _if(NakoNodeIf node)
         {
-            // TODO: if の実装
-            // ラベルジャンプを行う
+            // (1) 条件文をコードにする
             Write_r(node.nodeCond);
-
+            // (2) コードの結果により分岐する
+            // 分岐先をラベルとして作成
+            NakoILCode label_endif = createLABEL("ENDIF");
+            NakoILCode label_else = createLABEL("ELSE");
+            result.Add(new NakoILCode(NakoILType.BRANCH_FALSE, label_else));
+            // (3) TRUE
+            if (node.nodeTrue != null)
+            {
+                Write_r(node.nodeTrue);
+                result.Add(createJUMP(label_endif));
+            }
+            // (4) FALSE
+            result.Add(label_else);
+            if (node.nodeFalse != null)
+            {
+                Write_r(node.nodeFalse);
+            }
+            result.Add(label_endif);
         }
+
 
         private void _let(NakoNodeLet node)
         {
@@ -179,8 +256,8 @@ namespace Libnako.Parser
         }
     }
 
-    public class NakoILWriterExcept : Exception
+    public class NakoILWriterException : Exception
     {
-        public NakoILWriterExcept(String message) : base(message) { }
+        public NakoILWriterException(String message) : base(message) { }
     }
 }

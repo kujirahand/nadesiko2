@@ -14,19 +14,33 @@ namespace cnako
         static void Main(string[] args)
         {
             NakoNamespace ns = new NakoNamespace();
-            NakoILWriter w = new NakoILWriter();
             NakoInterpreter runner = new NakoInterpreter();
-            Object o;
-            Boolean r;
 
-            ns.source = "A=10; B=20; もし、A==20ならば、PRINT A 違えば PRINT B";
+            /*
+            String src =
+                "A=1\n" +
+                "B=2\n" +
+                "もし、A=Bならば\n" +
+                "  PRINT`真`\n" +
+                "違えば\n" +
+                "  PRINT`偽`\n";
+             */
+
+            String src = "A=1;B=1;もし、A=Bならば、PRINT`OK`違えば,PRINT`NG`";
+
+            ns.source = src;
             ns.Tokenize();
+            _w(ns.Tokens.toTypeString());
+
+            ns.Publish();
+
+            // DESCRIPT
             _w("token:" + ns.Tokens.toTypeString());
-            ns.Parse();
             _w("nodes:"+ns.TopNode.Children.toTypeString());
-            w.Write(ns.TopNode);
-            _w("IL:"+w.Result.ToTypeString());
-            runner.Run(w.Result);
+            _w("IL:\n"+ns.Codes.ToAddressString());
+
+            //
+            runner.Run(ns.Codes);
             _w(runner.PrintLog);
 
             //

@@ -48,6 +48,8 @@ NOT		 { args:0, push:1, pop:1 }
 JUMP    { args:1, push:0, pop:0 }
 CALL    { args:1, push:0, pop:0 }
 RET     { args:0, push:0, pop:0 }
+BRANCH_TRUE  { args:1, push:0, pop:1 }
+BRANCH_FALSE { args:1, push:0, pop:1 }
 
 // DEBUG用
 PRINT   { args:0, push:0, pop:1 }

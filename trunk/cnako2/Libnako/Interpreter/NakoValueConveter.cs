@@ -21,6 +21,10 @@ namespace Libnako.Interpreter
             {
                 return (Int32)value;
             }
+            if (t == typeof(Boolean))
+            {
+                return (Boolean)value ? 1 : 0;
+            }
             if (t == typeof(Double))
             {
                 return (Int32)((Double)value);
@@ -45,6 +49,10 @@ namespace Libnako.Interpreter
             if (t == typeof(Double))
             {
                 return (Double)value;
+            }
+            if (t == typeof(Boolean))
+            {
+                return (Boolean)value ? 1 : 0;
             }
             if (t == typeof(String))
             {

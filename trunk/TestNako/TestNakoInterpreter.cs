@@ -68,7 +68,7 @@ namespace TestNako
 
             // 2
             w.Init();
-            runner.Init();
+            runner.Reset();
             ns.source = "A=5; B=8; C=A+B; PRINT C";
             ns.Tokenize();
             ns.Parse();
@@ -93,7 +93,7 @@ namespace TestNako
 
             // 2
             w.Init();
-            runner.Init();
+            runner.Reset();
             ns.source = "PRINT (1 / 2) * 4";
             ns.Tokenize();
             ns.Parse();
@@ -103,7 +103,7 @@ namespace TestNako
 
             // 3
             w.Init();
-            runner.Init();
+            runner.Reset();
             ns.source = "PRINT 4 % 3";
             ns.Tokenize();
             ns.Parse();
@@ -113,7 +113,7 @@ namespace TestNako
 
             // 4
             w.Init();
-            runner.Init();
+            runner.Reset();
             ns.source = "PRINT 2 ^ 3";
             ns.Tokenize();
             ns.Parse();
@@ -123,7 +123,7 @@ namespace TestNako
 
             // 5 : べき乗の優先順位
             w.Init();
-            runner.Init();
+            runner.Reset();
             ns.source = "PRINT 2 * 3 ^ 3";
             ns.Tokenize();
             ns.Parse();

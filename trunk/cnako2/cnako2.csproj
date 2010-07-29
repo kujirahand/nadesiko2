@@ -51,31 +51,31 @@
     <Compile Include="Libnako\Parser\NakoILCodeList.cs" />
     <Compile Include="Libnako\Parser\NakoILType.cs" />
     <Compile Include="Libnako\Parser\NakoILWriter.cs" />
-    <Compile Include="Libnako\Parser\NakoNodeList.cs" />
     <Compile Include="Libnako\Parser\NakoParserBase.cs" />
     <Compile Include="Libnako\Parser\NakoParserException.cs" />
-    <Compile Include="Libnako\Parser\NakoTokenizerBase.cs" />
-    <Compile Include="Libnako\Parser\NakoDic.cs" />
     <Compile Include="Libnako\Parser\NakoHalfFlag.cs" />
-    <Compile Include="Libnako\Parser\NakoJosi.cs" />
     <Compile Include="Libnako\Parser\NakoLoader.cs" />
     <Compile Include="Libnako\Parser\NakoNamespace.cs" />
-    <Compile Include="Libnako\Parser\NakoToken.cs" />
     <Compile Include="Libnako\Parser\NakoParser.cs" />
-    <Compile Include="Libnako\Parser\NakoTokenizer.cs" />
-    <Compile Include="Libnako\Parser\NakoTokenizerException.cs" />
-    <Compile Include="Libnako\Parser\NakoTokenList.cs" />
     <Compile Include="Libnako\Parser\NakoVariableNames.cs" />
     <Compile Include="Libnako\Parser\NakoVariableType.cs" />
-    <Compile Include="Libnako\Parser\NodeType.cs" />
     <Compile Include="Libnako\Parser\Node\NakoNode.cs" />
     <Compile Include="Libnako\Parser\Node\NakoNodeCalc.cs" />
     <Compile Include="Libnako\Parser\Node\NakoNodeConst.cs" />
     <Compile Include="Libnako\Parser\Node\NakoNodeDefFunction.cs" />
     <Compile Include="Libnako\Parser\Node\NakoNodeIf.cs" />
     <Compile Include="Libnako\Parser\Node\NakoNodeLet.cs" />
+    <Compile Include="Libnako\Parser\Node\NakoNodeList.cs" />
     <Compile Include="Libnako\Parser\Node\NakoNodeVariable.cs" />
-    <Compile Include="Libnako\Parser\TokenType.cs" />
+    <Compile Include="Libnako\Parser\Node\NodeType.cs" />
+    <Compile Include="Libnako\Parser\Tokenizer\NakoDic.cs" />
+    <Compile Include="Libnako\Parser\Tokenizer\NakoJosi.cs" />
+    <Compile Include="Libnako\Parser\Tokenizer\NakoToken.cs" />
+    <Compile Include="Libnako\Parser\Tokenizer\NakoTokenizer.cs" />
+    <Compile Include="Libnako\Parser\Tokenizer\NakoTokenizerBase.cs" />
+    <Compile Include="Libnako\Parser\Tokenizer\NakoTokenizerException.cs" />
+    <Compile Include="Libnako\Parser\Tokenizer\NakoTokenList.cs" />
+    <Compile Include="Libnako\Parser\Tokenizer\TokenType.cs" />
     <Compile Include="Libnako\Parser\NakoVariableScope.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -84,10 +84,10 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Libnako\Parser\NodeType.txt" />
     <Content Include="Libnako\Parser\NakoILType.txt" />
     <Content Include="Libnako\Parser\CalcType.txt" />
-    <Content Include="Libnako\Parser\TokenType.txt" />
+    <Content Include="Libnako\Parser\Node\NodeType.txt" />
+    <Content Include="Libnako\Parser\Tokenizer\TokenType.txt" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

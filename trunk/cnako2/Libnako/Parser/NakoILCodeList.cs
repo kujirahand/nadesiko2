@@ -35,5 +35,39 @@ namespace Libnako.Parser
             }
             return r;
         }
+        public String ToAddressString()
+        {
+            String r = "";
+            for (int i = 0; i < this.Count; i++)
+            {
+                NakoILCode c;
+                c = this[i];
+                // address
+                r += String.Format("{0,0:X4}:", i);
+                // type
+                r += c.type.ToString();
+                //TODO
+                switch (c.type)
+                {
+                    case NakoILType.NOP:
+                        if (c.value is string) { r += ":" + c.value; }
+                        break;
+                    case NakoILType.LD_CONST_INT:
+                    case NakoILType.LD_CONST_REAL:
+                    case NakoILType.LD_CONST_STR:
+                    case NakoILType.LD_GLOBAL:
+                    case NakoILType.ST_GLOBAL:
+                        r += ":" + c.value;
+                        break;
+                    case NakoILType.JUMP:
+                    case NakoILType.BRANCH_FALSE:
+                    case NakoILType.BRANCH_TRUE:
+                        r += "->" + String.Format("{0,0:X4}", (Int32)c.value);
+                        break;
+                }
+                r += "\n";
+            }
+            return r;
+        }
     }
 }

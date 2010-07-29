@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Libnako.Parser
+namespace Libnako.Parser.Tokenizer
 {
     public enum TokenType
     {
