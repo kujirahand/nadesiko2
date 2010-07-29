@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using Libnako.Parser;
+using Libnako.Parser.Tokenizer;
 
 namespace TestNako
 {

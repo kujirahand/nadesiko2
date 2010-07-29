@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Libnako.Parser.Tokenizer;
 
-namespace Libnako.Parser
+namespace Libnako.Parser.Node
 {
     public class NakoNode
     {
@@ -57,22 +58,9 @@ namespace Libnako.Parser
 
         public virtual String ToTypeString()
         {
-            return type.ToString();
+            String r = type.ToString();
+            return r;
         }
 
-        public virtual void Eval()
-        {
-            EvalSelf();
-            EvalChildren();
-        }
-
-        protected virtual void EvalSelf()
-        {
-        }
-
-        protected virtual void EvalChildren()
-        {
-            if (!hasChildren()) return;
-        }
     }
 }

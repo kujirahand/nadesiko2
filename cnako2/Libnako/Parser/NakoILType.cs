@@ -58,9 +58,11 @@ namespace Libnako.Parser
         JUMP             = 31, // { args:1, push:0, pop:0 } 
         CALL             = 32, // { args:1, push:0, pop:0 } 
         RET              = 33, // { args:0, push:0, pop:0 } 
+        BRANCH_TRUE      = 34, // { args:1, push:0, pop:1 } 
+        BRANCH_FALSE     = 35, // { args:1, push:0, pop:1 } 
 
         // DEBUG用
-        PRINT            = 34, // { args:0, push:0, pop:1 } 
+        PRINT            = 36, // { args:0, push:0, pop:1 } 
 
 
     }
@@ -99,6 +101,8 @@ namespace Libnako.Parser
         case NakoILType.JUMP:
         case NakoILType.CALL:
         case NakoILType.RET:
+        case NakoILType.BRANCH_TRUE:
+        case NakoILType.BRANCH_FALSE:
         case NakoILType.PRINT:
 
 */

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Libnako.Parser
+namespace Libnako.Parser.Tokenizer
 {
     public class NakoJosi : List<String>
     {
@@ -23,6 +23,8 @@ namespace Libnako.Parser
 
         protected void Init()
         {
+            Add("ならば");
+            Add("なら");
             Add("から");
             Add("まで");
             Add("とは");
