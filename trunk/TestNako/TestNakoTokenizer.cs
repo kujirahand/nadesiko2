@@ -82,6 +82,40 @@ namespace TestNako
             Assert.IsTrue(r);
         }
 
+        [Test]
+        public void TestBlockLevel()
+        {
+            NakoTokenizer tok = new NakoTokenizer(null);
+            Boolean r;
+            //
+            tok.Source = "もし、A=1ならば\n" +
+                "  PRINT A\n" +
+                "違えば\n" +
+                "  PRINT A\n";
+            tok.Tokenize();
+            r = tok.CheckTokenType(new TokenType[]{
+                TokenType.IF,
+                TokenType.WORD,
+                TokenType.EQ,
+                TokenType.INT,
+                TokenType.EOL,
+                TokenType.SCOPE_BEGIN,
+                TokenType.PRINT,
+                TokenType.WORD,
+                TokenType.EOL,
+                TokenType.SCOPE_END,
+                TokenType.ELSE,
+                TokenType.EOL,
+                TokenType.SCOPE_BEGIN,
+                TokenType.PRINT,
+                TokenType.WORD,
+                TokenType.EOL,
+                TokenType.SCOPE_END
+            });
+            Assert.IsTrue(r);
+
+        }
+
         [Test(Description = "TestNakoHalfFlag")]
         public void TestNakoHalfFlag()
         {
