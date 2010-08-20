@@ -315,6 +315,7 @@ namespace Libnako.Parser.Tokenizer
                 case ')':
                     token.type = TokenType.PARENTHESES_R;
                     cur++;
+                    CheckJosi(token);
                     return token;
                 default:
                     NakoToken tt = GetToken_NotFlag();

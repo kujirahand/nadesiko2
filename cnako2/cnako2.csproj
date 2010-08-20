@@ -67,6 +67,7 @@
     <Compile Include="Libnako\Parser\Node\NakoNodeLet.cs" />
     <Compile Include="Libnako\Parser\Node\NakoNodeList.cs" />
     <Compile Include="Libnako\Parser\Node\NakoNodeVariable.cs" />
+    <Compile Include="Libnako\Parser\Node\NakoNodeWhile.cs" />
     <Compile Include="Libnako\Parser\Node\NodeType.cs" />
     <Compile Include="Libnako\Parser\Tokenizer\NakoDic.cs" />
     <Compile Include="Libnako\Parser\Tokenizer\NakoJosi.cs" />
