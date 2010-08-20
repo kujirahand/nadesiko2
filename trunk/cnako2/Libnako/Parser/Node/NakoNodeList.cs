@@ -17,6 +17,18 @@ namespace Libnako.Parser.Node
             return r;
         }
 
+        public NakoNode Pop()
+        {
+            NakoNode n = this[this.Count - 1];
+            this.RemoveAt(this.Count - 1);
+            return n;
+        }
+
+        public void Push(NakoNode value)
+        {
+            this.Add(value);
+        }
+
 
         public Boolean checkNodeType(NodeType[] checker)
         {

@@ -16,6 +16,8 @@ namespace Libnako.Parser
         protected NakoTokenList tok;
         protected NakoVariableNames globalVar;
         protected NakoVariableNames localVar;
+        protected NakoNodeList calcStack;
+        protected Stack<int> calcStackCounters;
         internal Stack<NakoParserFrame> frameStack;
         internal Stack<NakoParserNodeState> stateStack;
 
@@ -26,6 +28,8 @@ namespace Libnako.Parser
             parentNode = topNode = new NakoNode();
             frameStack = new Stack<NakoParserFrame>();
             stateStack = new Stack<NakoParserNodeState>();
+            calcStack = new NakoNodeList();
+            calcStackCounters = new Stack<int>();
             lastNode = null;
             globalVar = new NakoVariableNames();
             localVar = new NakoVariableNames();
@@ -36,12 +40,34 @@ namespace Libnako.Parser
             return (tok.CurrentTokenType == type);
         }
 
+        protected void TokenTry()
+        {
+            tok.Save();
+            calcStackCounters.Push(calcStack.Count);
+        }
+        protected void TokenBack()
+        {
+            tok.Restore();
+            int c = calcStackCounters.Pop();
+            while (c > calcStack.Count)
+            {
+                calcStack.Pop();
+            }
+        }
+        protected void TokenFinally()
+        {
+            tok.RemoveTop();
+            calcStackCounters.Pop();
+        }
+
         protected void PushFrame()
         {
             NakoParserFrame f = new NakoParserFrame();
             f.lastNode = lastNode;
             f.parentNode = parentNode;
             f.localVar = localVar;
+            f.calcStack = calcStack;
+            f.calcStackCounters = calcStackCounters;
             frameStack.Push(f);
         }
 
@@ -51,6 +77,8 @@ namespace Libnako.Parser
             lastNode = f.lastNode;
             parentNode = f.parentNode;
             localVar = f.localVar;
+            calcStack = f.calcStack;
+            calcStackCounters = f.calcStackCounters;
         }
 
         protected void PushNodeState()
@@ -80,5 +108,7 @@ namespace Libnako.Parser
         public NakoVariableNames localVar;
         public NakoNode lastNode;
         public NakoNode parentNode;
+        public NakoNodeList calcStack;
+        public Stack<int> calcStackCounters;
     }
 }

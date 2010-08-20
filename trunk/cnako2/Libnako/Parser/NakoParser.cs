@@ -105,6 +105,7 @@ namespace Libnako.Parser
         // _statement : _let
         //            | _def_function
         //            | _if_stmt
+        //            | _white
         //            | _print
         //            | _callfunc
         //            ;
@@ -116,6 +117,7 @@ namespace Libnako.Parser
             if (_callfunc()) return true;
             if (_print()) return true;
             if (_if_stmt()) return true;
+            if (_while()) return true;
             return false;
         }
 
@@ -135,7 +137,7 @@ namespace Libnako.Parser
             {
                 throw new NakoParserException("もし文で比較式がありません。", t);
             }
-            ifnode.nodeCond = this.lastNode;
+            ifnode.nodeCond = calcStack.Pop();
             
             // THEN (日本語では、助詞なのでたぶんないはずだが...)
             if (Accept(TokenType.THEN)) tok.MoveNext();
@@ -165,7 +167,42 @@ namespace Libnako.Parser
             this.parentNode.AddChild(ifnode);
             this.lastNode = ifnode;
             return true;
+        }
 
+        // _while   : _value WHILE _statement
+        //          | _value WHILE EOL _blocks
+        //          ;
+        private Boolean _while()
+        {
+            TokenTry();
+            if (!_value())
+            {
+                TokenBack();
+                return false;
+            }
+            if (!Accept(TokenType.WHILE))
+            {
+                TokenBack();
+                return false;
+            }
+            TokenFinally();
+            calcStack.Pop();
+            NakoNodeWhile node_while = new NakoNodeWhile();
+            node_while.nodeCond = lastNode;
+            
+            // 単文の時
+            this.PushNodeState();
+            node_while.nodeBlocks = this.parentNode = this.lastNode = new NakoNode();
+            if (!Accept(TokenType.EOL))
+            {
+                _statement();
+            }
+            else
+            {
+                _blocks();
+            }
+            this.PopNodeState();
+            return false;
         }
 
         // _callfunc : _value .. FUNCTION_NAME
@@ -175,19 +212,19 @@ namespace Libnako.Parser
         {
             NakoToken t = tok.CurrentToken;
             // TODO: 関数呼び出し
-            tok.Save();
+            TokenTry();
             while (!tok.IsEOF())
             {
                 if (tok.CurrentTokenType == TokenType.FUNCTION_NAME)
                 {
                     tok.MoveNext();
-                    tok.RemoveTop();
+                    TokenFinally();
                     return true;
                 }
                 if (!_value()) break;
 
             }
-            tok.Restore();
+            TokenBack();
             return false;
         }
 
@@ -299,19 +336,20 @@ namespace Libnako.Parser
             {
                 return false;
             }
-            tok.Save();
+            TokenTry();
             tok.MoveNext();
 
             if (!_value())
             {
-                tok.Restore();
+                TokenBack();
                 throw new NakoParserException("代入文で値がありません。", tok.CurrentToken);
             }
             node.AddChild(lastNode);
             parentNode.AddChild(node);
             lastNode = node;
 
-            tok.RemoveTop();
+            TokenFinally();
+            calcStack.Pop();
             return true;
         }
 
@@ -381,6 +419,8 @@ namespace Libnako.Parser
             _variable__detectVariable(n, name);
             lastNode = n;
             tok.MoveNext();
+            
+            calcStack.Push(n);
             return true;
         }
 
@@ -421,20 +461,20 @@ namespace Libnako.Parser
             // Check '(' *** ')'
             if (Accept(TokenType.PARENTHESES_L))
             {
-                tok.Save();
+                TokenTry();
                 tok.MoveNext();
                 if (!_value())
                 {
-                    tok.Restore();
+                    TokenBack();
                     return false;
                 }
                 if (Accept(TokenType.PARENTHESES_R))
                 {
                     tok.MoveNext();
-                    tok.RemoveTop();
+                    TokenFinally();
                     return true;
                 }
-                tok.Restore();
+                TokenBack();
                 return false;
             }
             return _calc_value();
@@ -444,26 +484,27 @@ namespace Libnako.Parser
         //             ;
         private Boolean _calc_power()
         {
-            NakoNodeCalc node = new NakoNodeCalc();
             if (!_calc_formula())
             {
                 return false;
             }
-            node.nodeL = lastNode;
             if (Accept(TokenType.POWER))
             {
-                node.calc_type = CalcType.POWER;
-                tok.Save();
+                TokenTry();
                 tok.MoveNext();
                 if (!_calc_formula())
                 {
-                    tok.Restore();
+                    TokenBack();
                     return false;
                 }
-                tok.RemoveTop();
-                node.nodeR = lastNode;
+                TokenFinally();
+                
+                NakoNodeCalc node = new NakoNodeCalc();
+                node.calc_type = CalcType.POWER;
+                node.nodeR = calcStack.Pop();
+                node.nodeL = calcStack.Pop();
                 lastNode = node;
-
+                calcStack.Push(node);
                 return true;
             }
             else
@@ -478,26 +519,30 @@ namespace Libnako.Parser
         //            ;
         private Boolean _calc_expr()
         {
-            NakoNodeCalc node = new NakoNodeCalc();
             if (!_calc_power()) { return false; }
-            node.nodeL = lastNode;
             if (Accept(TokenType.MUL) || Accept(TokenType.DIV) || Accept(TokenType.MOD))
             {
-                tok.Save();
+                int calc_type = CalcType.NOP;
+                TokenTry();
                 switch (tok.CurrentTokenType)
                 {
-                    case TokenType.MUL: node.calc_type = CalcType.MUL; break;
-                    case TokenType.DIV: node.calc_type = CalcType.DIV; break;
-                    case TokenType.MOD: node.calc_type = CalcType.MOD; break;
+                    case TokenType.MUL: calc_type = CalcType.MUL; break;
+                    case TokenType.DIV: calc_type = CalcType.DIV; break;
+                    case TokenType.MOD: calc_type = CalcType.MOD; break;
                 }
                 tok.MoveNext();
                 if (!_calc_power())
                 {
-                    tok.Restore();
+                    TokenBack();
                     return false;
                 }
-                tok.RemoveTop();
-                node.nodeR = lastNode;
+                TokenFinally();
+                
+                NakoNodeCalc node = new NakoNodeCalc();
+                node.calc_type = calc_type;
+                node.nodeR = calcStack.Pop();
+                node.nodeL = calcStack.Pop();
+                calcStack.Push(node);
                 lastNode = node;
                 return true;
             }
@@ -512,28 +557,28 @@ namespace Libnako.Parser
         //            ;
         private Boolean _calc_term()
         {
-            NakoNodeCalc node = new NakoNodeCalc();
             if (!_calc_expr())
             {
                 return false;
             }
-            node.nodeL = lastNode;
             if (Accept(TokenType.PLUS) || Accept(TokenType.MINUS))
             {
+                NakoNodeCalc node = new NakoNodeCalc();
                 node.calc_type =
                     Accept(TokenType.PLUS) ? CalcType.ADD
                                              : CalcType.SUB;
-                tok.Save();
+                TokenTry();
                 tok.MoveNext();
                 if (!_calc_expr())
                 {
-                    tok.Restore();
+                    TokenBack();
                     return false;
                 }
-                tok.RemoveTop();
-                node.nodeR = lastNode;
+                TokenFinally();
+                node.nodeR = calcStack.Pop();
+                node.nodeL = calcStack.Pop();
+                calcStack.Push(node);
                 lastNode = node;
-
                 return true;
             }
             else
@@ -553,7 +598,6 @@ namespace Libnako.Parser
                 return false;
             }
 
-            node.nodeL = lastNode;
             if (Accept(TokenType.GT) ||
                 Accept(TokenType.LT) ||
                 Accept(TokenType.GT_EQ) ||
@@ -572,15 +616,17 @@ namespace Libnako.Parser
                     case TokenType.EQ_EQ: node.calc_type = CalcType.EQ; break;
                     case TokenType.NOT_EQ: node.calc_type = CalcType.NOT_EQ; break;
                 }
-                tok.Save();
+                TokenTry();
                 tok.MoveNext();
                 if (!_calc_term())
                 {
-                    tok.Restore();
+                    TokenBack();
                     return false;
                 }
-                tok.RemoveTop();
-                node.nodeR = lastNode;
+                TokenFinally();
+                node.nodeR = calcStack.Pop();
+                node.nodeL = calcStack.Pop();
+                calcStack.Push(node);
                 lastNode = node;
                 return true;
             }
@@ -606,9 +652,10 @@ namespace Libnako.Parser
                 {
                     throw new NakoParserException("「-」記号の後に値がありません。", tok.CurrentToken);
                 }
-                node.nodeL = lastNode;
-                tok.RemoveTop();
+                node.nodeL = calcStack.Pop();
+                TokenFinally();
                 lastNode = node;
+                calcStack.Push(node);
                 return true;
             }
 
@@ -632,6 +679,7 @@ namespace Libnako.Parser
                 node.value = Int32.Parse(node.Token.value);
                 lastNode = node;
                 tok.MoveNext();
+                calcStack.Push(node);
                 return true;
             }
             else if (Accept(TokenType.NUMBER))
@@ -640,6 +688,7 @@ namespace Libnako.Parser
                 node.value = Double.Parse(node.Token.value);
                 lastNode = node;
                 tok.MoveNext();
+                calcStack.Push(node);
                 return true;
             }
             else if (Accept(TokenType.STRING))
@@ -648,6 +697,7 @@ namespace Libnako.Parser
                 node.value = node.Token.value;
                 lastNode = node;
                 tok.MoveNext();
+                calcStack.Push(node);
                 return true;
             }
 

@@ -7,19 +7,14 @@ namespace Libnako.Parser.Node
 {
     public class NakoNode
     {
-        protected NodeType _type = NodeType.NOP;
-        public NodeType type
-        {
-            get { return _type; }
-            set
-            {
-                _type = value;
-            }
-        }
-
+        public NodeType type = NodeType.NOP;
         public Object value = null;
-        public String josi = "";
-
+        private String _josi;
+        public String josi
+        {
+            set { _josi = value; }
+            get { return getJosi(); }
+        }
         protected NakoNodeList children = null;
         public NakoNodeList Children
         {
@@ -31,8 +26,14 @@ namespace Libnako.Parser.Node
             if (children.Count == 0) return false;
             return true;
         }
-
         private NakoToken token = null;
+        
+        protected String getJosi()
+        {
+            return _josi;
+        }
+
+
         public NakoToken Token
         {
             get { return this.token; }

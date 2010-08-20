@@ -17,15 +17,7 @@ namespace cnako
             NakoInterpreter runner = new NakoInterpreter();
 
             String src =
-                "A=1\n" +
-                "B=2\n" +
-                "もし、A=1ならば\n" +
-                "  もし、B=1ならば\n" +
-                "    PRINT `11`\n" +
-                "  違えば\n" +
-                "    PRINT `12`\n" +
-                "違えば\n" +
-                "  PRINT `*`"
+                "(3+5)を表示"
             ;
             
             /*
