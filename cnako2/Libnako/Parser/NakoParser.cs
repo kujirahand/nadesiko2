@@ -186,23 +186,28 @@ namespace Libnako.Parser
                 return false;
             }
             TokenFinally();
+            tok.MoveNext();
             calcStack.Pop();
             NakoNodeWhile node_while = new NakoNodeWhile();
             node_while.nodeCond = lastNode;
+
+            while (Accept(TokenType.EOL)) tok.MoveNext();
             
-            // 単文の時
             this.PushNodeState();
             node_while.nodeBlocks = this.parentNode = this.lastNode = new NakoNode();
-            if (!Accept(TokenType.EOL))
+            
+            if (Accept(TokenType.SCOPE_BEGIN))
             {
-                _statement();
+                _scope();
             }
             else
             {
-                _blocks();
+                _statement();
             }
             this.PopNodeState();
-            return false;
+            this.parentNode.AddChild(node_while);
+            lastNode = node_while;
+            return true;
         }
 
         // _callfunc : _value .. FUNCTION_NAME
