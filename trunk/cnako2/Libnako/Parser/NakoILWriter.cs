@@ -121,6 +121,9 @@ namespace Libnako.Parser
                 case NodeType.IF:
                     _if((NakoNodeIf)node);
                     return;
+                case NodeType.WHILE:
+                    _while((NakoNodeWhile)node);
+                    return;
             }
             // ---
             if (!node.hasChildren()) return;
@@ -164,6 +167,21 @@ namespace Libnako.Parser
             result.Add(label_endif);
         }
 
+        private void _while(NakoNodeWhile node)
+        {
+            // (1) 条件をコードにする
+            NakoILCode label_while_begin = createLABEL("WHILE_BEGIN");
+            result.Add(label_while_begin);
+            Write_r(node.nodeCond);
+            // (2) コードの結果により分岐する
+            // 分岐先をラベルとして作成
+            NakoILCode label_while_end = createLABEL("WHILE_END");
+            result.Add(new NakoILCode(NakoILType.BRANCH_FALSE, label_while_end));
+            // (3) ループブロックを書き込む
+            Write_r(node.nodeBlocks);
+            result.Add(createJUMP(label_while_begin));
+            result.Add(label_while_end);
+        }
 
         private void _let(NakoNodeLet node)
         {

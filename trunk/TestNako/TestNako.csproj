@@ -48,6 +48,7 @@
     <Compile Include="TestNakoNodeIF.cs" />
     <Compile Include="TestNakoParser.cs" />
     <Compile Include="TestNakoTokenizer.cs" />
+    <Compile Include="TestNodeWhile.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\cnako2\cnako2.csproj">

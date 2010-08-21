@@ -9,5 +9,10 @@ namespace Libnako.Parser.Node
     {
         public NakoNode nodeCond;
         public NakoNode nodeBlocks;
+
+        public NakoNodeWhile()
+        {
+            type = NodeType.WHILE;
+        }
     }
 }

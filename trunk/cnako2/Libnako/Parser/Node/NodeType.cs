@@ -15,28 +15,32 @@ namespace Libnako.Parser.Node
         BLOCK = 1,
         BLOCKS = 2,
         IF = 3,
+        WHILE = 4,
+        FOR = 5,
+        FOREACH = 6,
+        REPEAT_TIMES = 7,
 
         // Const
-        INT = 4,
-        NUMBER = 5,
-        STRING = 6,
+        INT = 8,
+        NUMBER = 9,
+        STRING = 10,
 
         // Value
-        FORMULA = 7,
-        VALUE = 8,
-        CALC = 9,
-        LD_VARIABLE = 10,
+        FORMULA = 11,
+        VALUE = 12,
+        CALC = 13,
+        LD_VARIABLE = 14,
 
         // Let
-        LET = 11,
-        ST_VARIABLE = 12,
+        LET = 15,
+        ST_VARIABLE = 16,
 
         // Function
-        CALL_FUNCTION = 13,
-        DEF_FUNCTION = 14,
+        CALL_FUNCTION = 17,
+        DEF_FUNCTION = 18,
 
         // DEBUG
-        PRINT = 15,
+        PRINT = 19,
 
         END_OF_NODE
     }
