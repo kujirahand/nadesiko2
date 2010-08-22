@@ -1,0 +1,53 @@
+ _program : empty | _blocks ... ;
+ _scope : SCOPE_BEGIN _blocks SCOPE_END ;
+ _blocks : empty
+         | _statement ...
+         | _eol
+         ;
+ _eol : EOL ;
+ _statement : _let
+            | _def_function
+            | _if_stmt
+            | _white
+            | _print
+            | _callfunc
+            ;
+ _if_stmt : IF _value THEN [EOL] (_scope|_statement)
+          | IF _value THEN [EOL] (_scope|_statement) ELSE (_scope|_statement)
+          ;
+ _while   : _value WHILE _statement
+          | _value WHILE EOL _blocks
+          ;
+ _callfunc : _value .. FUNCTION_NAME
+           | FUNCTION_NAME
+           ;
+ _def_function : DEF_FUNCTION _def_function_args FUNCTION_NAME EOL _blocks
+               ;
+ _def_function_args : empty
+                    | '(' WORD ... ')' FUNCTION_NAME _blocks
+                    | WORD ... FUNCTION_NAME _blocks
+                    ;
+ _print : PRINT _value
+ _let : _setVariable EQ _value
+ _setVariable : WORD '[' VALUE ']'
+              | WORD ;
+ _variable : WORD '[' VALUE ']'
+           | WORD ;
+ _value : _calc_fact ;
+ _calc_value : _const | _variable
+             ;
+ _calc_formula : PARENTHESES_L _value PARENTHESES_R
+               | _calc_value
+               ;
+ _calc_power : _calc_formula { POWER _calc_formula }
+             ;
+ _calc_expr : _calc_power { (MUL|DIV|MOD) _calc_power }
+            ;
+ _calc_term : _calc_expr { (PLUS|MINUS) _calc_expr }
+            ;
+ _calc_comp : _calc_term  { (GT|GT_EQ|LT|LT_EQ|EQ|EQ_EQ|NOT_EQ) _calc_term }
+            ;
+ _calc_fact : MINUS  _calc_comp
+            | _calc_comp
+            ;
+ _const : INT | NUMBER | STRING ;
