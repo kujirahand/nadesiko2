@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 
 using NUnit.Framework;
-using Libnako.Parser;
+using Libnako.JCompiler;
 using Libnako.Interpreter;
+using Libnako.JCompiler.ILWriter;
 
 namespace TestNako
 {
@@ -69,6 +70,20 @@ namespace TestNako
             codes = ns.Publish("PRINT 2^3");
             runner.Run(codes);
             Assert.AreEqual(runner.PrintLog, "8");
+
+        }
+        [Test]
+        public void TestRenzokuCalc()
+        {
+            // (1) 
+            codes = ns.Publish("PRINT 1+2+3+4");
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "10");
+
+            // (2) 
+            codes = ns.Publish("PRINT 1*2*3*4");
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "24");
 
         }
     }
