@@ -25,7 +25,7 @@ namespace Libnako.JCompiler.Tokenizer
             }
             // 数字?
             if ('０' <= c && c <= '９') {
-                return (Char)(c - '０');
+                return (Char)('0' + c - '０');
             }
             // アルファベット?
             if ('Ａ' <= c && c <= 'Ｚ') {
@@ -51,7 +51,7 @@ namespace Libnako.JCompiler.Tokenizer
 
         public void Init()
         {
-
+            this.Add('　', ' ');
             this.Add('●','*');
             this.Add('＊','*');
             this.Add('！','!');

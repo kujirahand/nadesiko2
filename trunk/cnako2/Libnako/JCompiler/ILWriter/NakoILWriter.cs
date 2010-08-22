@@ -128,6 +128,9 @@ namespace Libnako.JCompiler.ILWriter
                 case NodeType.FOR:
                     _for((NakoNodeFor)node);
                     return;
+                case NodeType.REPEAT_TIMES:
+                    _repeat_times((NakoNodeRepeatTimes)node);
+                    return;
             }
             // ---
             if (!node.hasChildren()) return;
@@ -212,7 +215,47 @@ namespace Libnako.JCompiler.ILWriter
             // L
             addNewILCode(NakoILType.LD_LOCAL, loopVarNo);
             // R
-            Write_r(node.nodeTo);
+            Write_r(node.nodeTo); // TODO:最適化
+            // LT_EQ
+            addNewILCode(NakoILType.LT_EQ);
+            // IF BRANCH FALSE
+            addNewILCode(NakoILType.BRANCH_FALSE, label_for_end);
+
+            // (3) 繰り返し文を実行する
+            Write_r(node.nodeBlocks);
+
+            // (4) 変数を加算する (ここ最適化できそう)
+            addNewILCode(NakoILType.LD_LOCAL, loopVarNo);
+            addNewILCode(NakoILType.INC);
+            addNewILCode(NakoILType.ST_LOCAL, loopVarNo);
+
+            // (5) 手順2に戻る
+            result.Add(createJUMP(label_for_cond));
+            result.Add(label_for_end);
+        }
+
+        private void _repeat_times(NakoNodeRepeatTimes node)
+        {
+            // (1)
+            int loopVarNo = node.loopVarNo;
+
+            // (0)
+            NakoILCode label_for_begin = createLABEL("TIMES_BEGIN");
+            NakoILCode label_for_end = createLABEL("TIMES_END");
+
+            // (1) 変数を初期化する
+            result.Add(label_for_begin);
+            addNewILCode(NakoILType.LD_CONST_INT, 1);
+            addNewILCode(NakoILType.ST_LOCAL, loopVarNo);
+
+            // (2) 条件をコードにする
+            // i <= iTo
+            NakoILCode label_for_cond = createLABEL("TIMES_COND");
+            result.Add(label_for_cond);
+            // L
+            addNewILCode(NakoILType.LD_LOCAL, loopVarNo);
+            // R
+            Write_r(node.nodeTimes); // TODO:最適化
             // LT_EQ
             addNewILCode(NakoILType.LT_EQ);
             // IF BRANCH FALSE

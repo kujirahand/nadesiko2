@@ -49,6 +49,7 @@
     <Compile Include="TestNakoNodeIF.cs" />
     <Compile Include="TestNakoParser.cs" />
     <Compile Include="TestNakoTokenizer.cs" />
+    <Compile Include="TestNodeFor.cs" />
     <Compile Include="TestNodeWhile.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -104,6 +104,7 @@ namespace Libnako.JCompiler.Parser
             if (_if_stmt()) return true;
             if (_while()) return true;
             if (_for()) return true;
+            if (_repeat_times()) return true;
             if (_callfunc()) return true;
             if (_let()) return true;
             if (_print()) return true;
@@ -248,6 +249,30 @@ namespace Libnako.JCompiler.Parser
             fornode.nodeBlocks = _scope_or_statement();
             this.parentNode.AddChild(fornode);
             lastNode = fornode;
+            return true;
+        }
+
+        //> _repeat_times : _value REPEAT_TIMES _scope_or_statement
+        //>               ;
+        private Boolean _repeat_times()
+        {
+            TokenTry();
+            if (!_value()) return false;
+            if (!Accept(TokenType.REPEAT_TIMES))
+            {
+                TokenBack();
+                return false;
+            }
+            TokenFinally();
+            tok.MoveNext(); // skip REPEAT_TIMES
+            
+            NakoNodeRepeatTimes repnode = new NakoNodeRepeatTimes();
+            repnode.nodeTimes = calcStack.Pop();
+            repnode.nodeBlocks = _scope_or_statement();
+            repnode.loopVarNo = localVar.createNameless();
+
+            this.parentNode.AddChild(repnode);
+            lastNode = repnode;
             return true;
         }
 
