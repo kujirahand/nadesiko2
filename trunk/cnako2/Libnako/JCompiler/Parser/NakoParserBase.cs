@@ -35,6 +35,21 @@ namespace Libnako.JCompiler.Parser
             localVar = new NakoVariableNames();
         }
 
+        /// <summary>
+        /// 値を１つだけ解析したい場合
+        /// </summary>
+        /// <returns></returns>
+        public Boolean ParseOnlyValue()
+        {
+            lastNode = null;
+            if (tok.IsEOF()) return false;
+            if (!_value()) return false;
+            topNode.AddChild(lastNode);
+            return true;
+        }
+
+        protected virtual Boolean _value() { return true; }
+
         protected Boolean Accept(TokenType type)
         {
             return (tok.CurrentTokenType == type);

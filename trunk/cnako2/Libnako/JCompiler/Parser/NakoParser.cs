@@ -15,20 +15,6 @@ namespace Libnako.JCompiler.Parser
         public NakoParser(NakoTokenList tokens) : base(tokens)
         {
         }
-
-        /// <summary>
-        /// 値を１つだけ解析したい場合
-        /// </summary>
-        /// <returns></returns>
-        public Boolean ParseOnlyValue()
-        {
-            lastNode = null;
-            if (tok.IsEOF()) return false;
-            if (!_value()) return false;
-            topNode.AddChild(lastNode);
-            return true;
-        }
-        
         /// <summary>
         /// トークンを構文解析する
         /// </summary>
@@ -102,27 +88,51 @@ namespace Libnako.JCompiler.Parser
             return false;
         }
 
-        //> _statement : _let
-        //>            | _def_function
+        //> _statement : _def_function
         //>            | _if_stmt
         //>            | _white
-        //>            | _print
+        //>            | _for
         //>            | _callfunc
+        //>            | _let
+        //>            | _print
         //>            ;
         private Boolean _statement()
         {
             if (tok.IsEOF()) return true;
+
             if (_def_function()) return true;
-            if (_let()) return true;
-            if (_callfunc()) return true;
-            if (_print()) return true;
             if (_if_stmt()) return true;
             if (_while()) return true;
+            if (_for()) return true;
+            if (_callfunc()) return true;
+            if (_let()) return true;
+            if (_print()) return true;
+            
             return false;
         }
 
-        //> _if_stmt : IF _value THEN [EOL] (_scope|_statement)
-        //>          | IF _value THEN [EOL] (_scope|_statement) ELSE (_scope|_statement)
+        // _scope_or_statement : _scope
+        //                     | _statement
+        //                     ;
+        private NakoNode _scope_or_statement()
+        {
+            while (Accept(TokenType.EOL)) tok.MoveNext();
+
+            this.PushNodeState();
+            NakoNode n = this.parentNode = this.lastNode = new NakoNode();
+            if (Accept(TokenType.SCOPE_BEGIN))
+            {
+                _scope();
+            }
+            else
+            {
+                _statement();
+            }
+            this.PopNodeState();
+            return n;
+        }
+
+        //> _if_stmt : IF _value THEN [EOL] _scope_or_statement [ ELSE _scope_or_statement ]
         //>          ;
         private Boolean _if_stmt()
         {
@@ -144,33 +154,21 @@ namespace Libnako.JCompiler.Parser
             while (Accept(TokenType.EOL)) tok.MoveNext();
 
             // TRUE
-            this.PushNodeState();
-            ifnode.nodeTrue = this.parentNode = this.lastNode = new NakoNode();
-            if (Accept(TokenType.SCOPE_BEGIN)){
-                _scope();
-            } else{ 
-                _statement(); 
-            }
-            this.PopNodeState();
+            ifnode.nodeTrue = _scope_or_statement();
 
             // FALSE
             if (Accept(TokenType.ELSE))
             {
                 tok.MoveNext(); // skip ELSE
                 while (Accept(TokenType.EOL)) tok.MoveNext();
-                    
-                this.PushNodeState();
-                ifnode.nodeFalse = this.parentNode = this.lastNode = new NakoNode();
-                if (Accept(TokenType.SCOPE_BEGIN)) { _scope(); } else { _statement(); }
-                this.PopNodeState();
+                ifnode.nodeFalse = _scope_or_statement();
             }
             this.parentNode.AddChild(ifnode);
             this.lastNode = ifnode;
             return true;
         }
 
-        //> _while   : _value WHILE _statement
-        //>          | _value WHILE EOL _blocks
+        //> _while   : _value WHILE _scope_or_statement
         //>          ;
         private Boolean _while()
         {
@@ -189,24 +187,67 @@ namespace Libnako.JCompiler.Parser
             tok.MoveNext();
             calcStack.Pop();
             NakoNodeWhile node_while = new NakoNodeWhile();
+            
+            // condition
             node_while.nodeCond = lastNode;
 
-            while (Accept(TokenType.EOL)) tok.MoveNext();
-            
-            this.PushNodeState();
-            node_while.nodeBlocks = this.parentNode = this.lastNode = new NakoNode();
-            
-            if (Accept(TokenType.SCOPE_BEGIN))
-            {
-                _scope();
-            }
-            else
-            {
-                _statement();
-            }
-            this.PopNodeState();
+            // block
+            node_while.nodeBlocks = _scope_or_statement();
+
             this.parentNode.AddChild(node_while);
             lastNode = node_while;
+            return true;
+        }
+
+        //> _for     : WORD _value _value FOR _scope_or_statement
+        //>          ;
+        private Boolean _for()
+        {
+            NakoToken tokVar = null;
+
+            TokenTry();
+            
+            // local variable
+            if (!Accept(TokenType.WORD)) return false;
+            tokVar = tok.CurrentToken;
+            if (!(tokVar.josi == "を" || tokVar.josi == "で")) {
+                return false;
+            }
+            tok.MoveNext();
+
+            NakoNodeFor fornode = new NakoNodeFor();
+            NakoNodeVariable v = new NakoNodeVariable();
+            fornode.loopVar = v;
+            v.scope = NakoVariableScope.Local;
+            v.Token = tokVar;
+            v.varNo = localVar.createName(tokVar.value);
+
+            // get argument * 2
+            if (!_value())
+            {
+                TokenBack();
+                return false;
+            }
+            if (!_value())
+            {
+                TokenBack();
+                return false;
+            }
+
+            fornode.nodeTo = calcStack.Pop();
+            fornode.nodeFrom = calcStack.Pop();
+
+            if (!Accept(TokenType.FOR))
+            {
+                TokenBack();
+                return false;
+            }
+            TokenFinally();
+            tok.MoveNext();
+
+            fornode.nodeBlocks = _scope_or_statement();
+            this.parentNode.AddChild(fornode);
+            lastNode = fornode;
             return true;
         }
 
@@ -430,7 +471,7 @@ namespace Libnako.JCompiler.Parser
         }
 
         //> _value : _calc_fact ;
-        private Boolean _value()
+        protected override Boolean _value()
         {
             // TODO:
             // _value は再帰が多くコストが高いのであり得る値だけチェックする

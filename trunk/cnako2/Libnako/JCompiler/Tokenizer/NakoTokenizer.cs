@@ -542,6 +542,7 @@ namespace Libnako.JCompiler.Tokenizer
                 {
                     indent += 2;
                     cur++;
+                    continue;
                 }
                 break;
             }
