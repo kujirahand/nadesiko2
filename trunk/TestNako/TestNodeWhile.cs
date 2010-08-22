@@ -64,5 +64,26 @@ namespace TestNako
             Assert.AreEqual(runner.PrintLog, "A1B1B2B3A2B1B2B3");
              */
         }
+        [Test]
+        public void TestNestl()
+        {
+            NakoNamespace ns = new NakoNamespace();
+            NakoInterpreter runner = new NakoInterpreter();
+            NakoILCodeList codes = null;
+
+            codes = ns.Publish(
+                "A=1\n" +
+                "(A <= 2)の間\n" +
+                "  PRINT `A`&A;\n" +
+                "  A=A+1;\n" +
+                "  B=1\n" +
+                "  (B <= 3)の間\n" +
+                "    PRINT `B`&B;\n"+
+                "    B=B+1\n" +
+                "\n"
+                );
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "A1B1B2B3A2B1B2B3");
+        }
     }
 }

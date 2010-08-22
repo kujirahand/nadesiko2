@@ -258,6 +258,7 @@ namespace Libnako.Parser
                 case CalcType.MUL: c.type = NakoILType.MUL; break;
                 case CalcType.DIV: c.type = NakoILType.DIV; break;
                 case CalcType.MOD: c.type = NakoILType.MOD; break;
+                case CalcType.ADD_STR: c.type = NakoILType.ADD_STR; break;
                 case CalcType.POWER: c.type = NakoILType.POWER; break;
                 case CalcType.EQ: c.type = NakoILType.EQ; break;
                 case CalcType.NOT_EQ: c.type = NakoILType.NOT_EQ; break;

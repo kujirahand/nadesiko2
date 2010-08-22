@@ -17,12 +17,17 @@ namespace cnako
             NakoInterpreter runner = new NakoInterpreter();
 
             string src =
+                "PRINT 1+1&2" +
+                "";
+            /*
+            string src =
                 "A=1\n" +
                 "(A <= 2)の間\n" +
-                "  PRINT A;\n" +
+                "  PRINT A&`c`;\n" +
                 "  A=A+1;\n" +
                 "  B=1\n" +
                 "";
+             */
 
             // TokenizerTest
             ns.source = src;

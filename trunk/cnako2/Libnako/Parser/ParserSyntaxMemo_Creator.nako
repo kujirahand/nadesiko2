@@ -1,0 +1,10 @@
+「NakoParser.cs」を開く
+SJIS変換
+反復
+　　トリム
+　　S=それ
+　　もし、MID(S,1,3)=「//>」ならば
+　　　　MID(S,4,1000)を表示
+表示ログを、
+「ParserSyntaxMemo.txt」へ保存。
+終わる。

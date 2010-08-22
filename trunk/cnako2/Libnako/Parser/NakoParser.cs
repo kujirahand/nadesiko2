@@ -37,7 +37,7 @@ namespace Libnako.Parser
             _program();
         }
 
-        // _program : empty | _blocks ... ;
+        //> _program : empty | _blocks ... ;
         private Boolean _program()
         {
             while (!tok.IsEOF())
@@ -48,7 +48,7 @@ namespace Libnako.Parser
             return true;
         }
 
-        // _scope : SCOPE_BEGIN _blocks SCOPE_END ;
+        //> _scope : SCOPE_BEGIN _blocks SCOPE_END ;
         private Boolean _scope()
         {
             if (!Accept(TokenType.SCOPE_BEGIN)) return false;
@@ -63,10 +63,10 @@ namespace Libnako.Parser
             return true;
         }
 
-        // _blocks : empty
-        //         | _statement ... 
-        //         | _eol
-        //         ;
+        //> _blocks : empty
+        //>         | _statement ... 
+        //>         | _eol
+        //>         ;
         private Boolean _blocks()
         {
             if (tok.IsEOF()) return true;
@@ -91,7 +91,7 @@ namespace Libnako.Parser
             return true;
         }
 
-        // _eol : EOL ;
+        //> _eol : EOL ;
         private Boolean _eol()
         {
             if (tok.IsEOF()) return false;
@@ -102,13 +102,13 @@ namespace Libnako.Parser
             return false;
         }
 
-        // _statement : _let
-        //            | _def_function
-        //            | _if_stmt
-        //            | _white
-        //            | _print
-        //            | _callfunc
-        //            ;
+        //> _statement : _let
+        //>            | _def_function
+        //>            | _if_stmt
+        //>            | _white
+        //>            | _print
+        //>            | _callfunc
+        //>            ;
         private Boolean _statement()
         {
             if (tok.IsEOF()) return true;
@@ -121,9 +121,9 @@ namespace Libnako.Parser
             return false;
         }
 
-        // _if_stmt : IF _value THEN [EOL] (_scope|_statement)
-        //          | IF _value THEN [EOL] (_scope|_statement) ELSE (_scope|_statement)
-        //          ;
+        //> _if_stmt : IF _value THEN [EOL] (_scope|_statement)
+        //>          | IF _value THEN [EOL] (_scope|_statement) ELSE (_scope|_statement)
+        //>          ;
         private Boolean _if_stmt()
         {
             if (!Accept(TokenType.IF)) return false;
@@ -169,9 +169,9 @@ namespace Libnako.Parser
             return true;
         }
 
-        // _while   : _value WHILE _statement
-        //          | _value WHILE EOL _blocks
-        //          ;
+        //> _while   : _value WHILE _statement
+        //>          | _value WHILE EOL _blocks
+        //>          ;
         private Boolean _while()
         {
             TokenTry();
@@ -210,9 +210,9 @@ namespace Libnako.Parser
             return true;
         }
 
-        // _callfunc : _value .. FUNCTION_NAME
-        //           | FUNCTION_NAME
-        //           ;
+        //> _callfunc : _value .. FUNCTION_NAME
+        //>           | FUNCTION_NAME
+        //>           ;
         private Boolean _callfunc()
         {
             NakoToken t = tok.CurrentToken;
@@ -233,8 +233,8 @@ namespace Libnako.Parser
             return false;
         }
 
-        // _def_function : DEF_FUNCTION _def_function_args FUNCTION_NAME EOL _blocks
-        //               ;
+        //> _def_function : DEF_FUNCTION _def_function_args FUNCTION_NAME EOL _blocks
+        //>               ;
         private Boolean _def_function()
         {
             if (!Accept(TokenType.DEF_FUNCTION)) return false;
@@ -273,10 +273,10 @@ namespace Libnako.Parser
             return true;
         }
 
-        // _def_function_args : empty
-        //                    | '(' WORD ... ')' FUNCTION_NAME _blocks
-        //                    | WORD ... FUNCTION_NAME _blocks
-        //                    ;
+        //> _def_function_args : empty
+        //>                    | '(' WORD ... ')' FUNCTION_NAME _blocks
+        //>                    | WORD ... FUNCTION_NAME _blocks
+        //>                    ;
         private Boolean _def_function_args()
         {
             if (Accept(TokenType.PARENTHESES_L))
@@ -306,7 +306,7 @@ namespace Libnako.Parser
         }
 
 
-        // _print : PRINT _value
+        //> _print : PRINT _value
         private Boolean _print()
         {
             if (tok.CurrentTokenType != TokenType.PRINT)
@@ -327,7 +327,7 @@ namespace Libnako.Parser
             return true;
         }
 
-        // _let : _setVariable EQ _value
+        //> _let : _setVariable EQ _value
         private Boolean _let()
         {
             if (!_setVariable())
@@ -378,8 +378,8 @@ namespace Libnako.Parser
             }
         }
 
-        // _setVariable : WORD '[' VALUE ']'
-        //              | WORD ;
+        //> _setVariable : WORD '[' VALUE ']'
+        //>              | WORD ;
         private Boolean _setVariable()
         {
             if (!Accept(TokenType.WORD)) return false;
@@ -402,8 +402,8 @@ namespace Libnako.Parser
             return true;
         }
 
-        // _variable : WORD '[' VALUE ']'
-        //           | WORD ;
+        //> _variable : WORD '[' VALUE ']'
+        //>           | WORD ;
         private Boolean _variable()
         {
             if (!Accept(TokenType.WORD)) return false;
@@ -429,7 +429,7 @@ namespace Libnako.Parser
             return true;
         }
 
-        // _value : _calc_formula | _calc_value ;
+        //> _value : _calc_fact ;
         private Boolean _value()
         {
             // TODO:
@@ -451,7 +451,8 @@ namespace Libnako.Parser
             return false;
         }
 
-        // _calc_value : _const | _variable ;
+        //> _calc_value : _const | _variable 
+        //>             ;
         private Boolean _calc_value()
         {
             if (_const()) return true;
@@ -459,8 +460,9 @@ namespace Libnako.Parser
             return false;
         }
 
-        // _calc_formula : PARENTHESES_L _value PARENTHESES_R 
-        //               | _value
+        //> _calc_formula : PARENTHESES_L _value PARENTHESES_R 
+        //>               | _calc_value
+        //>               ;
         private Boolean _calc_formula()
         {
             // Check '(' *** ')'
@@ -485,15 +487,15 @@ namespace Libnako.Parser
             return _calc_value();
         }
 
-        // _calc_power : _calc_formula POWER _calc_formula
-        //             ;
+        //> _calc_power : _calc_formula { POWER _calc_formula }
+        //>             ;
         private Boolean _calc_power()
         {
             if (!_calc_formula())
             {
                 return false;
             }
-            if (Accept(TokenType.POWER))
+            while (Accept(TokenType.POWER))
             {
                 TokenTry();
                 tok.MoveNext();
@@ -510,31 +512,26 @@ namespace Libnako.Parser
                 node.nodeL = calcStack.Pop();
                 lastNode = node;
                 calcStack.Push(node);
-                return true;
             }
-            else
-            {
-                return true;
-            }
+            return true;
         }
 
-        // _calc_expr : _calc_power MUL _calc_power
-        //            | _calc_power DIV _calc_power
-        //            | _calc_power MOD _calc_power
-        //            ;
+        //> _calc_expr : _calc_power { (MUL|DIV|MOD) _calc_power }
+        //>            ;
         private Boolean _calc_expr()
         {
             if (!_calc_power()) { return false; }
-            if (Accept(TokenType.MUL) || Accept(TokenType.DIV) || Accept(TokenType.MOD))
+            
+            while (Accept(TokenType.MUL) || Accept(TokenType.DIV) || Accept(TokenType.MOD))
             {
-                int calc_type = CalcType.NOP;
-                TokenTry();
+                NakoNodeCalc node = new NakoNodeCalc();
                 switch (tok.CurrentTokenType)
                 {
-                    case TokenType.MUL: calc_type = CalcType.MUL; break;
-                    case TokenType.DIV: calc_type = CalcType.DIV; break;
-                    case TokenType.MOD: calc_type = CalcType.MOD; break;
+                    case TokenType.MUL: node.calc_type = CalcType.MUL; break;
+                    case TokenType.DIV: node.calc_type = CalcType.DIV; break;
+                    case TokenType.MOD: node.calc_type = CalcType.MOD; break;
                 }
+                TokenTry();
                 tok.MoveNext();
                 if (!_calc_power())
                 {
@@ -542,36 +539,36 @@ namespace Libnako.Parser
                     return false;
                 }
                 TokenFinally();
-                
-                NakoNodeCalc node = new NakoNodeCalc();
-                node.calc_type = calc_type;
                 node.nodeR = calcStack.Pop();
                 node.nodeL = calcStack.Pop();
                 calcStack.Push(node);
                 lastNode = node;
-                return true;
             }
-            else
-            {
-                return true;
-            }
+            return true;
         }
 
-        // _calc_term : _calc_expr PLUS _calc_expr 
-        //            | _calc_expr MINUS _calc_expr
-        //            ;
+        //> _calc_term : _calc_expr { (PLUS|MINUS) _calc_expr }
+        //>            ;
         private Boolean _calc_term()
         {
             if (!_calc_expr())
             {
                 return false;
             }
-            if (Accept(TokenType.PLUS) || Accept(TokenType.MINUS))
+            while (Accept(TokenType.PLUS) || Accept(TokenType.MINUS) || Accept(TokenType.AND))
             {
                 NakoNodeCalc node = new NakoNodeCalc();
-                node.calc_type =
-                    Accept(TokenType.PLUS) ? CalcType.ADD
-                                             : CalcType.SUB;
+                switch (tok.CurrentTokenType)
+                {
+                    case TokenType.PLUS:
+                        node.calc_type = CalcType.ADD; break;
+                    case TokenType.MINUS:
+                        node.calc_type = CalcType.SUB; break;
+                    case TokenType.AND:
+                        node.calc_type = CalcType.ADD_STR; break;
+                    default:
+                        throw new Exception("System Error");
+                }
                 TokenTry();
                 tok.MoveNext();
                 if (!_calc_expr())
@@ -584,33 +581,31 @@ namespace Libnako.Parser
                 node.nodeL = calcStack.Pop();
                 calcStack.Push(node);
                 lastNode = node;
-                return true;
             }
-            else
-            {
-                return true;
-            }
+            return true;
         }
 
-        // _calc_comp : _calc_term GT _calc_term
-        //            | _calc_term LT _calc_term
-        //            ;
+        //> _calc_comp : _calc_term  { (GT|GT_EQ|LT|LT_EQ|EQ|EQ_EQ|NOT_EQ) _calc_term }
+        //>            ;
         private Boolean _calc_comp()
         {
-            NakoNodeCalc node = new NakoNodeCalc();
             if (!_calc_term())
             {
                 return false;
             }
 
-            if (Accept(TokenType.GT) ||
-                Accept(TokenType.LT) ||
-                Accept(TokenType.GT_EQ) ||
-                Accept(TokenType.LT_EQ) ||
-                Accept(TokenType.EQ) ||
-                Accept(TokenType.EQ_EQ) ||
-                Accept(TokenType.NOT_EQ))
+            while
+                (
+                    Accept(TokenType.GT)    ||
+                    Accept(TokenType.LT)    ||
+                    Accept(TokenType.GT_EQ) ||
+                    Accept(TokenType.LT_EQ) ||
+                    Accept(TokenType.EQ)    ||
+                    Accept(TokenType.EQ_EQ) ||
+                    Accept(TokenType.NOT_EQ)
+                )
             {
+                NakoNodeCalc node = new NakoNodeCalc();
                 switch (tok.CurrentToken.type)
                 {
                     case TokenType.GT: node.calc_type = CalcType.GT; break;
@@ -620,6 +615,8 @@ namespace Libnako.Parser
                     case TokenType.EQ: node.calc_type = CalcType.EQ; break;
                     case TokenType.EQ_EQ: node.calc_type = CalcType.EQ; break;
                     case TokenType.NOT_EQ: node.calc_type = CalcType.NOT_EQ; break;
+                    default:
+                        throw new Exception("[Nako System Error] Operator not set.");
                 }
                 TokenTry();
                 tok.MoveNext();
@@ -633,46 +630,38 @@ namespace Libnako.Parser
                 node.nodeL = calcStack.Pop();
                 calcStack.Push(node);
                 lastNode = node;
-                return true;
             }
-            else
-            {
-                return true;
-            }
+            return true;
         }
 
-        // _calc_fact : MINUS _calc_fact
-        //            | _calc_comp
-        //            ;
+
+        //> _calc_fact : MINUS  _calc_comp
+        //>            | _calc_comp
+        //>            ;
         private Boolean _calc_fact()
         {
-            NakoNodeCalc node = new NakoNodeCalc();
-            node.Token = tok.CurrentToken;
-
             if (Accept(TokenType.MINUS))
             {
-                node.calc_type = CalcType.NEG;
-                tok.MoveNext();
-                if (!_calc_fact())
+                NakoNodeCalc node = new NakoNodeCalc();
+                node.Token = tok.CurrentToken;
+                tok.MoveNext(); // skip '-'
+                if (!_calc_comp())
                 {
                     throw new NakoParserException("「-」記号の後に値がありません。", tok.CurrentToken);
                 }
                 node.nodeL = calcStack.Pop();
-                TokenFinally();
                 lastNode = node;
                 calcStack.Push(node);
                 return true;
             }
-
             if (_calc_comp())
             {
                 return true;
             }
-
             return false;
         }
         
-        // _const : INT | NUMBER | STRING ;
+        //> _const : INT | NUMBER | STRING ;
         private Boolean _const()
         {
             NakoNodeConst node = new NakoNodeConst();
