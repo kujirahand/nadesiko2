@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 
 using NUnit.Framework;
-using Libnako.Parser;
+using Libnako.JCompiler;
 using Libnako.Interpreter;
+using Libnako.JCompiler.ILWriter;
 
 namespace TestNako
 {
@@ -47,8 +48,6 @@ namespace TestNako
             runner.Run(codes);
             Assert.AreEqual(runner.PrintLog, "1322");
 
-            /*
-            // ＴＯＤＯ(4) 以下がＮＧになる、原因を解明する
             codes = ns.Publish(
                 "A=1\n" +
                 "(A <= 2)の間\n" +
@@ -62,7 +61,6 @@ namespace TestNako
                 );
             runner.Run(codes);
             Assert.AreEqual(runner.PrintLog, "A1B1B2B3A2B1B2B3");
-             */
         }
         [Test]
         public void TestNestl()

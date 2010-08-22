@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using Libnako.Parser;
+using Libnako.JCompiler;
+using Libnako.JCompiler.ILWriter;
 
 namespace TestNako
 {

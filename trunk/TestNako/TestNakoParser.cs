@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Libnako.Parser;
+using Libnako.JCompiler;
 using NUnit.Framework;
-using Libnako.Parser.Node;
+using Libnako.JCompiler.Node;
 
 namespace TestNako
 {
