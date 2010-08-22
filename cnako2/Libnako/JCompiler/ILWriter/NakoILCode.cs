@@ -14,7 +14,7 @@ namespace Libnako.JCompiler.ILWriter
         {
         }
 
-        public NakoILCode(NakoILType type, Object value)
+        public NakoILCode(NakoILType type, Object value = null)
         {
             this.type = type;
             this.value = value;

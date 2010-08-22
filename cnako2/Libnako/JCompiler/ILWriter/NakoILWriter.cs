@@ -125,6 +125,9 @@ namespace Libnako.JCompiler.ILWriter
                 case NodeType.WHILE:
                     _while((NakoNodeWhile)node);
                     return;
+                case NodeType.FOR:
+                    _for((NakoNodeFor)node);
+                    return;
             }
             // ---
             if (!node.hasChildren()) return;
@@ -177,11 +180,55 @@ namespace Libnako.JCompiler.ILWriter
             // (2) コードの結果により分岐する
             // 分岐先をラベルとして作成
             NakoILCode label_while_end = createLABEL("WHILE_END");
-            result.Add(new NakoILCode(NakoILType.BRANCH_FALSE, label_while_end));
+            addNewILCode(NakoILType.BRANCH_FALSE, label_while_end);
             // (3) ループブロックを書き込む
             Write_r(node.nodeBlocks);
             result.Add(createJUMP(label_while_begin));
             result.Add(label_while_end);
+        }
+
+        private void addNewILCode(NakoILType type, Object value = null)
+        {
+            result.Add(new NakoILCode(type, value));
+        }
+
+        private void _for(NakoNodeFor node)
+        {
+            int loopVarNo = node.loopVar.varNo;
+
+            // (0)
+            NakoILCode label_for_begin = createLABEL("FOR_BEGIN");
+            NakoILCode label_for_end = createLABEL("FOR_END");
+
+            // (1) 変数を初期化する
+            result.Add(label_for_begin);
+            Write_r(node.nodeFrom);
+            addNewILCode(NakoILType.ST_LOCAL, loopVarNo);
+
+            // (2) 条件をコードにする
+            // i <= iTo
+            NakoILCode label_for_cond = createLABEL("FOR_COND");
+            result.Add(label_for_cond);
+            // L
+            addNewILCode(NakoILType.LD_LOCAL, loopVarNo);
+            // R
+            Write_r(node.nodeTo);
+            // LT_EQ
+            addNewILCode(NakoILType.LT_EQ);
+            // IF BRANCH FALSE
+            addNewILCode(NakoILType.BRANCH_FALSE, label_for_end);
+
+            // (3) 繰り返し文を実行する
+            Write_r(node.nodeBlocks);
+
+            // (4) 変数を加算する (ここ最適化できそう)
+            addNewILCode(NakoILType.LD_LOCAL, loopVarNo);
+            addNewILCode(NakoILType.INC);
+            addNewILCode(NakoILType.ST_LOCAL, loopVarNo);
+
+            // (5) 手順2に戻る
+            result.Add(createJUMP(label_for_cond));
+            result.Add(label_for_end);
         }
 
         private void _let(NakoNodeLet node)

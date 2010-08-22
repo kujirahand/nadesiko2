@@ -57,6 +57,8 @@ namespace Libnako.JCompiler.ILWriter
                     case NakoILType.LD_CONST_STR:
                     case NakoILType.LD_GLOBAL:
                     case NakoILType.ST_GLOBAL:
+                    case NakoILType.LD_LOCAL:
+                    case NakoILType.ST_LOCAL:
                         r += ":" + c.value;
                         break;
                     case NakoILType.JUMP:

@@ -17,11 +17,8 @@ namespace cnako
             NakoInterpreter runner = new NakoInterpreter();
 
             string src =
-                "A=1\n" +
-                "(A <= 2)の間\n" +
-                "  PRINT A&`c`;\n" +
-                "  A=A+1;\n" +
-                "  B=1\n" +
+                "Iを1から3まで繰り返す\n" +
+                "　　PRINT I\n" +
                 "";
 
             // TokenizerTest
