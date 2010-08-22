@@ -321,7 +321,16 @@ namespace Libnako.JCompiler.Tokenizer
                     NakoToken tt = GetToken_NotFlag();
                     if (tt == null)
                     {
-                        String msg = "未定義の文字列`" + CurrentChar + "'";
+                        String msg = "未定義の文字列:";
+                        Char ch = CurrentChar;
+                        if (ch < 33)
+                        {
+                            msg += String.Format("0x{0,0:X2}", (int)ch);
+                        }
+                        else
+                        {
+                            msg += "`" + ch + "`";
+                        }
                         throw new NakoTokenizerException(msg, token);
                     }
                     return tt;

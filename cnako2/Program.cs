@@ -17,9 +17,10 @@ namespace cnako
             NakoInterpreter runner = new NakoInterpreter();
 
             string src =
-                "Iを1から3まで繰り返す\n" +
-                "　　PRINT I\n" +
+                "Iを１から3まで繰り返す\n" +
+                "  PRINT I\n" +
                 "";
+            _w(src);
 
             // TokenizerTest
             ns.source = src;

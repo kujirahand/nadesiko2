@@ -48,11 +48,22 @@ namespace TestNako
                 "　　PRINT `[`&I&`:`\n" +
                 "　　Ｊを１から3まで繰り返す\n" +
                 "　　　　PRINT J\n" +
-                "　　PRINT `]`&I\n" +
+                "　　PRINT `]`\n" +
                 "\n"
                 );
             runner.Run(codes);
             Assert.AreEqual(runner.PrintLog, "[1:123][2:123]");
+        }
+        [Test]
+        public void TestRepeatTimes()
+        {
+            codes = ns.Publish(
+                "3回\n" +
+                "　　PRINT `a`\n" +
+                "\n"
+                );
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "aaa");
         }
     }
 }
