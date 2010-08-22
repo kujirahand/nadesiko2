@@ -9,7 +9,7 @@ namespace Libnako.Parser.Node
     {
         public NakoNode nodeL;
         public NakoNode nodeR;
-        public int calc_type = CalcType.NOP;
+        public CalcType calc_type = CalcType.NOP;
 
         public NakoNodeCalc()
         {
@@ -21,7 +21,7 @@ namespace Libnako.Parser.Node
             String r = "";
             r += "(";
             r += base.ToTypeString() + ":";
-            r += CalcType.GetTypeName((int)calc_type) + " ";
+            r += calc_type.ToString() + " ";
             if (nodeL != null)
             {
                 r += "(";
