@@ -5,6 +5,7 @@ using System.Text;
 using System.Reflection;
 using System.Reflection.Emit;
 using Libnako.JCompiler.Node;
+using Libnako.JCompiler.Parser;
 
 namespace Libnako.JCompiler.ILWriter
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Libnako.JCompiler
+namespace Libnako.JCompiler.Tokenizer
 {
     public class NakoHalfFlag : Dictionary<Char, Char>
     {
