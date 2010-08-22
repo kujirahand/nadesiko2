@@ -1,0 +1,24 @@
+﻿//
+NOP		???
+//
+ADD		+
+SUB		-
+MUL		*
+DIV		/
+MOD		%
+POWER	^
+ADD_STR &
+// comp
+EQ		==
+NOT_EQ	<> !=
+GT		>
+GT_EQ	>=
+LT		<
+LT_EQ	<=
+// 
+AND		&&
+OR		||
+XOR		~~
+//
+NEG		!
+
