@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Libnako.Parser.Node
+namespace Libnako.JCompiler.Node
 {
     public class NakoNodeDefFunction : NakoNode
     {

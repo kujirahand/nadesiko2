@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Libnako.Parser;
+using Libnako.JCompiler.ILWriter;
+using Libnako.JCompiler;
 
 namespace Libnako.Interpreter
 {

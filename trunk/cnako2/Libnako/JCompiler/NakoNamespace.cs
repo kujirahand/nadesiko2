@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Libnako.Parser.Node;
-using Libnako.Parser.Tokenizer;
+using Libnako.JCompiler.Node;
+using Libnako.JCompiler.Tokenizer;
+using Libnako.JCompiler.ILWriter;
+using Libnako.JCompiler.Parser;
 
-namespace Libnako.Parser
+namespace Libnako.JCompiler
 {
     public class NakoNamespace
     {

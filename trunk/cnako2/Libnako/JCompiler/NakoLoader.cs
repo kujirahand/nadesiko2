@@ -4,7 +4,7 @@ using System.Text;
 using System.IO;
 
 
-namespace Libnako.Parser
+namespace Libnako.JCompiler
 {
     public class NakoLoader
     {

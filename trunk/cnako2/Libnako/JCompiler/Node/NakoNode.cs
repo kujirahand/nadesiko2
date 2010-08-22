@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Libnako.Parser.Tokenizer;
+using Libnako.JCompiler.Tokenizer;
 
-namespace Libnako.Parser.Node
+namespace Libnako.JCompiler.Node
 {
     public class NakoNode
     {

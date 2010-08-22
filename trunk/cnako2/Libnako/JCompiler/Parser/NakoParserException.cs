@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Libnako.Parser.Tokenizer;
+using Libnako.JCompiler.Tokenizer;
 
-namespace Libnako.Parser
+namespace Libnako.JCompiler.Parser
 {
     public class NakoParserException : Exception
     {

@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Reflection;
 using System.Reflection.Emit;
-using Libnako.Parser.Node;
+using Libnako.JCompiler.Node;
 
-namespace Libnako.Parser
+namespace Libnako.JCompiler.ILWriter
 {
     public class NakoILWriter
     {

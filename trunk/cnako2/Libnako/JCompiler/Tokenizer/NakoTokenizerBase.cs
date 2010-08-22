@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Libnako.Parser.Tokenizer
+namespace Libnako.JCompiler.Tokenizer
 {
     /// <summary>
     /// トークン解析機の基本メソッドを提供する
