@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Libnako.Parser.Node
+namespace Libnako.JCompiler.Node
 {
     public class NakoNodeList : List<NakoNode>
     {

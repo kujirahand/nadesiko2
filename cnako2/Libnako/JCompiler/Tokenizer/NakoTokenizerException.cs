@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Libnako.Parser.Tokenizer
+namespace Libnako.JCompiler.Tokenizer
 {
     public class NakoTokenizerException : Exception
     {

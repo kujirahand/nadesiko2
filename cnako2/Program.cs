@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Libnako.Parser;
+using Libnako.JCompiler;
 using Libnako.Interpreter;
 
 using System.Reflection;
@@ -17,17 +17,12 @@ namespace cnako
             NakoInterpreter runner = new NakoInterpreter();
 
             string src =
-                "PRINT 1+1&2" +
-                "";
-            /*
-            string src =
                 "A=1\n" +
                 "(A <= 2)の間\n" +
                 "  PRINT A&`c`;\n" +
                 "  A=A+1;\n" +
                 "  B=1\n" +
                 "";
-             */
 
             // TokenizerTest
             ns.source = src;
