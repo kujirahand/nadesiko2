@@ -1,0 +1,40 @@
+# v1
+# なでしこv1用スクリプト
+
+R=""
+S=""
+N=0
+「TokenType.txt」を開く
+SJIS変換
+反復
+　　対象＝トリム（対象）
+　　もし、LEFT(対象,2)＝「//」ならば
+　　　R=R&「        {対象}{~}」
+　　違えば
+　　　　R=R&「        {対象} = {N},{~}」
+　　　　S=S&「"{対象}",」
+　　　　N=N+1
+　　もし、N%10 = 9ならば
+　　　　S=S&改行
+
+SRC=『
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Libnako.Parser.Tokenizer
+{
+    public enum TokenType
+    {
+        // Define Token
+//[[TOKEN_DEFINE]]
+        END_OF_TOKEN
+    }
+}
+』
+SRC=SRCの「//[[TOKEN_DEFINE]]」をRに置換
+SRC=SRCの「//[[TOKEN_NAME]]」をSに置換
+#SRCをメモ記入。
+SRC=SRCをSJIS_UTF8変換
+SRCを「TokenType.cs」に保存。
+終わる
