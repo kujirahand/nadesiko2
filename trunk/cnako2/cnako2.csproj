@@ -45,18 +45,13 @@
     <Compile Include="Libnako\Interpreter\NakoInterpreter.cs" />
     <Compile Include="Libnako\Interpreter\NakoValueConveter.cs" />
     <Compile Include="Libnako\Interpreter\NakoVariables.cs" />
-    <Compile Include="Libnako\JCompiler\CalcType.cs" />
     <Compile Include="Libnako\JCompiler\ILWriter\NakoILCode.cs" />
     <Compile Include="Libnako\JCompiler\ILWriter\NakoILCodeList.cs" />
     <Compile Include="Libnako\JCompiler\ILWriter\NakoILType.cs" />
     <Compile Include="Libnako\JCompiler\ILWriter\NakoILWriter.cs" />
     <Compile Include="Libnako\JCompiler\NakoFuncArg.cs" />
-    <Compile Include="Libnako\JCompiler\NakoHalfFlag.cs" />
     <Compile Include="Libnako\JCompiler\NakoLoader.cs" />
     <Compile Include="Libnako\JCompiler\NakoNamespace.cs" />
-    <Compile Include="Libnako\JCompiler\NakoVariableNames.cs" />
-    <Compile Include="Libnako\JCompiler\NakoVariableScope.cs" />
-    <Compile Include="Libnako\JCompiler\NakoVariableType.cs" />
     <Compile Include="Libnako\JCompiler\Node\NakoNode.cs" />
     <Compile Include="Libnako\JCompiler\Node\NakoNodeCalc.cs" />
     <Compile Include="Libnako\JCompiler\Node\NakoNodeConst.cs" />
@@ -67,10 +62,15 @@
     <Compile Include="Libnako\JCompiler\Node\NakoNodeVariable.cs" />
     <Compile Include="Libnako\JCompiler\Node\NakoNodeWhile.cs" />
     <Compile Include="Libnako\JCompiler\Node\NodeType.cs" />
+    <Compile Include="Libnako\JCompiler\Parser\CalcType.cs" />
     <Compile Include="Libnako\JCompiler\Parser\NakoParser.cs" />
     <Compile Include="Libnako\JCompiler\Parser\NakoParserBase.cs" />
     <Compile Include="Libnako\JCompiler\Parser\NakoParserException.cs" />
+    <Compile Include="Libnako\JCompiler\Parser\NakoVariableNames.cs" />
+    <Compile Include="Libnako\JCompiler\Parser\NakoVariableScope.cs" />
+    <Compile Include="Libnako\JCompiler\Parser\NakoVariableType.cs" />
     <Compile Include="Libnako\JCompiler\Tokenizer\NakoDic.cs" />
+    <Compile Include="Libnako\JCompiler\Tokenizer\NakoHalfFlag.cs" />
     <Compile Include="Libnako\JCompiler\Tokenizer\NakoJosi.cs" />
     <Compile Include="Libnako\JCompiler\Tokenizer\NakoToken.cs" />
     <Compile Include="Libnako\JCompiler\Tokenizer\NakoTokenizer.cs" />
@@ -91,7 +91,6 @@
   <ItemGroup>
     <Content Include="Libnako\JCompiler\ILWriter\NakoILType.txt" />
     <Content Include="Libnako\JCompiler\Node\NodeType.txt" />
-    <Content Include="Libnako\JCompiler\ParserSyntaxMemo.txt" />
     <Content Include="Libnako\JCompiler\Tokenizer\TokenType.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
