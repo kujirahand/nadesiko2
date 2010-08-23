@@ -23,9 +23,4 @@ namespace Libnako.JCompiler
             }
         }
     }
-
-    public class NakoFuncArgs : List<NakoFuncArg>
-    {
-
-    }
 }

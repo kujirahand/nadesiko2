@@ -26,6 +26,20 @@ namespace Libnako.JCompiler.Tokenizer
             TokenizeCheckWord();
         }
 
+        /// <summary>
+        /// トークンをひたすらぶった切るだけ、文法を一切考慮しない
+        /// </summary>
+        public void splitWord()
+        {
+            // 繰り返しトークンを取得する
+            while (!IsEOF())
+            {
+                NakoToken token = GetToken();
+                if (token == null) continue;
+                tokens.Add(token);
+            }
+        }
+
 
         /// <summary>
         /// 関数宣言など辞書登録を行う

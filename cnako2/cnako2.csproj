@@ -49,7 +49,10 @@
     <Compile Include="Libnako\JCompiler\ILWriter\NakoILCodeList.cs" />
     <Compile Include="Libnako\JCompiler\ILWriter\NakoILType.cs" />
     <Compile Include="Libnako\JCompiler\ILWriter\NakoILWriter.cs" />
+    <Compile Include="Libnako\JCompiler\Function\NakoFunc.cs" />
     <Compile Include="Libnako\JCompiler\NakoFuncArg.cs" />
+    <Compile Include="Libnako\JCompiler\Function\NakoFuncArgs.cs" />
+    <Compile Include="Libnako\JCompiler\Function\NakoFuncCallInfo.cs" />
     <Compile Include="Libnako\JCompiler\NakoLoader.cs" />
     <Compile Include="Libnako\JCompiler\NakoNamespace.cs" />
     <Compile Include="Libnako\JCompiler\Node\NakoNode.cs" />
@@ -80,6 +83,8 @@
     <Compile Include="Libnako\JCompiler\Tokenizer\NakoTokenizerException.cs" />
     <Compile Include="Libnako\JCompiler\Tokenizer\NakoTokenList.cs" />
     <Compile Include="Libnako\JCompiler\Tokenizer\TokenType.cs" />
+    <Compile Include="Libnako\SysCall\NakoSysCall.cs" />
+    <Compile Include="Libnako\SysCall\NakoSysCallList.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
