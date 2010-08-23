@@ -110,6 +110,8 @@ namespace Libnako.Interpreter
                 case NakoILType.CALL:
                 case NakoILType.RET:
                     break;
+                case NakoILType.SYSCALL: exec_syscall(code); break;
+                    break;
                 case NakoILType.PRINT: exec_print(); break;
             }
         }
@@ -212,6 +214,12 @@ namespace Libnako.Interpreter
                 Console.Write(s);
             }
             PrintLog += s;
+        }
+
+        private void exec_syscall(NakoILCode code)
+        {
+            int funcNo = (int)code.value;
+
         }
 
         private void exec_calc(CalcMethodType f)

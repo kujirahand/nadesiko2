@@ -61,8 +61,11 @@ namespace Libnako.JCompiler.ILWriter
         BRANCH_TRUE      = 34, // { args:1, push:0, pop:1 } 
         BRANCH_FALSE     = 35, // { args:1, push:0, pop:1 } 
 
+        // 組み込み用
+        SYSCALL          = 36, // { args:1, push:1, pop:? } 
+
         // DEBUG用
-        PRINT            = 36, // { args:0, push:0, pop:1 } 
+        PRINT            = 37, // { args:0, push:0, pop:1 } 
 
 
     }
@@ -103,6 +106,7 @@ namespace Libnako.JCompiler.ILWriter
         case NakoILType.RET:
         case NakoILType.BRANCH_TRUE:
         case NakoILType.BRANCH_FALSE:
+        case NakoILType.SYSCALL:
         case NakoILType.PRINT:
 
 */

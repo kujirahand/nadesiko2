@@ -32,7 +32,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Libnako.Parser.ILWriter
+namespace Libnako.JCompiler.ILWriter
 {
     public enum NakoILType
     {
