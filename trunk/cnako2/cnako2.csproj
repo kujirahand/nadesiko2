@@ -45,12 +45,12 @@
     <Compile Include="Libnako\Interpreter\NakoInterpreter.cs" />
     <Compile Include="Libnako\Interpreter\NakoValueConveter.cs" />
     <Compile Include="Libnako\Interpreter\NakoVariables.cs" />
+    <Compile Include="Libnako\JCompiler\Function\NakoFuncArg.cs" />
     <Compile Include="Libnako\JCompiler\ILWriter\NakoILCode.cs" />
     <Compile Include="Libnako\JCompiler\ILWriter\NakoILCodeList.cs" />
     <Compile Include="Libnako\JCompiler\ILWriter\NakoILType.cs" />
     <Compile Include="Libnako\JCompiler\ILWriter\NakoILWriter.cs" />
     <Compile Include="Libnako\JCompiler\Function\NakoFunc.cs" />
-    <Compile Include="Libnako\JCompiler\NakoFuncArg.cs" />
     <Compile Include="Libnako\JCompiler\Function\NakoFuncArgs.cs" />
     <Compile Include="Libnako\JCompiler\Function\NakoFuncCallInfo.cs" />
     <Compile Include="Libnako\JCompiler\NakoLoader.cs" />
