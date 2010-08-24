@@ -66,6 +66,15 @@ namespace Libnako.Interpreter
             }
         }
 
+        public Object StackPop()
+        {
+            return stack.Pop();
+        }
+        public void StackPush(Object v)
+        {
+            stack.Push(v);
+        }
+
         protected void Run_NakoIL(NakoILCode code)
         {
             switch (code.type)

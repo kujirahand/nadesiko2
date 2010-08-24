@@ -7,6 +7,7 @@ namespace Libnako.JCompiler.Function
 {
     public class NakoFunc
     {
+        public int varNo;
         public String name;
         public NakoFuncArgs args;
         public NakoFuncType funcType = NakoFuncType.UserCall; 

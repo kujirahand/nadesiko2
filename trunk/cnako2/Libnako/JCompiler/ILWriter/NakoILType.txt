@@ -52,7 +52,7 @@ BRANCH_TRUE  { args:1, push:0, pop:1 }
 BRANCH_FALSE { args:1, push:0, pop:1 }
 
 // 組み込み用
-SYSCALL { args:1, push:1, pop:? }
+SYSCALL { args:1, push:?, pop:? }
 
 // DEBUG用
 PRINT   { args:0, push:0, pop:1 }

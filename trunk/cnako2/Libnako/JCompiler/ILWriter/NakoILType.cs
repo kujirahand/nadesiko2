@@ -62,7 +62,7 @@ namespace Libnako.JCompiler.ILWriter
         BRANCH_FALSE     = 35, // { args:1, push:0, pop:1 } 
 
         // 組み込み用
-        SYSCALL          = 36, // { args:1, push:1, pop:? } 
+        SYSCALL          = 36, // { args:1, push:?, pop:? } 
 
         // DEBUG用
         PRINT            = 37, // { args:0, push:0, pop:1 } 

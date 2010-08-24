@@ -71,8 +71,7 @@ namespace Libnako.JCompiler.Parser
                 if (_statement()) continue;
                 if (_eol()) continue;
 
-                //throw new NakoParserException("ブロックの解析エラー", t);
-                return true;
+                throw new NakoParserException("ブロックの解析エラー", t);
             }
             return true;
         }
@@ -91,9 +90,10 @@ namespace Libnako.JCompiler.Parser
         //> _statement : _def_function
         //>            | _if_stmt
         //>            | _white
+        //>            | _let
         //>            | _for
         //>            | _callfunc
-        //>            | _let
+        //>            | _repeat_times
         //>            | _print
         //>            ;
         private Boolean _statement()
@@ -103,10 +103,10 @@ namespace Libnako.JCompiler.Parser
             if (_def_function()) return true;
             if (_if_stmt()) return true;
             if (_while()) return true;
+            if (_let()) return true;
             if (_for()) return true;
             if (_repeat_times()) return true;
             if (_callfunc()) return true;
-            if (_let()) return true;
             if (_print()) return true;
             
             return false;
@@ -221,7 +221,7 @@ namespace Libnako.JCompiler.Parser
             fornode.loopVar = v;
             v.scope = NakoVariableScope.Local;
             v.Token = tokVar;
-            v.varNo = localVar.createName(tokVar.value);
+            v.varNo = localVar.createNameGetNo(tokVar.value);
 
             // get argument * 2
             if (!_value())
@@ -269,7 +269,7 @@ namespace Libnako.JCompiler.Parser
             NakoNodeRepeatTimes repnode = new NakoNodeRepeatTimes();
             repnode.nodeTimes = calcStack.Pop();
             repnode.nodeBlocks = _scope_or_statement();
-            repnode.loopVarNo = localVar.createNameless();
+            repnode.loopVarNo = localVar.createNamelessGetNo();
 
             this.parentNode.AddChild(repnode);
             lastNode = repnode;
@@ -396,23 +396,23 @@ namespace Libnako.JCompiler.Parser
         //> _let : _setVariable EQ _value
         private Boolean _let()
         {
+            TokenTry();
             if (!_setVariable())
             {
+                TokenBack();
                 return false;
             }
-            NakoNodeLet node = new NakoNodeLet();
-            node.nodeVar = (NakoNodeVariable)lastNode;
- 
             if (!Accept(TokenType.EQ))
             {
+                TokenBack();
                 return false;
             }
-            TokenTry();
-            tok.MoveNext();
 
+            NakoNodeLet node = new NakoNodeLet();
+            node.nodeVar = (NakoNodeVariable)lastNode;
+            tok.MoveNext();
             if (!_value())
             {
-                TokenBack();
                 throw new NakoParserException("代入文で値がありません。", tok.CurrentToken);
             }
             node.AddChild(lastNode);
@@ -430,17 +430,17 @@ namespace Libnako.JCompiler.Parser
             if (localVar.ContainsKey(name))
             {
                 n.scope = NakoVariableScope.Local;
-                n.varNo = localVar[name];
+                n.varNo = localVar[name].no;
             }
             else if (globalVar.ContainsKey(name))
             {
                 n.scope = NakoVariableScope.Global;
-                n.varNo = globalVar[name];
+                n.varNo = globalVar[name].no;
             }
             else
             {
                 n.scope = NakoVariableScope.Global;
-                n.varNo = globalVar.createName(name);
+                n.varNo = globalVar.createName(name).no;
             }
         }
 

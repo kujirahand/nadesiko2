@@ -5,6 +5,7 @@ using Libnako.JCompiler.Node;
 using Libnako.JCompiler.Tokenizer;
 using Libnako.JCompiler.ILWriter;
 using Libnako.JCompiler.Parser;
+using Libnako.SysCall;
 
 namespace Libnako.JCompiler
 {
@@ -91,6 +92,11 @@ namespace Libnako.JCompiler
             NakoParser paser = new NakoParser(tokens);
             paser.ParseOnlyValue();
             this.topNode = paser.topNode;
+        }
+
+        public void useBaseSystem()
+        {
+            NakoBaseSystem.Instance.registerToSystem();
         }
     }
 }
