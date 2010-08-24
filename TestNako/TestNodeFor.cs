@@ -13,7 +13,7 @@ namespace TestNako
     [TestFixture]
     class TestNakoNodeFor
     {
-        NakoNamespace ns = new NakoNamespace();
+        NakoCompiler ns = new NakoCompiler();
         NakoInterpreter runner = new NakoInterpreter();
         NakoILCodeList codes = null;
 

@@ -16,7 +16,7 @@ namespace TestNako
         [Test]
         public void TestNormal()
         {
-            NakoNamespace ns = new NakoNamespace();
+            NakoCompiler ns = new NakoCompiler();
             NakoInterpreter runner = new NakoInterpreter();
             NakoILCodeList codes = null;
 
@@ -65,7 +65,7 @@ namespace TestNako
         [Test]
         public void TestNestl()
         {
-            NakoNamespace ns = new NakoNamespace();
+            NakoCompiler ns = new NakoCompiler();
             NakoInterpreter runner = new NakoInterpreter();
             NakoILCodeList codes = null;
 

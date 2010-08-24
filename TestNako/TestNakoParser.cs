@@ -15,7 +15,7 @@ namespace TestNako
         public void TestLet()
         {
             // 1
-            NakoNamespace ns = new NakoNamespace(null);
+            NakoCompiler ns = new NakoCompiler(null);
             ns.source = "1+2*3";
             ns.Tokenize();
             ns.ParseOnlyValue();

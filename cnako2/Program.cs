@@ -6,6 +6,7 @@ using Libnako.Interpreter;
 
 using System.Reflection;
 using System.Reflection.Emit;
+using Libnako.JCompiler.ILWriter;
 
 namespace cnako
 {
@@ -13,7 +14,27 @@ namespace cnako
     {
         static void Main(string[] args)
         {
-            NakoNamespace ns = new NakoNamespace();
+            NakoCompiler ns = new NakoCompiler();
+            NakoILWriter writer = new NakoILWriter(null);
+            Boolean r;
+
+            // (1)
+            ns.source = "1+2*3";
+            ns.Tokenize();
+            ns.ParseOnlyValue();
+            writer.Write(ns.TopNode);
+            r = writer.Result.CheckTypes(new NakoILType[] {
+                NakoILType.NOP,
+                NakoILType.LD_CONST_INT,
+                NakoILType.LD_CONST_INT,
+                NakoILType.LD_CONST_INT,
+                NakoILType.MUL,
+                NakoILType.ADD
+            });
+
+            NakoCompiler a = new NakoCompiler();
+
+
             NakoInterpreter runner = new NakoInterpreter();
 
             string src =
