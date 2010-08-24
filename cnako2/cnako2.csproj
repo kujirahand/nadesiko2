@@ -84,28 +84,20 @@
     <Compile Include="Libnako\JCompiler\Tokenizer\NakoTokenList.cs" />
     <Compile Include="Libnako\JCompiler\Tokenizer\TokenType.cs" />
     <Compile Include="Libnako\SysCall\NakoSysCall.cs" />
+    <Compile Include="Libnako\SysCall\NakoBaseSystem.cs" />
     <Compile Include="Libnako\SysCall\NakoSysCallList.cs" />
+    <Compile Include="Libnako\SysCall\NakoSysCallRegister.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="bin\Debug\cnako2.exe.config" />
-    <None Include="bin\Debug\cnako2.vshost.exe.config" />
-    <None Include="bin\Debug\cnako2.vshost.exe.manifest" />
-    <None Include="bin\Debug\ildasm.exe - ショートカット.lnk" />
-    <None Include="bin\Release\cnako2.exe.config" />
     <None Include="Libnako\JCompiler\ILWriter\NakoILType_Creator.nako" />
     <None Include="Libnako\JCompiler\Node\NodeType_Creator.nako" />
     <None Include="Libnako\JCompiler\Parser\ParserSyntaxMemo_Creator.nako" />
     <None Include="Libnako\JCompiler\Tokenizer\TokenType_Creator.nako" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="bin\Debug\cnako2.exe" />
-    <Content Include="bin\Debug\cnako2.pdb" />
-    <Content Include="bin\Debug\cnako2.vshost.exe" />
-    <Content Include="bin\Release\cnako2.exe" />
-    <Content Include="bin\Release\cnako2.pdb" />
     <Content Include="Libnako\JCompiler\ILWriter\NakoILType.txt" />
     <Content Include="Libnako\JCompiler\Node\NodeType.txt" />
     <Content Include="Libnako\JCompiler\Tokenizer\TokenType.txt" />

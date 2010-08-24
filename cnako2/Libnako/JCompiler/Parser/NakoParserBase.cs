@@ -14,8 +14,8 @@ namespace Libnako.JCompiler.Parser
         protected NakoNode parentNode;
         protected NakoNode lastNode;
         protected NakoTokenList tok;
-        protected NakoVariableNames globalVar;
-        protected NakoVariableNames localVar;
+        public NakoVariableNames globalVar;
+        public NakoVariableNames localVar;
         protected NakoNodeList calcStack;
         protected Stack<int> calcStackCounters;
         internal Stack<NakoParserFrame> frameStack;

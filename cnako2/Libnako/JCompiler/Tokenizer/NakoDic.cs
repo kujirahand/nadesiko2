@@ -12,20 +12,7 @@ namespace Libnako.JCompiler.Tokenizer
         /// <summary>
         /// Singleton でインスタンス管理
         /// </summary>
-        /// <returns>唯一のNakoDicインスタンス</returns>
-        public static NakoDic Instance
-        {
-            get
-            {
-                if (NakoDic.instance == null)
-                {
-                    NakoDic.instance = new NakoDic();
-                }
-                return NakoDic.instance;
-            }
-        }
-        private static NakoDic instance = null;
-
+        public static readonly NakoDic Instance = new NakoDic();
         private NakoDic()
         {
             Init();

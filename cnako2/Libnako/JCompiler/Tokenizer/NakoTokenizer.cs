@@ -78,7 +78,7 @@ namespace Libnako.JCompiler.Tokenizer
         
         protected void TokenizeAnalize_DefFunction()
         {
-            tokens.MoveNext(); // skip '*'
+            tokens.MoveNext(); // skip '*' (DEF_FUNCTION)
             // 引数宣言をスキップ
             while (!tokens.IsEOF())
             {
@@ -86,6 +86,7 @@ namespace Libnako.JCompiler.Tokenizer
                 if (tokens.CurrentTokenType == TokenType.WORD &&
                     tokens.NextTokenType == TokenType.EOL)
                 {
+                    // TODO: 関数定義を行う
                     NakoToken t = tokens.CurrentToken;
                     NakoDic.Instance[t.value] = TokenType.FUNCTION_NAME;
                     t.type = TokenType.FUNCTION_NAME;
