@@ -13,7 +13,7 @@ namespace Libnako.JCompiler.Node
 
         public NakoNodeIf()
         {
-            this.type = NodeType.IF;
+            this.type = NakoNodeType.IF;
         }
     }
 }

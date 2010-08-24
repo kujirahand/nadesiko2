@@ -349,7 +349,7 @@ namespace Libnako.JCompiler.Parser
             // ブロックの取得
             PushFrame();
             NakoNodeDefFunction funcNode = new NakoNodeDefFunction();
-            funcNode.type = NodeType.BLOCKS;
+            funcNode.type = NakoNodeType.BLOCKS;
             parentNode = funcNode;
             funcNode.RegistArgsToLocalVar();
             localVar = funcNode.localVar;
@@ -409,7 +409,7 @@ namespace Libnako.JCompiler.Parser
             {
                 throw new NakoParserException("PRINT の後に値がありません。", n.Token);
             }
-            n.type = NodeType.PRINT;
+            n.type = NakoNodeType.PRINT;
             n.AddChild(this.lastNode);
             lastNode = n;
             this.parentNode.AddChild(n);
@@ -486,7 +486,7 @@ namespace Libnako.JCompiler.Parser
 
             // 変数アクセス
             NakoNodeVariable n = new NakoNodeVariable();
-            n.type = NodeType.ST_VARIABLE;
+            n.type = NakoNodeType.ST_VARIABLE;
             n.Token = tok.CurrentToken;
             String name = (String)tok.CurrentToken.value;
             _variable__detectVariable(n, name);
@@ -510,7 +510,7 @@ namespace Libnako.JCompiler.Parser
 
             // 変数アクセス
             NakoNodeVariable n = new NakoNodeVariable();
-            n.type = NodeType.LD_VARIABLE;
+            n.type = NakoNodeType.LD_VARIABLE;
             n.Token = tok.CurrentToken;
 
             String name = (String)tok.CurrentToken.value;
@@ -762,7 +762,7 @@ namespace Libnako.JCompiler.Parser
 
             if (Accept(TokenType.INT))
             {
-                node.type = NodeType.INT;
+                node.type = NakoNodeType.INT;
                 node.value = Int32.Parse(node.Token.value);
                 lastNode = node;
                 tok.MoveNext();
@@ -771,7 +771,7 @@ namespace Libnako.JCompiler.Parser
             }
             else if (Accept(TokenType.NUMBER))
             {
-                node.type = NodeType.NUMBER;
+                node.type = NakoNodeType.NUMBER;
                 node.value = Double.Parse(node.Token.value);
                 lastNode = node;
                 tok.MoveNext();
@@ -780,7 +780,7 @@ namespace Libnako.JCompiler.Parser
             }
             else if (Accept(TokenType.STRING))
             {
-                node.type = NodeType.STRING;
+                node.type = NakoNodeType.STRING;
                 node.value = node.Token.value;
                 lastNode = node;
                 tok.MoveNext();

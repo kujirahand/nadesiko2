@@ -14,7 +14,7 @@ namespace Libnako.JCompiler.Node
 
         public NakoNodeRepeatTimes()
         {
-            type = NodeType.REPEAT_TIMES;
+            type = NakoNodeType.REPEAT_TIMES;
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Libnako.JCompiler.Node
         }
 
 
-        public Boolean checkNodeType(NodeType[] checker)
+        public Boolean checkNodeType(NakoNodeType[] checker)
         {
             if (checker.Length != this.Count) return false;
             for (int i = 0; i < checker.Length; i++)
@@ -57,9 +57,9 @@ namespace Libnako.JCompiler.Node
             return r;
         }
 
-        public NodeType[] toTypeArray()
+        public NakoNodeType[] toTypeArray()
         {
-            NodeType[] r = new NodeType[this.Count];
+            NakoNodeType[] r = new NakoNodeType[this.Count];
             int i = 0;
             foreach (NakoNode n in this)
             {

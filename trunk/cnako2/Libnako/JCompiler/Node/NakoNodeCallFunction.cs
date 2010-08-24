@@ -9,7 +9,7 @@ namespace Libnako.JCompiler.Node
     {
         public NakoNodeCallFunction()
         {
-            type = NodeType.CALL_FUNCTION;
+            type = NakoNodeType.CALL_FUNCTION;
         }
     }
 }

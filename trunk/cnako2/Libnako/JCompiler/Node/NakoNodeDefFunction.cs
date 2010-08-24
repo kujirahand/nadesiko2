@@ -15,7 +15,7 @@ namespace Libnako.JCompiler.Node
 
         public NakoNodeDefFunction()
         {
-            type = NodeType.DEF_FUNCTION;
+            type = NakoNodeType.DEF_FUNCTION;
             localVar = new NakoVariables();
         }
 
