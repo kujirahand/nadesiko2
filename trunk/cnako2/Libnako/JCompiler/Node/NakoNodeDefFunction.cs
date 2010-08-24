@@ -11,12 +11,12 @@ namespace Libnako.JCompiler.Node
     {
         public String funcName;
         public NakoFuncArgs args;
-        public NakoVariableNames localVar;
+        public NakoVariables localVar;
 
         public NakoNodeDefFunction()
         {
             type = NodeType.DEF_FUNCTION;
-            localVar = new NakoVariableNames();
+            localVar = new NakoVariables();
         }
 
         public void RegistArgsToLocalVar()

@@ -9,9 +9,9 @@ namespace Libnako.JCompiler
     public class NakoLoader
     {
         protected List<string> files;
-        protected List<NakoNamespace> namespaceList;
+        protected List<NakoCompiler> namespaceList;
         protected string basePath;
-        protected NakoNamespace cur;
+        protected NakoCompiler cur;
 
         private static NakoLoader instance = null;
         public static NakoLoader Instance
@@ -28,7 +28,7 @@ namespace Libnako.JCompiler
         private NakoLoader()
         {
             files = new List<string>();
-            namespaceList = new List<NakoNamespace>();
+            namespaceList = new List<NakoCompiler>();
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Libnako.JCompiler
         /// <param name="src"></param>
         public void Parse(string src, string filename)
         {
-            cur = new NakoNamespace(src);
+            cur = new NakoCompiler(src);
             cur.fullpath = filename;
             cur.name = this.GetNamespaceFromPath(filename);
             cur.Tokenize();

@@ -14,7 +14,7 @@ namespace TestNako
         [Test]
         public void TestNakoILWriter1()
         {
-            NakoNamespace ns = new NakoNamespace();
+            NakoCompiler ns = new NakoCompiler();
             NakoILWriter writer = new NakoILWriter(null);
             Boolean r;
 

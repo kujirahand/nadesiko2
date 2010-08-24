@@ -9,7 +9,7 @@ using Libnako.SysCall;
 
 namespace Libnako.JCompiler
 {
-    public class NakoNamespace
+    public class NakoCompiler
     {
         public String name;
         public String fullpath;
@@ -33,9 +33,11 @@ namespace Libnako.JCompiler
             get { return codes; }
         }
 
-        public NakoNamespace(String source = null)
+        public NakoCompiler(String source = null)
         {
             this.source = source;
+            // システムの初期化
+            RegisterSysCall();
         }
 
         /// <summary>
@@ -55,9 +57,9 @@ namespace Libnako.JCompiler
         /// </summary>
         public void Parse()
         {
-            NakoParser paser = new NakoParser(tokens);
-            paser.Parse();
-            this.topNode = paser.topNode;
+            NakoParser parser = new NakoParser(tokens);
+            parser.Parse();
+            this.topNode = parser.topNode;
         }
 
         /// <summary>
@@ -94,9 +96,10 @@ namespace Libnako.JCompiler
             this.topNode = paser.topNode;
         }
 
-        public void useBaseSystem()
+        protected void RegisterSysCall()
         {
             NakoBaseSystem.Instance.registerToSystem();
+            NakoSysCallList.Instance.RegisterToSystem();
         }
     }
 }

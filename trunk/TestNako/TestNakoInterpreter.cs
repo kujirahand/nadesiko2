@@ -16,7 +16,7 @@ namespace TestNako
         [Test]
         public void TestInterpreter1()
         {
-            NakoNamespace ns = new NakoNamespace();
+            NakoCompiler ns = new NakoCompiler();
             NakoILWriter w = new NakoILWriter();
             NakoInterpreter runner = new NakoInterpreter();
             Object o;
@@ -55,7 +55,7 @@ namespace TestNako
         [Test]
         public void TestInterpreter2()
         {
-            NakoNamespace ns = new NakoNamespace();
+            NakoCompiler ns = new NakoCompiler();
             NakoILWriter w = new NakoILWriter();
             NakoInterpreter runner = new NakoInterpreter();
 
@@ -80,7 +80,7 @@ namespace TestNako
         [Test]
         public void TestInterpreterCalcReal()
         {
-            NakoNamespace ns = new NakoNamespace();
+            NakoCompiler ns = new NakoCompiler();
             NakoILWriter w = new NakoILWriter();
             NakoInterpreter runner = new NakoInterpreter();
 

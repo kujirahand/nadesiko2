@@ -44,7 +44,6 @@
   <ItemGroup>
     <Compile Include="Libnako\Interpreter\NakoInterpreter.cs" />
     <Compile Include="Libnako\Interpreter\NakoValueConveter.cs" />
-    <Compile Include="Libnako\Interpreter\NakoVariables.cs" />
     <Compile Include="Libnako\JCompiler\Function\NakoFuncArg.cs" />
     <Compile Include="Libnako\JCompiler\ILWriter\NakoILCode.cs" />
     <Compile Include="Libnako\JCompiler\ILWriter\NakoILCodeList.cs" />
@@ -53,8 +52,10 @@
     <Compile Include="Libnako\JCompiler\Function\NakoFunc.cs" />
     <Compile Include="Libnako\JCompiler\Function\NakoFuncArgs.cs" />
     <Compile Include="Libnako\JCompiler\Function\NakoFuncCallInfo.cs" />
+    <Compile Include="Libnako\JCompiler\NakoCompiler.cs" />
     <Compile Include="Libnako\JCompiler\NakoLoader.cs" />
-    <Compile Include="Libnako\JCompiler\NakoNamespace.cs" />
+    <Compile Include="Libnako\JCompiler\NakoVariable.cs" />
+    <Compile Include="Libnako\JCompiler\NakoVariables.cs" />
     <Compile Include="Libnako\JCompiler\Node\NakoNode.cs" />
     <Compile Include="Libnako\JCompiler\Node\NakoNodeCalc.cs" />
     <Compile Include="Libnako\JCompiler\Node\NakoNodeConst.cs" />
@@ -72,8 +73,6 @@
     <Compile Include="Libnako\JCompiler\Parser\NakoParserBase.cs" />
     <Compile Include="Libnako\JCompiler\Parser\NakoParserException.cs" />
     <Compile Include="Libnako\JCompiler\Parser\NakoVariableNames.cs" />
-    <Compile Include="Libnako\JCompiler\Parser\NakoVariableScope.cs" />
-    <Compile Include="Libnako\JCompiler\Parser\NakoVariableType.cs" />
     <Compile Include="Libnako\JCompiler\Tokenizer\NakoDic.cs" />
     <Compile Include="Libnako\JCompiler\Tokenizer\NakoHalfFlag.cs" />
     <Compile Include="Libnako\JCompiler\Tokenizer\NakoJosi.cs" />

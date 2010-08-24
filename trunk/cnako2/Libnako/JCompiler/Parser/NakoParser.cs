@@ -221,7 +221,7 @@ namespace Libnako.JCompiler.Parser
             fornode.loopVar = v;
             v.scope = NakoVariableScope.Local;
             v.Token = tokVar;
-            v.varNo = localVar.createNameGetNo(tokVar.value);
+            v.varNo = localVar.CreateVar(tokVar.value);
 
             // get argument * 2
             if (!_value())
@@ -269,7 +269,7 @@ namespace Libnako.JCompiler.Parser
             NakoNodeRepeatTimes repnode = new NakoNodeRepeatTimes();
             repnode.nodeTimes = calcStack.Pop();
             repnode.nodeBlocks = _scope_or_statement();
-            repnode.loopVarNo = localVar.createNamelessGetNo();
+            repnode.loopVarNo = localVar.CreateVarNameless();
 
             this.parentNode.AddChild(repnode);
             lastNode = repnode;
@@ -426,22 +426,26 @@ namespace Libnako.JCompiler.Parser
 
         private void _variable__detectVariable(NakoNodeVariable n, String name)
         {
+            int varno;
             // local ?
-            if (localVar.ContainsKey(name))
+            varno = localVar.GetIndex(name);
+            if (varno >= 0)
             {
                 n.scope = NakoVariableScope.Local;
-                n.varNo = localVar[name].no;
+                n.varNo = varno;
+                return;
             }
-            else if (globalVar.ContainsKey(name))
+            // global ?
+            varno = NakoVariables.Globals.GetIndex(name);
+            if (varno >= 0)
             {
                 n.scope = NakoVariableScope.Global;
-                n.varNo = globalVar[name].no;
+                n.varNo = varno;
+                return;
             }
-            else
-            {
-                n.scope = NakoVariableScope.Global;
-                n.varNo = globalVar.createName(name).no;
-            }
+            // Create variable
+            n.scope = NakoVariableScope.Global;
+            n.varNo = NakoVariables.Globals.CreateVar(name);
         }
 
         //> _setVariable : WORD '[' VALUE ']'
