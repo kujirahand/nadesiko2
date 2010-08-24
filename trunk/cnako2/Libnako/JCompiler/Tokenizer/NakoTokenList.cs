@@ -44,21 +44,21 @@ namespace Libnako.JCompiler.Tokenizer
             }
         }
 
-        public TokenType CurrentTokenType
+        public NakoTokenType CurrentTokenType
         {
             get {
                 NakoToken t = CurrentToken;
-                if (t == null) return TokenType.UNKNOWN;
+                if (t == null) return NakoTokenType.UNKNOWN;
                 return t.type;
             }
         }
 
-        public TokenType NextTokenType
+        public NakoTokenType NextTokenType
         {
             get
             {
                 NakoToken t = NextToken;
-                if (t == null) return TokenType.UNKNOWN;
+                if (t == null) return NakoTokenType.UNKNOWN;
                 return t.type;
             }
         }
@@ -107,7 +107,7 @@ namespace Libnako.JCompiler.Tokenizer
             return true;
         }
 
-        public Boolean CheckTokenType(TokenType[] checker)
+        public Boolean CheckTokenType(NakoTokenType[] checker)
         {
             // 要素数が異なる
             if (checker.Length != this.Count) return false;
