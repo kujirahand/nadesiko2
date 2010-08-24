@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Libnako.JCompiler;
 
 namespace Libnako.SysCall
 {
@@ -17,12 +18,13 @@ namespace Libnako.SysCall
         /// </summary>
         /// <param name="name">関数の名前</param>
         /// <param name="argdef">引数の定義</param>
+        /// <param name="resultType">関数の戻り値</param>
         /// <param name="f">実際に処理を行うC#のdelegate</param>
         /// <param name="desc">関数の説明</param>
         /// <param name="kana">命令のよみがな</param>
-        protected void addFunc(String name, String argdef, SysCallDelegate f, String desc, String kana)
+        protected void addFunc(String name, String argdef, NakoVariableType resultType, SysCallDelegate f, String desc, String kana)
         {
-            NakoSysCall s = new NakoSysCall(name, argdef, f);
+            NakoSysCall s = new NakoSysCall(name, argdef, resultType, f);
             NakoSysCallList.Instance.list.Add(s);
         }
         /// <summary>

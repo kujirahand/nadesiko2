@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Libnako.JCompiler.Function;
+using Libnako.JCompiler;
 
 namespace Libnako.SysCall
 {
@@ -12,10 +13,11 @@ namespace Libnako.SysCall
     {
         public SysCallDelegate FuncDl;
 
-        public NakoSysCall(String name, String argdef, SysCallDelegate FuncDl)
+        public NakoSysCall(String name, String argdef, NakoVariableType resultType, SysCallDelegate FuncDl)
             : base(name, argdef)
         {
             this.FuncDl = FuncDl;
+            this.resultType = resultType;
         }
 
         public override void Init()
