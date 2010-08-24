@@ -15,7 +15,7 @@ namespace Libnako.JCompiler.Node
 
         public NakoNodeFor()
         {
-            type = NodeType.FOR;
+            type = NakoNodeType.FOR;
         }
     }
 }

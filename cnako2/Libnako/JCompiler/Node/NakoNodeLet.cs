@@ -11,7 +11,7 @@ namespace Libnako.JCompiler.Node
 
         public NakoNodeLet()
         {
-            type = NodeType.LET;
+            type = NakoNodeType.LET;
         }
     }
 }

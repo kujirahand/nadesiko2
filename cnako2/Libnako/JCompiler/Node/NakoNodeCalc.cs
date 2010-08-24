@@ -14,7 +14,7 @@ namespace Libnako.JCompiler.Node
 
         public NakoNodeCalc()
         {
-            type = NodeType.CALC;
+            type = NakoNodeType.CALC;
         }
 
         public override String ToTypeString()

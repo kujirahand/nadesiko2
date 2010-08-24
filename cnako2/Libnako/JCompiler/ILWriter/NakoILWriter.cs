@@ -92,43 +92,43 @@ namespace Libnako.JCompiler.ILWriter
             if (node == null) return;
             switch (node.type)
             {
-                case NodeType.NOP:
+                case NakoNodeType.NOP:
                     result.Add(NakoILCode.newNop());
                     break;
-                case NodeType.CALC:
+                case NakoNodeType.CALC:
                     newCalc((NakoNodeCalc)node);
                     return;
-                case NodeType.INT:
+                case NakoNodeType.INT:
                     result.Add(new NakoILCode(NakoILType.LD_CONST_INT, node.value));
                     return;
-                case NodeType.NUMBER:
+                case NakoNodeType.NUMBER:
                     result.Add(new NakoILCode(NakoILType.LD_CONST_REAL, node.value));
                     return;
-                case NodeType.STRING:
+                case NakoNodeType.STRING:
                     result.Add(new NakoILCode(NakoILType.LD_CONST_STR, node.value));
                     return;
-                case NodeType.PRINT:
+                case NakoNodeType.PRINT:
                     _print(node);
                     return;
-                case NodeType.ST_VARIABLE:
+                case NakoNodeType.ST_VARIABLE:
                     _setVariable((NakoNodeVariable)node);
                     return;
-                case NodeType.LET:
+                case NakoNodeType.LET:
                     _let((NakoNodeLet)node);
                     return;
-                case NodeType.LD_VARIABLE:
+                case NakoNodeType.LD_VARIABLE:
                     _getVariable((NakoNodeVariable)node);
                     return;
-                case NodeType.IF:
+                case NakoNodeType.IF:
                     _if((NakoNodeIf)node);
                     return;
-                case NodeType.WHILE:
+                case NakoNodeType.WHILE:
                     _while((NakoNodeWhile)node);
                     return;
-                case NodeType.FOR:
+                case NakoNodeType.FOR:
                     _for((NakoNodeFor)node);
                     return;
-                case NodeType.REPEAT_TIMES:
+                case NakoNodeType.REPEAT_TIMES:
                     _repeat_times((NakoNodeRepeatTimes)node);
                     return;
             }

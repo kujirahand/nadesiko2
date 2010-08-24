@@ -7,7 +7,7 @@ namespace Libnako.JCompiler.Node
 {
     public class NakoNode
     {
-        public NodeType type = NodeType.NOP;
+        public NakoNodeType type = NakoNodeType.NOP;
         public Object value = null;
         private String _josi;
         public String josi

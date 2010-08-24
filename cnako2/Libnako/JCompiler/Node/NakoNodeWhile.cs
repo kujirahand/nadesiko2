@@ -12,7 +12,7 @@ namespace Libnako.JCompiler.Node
 
         public NakoNodeWhile()
         {
-            type = NodeType.WHILE;
+            type = NakoNodeType.WHILE;
         }
     }
 }

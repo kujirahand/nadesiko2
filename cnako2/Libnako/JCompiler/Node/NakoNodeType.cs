@@ -6,7 +6,7 @@ using System.Text;
 namespace Libnako.JCompiler.Node
 {
     // Define Node Type
-    public enum NodeType
+    public enum NakoNodeType
     {
         // NODE
         NOP,
