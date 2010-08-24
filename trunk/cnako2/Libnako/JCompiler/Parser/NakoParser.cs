@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Libnako.JCompiler.Node;
 using Libnako.JCompiler.Tokenizer;
+using Libnako.SysCall;
 
 namespace Libnako.JCompiler.Parser
 {
@@ -288,6 +289,7 @@ namespace Libnako.JCompiler.Parser
             {
                 if (tok.CurrentTokenType == TokenType.FUNCTION_NAME)
                 {
+                    __detect_func(tok.CurrentToken);
                     tok.MoveNext();
                     TokenFinally();
                     return true;
@@ -297,6 +299,27 @@ namespace Libnako.JCompiler.Parser
             }
             TokenBack();
             return false;
+        }
+
+        private void __detect_func(NakoToken t)
+        {
+            string fname = t.value;
+            NakoVariable var = NakoVariables.Globals.GetVar(fname);
+            if (var == null)
+            {
+                throw new NakoParserException("関数『" + fname + "』が見あたりません。", t);
+            }
+            if (var.type == NakoVariableType.SysCall)
+            {
+                int funcNo = (int)var.value;
+                NakoSysCall sys = NakoSysCallList.Instance.list[funcNo];
+                
+            }
+            else
+            {
+                // TODO
+                throw new Exception("未実装");
+            }
         }
 
         //> _def_function : DEF_FUNCTION _def_function_args FUNCTION_NAME EOL _blocks

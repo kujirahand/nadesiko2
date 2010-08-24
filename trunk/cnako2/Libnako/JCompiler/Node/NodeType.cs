@@ -5,43 +5,41 @@ using System.Text;
 
 namespace Libnako.JCompiler.Node
 {
+    // Define Node Type
     public enum NodeType
     {
-        // Define Token
         // NODE
-        NOP = 0,
+        NOP,
 
         // Blocks
-        BLOCK = 1,
-        BLOCKS = 2,
-        IF = 3,
-        WHILE = 4,
-        FOR = 5,
-        FOREACH = 6,
-        REPEAT_TIMES = 7,
+        BLOCK,
+        BLOCKS,
+        IF,
+        WHILE,
+        FOR,
+        FOREACH,
+        REPEAT_TIMES,
 
         // Const
-        INT = 8,
-        NUMBER = 9,
-        STRING = 10,
+        INT,
+        NUMBER,
+        STRING,
 
         // Value
-        FORMULA = 11,
-        VALUE = 12,
-        CALC = 13,
-        LD_VARIABLE = 14,
+        FORMULA,
+        VALUE,
+        CALC,
+        LD_VARIABLE,
 
         // Let
-        LET = 15,
-        ST_VARIABLE = 16,
+        LET,
+        ST_VARIABLE,
 
         // Function
-        CALL_FUNCTION = 17,
-        DEF_FUNCTION = 18,
+        CALL_FUNCTION,
+        DEF_FUNCTION,
 
         // DEBUG
-        PRINT = 19,
-
-        END_OF_NODE
+        PRINT
     }
 }

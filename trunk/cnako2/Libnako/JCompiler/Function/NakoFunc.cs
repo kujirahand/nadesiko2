@@ -5,12 +5,16 @@ using System.Text;
 
 namespace Libnako.JCompiler.Function
 {
+    /// <summary>
+    /// なでしこ関数を定義したもの
+    /// </summary>
     public class NakoFunc
     {
         public int varNo;
         public String name;
         public NakoFuncArgs args;
-        public NakoFuncType funcType = NakoFuncType.UserCall; 
+        public NakoFuncType funcType = NakoFuncType.UserCall;
+        public NakoVariableType resultType = NakoVariableType.Void;
 
         public NakoFunc()
         {
@@ -30,6 +34,15 @@ namespace Libnako.JCompiler.Function
         }
 
         public virtual void Execute() { }
+
+        public int ArgCount
+        {
+            get
+            {
+                return args.Count;
+            }
+        }
+
     }
 
     public enum NakoFuncType

@@ -120,7 +120,6 @@ namespace Libnako.Interpreter
                 case NakoILType.RET:
                     break;
                 case NakoILType.SYSCALL: exec_syscall(code); break;
-                    break;
                 case NakoILType.PRINT: exec_print(); break;
             }
         }
