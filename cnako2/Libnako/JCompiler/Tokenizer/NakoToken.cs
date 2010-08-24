@@ -11,14 +11,14 @@ namespace Libnako.JCompiler.Tokenizer
         public int lineno = 0;
         public int level = 0;
         public string josi = "";
-        protected TokenType _type = 0;
-        public TokenType type
+        protected NakoTokenType _type = 0;
+        public NakoTokenType type
         {
             get { return _type;  }
             set { _type = value; }
         }
 
-        public NakoToken(TokenType type = 0, int lineno = 0, int level = 0)
+        public NakoToken(NakoTokenType type = 0, int lineno = 0, int level = 0)
         {
             this.lineno = lineno;
             this.level = level;

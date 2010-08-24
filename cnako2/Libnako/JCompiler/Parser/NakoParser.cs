@@ -38,11 +38,11 @@ namespace Libnako.JCompiler.Parser
         //> _scope : SCOPE_BEGIN _blocks SCOPE_END ;
         private Boolean _scope()
         {
-            if (!Accept(TokenType.SCOPE_BEGIN)) return false;
+            if (!Accept(NakoTokenType.SCOPE_BEGIN)) return false;
             tok.MoveNext();
             if (!_blocks()) return false;
-            if (Accept(TokenType.KOKOMADE)) tok.MoveNext();
-            if (!Accept(TokenType.SCOPE_END))
+            if (Accept(NakoTokenType.KOKOMADE)) tok.MoveNext();
+            if (!Accept(NakoTokenType.SCOPE_END))
             {
                 throw new NakoParserException("トークンの終端がありません。システムエラー。", tok.CurrentToken);
             }
@@ -64,8 +64,8 @@ namespace Libnako.JCompiler.Parser
             while (!tok.IsEOF())
             {
                 // ブロックを抜けるキーワードをチェック
-                if (Accept(TokenType.SCOPE_END)) return true;
-                if (Accept(TokenType.KOKOMADE)) return true;
+                if (Accept(NakoTokenType.SCOPE_END)) return true;
+                if (Accept(NakoTokenType.KOKOMADE)) return true;
 
                 // ブロック要素を繰り返し評価
                 t = tok.CurrentToken;
@@ -81,7 +81,7 @@ namespace Libnako.JCompiler.Parser
         private Boolean _eol()
         {
             if (tok.IsEOF()) return false;
-            if (Accept(TokenType.EOL))
+            if (Accept(NakoTokenType.EOL))
             {
                 tok.MoveNext(); return true;
             }
@@ -118,11 +118,11 @@ namespace Libnako.JCompiler.Parser
         //                     ;
         private NakoNode _scope_or_statement()
         {
-            while (Accept(TokenType.EOL)) tok.MoveNext();
+            while (Accept(NakoTokenType.EOL)) tok.MoveNext();
 
             this.PushNodeState();
             NakoNode n = this.parentNode = this.lastNode = new NakoNode();
-            if (Accept(TokenType.SCOPE_BEGIN))
+            if (Accept(NakoTokenType.SCOPE_BEGIN))
             {
                 _scope();
             }
@@ -138,7 +138,7 @@ namespace Libnako.JCompiler.Parser
         //>          ;
         private Boolean _if_stmt()
         {
-            if (!Accept(TokenType.IF)) return false;
+            if (!Accept(NakoTokenType.IF)) return false;
             tok.MoveNext(); // skip IF
 
             NakoNodeIf ifnode = new NakoNodeIf();
@@ -152,17 +152,17 @@ namespace Libnako.JCompiler.Parser
             ifnode.nodeCond = calcStack.Pop();
             
             // THEN (日本語では、助詞なのでたぶんないはずだが...)
-            if (Accept(TokenType.THEN)) tok.MoveNext();
-            while (Accept(TokenType.EOL)) tok.MoveNext();
+            if (Accept(NakoTokenType.THEN)) tok.MoveNext();
+            while (Accept(NakoTokenType.EOL)) tok.MoveNext();
 
             // TRUE
             ifnode.nodeTrue = _scope_or_statement();
 
             // FALSE
-            if (Accept(TokenType.ELSE))
+            if (Accept(NakoTokenType.ELSE))
             {
                 tok.MoveNext(); // skip ELSE
-                while (Accept(TokenType.EOL)) tok.MoveNext();
+                while (Accept(NakoTokenType.EOL)) tok.MoveNext();
                 ifnode.nodeFalse = _scope_or_statement();
             }
             this.parentNode.AddChild(ifnode);
@@ -180,7 +180,7 @@ namespace Libnako.JCompiler.Parser
                 TokenBack();
                 return false;
             }
-            if (!Accept(TokenType.WHILE))
+            if (!Accept(NakoTokenType.WHILE))
             {
                 TokenBack();
                 return false;
@@ -210,7 +210,7 @@ namespace Libnako.JCompiler.Parser
             TokenTry();
             
             // local variable
-            if (!Accept(TokenType.WORD)) return false;
+            if (!Accept(NakoTokenType.WORD)) return false;
             tokVar = tok.CurrentToken;
             if (!(tokVar.josi == "を" || tokVar.josi == "で")) {
                 return false;
@@ -239,7 +239,7 @@ namespace Libnako.JCompiler.Parser
             fornode.nodeTo = calcStack.Pop();
             fornode.nodeFrom = calcStack.Pop();
 
-            if (!Accept(TokenType.FOR))
+            if (!Accept(NakoTokenType.FOR))
             {
                 TokenBack();
                 return false;
@@ -259,7 +259,7 @@ namespace Libnako.JCompiler.Parser
         {
             TokenTry();
             if (!_value()) return false;
-            if (!Accept(TokenType.REPEAT_TIMES))
+            if (!Accept(NakoTokenType.REPEAT_TIMES))
             {
                 TokenBack();
                 return false;
@@ -287,7 +287,7 @@ namespace Libnako.JCompiler.Parser
             TokenTry();
             while (!tok.IsEOF())
             {
-                if (tok.CurrentTokenType == TokenType.FUNCTION_NAME)
+                if (tok.CurrentTokenType == NakoTokenType.FUNCTION_NAME)
                 {
                     __detect_func(tok.CurrentToken);
                     tok.MoveNext();
@@ -326,7 +326,7 @@ namespace Libnako.JCompiler.Parser
         //>               ;
         private Boolean _def_function()
         {
-            if (!Accept(TokenType.DEF_FUNCTION)) return false;
+            if (!Accept(NakoTokenType.DEF_FUNCTION)) return false;
             NakoToken t = tok.CurrentToken;
             tok.MoveNext(); // '*'
 
@@ -334,13 +334,13 @@ namespace Libnako.JCompiler.Parser
             _def_function_args();
 
             // 関数名
-            if (!Accept(TokenType.FUNCTION_NAME))
+            if (!Accept(NakoTokenType.FUNCTION_NAME))
             {
                 throw new NakoParserException("関数の定義で関数名が見当たりません。", t);
             }
             tok.MoveNext(); // FUNCTION_NAME
 
-            if (!Accept(TokenType.EOL))
+            if (!Accept(NakoTokenType.EOL))
             {
                 throw new NakoParserException("関数の定義で改行がありません。", t);
             }
@@ -368,22 +368,22 @@ namespace Libnako.JCompiler.Parser
         //>                    ;
         private Boolean _def_function_args()
         {
-            if (Accept(TokenType.PARENTHESES_L))
+            if (Accept(NakoTokenType.PARENTHESES_L))
             {
                 tok.MoveNext();
             }
             // 引数の登録
             while (!tok.IsEOF()) {
-                if (Accept(TokenType.PARENTHESES_R)) {
+                if (Accept(NakoTokenType.PARENTHESES_R)) {
                     tok.MoveNext();
                     break;
                 }
-                if (Accept(TokenType.OR))
+                if (Accept(NakoTokenType.OR))
                 {
                     tok.MoveNext();
                     break;
                 }
-                if (Accept(TokenType.WORD))
+                if (Accept(NakoTokenType.WORD))
                 {
                     // TODO: 引数の登録
                     tok.MoveNext();
@@ -398,7 +398,7 @@ namespace Libnako.JCompiler.Parser
         //> _print : PRINT _value
         private Boolean _print()
         {
-            if (tok.CurrentTokenType != TokenType.PRINT)
+            if (tok.CurrentTokenType != NakoTokenType.PRINT)
             {
                 return false;
             }
@@ -425,7 +425,7 @@ namespace Libnako.JCompiler.Parser
                 TokenBack();
                 return false;
             }
-            if (!Accept(TokenType.EQ))
+            if (!Accept(NakoTokenType.EQ))
             {
                 TokenBack();
                 return false;
@@ -475,10 +475,10 @@ namespace Libnako.JCompiler.Parser
         //>              | WORD ;
         private Boolean _setVariable()
         {
-            if (!Accept(TokenType.WORD)) return false;
+            if (!Accept(NakoTokenType.WORD)) return false;
 
             // 配列アクセス
-            if (tok.NextTokenType == TokenType.BLACKETS_L)
+            if (tok.NextTokenType == NakoTokenType.BLACKETS_L)
             {
                 // TODO
                 throw new NakoParserException("Not supported", tok.CurrentToken);
@@ -499,10 +499,10 @@ namespace Libnako.JCompiler.Parser
         //>           | WORD ;
         private Boolean _variable()
         {
-            if (!Accept(TokenType.WORD)) return false;
+            if (!Accept(NakoTokenType.WORD)) return false;
             
             // 配列アクセス
-            if (tok.NextTokenType == TokenType.BLACKETS_L)
+            if (tok.NextTokenType == NakoTokenType.BLACKETS_L)
             {
                 // TODO
                 throw new NakoParserException("Not supported", tok.CurrentToken);
@@ -529,12 +529,12 @@ namespace Libnako.JCompiler.Parser
             // _value は再帰が多くコストが高いのであり得る値だけチェックする
             switch (tok.CurrentTokenType)
             {
-                case TokenType.PARENTHESES_L:
-                case TokenType.INT:
-                case TokenType.NUMBER:
-                case TokenType.WORD:
-                case TokenType.FUNCTION_NAME:
-                case TokenType.STRING:
+                case NakoTokenType.PARENTHESES_L:
+                case NakoTokenType.INT:
+                case NakoTokenType.NUMBER:
+                case NakoTokenType.WORD:
+                case NakoTokenType.FUNCTION_NAME:
+                case NakoTokenType.STRING:
                     break;
                 default:
                     return false;
@@ -559,7 +559,7 @@ namespace Libnako.JCompiler.Parser
         private Boolean _calc_formula()
         {
             // Check '(' *** ')'
-            if (Accept(TokenType.PARENTHESES_L))
+            if (Accept(NakoTokenType.PARENTHESES_L))
             {
                 TokenTry();
                 tok.MoveNext();
@@ -568,7 +568,7 @@ namespace Libnako.JCompiler.Parser
                     TokenBack();
                     return false;
                 }
-                if (Accept(TokenType.PARENTHESES_R))
+                if (Accept(NakoTokenType.PARENTHESES_R))
                 {
                     tok.MoveNext();
                     TokenFinally();
@@ -588,7 +588,7 @@ namespace Libnako.JCompiler.Parser
             {
                 return false;
             }
-            while (Accept(TokenType.POWER))
+            while (Accept(NakoTokenType.POWER))
             {
                 TokenTry();
                 tok.MoveNext();
@@ -615,14 +615,14 @@ namespace Libnako.JCompiler.Parser
         {
             if (!_calc_power()) { return false; }
             
-            while (Accept(TokenType.MUL) || Accept(TokenType.DIV) || Accept(TokenType.MOD))
+            while (Accept(NakoTokenType.MUL) || Accept(NakoTokenType.DIV) || Accept(NakoTokenType.MOD))
             {
                 NakoNodeCalc node = new NakoNodeCalc();
                 switch (tok.CurrentTokenType)
                 {
-                    case TokenType.MUL: node.calc_type = CalcType.MUL; break;
-                    case TokenType.DIV: node.calc_type = CalcType.DIV; break;
-                    case TokenType.MOD: node.calc_type = CalcType.MOD; break;
+                    case NakoTokenType.MUL: node.calc_type = CalcType.MUL; break;
+                    case NakoTokenType.DIV: node.calc_type = CalcType.DIV; break;
+                    case NakoTokenType.MOD: node.calc_type = CalcType.MOD; break;
                 }
                 TokenTry();
                 tok.MoveNext();
@@ -648,16 +648,16 @@ namespace Libnako.JCompiler.Parser
             {
                 return false;
             }
-            while (Accept(TokenType.PLUS) || Accept(TokenType.MINUS) || Accept(TokenType.AND))
+            while (Accept(NakoTokenType.PLUS) || Accept(NakoTokenType.MINUS) || Accept(NakoTokenType.AND))
             {
                 NakoNodeCalc node = new NakoNodeCalc();
                 switch (tok.CurrentTokenType)
                 {
-                    case TokenType.PLUS:
+                    case NakoTokenType.PLUS:
                         node.calc_type = CalcType.ADD; break;
-                    case TokenType.MINUS:
+                    case NakoTokenType.MINUS:
                         node.calc_type = CalcType.SUB; break;
-                    case TokenType.AND:
+                    case NakoTokenType.AND:
                         node.calc_type = CalcType.ADD_STR; break;
                     default:
                         throw new Exception("System Error");
@@ -689,25 +689,25 @@ namespace Libnako.JCompiler.Parser
 
             while
                 (
-                    Accept(TokenType.GT)    ||
-                    Accept(TokenType.LT)    ||
-                    Accept(TokenType.GT_EQ) ||
-                    Accept(TokenType.LT_EQ) ||
-                    Accept(TokenType.EQ)    ||
-                    Accept(TokenType.EQ_EQ) ||
-                    Accept(TokenType.NOT_EQ)
+                    Accept(NakoTokenType.GT)    ||
+                    Accept(NakoTokenType.LT)    ||
+                    Accept(NakoTokenType.GT_EQ) ||
+                    Accept(NakoTokenType.LT_EQ) ||
+                    Accept(NakoTokenType.EQ)    ||
+                    Accept(NakoTokenType.EQ_EQ) ||
+                    Accept(NakoTokenType.NOT_EQ)
                 )
             {
                 NakoNodeCalc node = new NakoNodeCalc();
                 switch (tok.CurrentToken.type)
                 {
-                    case TokenType.GT: node.calc_type = CalcType.GT; break;
-                    case TokenType.LT: node.calc_type = CalcType.LT; break;
-                    case TokenType.GT_EQ: node.calc_type = CalcType.GT_EQ; break;
-                    case TokenType.LT_EQ: node.calc_type = CalcType.LT_EQ; break;
-                    case TokenType.EQ: node.calc_type = CalcType.EQ; break;
-                    case TokenType.EQ_EQ: node.calc_type = CalcType.EQ; break;
-                    case TokenType.NOT_EQ: node.calc_type = CalcType.NOT_EQ; break;
+                    case NakoTokenType.GT: node.calc_type = CalcType.GT; break;
+                    case NakoTokenType.LT: node.calc_type = CalcType.LT; break;
+                    case NakoTokenType.GT_EQ: node.calc_type = CalcType.GT_EQ; break;
+                    case NakoTokenType.LT_EQ: node.calc_type = CalcType.LT_EQ; break;
+                    case NakoTokenType.EQ: node.calc_type = CalcType.EQ; break;
+                    case NakoTokenType.EQ_EQ: node.calc_type = CalcType.EQ; break;
+                    case NakoTokenType.NOT_EQ: node.calc_type = CalcType.NOT_EQ; break;
                     default:
                         throw new Exception("[Nako System Error] Operator not set.");
                 }
@@ -733,7 +733,7 @@ namespace Libnako.JCompiler.Parser
         //>            ;
         private Boolean _calc_fact()
         {
-            if (Accept(TokenType.MINUS))
+            if (Accept(NakoTokenType.MINUS))
             {
                 NakoNodeCalc node = new NakoNodeCalc();
                 node.Token = tok.CurrentToken;
@@ -760,7 +760,7 @@ namespace Libnako.JCompiler.Parser
             NakoNodeConst node = new NakoNodeConst();
             node.Token = tok.CurrentToken;
 
-            if (Accept(TokenType.INT))
+            if (Accept(NakoTokenType.INT))
             {
                 node.type = NakoNodeType.INT;
                 node.value = Int32.Parse(node.Token.value);
@@ -769,7 +769,7 @@ namespace Libnako.JCompiler.Parser
                 calcStack.Push(node);
                 return true;
             }
-            else if (Accept(TokenType.NUMBER))
+            else if (Accept(NakoTokenType.NUMBER))
             {
                 node.type = NakoNodeType.NUMBER;
                 node.value = Double.Parse(node.Token.value);
@@ -778,7 +778,7 @@ namespace Libnako.JCompiler.Parser
                 calcStack.Push(node);
                 return true;
             }
-            else if (Accept(TokenType.STRING))
+            else if (Accept(NakoTokenType.STRING))
             {
                 node.type = NakoNodeType.STRING;
                 node.value = node.Token.value;

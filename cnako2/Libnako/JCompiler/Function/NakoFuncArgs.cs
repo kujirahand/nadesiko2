@@ -22,7 +22,7 @@ namespace Libnako.JCompiler.Function
             {
                 NakoToken tok = tokens[i];
                 NakoFuncArg arg = null;
-                if (tok.type == TokenType.WORD)
+                if (tok.type == NakoTokenType.WORD)
                 {
                     int idx = indexOfName(tok.value);
                     if (idx < 0)
@@ -38,7 +38,7 @@ namespace Libnako.JCompiler.Function
                         arg.AddJosi(tok.josi);
                     }
                 }
-                if (tok.type == TokenType.OR || tok.type == TokenType.OR_OR)
+                if (tok.type == NakoTokenType.OR || tok.type == NakoTokenType.OR_OR)
                 {
                     continue;
                 }

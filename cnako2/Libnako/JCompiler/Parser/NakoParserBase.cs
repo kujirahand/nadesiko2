@@ -46,7 +46,7 @@ namespace Libnako.JCompiler.Parser
 
         protected virtual Boolean _value() { return true; }
 
-        protected Boolean Accept(TokenType type)
+        protected Boolean Accept(NakoTokenType type)
         {
             return (tok.CurrentTokenType == type);
         }

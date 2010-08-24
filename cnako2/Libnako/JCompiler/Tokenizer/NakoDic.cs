@@ -7,7 +7,7 @@ namespace Libnako.JCompiler.Tokenizer
     /// <summary>
     /// なでしこ単語管理クラス
     /// </summary>
-    public class NakoDic : Dictionary<string, TokenType>
+    public class NakoDic : Dictionary<string, NakoTokenType>
     {
         /// <summary>
         /// Singleton でインスタンス管理
@@ -20,16 +20,16 @@ namespace Libnako.JCompiler.Tokenizer
 
         public void Init()
         {
-            this.Add("ナデシコ", TokenType.RESERVED);
-            this.Add("もし", TokenType.IF);
-            this.Add("ならば", TokenType.THEN);
-            this.Add("違えば", TokenType.ELSE);
-            this.Add("ここまで", TokenType.KOKOMADE);
-            this.Add("繰り返す", TokenType.FOR);
-            this.Add("間", TokenType.WHILE);
-            this.Add("回", TokenType.REPEAT_TIMES);
-            this.Add("条件分岐", TokenType.SWITCH);
-            this.Add("PRINT", TokenType.PRINT);
+            this.Add("ナデシコ", NakoTokenType.RESERVED);
+            this.Add("もし", NakoTokenType.IF);
+            this.Add("ならば", NakoTokenType.THEN);
+            this.Add("違えば", NakoTokenType.ELSE);
+            this.Add("ここまで", NakoTokenType.KOKOMADE);
+            this.Add("繰り返す", NakoTokenType.FOR);
+            this.Add("間", NakoTokenType.WHILE);
+            this.Add("回", NakoTokenType.REPEAT_TIMES);
+            this.Add("条件分岐", NakoTokenType.SWITCH);
+            this.Add("PRINT", NakoTokenType.PRINT);
         }
 
     }

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Libnako.JCompiler.Tokenizer
 {
-    public enum TokenType
+    public enum NakoTokenType
     {
         // Define Token
         UNKNOWN,
