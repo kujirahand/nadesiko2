@@ -99,7 +99,7 @@ namespace Libnako.JCompiler
         protected void RegisterSysCall()
         {
             NakoBaseSystem.Instance.registerToSystem();
-            NakoSysCallList.Instance.RegisterToSystem();
+            NakoAPIFuncBank.Instance.RegisterToSystem();
         }
     }
 }
