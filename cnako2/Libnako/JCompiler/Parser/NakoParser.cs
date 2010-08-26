@@ -323,7 +323,7 @@ namespace Libnako.JCompiler.Parser
                 throw new NakoParserException("関数『" + fname + "』が見あたりません。", t);
             }
 
-            if (var.type == NakoVariableType.SysCall)
+            if (var.type == NakoVariableType.SystemFunc)
             {
                 int funcNo = (int)var.value;
                 NakoAPIFunc sys = NakoAPIFuncBank.Instance.list[funcNo];
