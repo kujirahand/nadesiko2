@@ -20,7 +20,7 @@ namespace cnako
             runner.debugMode = true;
 
             string src =
-                "A=1に2を足す。PRINT A" +
+                "`baba`と言う" +
                 "";
             _w(src);
 

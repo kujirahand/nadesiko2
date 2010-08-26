@@ -60,7 +60,7 @@ namespace Libnako.JCompiler.Parser
         {
             tok.Restore();
             int c = calcStackCounters.Pop();
-            while (c > calcStack.Count)
+            while (c < calcStack.Count)
             {
                 calcStack.Pop();
             }

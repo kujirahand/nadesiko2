@@ -335,17 +335,9 @@ namespace Libnako.JCompiler.Parser
                 {
                     node.argNodes.Add(calcStack.Pop());
                 }
-                // 戻り値が Void でなければ結果として関数を Push
-                if (sys.resultType != NakoVariableType.Void)
-                {
-                    calcStack.Push(node);
-                    this.lastNode = node;
-                }
-                else
-                {
-                    this.lastNode = node;
-                    this.parentNode.AddChild(node);
-                }
+                // 計算スタックに関数の呼び出しを追加
+                calcStack.Push(node);
+                this.lastNode = node;
                 tok.MoveNext();
             }
             else
