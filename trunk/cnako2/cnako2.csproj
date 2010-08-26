@@ -82,10 +82,10 @@
     <Compile Include="Libnako\JCompiler\Tokenizer\NakoTokenizerException.cs" />
     <Compile Include="Libnako\JCompiler\Tokenizer\NakoTokenList.cs" />
     <Compile Include="Libnako\JCompiler\Tokenizer\NakoTokenType.cs" />
-    <Compile Include="Libnako\SysCall\NakoSysCall.cs" />
-    <Compile Include="Libnako\SysCall\NakoBaseSystem.cs" />
-    <Compile Include="Libnako\SysCall\NakoSysCallList.cs" />
-    <Compile Include="Libnako\SysCall\NakoSysCallRegister.cs" />
+    <Compile Include="Libnako\NakoAPI\NakoBaseSystem.cs" />
+    <Compile Include="Libnako\NakoAPI\NakoSysCall.cs" />
+    <Compile Include="Libnako\NakoAPI\NakoSysCallList.cs" />
+    <Compile Include="Libnako\NakoAPI\NakoSysCallRegister.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
