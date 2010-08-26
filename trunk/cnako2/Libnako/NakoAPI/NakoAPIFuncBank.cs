@@ -12,11 +12,11 @@ namespace Libnako.NakoAPI
     /// <summary>
     /// なでしこ２のシステム関数の一覧を保持するリスト
     /// </summary>
-    public class NakoSysCallList
+    public class NakoAPIFuncBank
     {
         // Singleton
-        public static readonly NakoSysCallList Instance = new NakoSysCallList();
-        private NakoSysCallList() { }
+        public static readonly NakoAPIFuncBank Instance = new NakoAPIFuncBank();
+        private NakoAPIFuncBank() { }
         private static Boolean FlagInit = false;
 
         public List<NakoAPIFunc> list = new List<NakoAPIFunc>();

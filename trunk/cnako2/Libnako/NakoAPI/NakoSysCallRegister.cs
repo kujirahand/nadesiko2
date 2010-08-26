@@ -25,7 +25,7 @@ namespace Libnako.NakoAPI
         protected void addFunc(String name, String argdef, NakoVariableType resultType, SysCallDelegate f, String desc, String kana)
         {
             NakoAPIFunc s = new NakoAPIFunc(name, argdef, resultType, f);
-            NakoSysCallList.Instance.AddFunc(s);
+            NakoAPIFuncBank.Instance.AddFunc(s);
         }
         /// <summary>
         /// このメソッドを override してここでシステム関数の登録を行う

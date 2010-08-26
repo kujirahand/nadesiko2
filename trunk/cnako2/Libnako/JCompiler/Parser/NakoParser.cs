@@ -326,7 +326,7 @@ namespace Libnako.JCompiler.Parser
             if (var.type == NakoVariableType.SysCall)
             {
                 int funcNo = (int)var.value;
-                NakoAPIFunc sys = NakoSysCallList.Instance.list[funcNo];
+                NakoAPIFunc sys = NakoAPIFuncBank.Instance.list[funcNo];
                 NakoNodeCallFunction node = new NakoNodeCallFunction();
                 node.Token = t;
                 node.func = sys;

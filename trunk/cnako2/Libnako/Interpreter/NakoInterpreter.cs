@@ -243,7 +243,7 @@ namespace Libnako.Interpreter
         private void exec_syscall(NakoILCode code)
         {
             int funcNo = (int)code.value;
-            NakoAPIFunc s = NakoSysCallList.Instance.list[funcNo];
+            NakoAPIFunc s = NakoAPIFuncBank.Instance.list[funcNo];
             NakoFuncCallInfo f = new NakoFuncCallInfo(this);
             s.FuncDl(f);
         }
