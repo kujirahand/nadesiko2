@@ -194,6 +194,9 @@ namespace Libnako.JCompiler.Tokenizer
                     return null;
                 // 句読点
                 case ';':
+                    token.type = NakoTokenType.EOL; // 明確な区切り
+                    cur++;
+                    return token;
                 case ',':
                     cur++;
                     return null;

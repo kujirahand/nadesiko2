@@ -16,30 +16,11 @@ namespace cnako
         {
             NakoCompiler ns = new NakoCompiler();
             NakoILWriter writer = new NakoILWriter(null);
-            Boolean r;
-
-            // (1)
-            ns.source = "1+2*3";
-            ns.Tokenize();
-            ns.ParseOnlyValue();
-            writer.Write(ns.TopNode);
-            r = writer.Result.CheckTypes(new NakoILType[] {
-                NakoILType.NOP,
-                NakoILType.LD_CONST_INT,
-                NakoILType.LD_CONST_INT,
-                NakoILType.LD_CONST_INT,
-                NakoILType.MUL,
-                NakoILType.ADD
-            });
-
-            NakoCompiler a = new NakoCompiler();
-
-
             NakoInterpreter runner = new NakoInterpreter();
+            runner.debugMode = true;
 
             string src =
-                "Iを１から3まで繰り返す\n" +
-                "  PRINT I\n" +
+                "A=1に2を足す。PRINT A" +
                 "";
             _w(src);
 
@@ -49,8 +30,6 @@ namespace cnako
             _w(ns.Tokens.toTypeString());
             Console.WriteLine("End.");
             //Console.ReadLine();
-
-
 
             ns.Publish(src);
 

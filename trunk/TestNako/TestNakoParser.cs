@@ -20,24 +20,24 @@ namespace TestNako
             ns.Tokenize();
             ns.ParseOnlyValue();
             Assert.IsTrue(ns.TopNode.hasChildren());
-            Boolean r = ns.TopNode.Children.checkNodeType(new NodeType[] {
-                NodeType.CALC
+            Boolean r = ns.TopNode.Children.checkNodeType(new NakoNodeType[] {
+                NakoNodeType.CALC
             });
             // 2
             ns.source = "(1+2)*3";
             ns.Tokenize();
             ns.ParseOnlyValue();
             Assert.IsTrue(ns.TopNode.hasChildren());
-            r = ns.TopNode.Children.checkNodeType(new NodeType[] {
-                NodeType.CALC
+            r = ns.TopNode.Children.checkNodeType(new NakoNodeType[] {
+                NakoNodeType.CALC
             });
             // 3
             ns.source = "A=5";
             ns.Tokenize();
             ns.Parse();
             Assert.IsTrue(ns.TopNode.hasChildren());
-            r = ns.TopNode.Children.checkNodeType(new NodeType[] {
-                NodeType.LET
+            r = ns.TopNode.Children.checkNodeType(new NakoNodeType[] {
+                NakoNodeType.LET
             });
         }
     }

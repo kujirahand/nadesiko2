@@ -25,7 +25,7 @@ namespace Libnako.SysCall
         protected void addFunc(String name, String argdef, NakoVariableType resultType, SysCallDelegate f, String desc, String kana)
         {
             NakoSysCall s = new NakoSysCall(name, argdef, resultType, f);
-            NakoSysCallList.Instance.list.Add(s);
+            NakoSysCallList.Instance.AddFunc(s);
         }
         /// <summary>
         /// このメソッドを override してここでシステム関数の登録を行う

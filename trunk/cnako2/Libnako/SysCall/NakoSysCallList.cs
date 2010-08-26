@@ -20,7 +20,13 @@ namespace Libnako.SysCall
         private static Boolean FlagInit = false;
 
         public List<NakoSysCall> list = new List<NakoSysCall>();
-        
+
+        public void AddFunc(NakoSysCall s)
+        {
+            list.Add(s);
+            s.varNo = list.Count - 1;
+        }
+
         public void RegisterToSystem()
         {
             // 二重初期化を防ぐ
@@ -31,7 +37,7 @@ namespace Libnako.SysCall
             for (int i = 0; i < list.Count; i++)
             {
                 NakoSysCall call = list[i];
-                dic.Add(call.name, TokenType.FUNCTION_NAME);
+                dic.Add(call.name, NakoTokenType.FUNCTION_NAME);
             }
 
             // NakoVariables に登録
