@@ -5,15 +5,15 @@ using System.Text;
 using Libnako.JCompiler.Function;
 using Libnako.JCompiler;
 
-namespace Libnako.SysCall
+namespace Libnako.NakoAPI
 {
     public delegate void SysCallDelegate(NakoFuncCallInfo info);
 
-    public class NakoSysCall : NakoFunc
+    public class NakoAPIFunc : NakoFunc
     {
         public SysCallDelegate FuncDl;
 
-        public NakoSysCall(String name, String argdef, NakoVariableType resultType, SysCallDelegate FuncDl)
+        public NakoAPIFunc(String name, String argdef, NakoVariableType resultType, SysCallDelegate FuncDl)
             : base(name, argdef)
         {
             this.FuncDl = FuncDl;

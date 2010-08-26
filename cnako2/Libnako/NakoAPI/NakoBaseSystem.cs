@@ -6,7 +6,7 @@ using Libnako.JCompiler.Function;
 using Libnako.JCompiler;
 using Libnako.Interpreter;
 
-namespace Libnako.SysCall
+namespace Libnako.NakoAPI
 {
     public class NakoBaseSystem : NakoSysCallRegister
     {

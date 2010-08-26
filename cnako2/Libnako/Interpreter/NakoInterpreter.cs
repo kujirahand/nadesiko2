@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Libnako.JCompiler.ILWriter;
 using Libnako.JCompiler;
-using Libnako.SysCall;
+using Libnako.NakoAPI;
 using Libnako.JCompiler.Function;
 
 namespace Libnako.Interpreter
@@ -243,7 +243,7 @@ namespace Libnako.Interpreter
         private void exec_syscall(NakoILCode code)
         {
             int funcNo = (int)code.value;
-            NakoSysCall s = NakoSysCallList.Instance.list[funcNo];
+            NakoAPIFunc s = NakoSysCallList.Instance.list[funcNo];
             NakoFuncCallInfo f = new NakoFuncCallInfo(this);
             s.FuncDl(f);
         }

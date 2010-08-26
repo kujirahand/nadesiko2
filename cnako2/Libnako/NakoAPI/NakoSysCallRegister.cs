@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Libnako.JCompiler;
 
-namespace Libnako.SysCall
+namespace Libnako.NakoAPI
 {
     /// <summary>
     /// なでしこのシステム関数を登録する専用の基底クラス
@@ -24,7 +24,7 @@ namespace Libnako.SysCall
         /// <param name="kana">命令のよみがな</param>
         protected void addFunc(String name, String argdef, NakoVariableType resultType, SysCallDelegate f, String desc, String kana)
         {
-            NakoSysCall s = new NakoSysCall(name, argdef, resultType, f);
+            NakoAPIFunc s = new NakoAPIFunc(name, argdef, resultType, f);
             NakoSysCallList.Instance.AddFunc(s);
         }
         /// <summary>

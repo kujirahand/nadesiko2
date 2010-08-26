@@ -5,7 +5,7 @@ using Libnako.JCompiler.Node;
 using Libnako.JCompiler.Tokenizer;
 using Libnako.JCompiler.ILWriter;
 using Libnako.JCompiler.Parser;
-using Libnako.SysCall;
+using Libnako.NakoAPI;
 
 namespace Libnako.JCompiler
 {

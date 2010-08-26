@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using Libnako.JCompiler.Node;
 using Libnako.JCompiler.Parser;
-using Libnako.SysCall;
+using Libnako.NakoAPI;
 
 namespace Libnako.JCompiler.ILWriter
 {
@@ -378,7 +378,7 @@ namespace Libnako.JCompiler.ILWriter
             }
             if (node.func.funcType == Function.NakoFuncType.SysCall)
             {
-                NakoSysCall f = (NakoSysCall)node.func;
+                NakoAPIFunc f = (NakoAPIFunc)node.func;
                 NakoILCode code = new NakoILCode();
                 code.type = NakoILType.SYSCALL;
                 code.value = node.func.varNo;
