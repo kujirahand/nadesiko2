@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using Libnako.JCompiler.ILWriter;
 using Libnako.JCompiler;
+using Libnako.SysCall;
+using Libnako.JCompiler.Function;
 
 namespace Libnako.Interpreter
 {
@@ -22,6 +24,7 @@ namespace Libnako.Interpreter
         public String PrintLog;
         public Boolean UseConsoleOut = false;
         protected int runpos = 0;
+        public Boolean debugMode = false;
 
         public NakoInterpreter(NakoILCodeList list = null)
         {
@@ -77,6 +80,19 @@ namespace Libnako.Interpreter
 
         protected void Run_NakoIL(NakoILCode code)
         {
+            if (debugMode)
+            {
+                int i = runpos - 1;
+                string s = "";
+                s += String.Format("{0,4:X4}:", i);
+                s += code.type.ToString();
+                if (code.value != null)
+                {
+                    s += " : " + code.value.ToString();
+                }
+                Console.WriteLine(s);
+            }
+
             switch (code.type)
             {
                 case NakoILType.NOP:
@@ -227,7 +243,9 @@ namespace Libnako.Interpreter
         private void exec_syscall(NakoILCode code)
         {
             int funcNo = (int)code.value;
-
+            NakoSysCall s = NakoSysCallList.Instance.list[funcNo];
+            NakoFuncCallInfo f = new NakoFuncCallInfo(this);
+            s.FuncDl(f);
         }
 
         private void exec_calc(CalcMethodType f)

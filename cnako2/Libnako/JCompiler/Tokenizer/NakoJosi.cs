@@ -34,6 +34,7 @@ namespace Libnako.JCompiler.Tokenizer
             Add("を");
             Add("に");
             Add("へ");
+            Add("と");
             //
             SortAsLength();
         }

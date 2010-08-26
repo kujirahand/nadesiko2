@@ -10,17 +10,28 @@ namespace Libnako.JCompiler.Tokenizer
         protected int cur = 0;
         private Stack<int> curStack = new Stack<int>();
 
+        /// <summary>
+        /// トークンの位置を記憶する
+        /// </summary>
         public void Save()
         {
             curStack.Push(cur);
         }
-
+        
+        /// <summary>
+        /// Save() で記憶した位置まで戻る
+        /// </summary>
+        /// <returns></returns>
         public int Restore()
         {
             cur = curStack.Pop();
             return cur;
         }
 
+        /// <summary>
+        /// Save() で記憶した位置をクリアする
+        /// </summary>
+        /// <returns></returns>
         public int RemoveTop()
         {
             return curStack.Pop();
@@ -78,6 +89,33 @@ namespace Libnako.JCompiler.Tokenizer
             return (cur >= this.Count);
         }
 
+        /// <summary>
+        /// 現在のカーソル位置から keytype のトークンがないか調べる (EOLStop=trueのときはEOLまで)
+        /// </summary>
+        /// <param name="keytype"></param>
+        /// <param name="EOLStop"></param>
+        /// <returns></returns>
+        public Boolean SearchToken(NakoTokenType keytype, Boolean EOLStop = false)
+        {
+            int i = cur;
+            NakoToken t;
+            while (i < this.Count)
+            {
+                t = this[i];
+                if (t.type == keytype)
+                {
+                    return true;
+                }
+                if (EOLStop)
+                {
+                    if (t.type == NakoTokenType.EOL) break;
+                }
+                i++;
+            }
+            return false;
+        }
+
+
         public String toTypeString()
         {
             String s = "";
@@ -89,6 +127,11 @@ namespace Libnako.JCompiler.Tokenizer
             return s;
         }
 
+        /// <summary>
+        /// デバッグ用：トークンタイプを調べて引数と一致するかチェック
+        /// </summary>
+        /// <param name="checker"></param>
+        /// <returns></returns>
         public Boolean CheckTokens(NakoToken[] checker)
         {
             // 要素数が異なる
@@ -107,6 +150,11 @@ namespace Libnako.JCompiler.Tokenizer
             return true;
         }
 
+        /// <summary>
+        /// デバッグ用：トークンタイプを調べて引数と一致するかチェック
+        /// </summary>
+        /// <param name="checker"></param>
+        /// <returns></returns>
         public Boolean CheckTokenType(NakoTokenType[] checker)
         {
             // 要素数が異なる

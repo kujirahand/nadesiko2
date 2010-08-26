@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using Libnako.JCompiler.Node;
 using Libnako.JCompiler.Parser;
+using Libnako.SysCall;
 
 namespace Libnako.JCompiler.ILWriter
 {
@@ -130,6 +131,9 @@ namespace Libnako.JCompiler.ILWriter
                     return;
                 case NakoNodeType.REPEAT_TIMES:
                     _repeat_times((NakoNodeRepeatTimes)node);
+                    return;
+                case NakoNodeType.CALL_FUNCTION:
+                    _call_function((NakoNodeCallFunction)node);
                     return;
             }
             // ---
@@ -364,6 +368,24 @@ namespace Libnako.JCompiler.ILWriter
             }
             result.Add(c);
         }
+
+        private void _call_function(NakoNodeCallFunction node)
+        {
+            // push args values
+            for (int i = 0; i < node.argNodes.Count; i++)
+            {
+                Write_r(node.argNodes[i]);
+            }
+            if (node.func.funcType == Function.NakoFuncType.SysCall)
+            {
+                NakoSysCall f = (NakoSysCall)node.func;
+                NakoILCode code = new NakoILCode();
+                code.type = NakoILType.SYSCALL;
+                code.value = node.func.varNo;
+                result.Add(code);
+            }
+        }
+
     }
 
     public class NakoILWriterException : Exception

@@ -25,5 +25,11 @@ namespace Libnako.SysCall
             base.Init();
             funcType = NakoFuncType.SysCall;
         }
+
+        public override void Execute()
+        {
+
+        }
+
     }
 }

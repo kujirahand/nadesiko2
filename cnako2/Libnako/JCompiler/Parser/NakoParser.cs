@@ -88,12 +88,12 @@ namespace Libnako.JCompiler.Parser
             return false;
         }
 
-        //> _statement : _def_function
+        //> _statement : _let
+        //>            | _def_function
         //>            | _if_stmt
         //>            | _white
-        //>            | _let
         //>            | _for
-        //>            | _callfunc
+        //>            | _callfunc_stmt
         //>            | _repeat_times
         //>            | _print
         //>            ;
@@ -101,14 +101,14 @@ namespace Libnako.JCompiler.Parser
         {
             if (tok.IsEOF()) return true;
 
+            if (_let()) return true;
             if (_def_function()) return true;
             if (_if_stmt()) return true;
             if (_while()) return true;
-            if (_let()) return true;
             if (_for()) return true;
             if (_repeat_times()) return true;
-            if (_callfunc()) return true;
             if (_print()) return true;
+            if (_callfunc_stmt()) return true;
             
             return false;
         }
@@ -157,6 +157,7 @@ namespace Libnako.JCompiler.Parser
 
             // TRUE
             ifnode.nodeTrue = _scope_or_statement();
+            while (Accept(NakoTokenType.EOL)) tok.MoveNext();
 
             // FALSE
             if (Accept(NakoTokenType.ELSE))
@@ -277,49 +278,82 @@ namespace Libnako.JCompiler.Parser
             return true;
         }
 
-        //> _callfunc : _value .. FUNCTION_NAME
-        //>           | FUNCTION_NAME
+        //> _callfunc : { [{_value}] FUNCTION_NAME }
+        //>           ;
+        private Boolean _callfunc_stmt()
+        {
+            while (!tok.IsEOF())
+            {
+                if (Accept(NakoTokenType.EOL))
+                {
+                    tok.MoveNext();
+                    break;
+                }
+                _value();
+            }
+            
+            if (calcStack.Count > 0)
+            {
+                parentNode.AddChild(calcStack.Pop());
+            }
+
+            if (calcStack.Count > 0)
+            {
+                throw new NakoParserException("余剰スタックがあります", tok.CurrentToken);
+            }
+            // TODO: スタックを空にする or 余剰なスタックがあればエラーに。
+            return true;
+        }
+
+        //> _callfunc : FUNCTION_NAME
         //>           ;
         private Boolean _callfunc()
         {
             NakoToken t = tok.CurrentToken;
-            // TODO: 関数呼び出し
-            TokenTry();
-            while (!tok.IsEOF())
+            
+            if (!Accept(NakoTokenType.FUNCTION_NAME))
             {
-                if (tok.CurrentTokenType == NakoTokenType.FUNCTION_NAME)
-                {
-                    __detect_func(tok.CurrentToken);
-                    tok.MoveNext();
-                    TokenFinally();
-                    return true;
-                }
-                if (!_value()) break;
-
+                return false;
             }
-            TokenBack();
-            return false;
-        }
 
-        private void __detect_func(NakoToken t)
-        {
             string fname = t.value;
             NakoVariable var = NakoVariables.Globals.GetVar(fname);
             if (var == null)
             {
                 throw new NakoParserException("関数『" + fname + "』が見あたりません。", t);
             }
+
             if (var.type == NakoVariableType.SysCall)
             {
                 int funcNo = (int)var.value;
                 NakoSysCall sys = NakoSysCallList.Instance.list[funcNo];
-                
+                NakoNodeCallFunction node = new NakoNodeCallFunction();
+                node.Token = t;
+                node.func = sys;
+                // 引数の数だけノードを取得
+                for (int i = 0; i < sys.ArgCount; i++)
+                {
+                    node.argNodes.Add(calcStack.Pop());
+                }
+                // 戻り値が Void でなければ結果として関数を Push
+                if (sys.resultType != NakoVariableType.Void)
+                {
+                    calcStack.Push(node);
+                    this.lastNode = node;
+                }
+                else
+                {
+                    this.lastNode = node;
+                    this.parentNode.AddChild(node);
+                }
+                tok.MoveNext();
             }
             else
             {
                 // TODO
                 throw new Exception("未実装");
             }
+            return true;
         }
 
         //> _def_function : DEF_FUNCTION _def_function_args FUNCTION_NAME EOL _blocks
@@ -410,7 +444,7 @@ namespace Libnako.JCompiler.Parser
                 throw new NakoParserException("PRINT の後に値がありません。", n.Token);
             }
             n.type = NakoNodeType.PRINT;
-            n.AddChild(this.lastNode);
+            n.AddChild(calcStack.Pop());
             lastNode = n;
             this.parentNode.AddChild(n);
             return true;
@@ -522,7 +556,7 @@ namespace Libnako.JCompiler.Parser
             return true;
         }
 
-        //> _value : _calc_fact ;
+        //> _value : FUNCTION_NAME | _calc_fact ;
         protected override Boolean _value()
         {
             // TODO:
@@ -533,13 +567,40 @@ namespace Libnako.JCompiler.Parser
                 case NakoTokenType.INT:
                 case NakoTokenType.NUMBER:
                 case NakoTokenType.WORD:
-                case NakoTokenType.FUNCTION_NAME:
                 case NakoTokenType.STRING:
+                    break;
+                case NakoTokenType.FUNCTION_NAME:
+                    //TODO: 関数の後ろのカッコの中を評価する
+                    if (_callfunc()) return true;
                     break;
                 default:
                     return false;
             }
-
+            // 関数があるか調べる
+            if (tok.SearchToken(NakoTokenType.FUNCTION_NAME, true))
+            {
+                TokenTry();
+                while (!tok.IsEOF())
+                {
+                    if (Accept(NakoTokenType.EOL)) break;
+                    if (Accept(NakoTokenType.FUNCTION_NAME))
+                    {
+                        if (!_callfunc())
+                        {
+                            TokenBack();
+                            return false;
+                        }
+                        TokenFinally();
+                        return true;
+                    }
+                    if (!_calc_fact())
+                    {
+                        TokenBack(); return false;
+                    }
+                }
+            }
+            
+            // 計算式を評価
             if (_calc_fact()) return true;
             return false;
         }

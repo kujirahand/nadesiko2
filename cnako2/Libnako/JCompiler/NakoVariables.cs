@@ -110,6 +110,15 @@ namespace Libnako.JCompiler
         public Object GetValue(int index)
         {
             NakoVariable v = GetVar(index);
+            if (v == null)
+            {
+                v = new NakoVariable();
+                while (index >= list.Count)
+                {
+                    list.Add(new NakoVariable());
+                }
+                SetVar(index, v);
+            }
             return v.value;
         }
     }

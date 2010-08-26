@@ -58,6 +58,7 @@
     <Compile Include="Libnako\JCompiler\NakoVariables.cs" />
     <Compile Include="Libnako\JCompiler\Node\NakoNode.cs" />
     <Compile Include="Libnako\JCompiler\Node\NakoNodeCalc.cs" />
+    <Compile Include="Libnako\JCompiler\Node\NakoNodeCallFunction.cs" />
     <Compile Include="Libnako\JCompiler\Node\NakoNodeConst.cs" />
     <Compile Include="Libnako\JCompiler\Node\NakoNodeDefFunction.cs" />
     <Compile Include="Libnako\JCompiler\Node\NakoNodeFor.cs" />
@@ -65,14 +66,13 @@
     <Compile Include="Libnako\JCompiler\Node\NakoNodeLet.cs" />
     <Compile Include="Libnako\JCompiler\Node\NakoNodeList.cs" />
     <Compile Include="Libnako\JCompiler\Node\NakoNodeRepeatTimes.cs" />
+    <Compile Include="Libnako\JCompiler\Node\NakoNodeType.cs" />
     <Compile Include="Libnako\JCompiler\Node\NakoNodeVariable.cs" />
     <Compile Include="Libnako\JCompiler\Node\NakoNodeWhile.cs" />
-    <Compile Include="Libnako\JCompiler\Node\NodeType.cs" />
     <Compile Include="Libnako\JCompiler\Parser\CalcType.cs" />
     <Compile Include="Libnako\JCompiler\Parser\NakoParser.cs" />
     <Compile Include="Libnako\JCompiler\Parser\NakoParserBase.cs" />
     <Compile Include="Libnako\JCompiler\Parser\NakoParserException.cs" />
-    <Compile Include="Libnako\JCompiler\Parser\NakoVariableNames.cs" />
     <Compile Include="Libnako\JCompiler\Tokenizer\NakoDic.cs" />
     <Compile Include="Libnako\JCompiler\Tokenizer\NakoHalfFlag.cs" />
     <Compile Include="Libnako\JCompiler\Tokenizer\NakoJosi.cs" />
@@ -81,7 +81,7 @@
     <Compile Include="Libnako\JCompiler\Tokenizer\NakoTokenizerBase.cs" />
     <Compile Include="Libnako\JCompiler\Tokenizer\NakoTokenizerException.cs" />
     <Compile Include="Libnako\JCompiler\Tokenizer\NakoTokenList.cs" />
-    <Compile Include="Libnako\JCompiler\Tokenizer\TokenType.cs" />
+    <Compile Include="Libnako\JCompiler\Tokenizer\NakoTokenType.cs" />
     <Compile Include="Libnako\SysCall\NakoSysCall.cs" />
     <Compile Include="Libnako\SysCall\NakoBaseSystem.cs" />
     <Compile Include="Libnako\SysCall\NakoSysCallList.cs" />
@@ -92,14 +92,10 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="Libnako\JCompiler\ILWriter\NakoILType_Creator.nako" />
-    <None Include="Libnako\JCompiler\Node\NodeType_Creator.nako" />
     <None Include="Libnako\JCompiler\Parser\ParserSyntaxMemo_Creator.nako" />
-    <None Include="Libnako\JCompiler\Tokenizer\TokenType_Creator.nako" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Libnako\JCompiler\ILWriter\NakoILType.txt" />
-    <Content Include="Libnako\JCompiler\Node\NodeType.txt" />
-    <Content Include="Libnako\JCompiler\Tokenizer\TokenType.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
