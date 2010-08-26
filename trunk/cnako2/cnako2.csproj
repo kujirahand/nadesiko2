@@ -83,9 +83,9 @@
     <Compile Include="Libnako\JCompiler\Tokenizer\NakoTokenList.cs" />
     <Compile Include="Libnako\JCompiler\Tokenizer\NakoTokenType.cs" />
     <Compile Include="Libnako\NakoAPI\NakoAPIFunc.cs" />
+    <Compile Include="Libnako\NakoAPI\NakoAPIFuncBank.cs" />
+    <Compile Include="Libnako\NakoAPI\NakoAPIRegister.cs" />
     <Compile Include="Libnako\NakoAPI\NakoBaseSystem.cs" />
-    <Compile Include="Libnako\NakoAPI\NakoSysCallList.cs" />
-    <Compile Include="Libnako\NakoAPI\NakoSysCallRegister.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

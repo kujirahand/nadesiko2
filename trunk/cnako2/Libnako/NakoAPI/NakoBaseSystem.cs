@@ -8,7 +8,7 @@ using Libnako.Interpreter;
 
 namespace Libnako.NakoAPI
 {
-    public class NakoBaseSystem : NakoSysCallRegister
+    public class NakoBaseSystem : NakoAPIRegister
     {
         // C# Singleton
         public static readonly NakoBaseSystem Instance = new NakoBaseSystem();

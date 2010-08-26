@@ -15,7 +15,7 @@ namespace Libnako.JCompiler
         Array,
         Group,
         UserFunc,
-        SysCall
+        SystemFunc
     }
     
     public class NakoVariable

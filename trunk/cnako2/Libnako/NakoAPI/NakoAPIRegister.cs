@@ -11,7 +11,7 @@ namespace Libnako.NakoAPI
     /// 実際には、このクラスを継承した、NakoSysCallBaseSystem で実際のシステム関数の登録を行っている
     /// システム関数の登録を補助するヘルパークラス
     /// </summary>
-    public class NakoSysCallRegister
+    public class NakoAPIRegister
     {
         /// <summary>
         /// 関数をシステムに追加する
