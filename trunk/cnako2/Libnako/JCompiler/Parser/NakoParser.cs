@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Libnako.JCompiler.Node;
 using Libnako.JCompiler.Tokenizer;
-using Libnako.SysCall;
+using Libnako.NakoAPI;
 
 namespace Libnako.JCompiler.Parser
 {
@@ -326,7 +326,7 @@ namespace Libnako.JCompiler.Parser
             if (var.type == NakoVariableType.SysCall)
             {
                 int funcNo = (int)var.value;
-                NakoSysCall sys = NakoSysCallList.Instance.list[funcNo];
+                NakoAPIFunc sys = NakoSysCallList.Instance.list[funcNo];
                 NakoNodeCallFunction node = new NakoNodeCallFunction();
                 node.Token = t;
                 node.func = sys;

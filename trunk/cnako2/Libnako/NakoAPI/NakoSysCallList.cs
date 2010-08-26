@@ -7,7 +7,7 @@ using Libnako.JCompiler.Function;
 using Libnako.JCompiler;
 using Libnako.JCompiler.Tokenizer;
 
-namespace Libnako.SysCall
+namespace Libnako.NakoAPI
 {
     /// <summary>
     /// なでしこ２のシステム関数の一覧を保持するリスト
@@ -19,9 +19,9 @@ namespace Libnako.SysCall
         private NakoSysCallList() { }
         private static Boolean FlagInit = false;
 
-        public List<NakoSysCall> list = new List<NakoSysCall>();
+        public List<NakoAPIFunc> list = new List<NakoAPIFunc>();
 
-        public void AddFunc(NakoSysCall s)
+        public void AddFunc(NakoAPIFunc s)
         {
             list.Add(s);
             s.varNo = list.Count - 1;
@@ -36,7 +36,7 @@ namespace Libnako.SysCall
             NakoDic dic = NakoDic.Instance;
             for (int i = 0; i < list.Count; i++)
             {
-                NakoSysCall call = list[i];
+                NakoAPIFunc call = list[i];
                 dic.Add(call.name, NakoTokenType.FUNCTION_NAME);
             }
 
@@ -46,7 +46,7 @@ namespace Libnako.SysCall
                 NakoVariable var = new NakoVariable();
                 var.type = NakoVariableType.SysCall;
                 var.value = i;
-                NakoSysCall call = list[i];
+                NakoAPIFunc call = list[i];
                 NakoVariables.Globals.CreateVar(call.name, var);
             }
         }
