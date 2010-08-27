@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Libnako.JCompiler.Node;
 using Libnako.JCompiler.Tokenizer;
+using Libnako.JCompiler.Function;
 using Libnako.NakoAPI;
 
 namespace Libnako.JCompiler.Parser
@@ -333,7 +334,9 @@ namespace Libnako.JCompiler.Parser
                 // 引数の数だけノードを取得
                 for (int i = 0; i < sys.ArgCount; i++)
                 {
-                    node.argNodes.Add(calcStack.Pop());
+                    NakoFuncArg arg = sys.args[i];
+                    NakoNode argNode = calcStack.Pop();
+                    node.argNodes.Add(argNode);
                 }
                 // 計算スタックに関数の呼び出しを追加
                 calcStack.Push(node);
