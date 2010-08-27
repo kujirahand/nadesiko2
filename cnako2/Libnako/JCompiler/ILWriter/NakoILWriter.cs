@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using Libnako.JCompiler.Node;
 using Libnako.JCompiler.Parser;
+using Libnako.JCompiler.Function;
 using Libnako.NakoAPI;
 
 namespace Libnako.JCompiler.ILWriter
@@ -321,10 +322,18 @@ namespace Libnako.JCompiler.ILWriter
                 if (node.scope == NakoVariableScope.Global)
                 {
                     ld.type = NakoILType.LD_GLOBAL;
+                    if (node.varBy == VarByType.ByRef)
+                    {
+                        ld.type = NakoILType.LD_GLOBAL_REF;
+                    }
                 }
                 else
                 {
                     ld.type = NakoILType.LD_LOCAL;
+                    if (node.varBy == VarByType.ByRef)
+                    {
+                        ld.type = NakoILType.LD_LOCAL_REF;
+                    }
                 }
                 ld.value = node.varNo;
                 result.Add(ld);

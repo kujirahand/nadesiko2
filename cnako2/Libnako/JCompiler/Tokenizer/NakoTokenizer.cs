@@ -335,6 +335,15 @@ namespace Libnako.JCompiler.Tokenizer
                     cur++;
                     CheckJosi(token);
                     return token;
+                case '{':
+                    token.type = NakoTokenType.BRACES_L;
+                    cur++;
+                    return token;
+                case '}':
+                    token.type = NakoTokenType.BRACES_R;
+                    cur++;
+                    CheckJosi(token);
+                    return token;
                 default:
                     NakoToken tt = GetToken_NotFlag();
                     if (tt == null)

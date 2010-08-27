@@ -336,6 +336,13 @@ namespace Libnako.JCompiler.Parser
                 {
                     NakoFuncArg arg = sys.args[i];
                     NakoNode argNode = calcStack.Pop();
+                    if (arg.varBy == VarByType.ByRef)
+                    {
+                        if (argNode.type == NakoNodeType.LD_VARIABLE)
+                        {
+                            ((NakoNodeVariable)argNode).varBy = VarByType.ByRef; 
+                        }
+                    }
                     node.argNodes.Add(argNode);
                 }
                 // 計算スタックに関数の呼び出しを追加

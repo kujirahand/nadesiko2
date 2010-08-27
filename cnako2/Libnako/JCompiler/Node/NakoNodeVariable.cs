@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Libnako.JCompiler.Parser;
+using Libnako.JCompiler.Function;
 
 namespace Libnako.JCompiler.Node
 {
@@ -12,6 +13,7 @@ namespace Libnako.JCompiler.Node
         public NakoVariableScope scope = NakoVariableScope.Global;
         public NakoVariableType varType = NakoVariableType.Int;
         public int varNo = -1;
+        public VarByType varBy = VarByType.ByVal;
         public Boolean useElement = false; // a[3] のように配列かプロパティへのアクセスかどうか？
 
         public Boolean IsVarTypeSimple()
