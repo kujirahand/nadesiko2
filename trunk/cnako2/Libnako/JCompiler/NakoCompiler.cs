@@ -98,7 +98,9 @@ namespace Libnako.JCompiler
 
         protected void RegisterSysCall()
         {
+            // APIをBankに登録
             NakoBaseSystem.Instance.registerToSystem();
+            // Bankをシステムに登録
             NakoAPIFuncBank.Instance.RegisterToSystem();
         }
     }

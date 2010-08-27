@@ -5,10 +5,13 @@ using System.Text;
 
 namespace Libnako.JCompiler.Function
 {
+    public enum VarByType { ByVal/*値渡し*/, ByRef/*参照渡し*/ };
+
     public class NakoFuncArg
     {
         public String name;
         public List<String> josiList;
+        public VarByType varBy = VarByType.ByVal; 
 
         public NakoFuncArg()
         {

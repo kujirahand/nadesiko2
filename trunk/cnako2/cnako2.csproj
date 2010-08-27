@@ -91,11 +91,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Libnako\JCompiler\ILWriter\NakoILType_Creator.nako" />
     <None Include="Libnako\JCompiler\Parser\ParserSyntaxMemo_Creator.nako" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Libnako\JCompiler\ILWriter\NakoILType.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
