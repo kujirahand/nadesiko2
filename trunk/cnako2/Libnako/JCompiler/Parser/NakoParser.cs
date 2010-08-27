@@ -334,7 +334,7 @@ namespace Libnako.JCompiler.Parser
                 // 引数の数だけノードを取得
                 for (int i = 0; i < sys.ArgCount; i++)
                 {
-                    NakoFuncArg arg = sys.args[i];
+                    NakoFuncArg arg = sys.args[sys.ArgCount - i - 1];
                     NakoNode argNode = calcStack.Pop();
                     if (arg.varBy == VarByType.ByRef)
                     {

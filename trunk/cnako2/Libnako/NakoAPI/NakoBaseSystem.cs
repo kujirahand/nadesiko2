@@ -18,7 +18,7 @@ namespace Libnako.NakoAPI
         {
             addFunc("言う", "Sと|Sを", NakoVariableType.Void, _say, "メッセージSを画面に表示する", "いう");
             addFunc("足す", "AにBを|Aと", NakoVariableType.Object, _add, "値Aと値Bを足して返す", "たす");
-            addFunc("足す!", "{参照変数}AにBを|Aと", NakoVariableType.Object, _addEx, "変数Aと値Bを足して返す(変数A自身を書き換える)", "たす!");
+            addFunc("足す!", "{参照渡し}AにBを|Aと", NakoVariableType.Object, _addEx, "変数Aと値Bを足して返す(変数A自身を書き換える)", "たす!");
         }
 
         public void _say(NakoFuncCallInfo info)
@@ -45,8 +45,13 @@ namespace Libnako.NakoAPI
 
         public void _addEx(NakoFuncCallInfo info)
         {
-            Object a = info.StackPop();
+            Object ar = info.StackPop();
             Object b = info.StackPop();
+            if (!(ar is NakoVariable))
+            {
+                throw new NakoAPIError("『足す!』の引数が変数ではありません");
+            }
+            Object a = ((NakoVariable)ar).value;
             Object c;
             if (a.GetType() == typeof(Int32) && b.GetType() == typeof(Int32))
             {
@@ -60,7 +65,7 @@ namespace Libnako.NakoAPI
             }
             info.StackPush(c);
             //
-
+            ((NakoVariable)ar).value = c;
         }
     }
 }

@@ -103,6 +103,8 @@ namespace Libnako.Interpreter
                 case NakoILType.LD_CONST_STR:   stack.Push(code.value); break;
                 case NakoILType.LD_GLOBAL:      ld_global((int)code.value); break;
                 case NakoILType.LD_LOCAL:       ld_local((int)code.value); break;
+                case NakoILType.LD_GLOBAL_REF:  ld_global_ref((int)code.value); break;
+                case NakoILType.LD_LOCAL_REF:   ld_local_ref((int)code.value); break;
                 case NakoILType.ST_GLOBAL:      st_global((int)code.value); break;
                 case NakoILType.ST_LOCAL:       st_local((int)code.value); break;
                 case NakoILType.NEW_ARR:
@@ -227,6 +229,18 @@ namespace Libnako.Interpreter
         {
             Object p = globalVar.GetValue(no);
             stack.Push(p);
+        }
+
+        private void ld_local_ref(int no)
+        {
+            NakoVariable v = localVar.GetVar(no);
+            stack.Push(v);
+        }
+
+        private void ld_global_ref(int no)
+        {
+            NakoVariable v = globalVar.GetVar(no);
+            stack.Push(v);
         }
 
         private void exec_print()
