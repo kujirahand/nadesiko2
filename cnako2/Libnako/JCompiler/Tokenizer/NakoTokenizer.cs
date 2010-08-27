@@ -476,7 +476,7 @@ namespace Libnako.JCompiler.Tokenizer
             while (!IsEOF())
             {
                 Char c = CurrentChar;
-                if (IsAlpha(c) || c == '_' || IsNumber(c))
+                if (IsAlpha(c) || IsNumber(c) || c == '_' || c == '!' || c == '?')
                 {
                     s += c;
                     cur++;

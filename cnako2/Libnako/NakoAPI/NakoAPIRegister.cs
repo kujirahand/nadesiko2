@@ -34,4 +34,9 @@ namespace Libnako.NakoAPI
         {
         }
     }
+
+    public class NakoAPIError : Exception
+    {
+        public NakoAPIError(string msg) : base (msg) {}
+    }
 }

@@ -39,5 +39,16 @@ namespace TestNako
             runner.Run(codes);
             Assert.AreEqual(runner.PrintLog, "12");
         }
+        [Test]
+        public void TestSysFunc_AddEx_ByRef()
+        {
+            codes = ns.Publish(
+                "A=10;Aに2を足す!\n" +
+                "PRINT A\n" +
+                ""
+                );
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "12");
+        }
     }
 }

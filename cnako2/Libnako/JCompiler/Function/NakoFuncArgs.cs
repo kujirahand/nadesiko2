@@ -17,11 +17,37 @@ namespace Libnako.JCompiler.Function
             NakoTokenizer tokenizer = new NakoTokenizer(str);
             tokenizer.splitWord();
             NakoTokenList tokens = tokenizer.Tokens;
+            Boolean optMode = false;
+            ArgOpt argOpt = new ArgOpt();
 
             for (int i = 0; i < tokens.Count; i++)
             {
                 NakoToken tok = tokens[i];
                 NakoFuncArg arg = null;
+                // オプション指定モード(optMode) の on/off
+                if (tok.type == NakoTokenType.BRACES_L)
+                {
+                    // オプションの初期化
+                    optMode = true;
+                    argOpt.Init();
+                    continue;
+                }
+                if (tok.type == NakoTokenType.BRACES_R)
+                {
+                    optMode = false; 
+                    continue;
+                }
+                if (optMode)
+                {
+                    if (tok.type == NakoTokenType.WORD)
+                    {
+                        string opt = (string)tok.value;
+                        if (opt == "参照渡し") argOpt.varBy = VarByType.ByRef;
+                    }
+                    continue;
+                }
+
+                // WORD
                 if (tok.type == NakoTokenType.WORD)
                 {
                     int idx = indexOfName(tok.value);
@@ -29,8 +55,10 @@ namespace Libnako.JCompiler.Function
                     {
                         arg = new NakoFuncArg();
                         arg.name = tok.value;
+                        arg.varBy = argOpt.varBy;
                         arg.AddJosi(tok.josi);
                         this.Add(arg);
+                        argOpt.Init();
                     }
                     else
                     {
@@ -57,6 +85,17 @@ namespace Libnako.JCompiler.Function
                 }
             }
             return -1;
+        }
+    }
+
+    internal class ArgOpt
+    {
+        internal VarByType varBy = VarByType.ByVal;
+        internal Object defaultValue;
+        internal void Init()
+        {
+            varBy = VarByType.ByVal;
+            defaultValue = null;
         }
     }
 }
