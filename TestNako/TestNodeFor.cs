@@ -18,7 +18,7 @@ namespace TestNako
         NakoILCodeList codes = null;
 
         [Test]
-        public void TestNormal()
+        public void Test1_Normal()
         {
             // (1) 
             codes = ns.Publish(
@@ -41,7 +41,7 @@ namespace TestNako
 
         }
         [Test]
-        public void TestNest()
+        public void Test2_Nest()
         {
             codes = ns.Publish(
                 "Ｉを１から２まで繰り返す\n" +
@@ -55,7 +55,7 @@ namespace TestNako
             Assert.AreEqual(runner.PrintLog, "[1:123][2:123]");
         }
         [Test]
-        public void TestRepeatTimes()
+        public void Test3_RepeatTimes()
         {
             codes = ns.Publish(
                 "3回\n" +

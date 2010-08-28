@@ -11,12 +11,8 @@ namespace Libnako.JCompiler.Function
         /// <summary>
         /// 引数の定義文字列を読んで、関数の引数として登録する
         /// </summary>
-        /// <param name="str"></param>
-        public void analizeArgStr(String str)
+        public void analizeArgTokens(NakoTokenList tokens)
         {
-            NakoTokenizer tokenizer = new NakoTokenizer(str);
-            tokenizer.splitWord();
-            NakoTokenList tokens = tokenizer.Tokens;
             Boolean optMode = false;
             ArgOpt argOpt = new ArgOpt();
 
@@ -70,8 +66,19 @@ namespace Libnako.JCompiler.Function
                 {
                     continue;
                 }
-
             }
+        }
+
+        /// <summary>
+        /// 引数の定義文字列を読んで、関数の引数として登録する
+        /// </summary>
+        /// <param name="str"></param>
+        public void analizeArgStr(String str)
+        {
+            NakoTokenizer tokenizer = new NakoTokenizer(str);
+            tokenizer.splitWord();
+            NakoTokenList tokens = tokenizer.Tokens;
+            analizeArgTokens(tokens);
         }
 
         public int indexOfName(String name)

@@ -50,5 +50,29 @@ namespace TestNako
             runner.Run(codes);
             Assert.AreEqual(runner.PrintLog, "12");
         }
+        [Test]
+        public void TestUserFunc_Add()
+        {
+            codes = ns.Publish(
+                "●AにBを加算\n" +
+                "　　それ=A+B\n" +
+                "\n" +
+                "3に5を加算;PRINT それ\n" +
+                "\n");
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "8");
+        }
+        [Test]
+        public void TestUserFunc_Add2()
+        {
+            codes = ns.Publish(
+                "●AにBを加算\n" +
+                "　　それ=A+B\n" +
+                "\n" +
+                "3に5を加算して、それに8を加算する;PRINT それ\n" +
+                "\n");
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "16");
+        }
     }
 }

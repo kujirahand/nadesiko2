@@ -10,7 +10,6 @@ namespace Libnako.JCompiler.Parser
     public class NakoParserBase
     {
         public NakoNode topNode;
-        public NakoNodeDefFunctionList funcList;
         protected NakoNode parentNode;
         protected NakoNode lastNode;
         protected NakoTokenList tok;

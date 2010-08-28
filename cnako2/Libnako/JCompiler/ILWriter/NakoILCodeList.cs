@@ -59,6 +59,10 @@ namespace Libnako.JCompiler.ILWriter
                     case NakoILType.ST_GLOBAL:
                     case NakoILType.LD_LOCAL:
                     case NakoILType.ST_LOCAL:
+                    case NakoILType.LD_GLOBAL_REF:
+                    case NakoILType.LD_LOCAL_REF:
+                    case NakoILType.USRCALL:
+                    case NakoILType.SYSCALL:
                         r += ":" + c.value;
                         break;
                     case NakoILType.JUMP:

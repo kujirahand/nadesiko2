@@ -20,8 +20,9 @@ namespace cnako
             runner.debugMode = true;
 
             string src =
-                "A=3;B=4;AにBを足す!;PRINT A;" +
-                "";
+                "Iを１から３までTEST\n" +
+                "　　PRINT I\n" +
+                "\n";
             _w(src);
 
             // TokenizerTest

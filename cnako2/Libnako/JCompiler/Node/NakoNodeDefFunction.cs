@@ -4,24 +4,31 @@ using System.Linq;
 using System.Text;
 using Libnako.JCompiler.Function;
 using Libnako.JCompiler.Parser;
+using Libnako.JCompiler.ILWriter;
 
 namespace Libnako.JCompiler.Node
 {
     public class NakoNodeDefFunction : NakoNode
     {
         public String funcName;
-        public NakoFuncArgs args;
+        public NakoFunc func;
         public NakoVariables localVar;
+        public NakoNode funcBody;
+        public NakoILCode defLabel;
 
         public NakoNodeDefFunction()
         {
             type = NakoNodeType.DEF_FUNCTION;
-            localVar = new NakoVariables();
+            localVar = new NakoVariables(NakoVariableScope.Local);
         }
 
         public void RegistArgsToLocalVar()
         {
-            // TODO: 引数をローカル変数に登録する
+            for (int i = 0; i < func.args.Count; i++)
+            {
+                NakoFuncArg arg = func.args[i];
+                localVar.CreateVar(arg.name);
+            }
         }
 
     }
@@ -30,3 +37,4 @@ namespace Libnako.JCompiler.Node
     {
     }
 }
+

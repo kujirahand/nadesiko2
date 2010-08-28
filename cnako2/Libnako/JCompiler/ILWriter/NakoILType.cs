@@ -63,13 +63,13 @@ namespace Libnako.JCompiler.ILWriter
 
         // アドレスジャンプ
         JUMP             = 0x60, // { args:1, push:0, pop:0 } 
-        CALL             = 0x61, // { args:1, push:0, pop:0 } 
-        RET              = 0x62, // { args:0, push:0, pop:0 } 
-        BRANCH_TRUE      = 0x63, // { args:1, push:0, pop:1 } 
-        BRANCH_FALSE     = 0x64, // { args:1, push:0, pop:1 } 
+        BRANCH_TRUE      = 0x61, // { args:1, push:0, pop:1 } 
+        BRANCH_FALSE     = 0x62, // { args:1, push:0, pop:1 } 
 
-        // 組み込み用
-        SYSCALL          = 0x70, // { args:1, push:?, pop:? } 
+        // 関数用
+        SYSCALL          = 0x70, // { args:1, push:1, pop:? } 
+        USRCALL          = 0x71, // { args:1, push:1, pop:? } 
+        RET              = 0x72, // { args:0, push:0, pop:0 } 
 
         // DEBUG用
         PRINT            = 0x80, // { args:0, push:0, pop:1 } 

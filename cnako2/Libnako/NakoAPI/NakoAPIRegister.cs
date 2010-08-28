@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Libnako.JCompiler;
+using Libnako.JCompiler.Tokenizer;
 
 namespace Libnako.NakoAPI
 {
@@ -24,6 +25,7 @@ namespace Libnako.NakoAPI
         /// <param name="kana">命令のよみがな</param>
         protected void addFunc(String name, String argdef, NakoVariableType resultType, SysCallDelegate f, String desc, String kana)
         {
+            name = NakoToken.TrimOkurigana(name);
             NakoAPIFunc s = new NakoAPIFunc(name, argdef, resultType, f);
             NakoAPIFuncBank.Instance.AddFunc(s);
         }

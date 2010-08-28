@@ -45,7 +45,8 @@ namespace Libnako.JCompiler.Parser
             if (Accept(NakoTokenType.KOKOMADE)) tok.MoveNext();
             if (!Accept(NakoTokenType.SCOPE_END))
             {
-                throw new NakoParserException("トークンの終端がありません。システムエラー。", tok.CurrentToken);
+                throw new NakoParserException(
+                    "トークンの終端がありません。システムエラー。", tok.CurrentToken);
             }
             tok.MoveNext(); // skip SCOPE_END
             return true;
@@ -110,6 +111,15 @@ namespace Libnako.JCompiler.Parser
             if (_repeat_times()) return true;
             if (_print()) return true;
             if (_callfunc_stmt()) return true;
+
+            // 突然の字下げも構文の１つと考える
+            if (Accept(NakoTokenType.SCOPE_BEGIN))
+            {
+                if (_scope())
+                {
+                    return true;
+                }
+            }
             
             return false;
         }
@@ -283,6 +293,7 @@ namespace Libnako.JCompiler.Parser
         //>           ;
         private Boolean _callfunc_stmt()
         {
+            TokenTry();
             while (!tok.IsEOF())
             {
                 if (Accept(NakoTokenType.EOL))
@@ -290,17 +301,22 @@ namespace Libnako.JCompiler.Parser
                     tok.MoveNext();
                     break;
                 }
-                _value();
+                if (!_value())
+                {
+                    TokenBack();
+                    return false;
+                }
             }
+            TokenFinally();
             
             if (calcStack.Count > 0)
             {
-                parentNode.AddChild(calcStack.Pop());
-            }
-
-            if (calcStack.Count > 0)
-            {
-                throw new NakoParserException("余剰スタックがあります", tok.CurrentToken);
+                while (calcStack.Count > 0)
+                {
+                    NakoNode n = calcStack.Shift();
+                    parentNode.AddChild(n);
+                }
+                //throw new NakoParserException("余剰スタックがあります", tok.CurrentToken);
             }
             // TODO: スタックを空にする or 余剰なスタックがあればエラーに。
             return true;
@@ -317,48 +333,57 @@ namespace Libnako.JCompiler.Parser
                 return false;
             }
 
-            string fname = t.value;
+            string fname = t.getValueAsName();
             NakoVariable var = NakoVariables.Globals.GetVar(fname);
             if (var == null)
             {
                 throw new NakoParserException("関数『" + fname + "』が見あたりません。", t);
             }
 
+            //
+            NakoNodeCallFunction callNode = new NakoNodeCallFunction();
+            NakoFunc func = null;
+            callNode.Token = t;
+
             if (var.type == NakoVariableType.SystemFunc)
             {
                 int funcNo = (int)var.value;
-                NakoAPIFunc sys = NakoAPIFuncBank.Instance.list[funcNo];
-                NakoNodeCallFunction node = new NakoNodeCallFunction();
-                node.Token = t;
-                node.func = sys;
-                // 引数の数だけノードを取得
-                for (int i = 0; i < sys.ArgCount; i++)
-                {
-                    NakoFuncArg arg = sys.args[sys.ArgCount - i - 1];
-                    NakoNode argNode = calcStack.Pop();
-                    if (arg.varBy == VarByType.ByRef)
-                    {
-                        if (argNode.type == NakoNodeType.LD_VARIABLE)
-                        {
-                            ((NakoNodeVariable)argNode).varBy = VarByType.ByRef; 
-                        }
-                    }
-                    node.argNodes.Add(argNode);
-                }
-                // 計算スタックに関数の呼び出しを追加
-                calcStack.Push(node);
-                this.lastNode = node;
-                tok.MoveNext();
+                func = NakoAPIFuncBank.Instance.list[funcNo];
+                callNode.func = func;
             }
             else
             {
-                // TODO
-                throw new Exception("未実装");
+                NakoNodeDefFunction defNode = (NakoNodeDefFunction)var.value;
+                func = callNode.func = defNode.func;
+                callNode.value = defNode;
             }
+
+            // ---------------------------------
+            // 引数の数だけノードを取得
+            for (int i = 0; i < func.ArgCount; i++)
+            {
+                NakoFuncArg arg = func.args[func.ArgCount - i - 1];
+                NakoNode argNode = calcStack.Pop();
+                if (arg.varBy == VarByType.ByRef)
+                {
+                    if (argNode.type == NakoNodeType.LD_VARIABLE)
+                    {
+                        ((NakoNodeVariable)argNode).varBy = VarByType.ByRef;
+                    }
+                }
+                callNode.argNodes.Add(argNode);
+            }
+
+            // ---------------------------------
+            // 計算スタックに関数の呼び出しを追加
+            calcStack.Push(callNode);
+            this.lastNode = callNode;
+            tok.MoveNext();
+
             return true;
         }
 
-        //> _def_function : DEF_FUNCTION _def_function_args FUNCTION_NAME EOL _blocks
+        //> _def_function : DEF_FUNCTION _def_function_args _scope
         //>               ;
         private Boolean _def_function()
         {
@@ -366,67 +391,85 @@ namespace Libnako.JCompiler.Parser
             NakoToken t = tok.CurrentToken;
             tok.MoveNext(); // '*'
 
-            // 引数の取得
-            _def_function_args();
+            NakoFunc userFunc = new NakoFunc();
+            userFunc.funcType = NakoFuncType.UserCall;
 
-            // 関数名
-            if (!Accept(NakoTokenType.FUNCTION_NAME))
-            {
-                throw new NakoParserException("関数の定義で関数名が見当たりません。", t);
-            }
-            tok.MoveNext(); // FUNCTION_NAME
-
-            if (!Accept(NakoTokenType.EOL))
-            {
-                throw new NakoParserException("関数の定義で改行がありません。", t);
-            }
-            tok.MoveNext(); // EOL
+            // 引数 + 関数名の取得
+            _def_function_args(userFunc);
 
             // ブロックの取得
             PushFrame();
             NakoNodeDefFunction funcNode = new NakoNodeDefFunction();
-            funcNode.type = NakoNodeType.BLOCKS;
-            parentNode = funcNode;
+            funcNode.func = userFunc;
+            parentNode = funcNode.funcBody = new NakoNode();
             funcNode.RegistArgsToLocalVar();
             localVar = funcNode.localVar;
-            funcList.Add(funcNode);
-            if (!_blocks())
+            if (!_scope())
             {
                 throw new NakoParserException("関数定義中のエラー。", t);
             }
             PopFrame();
+            // グローバル変数に登録
+            NakoVariable v = new NakoVariable();
+            v.type = NakoVariableType.UserFunc;
+            v.value = funcNode;
+            NakoVariables.Globals.CreateVar(userFunc.name, v);
+            // 関数の宣言は、ノードのトップ直下に追加する
+            if (!this.topNode.hasChildren())
+            {
+                this.topNode.AddChild(new NakoNode());
+            }
+            this.topNode.Children.Insert(0, funcNode);
             return true;
         }
 
         //> _def_function_args : empty
-        //>                    | '(' WORD ... ')' FUNCTION_NAME _blocks
-        //>                    | WORD ... FUNCTION_NAME _blocks
+        //>                    | '(' { WORD } ')' FUNCTION_NAME
+        //>                    | { WORD } FUNCTION_NAME
+        //>                    | FUNCTION_NAME '(' { WORD } ')'
         //>                    ;
-        private Boolean _def_function_args()
+        private Boolean _def_function_args(NakoFunc func)
         {
-            if (Accept(NakoTokenType.PARENTHESES_L))
+            NakoToken firstT = tok.CurrentToken;
+            NakoTokenList argTokens = new NakoTokenList();
+            Boolean argMode = false;
+            NakoToken funcName = null;
+
+            // 関数の引数宣言を取得する
+            while (!tok.IsEOF())
             {
-                tok.MoveNext();
-            }
-            // 引数の登録
-            while (!tok.IsEOF()) {
-                if (Accept(NakoTokenType.PARENTHESES_R)) {
-                    tok.MoveNext();
-                    break;
-                }
-                if (Accept(NakoTokenType.OR))
+                // '(' .. ')' の中は全部、関数の引数です
+                if (argMode)
                 {
-                    tok.MoveNext();
-                    break;
-                }
-                if (Accept(NakoTokenType.WORD))
-                {
-                    // TODO: 引数の登録
+                    if (Accept(NakoTokenType.PARENTHESES_R))
+                    {
+                        argMode = false;
+                        tok.MoveNext();
+                        continue;
+                    }
+                    argTokens.Add(tok.CurrentToken);
                     tok.MoveNext();
                     continue;
                 }
-                break;
+                if (Accept(NakoTokenType.PARENTHESES_L))
+                {
+                    tok.MoveNext();
+                    argMode = true;
+                    continue;
+                }
+                if (Accept(NakoTokenType.SCOPE_BEGIN)) break;
+                if (Accept(NakoTokenType.FUNCTION_NAME))
+                {
+                    funcName = tok.CurrentToken;
+                    tok.MoveNext();
+                    continue;
+                }
+                argTokens.Add(tok.CurrentToken);
+                tok.MoveNext();
             }
+            if (funcName == null) { throw new NakoParserException("関数名がありません。", firstT); }
+            func.name = funcName.getValueAsName();
+            func.args.analizeArgTokens(argTokens);
             return true;
         }
 

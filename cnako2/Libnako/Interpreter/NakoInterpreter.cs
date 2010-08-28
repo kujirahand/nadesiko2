@@ -20,11 +20,13 @@ namespace Libnako.Interpreter
         protected NakoILCodeList list = null;
         protected NakoVariables globalVar;
         protected NakoVariables localVar;
+        protected Stack<NakoCallStack> callStack;
 
         public String PrintLog;
         public Boolean UseConsoleOut = false;
         protected int runpos = 0;
         public Boolean debugMode = false;
+        protected Boolean autoIncPos = true;
 
         public NakoInterpreter(NakoILCodeList list = null)
         {
@@ -35,8 +37,9 @@ namespace Libnako.Interpreter
         public void Reset()
         {
             stack = new Stack<Object>();
-            localVar = new NakoVariables();
-            globalVar = new NakoVariables();
+            globalVar = NakoVariables.Globals;
+            localVar = NakoVariables.Locals = new NakoVariables(NakoVariableScope.Local);
+            callStack = new Stack<NakoCallStack>();
             PrintLog = "";
         }
 
@@ -55,8 +58,16 @@ namespace Libnako.Interpreter
         {
             while (runpos < list.Count)
             {
-                NakoILCode code = this.list[runpos++];
+                NakoILCode code = this.list[runpos];
                 Run_NakoIL(code);
+                if (autoIncPos)
+                {
+                    runpos++;
+                }
+                else
+                {
+                    autoIncPos = true;
+                }
             }
             return true;
         }
@@ -73,6 +84,7 @@ namespace Libnako.Interpreter
         {
             return stack.Pop();
         }
+
         public void StackPush(Object v)
         {
             stack.Push(v);
@@ -82,7 +94,7 @@ namespace Libnako.Interpreter
         {
             if (debugMode)
             {
-                int i = runpos - 1;
+                int i = runpos;
                 string s = "";
                 s += String.Format("{0,4:X4}:", i);
                 s += code.type.ToString();
@@ -131,15 +143,33 @@ namespace Libnako.Interpreter
                 case NakoILType.OR:         exec_calc(calc_method_or); break;
                 case NakoILType.XOR:        exec_calc(calc_method_xor); break;
                 case NakoILType.NOT:        _not(); break;
-                case NakoILType.JUMP:       _jump(code); break;
+                case NakoILType.JUMP:           _jump(code); break;
                 case NakoILType.BRANCH_TRUE:    _branch_true(code); break;
                 case NakoILType.BRANCH_FALSE:   _branch_false(code); break;
-                case NakoILType.CALL:
-                case NakoILType.RET:
-                    break;
-                case NakoILType.SYSCALL:    exec_syscall(code); break;
-                case NakoILType.PRINT:      exec_print(); break;
+                case NakoILType.SYSCALL:        exec_syscall(code); break;
+                case NakoILType.USRCALL:        exec_usrcall(code); break;
+                case NakoILType.RET:            exec_ret(code); break;
+                case NakoILType.PRINT:          exec_print(); break;
             }
+        }
+
+        private void exec_usrcall(NakoILCode code)
+        {
+            NakoCallStack c = new NakoCallStack();
+            c.localVar = localVar;
+            c.nextpos = runpos + 1;
+            this.localVar = new NakoVariables();
+            callStack.Push(c);
+            // JUMP
+            autoIncPos = false;
+            runpos = (int)code.value;
+        }
+
+        private void exec_ret(NakoILCode code)
+        {
+            autoIncPos = false;
+            NakoCallStack c = callStack.Pop();
+            this.runpos = c.nextpos;
         }
 
         private void _branch_true(NakoILCode code)
@@ -147,6 +177,7 @@ namespace Libnako.Interpreter
             Object v = stack.Pop();
             if (NakoValueConveter.ToInt(v) > 0)
             {
+                autoIncPos = false;
                 runpos = (Int32)code.value;
             }
         }
@@ -156,12 +187,14 @@ namespace Libnako.Interpreter
             Object v = stack.Pop();
             if (NakoValueConveter.ToInt(v) == 0)
             {
+                autoIncPos = false;
                 runpos = (Int32)code.value;
             }
         }
 
         private void _jump(NakoILCode code)
         {
+            autoIncPos = false;
             runpos = (Int32)(code.value);
         }
 
@@ -246,7 +279,12 @@ namespace Libnako.Interpreter
         private void exec_print()
         {
             Object o = stack.Pop();
-            String s = o.ToString();
+            String s;
+            if (o == null) {
+                s = "";
+            } else {
+                s = o.ToString();
+            }
             if (UseConsoleOut)
             {
                 Console.Write(s);
@@ -260,6 +298,8 @@ namespace Libnako.Interpreter
             NakoAPIFunc s = NakoAPIFuncBank.Instance.list[funcNo];
             NakoFuncCallInfo f = new NakoFuncCallInfo(this);
             s.FuncDl(f);
+            Object top = stack.Peek();
+            globalVar.SetValue(0, top); // 変数「それ」に値をセット
         }
 
         private void exec_calc(CalcMethodType f)
@@ -482,5 +522,11 @@ namespace Libnako.Interpreter
         {
         }
 
+    }
+
+    public class NakoCallStack
+    {
+        public NakoVariables localVar;
+        public int nextpos;
     }
 }
