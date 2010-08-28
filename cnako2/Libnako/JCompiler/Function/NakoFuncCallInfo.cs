@@ -26,10 +26,13 @@ namespace Libnako.JCompiler.Function
             return _runner.StackPop();
         }
 
+        /*
+         * 基本的に PUSH は不要
         public void StackPush(Object v)
         {
             _runner.StackPush(v);
         }
+        */
 
     }
 }

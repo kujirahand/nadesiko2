@@ -7,7 +7,7 @@ using Libnako.JCompiler;
 
 namespace Libnako.NakoAPI
 {
-    public delegate void SysCallDelegate(NakoFuncCallInfo info);
+    public delegate Object SysCallDelegate(NakoFuncCallInfo info);
 
     public class NakoAPIFunc : NakoFunc
     {
@@ -28,7 +28,6 @@ namespace Libnako.NakoAPI
 
         public override void Execute()
         {
-
         }
 
     }

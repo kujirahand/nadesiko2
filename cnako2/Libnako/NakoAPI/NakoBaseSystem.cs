@@ -17,33 +17,42 @@ namespace Libnako.NakoAPI
         public override void registerToSystem()
         {
             addFunc("言う", "Sと|Sを", NakoVariableType.Void, _say, "メッセージSを画面に表示する", "いう");
+            addFunc("表示", "Sと|Sを", NakoVariableType.Void, _show, "メッセージSを表示する", "ひょうじ");
             addFunc("足す", "AにBを|Aと", NakoVariableType.Object, _add, "値Aと値Bを足して返す", "たす");
             addFunc("足す!", "{参照渡し}AにBを|Aと", NakoVariableType.Object, _addEx, "変数Aと値Bを足して返す(変数A自身を書き換える)", "たす!");
         }
 
-        public void _say(NakoFuncCallInfo info)
+        public Object _say(NakoFuncCallInfo info)
         {
             String msg = (String)info.StackPop();
             info.Runner.PrintLog += msg;
+            return null;
         }
 
-        public void _add(NakoFuncCallInfo info)
+        public Object _show(NakoFuncCallInfo info)
+        {
+            String msg = (String)info.StackPop();
+            info.Runner.PrintLog += msg;
+            return null;
+        }
+
+        public Object _add(NakoFuncCallInfo info)
         {
             Object a = info.StackPop();
             Object b = info.StackPop();
             if (a.GetType() == typeof(Int32) && b.GetType() == typeof(Int32))
             {
-                info.StackPush((int)a + (int)b);
+                return ((int)a + (int)b);
             }
             else
             {
                 Double da = NakoValueConveter.ToDouble(a);
                 Double db = NakoValueConveter.ToDouble(b);
-                info.StackPush(da + db);
+                return (da + db);
             }
         }
 
-        public void _addEx(NakoFuncCallInfo info)
+        public Object _addEx(NakoFuncCallInfo info)
         {
             Object ar = info.StackPop();
             Object b = info.StackPop();
@@ -63,9 +72,9 @@ namespace Libnako.NakoAPI
                 Double db = NakoValueConveter.ToDouble(b);
                 c = da + db;
             }
-            info.StackPush(c);
-            //
+            // 結果をセット
             ((NakoVariable)ar).value = c;
+            return (c);
         }
     }
 }
