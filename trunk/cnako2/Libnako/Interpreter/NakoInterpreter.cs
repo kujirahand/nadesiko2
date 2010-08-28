@@ -97,10 +97,17 @@ namespace Libnako.Interpreter
                 int i = runpos;
                 string s = "";
                 s += String.Format("{0,4:X4}:", i);
-                s += code.type.ToString();
+                s += String.Format("{0,-14}", code.type.ToString());
                 if (code.value != null)
                 {
-                    s += " : " + code.value.ToString();
+                    if (code.value is int)
+                    {
+                        s += String.Format("({0,4:X4})", (int)code.value);
+                    }
+                    else
+                    {
+                        s += "(" + code.value.ToString() + ")";
+                    }
                 }
                 Console.WriteLine(s);
             }
@@ -297,9 +304,9 @@ namespace Libnako.Interpreter
             int funcNo = (int)code.value;
             NakoAPIFunc s = NakoAPIFuncBank.Instance.list[funcNo];
             NakoFuncCallInfo f = new NakoFuncCallInfo(this);
-            s.FuncDl(f);
-            Object top = stack.Peek();
-            globalVar.SetValue(0, top); // 変数「それ」に値をセット
+            Object result = s.FuncDl(f);
+            globalVar.SetValue(0, result); // 変数「それ」に値をセット
+            StackPush(result); // 関数の結果を PUSH する
         }
 
         private void exec_calc(CalcMethodType f)

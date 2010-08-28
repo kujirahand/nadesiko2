@@ -20,7 +20,7 @@ namespace cnako
             runner.debugMode = true;
 
             string src =
-                "Iを１から３までTEST\n" +
+                "Iを１から３まで繰り返す\n" +
                 "　　PRINT I\n" +
                 "\n";
             _w(src);
