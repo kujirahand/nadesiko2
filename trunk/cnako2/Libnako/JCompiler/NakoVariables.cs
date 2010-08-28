@@ -14,8 +14,9 @@ namespace Libnako.JCompiler
     public class NakoVariables
     {
         // Globals and Locals
-        public static readonly NakoVariables Globals = new NakoVariables(NakoVariableScope.Global);
-        public static NakoVariables Locals = new NakoVariables(NakoVariableScope.Local);
+		private static readonly NakoVariables _Globals = new NakoVariables(NakoVariableScope.Global);
+		public static NakoVariables Globals { get { return _Globals; } }
+		public static NakoVariables Locals { get; set; }
 
         /// <summary>
         /// 変数一覧をリストとして保持
@@ -26,6 +27,11 @@ namespace Libnako.JCompiler
         /// 名前から変数番号を取得するための辞書
         /// </summary>
         protected Dictionary<String, int> names;
+
+		static NakoVariables()
+		{
+			Locals = new NakoVariables(NakoVariableScope.Local);
+		}
 
         public NakoVariables(NakoVariableScope scope = NakoVariableScope.Local)
         {

@@ -8,10 +8,10 @@ namespace Libnako.JCompiler.Node
 {
     class NakoNodeFor : NakoNode
     {
-        public NakoNodeVariable loopVar;
-        public NakoNode nodeFrom;
-        public NakoNode nodeTo;
-        public NakoNode nodeBlocks;
+		public NakoNodeVariable loopVar { get; set; }
+		public NakoNode nodeFrom { get; set; }
+		public NakoNode nodeTo { get; set; }
+		public NakoNode nodeBlocks { get; set; }
 
         public NakoNodeFor()
         {

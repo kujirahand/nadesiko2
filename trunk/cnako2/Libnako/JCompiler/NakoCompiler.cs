@@ -11,9 +11,9 @@ namespace Libnako.JCompiler
 {
     public class NakoCompiler
     {
-        public String name;
-        public String fullpath;
-        public String source;
+		public String name { get; set; }
+		public String fullpath { get; set; }
+		public String source { get; set; }
         // token
         protected NakoTokenList tokens = null;
         public NakoTokenList Tokens

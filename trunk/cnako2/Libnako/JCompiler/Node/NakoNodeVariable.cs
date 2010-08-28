@@ -10,11 +10,11 @@ namespace Libnako.JCompiler.Node
     public class NakoNodeVariable : NakoNode
     {
         // public NodeType type = N_LD_VARIABLE || N_ST_VARIABLE
-        public NakoVariableScope scope = NakoVariableScope.Global;
-        public NakoVariableType varType = NakoVariableType.Int;
-        public int varNo = -1;
-        public VarByType varBy = VarByType.ByVal;
-        public Boolean useElement = false; // a[3] のように配列かプロパティへのアクセスかどうか？
+		public NakoVariableScope scope { get; set; }
+		public NakoVariableType varType { get; set; }
+		public int varNo { get; set; }
+		public VarByType varBy { get; set; }
+		public Boolean useElement { get; set; } // a[3] のように配列かプロパティへのアクセスかどうか？
 
         public Boolean IsVarTypeSimple()
         {
@@ -22,5 +22,14 @@ namespace Libnako.JCompiler.Node
                 varType == NakoVariableType.Real ||
                 varType == NakoVariableType.String);
         }
+
+		public NakoNodeVariable()
+		{
+			this.scope = NakoVariableScope.Global;
+			this.varType = NakoVariableType.Int;
+			this.varNo = -1;
+			this.varBy = VarByType.ByVal;
+			this.useElement = false;
+		}
     }
 }

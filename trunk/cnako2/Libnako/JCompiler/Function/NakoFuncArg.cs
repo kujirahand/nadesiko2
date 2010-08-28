@@ -9,13 +9,14 @@ namespace Libnako.JCompiler.Function
 
     public class NakoFuncArg
     {
-        public String name;
-        public List<String> josiList;
-        public VarByType varBy = VarByType.ByVal; 
+		public String name { get; set; }
+		public List<String> josiList { get; set; }
+		public VarByType varBy { get; set; }
 
         public NakoFuncArg()
         {
-            josiList = new List<String>();    
+			varBy = VarByType.ByVal;
+			josiList = new List<String>();    
         }
 
         public void AddJosi(String josi)

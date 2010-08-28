@@ -11,7 +11,8 @@ namespace Libnako.NakoAPI
     public class NakoBaseSystem : NakoAPIRegister
     {
         // C# Singleton
-        public static readonly NakoBaseSystem Instance = new NakoBaseSystem();
+        private static readonly NakoBaseSystem _Instance = new NakoBaseSystem();
+		public static NakoBaseSystem Instance { get { return _Instance; } }
         private NakoBaseSystem() { }
 
         public override void registerToSystem()

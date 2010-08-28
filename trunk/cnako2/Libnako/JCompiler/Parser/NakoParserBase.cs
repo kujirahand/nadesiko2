@@ -9,14 +9,14 @@ namespace Libnako.JCompiler.Parser
 {
     public class NakoParserBase
     {
-        public NakoNode topNode;
+		public NakoNode topNode { get; set; }
         protected NakoNode parentNode;
         protected NakoNode lastNode;
         protected NakoTokenList tok;
         protected NakoNodeList calcStack;
         protected Stack<int> calcStackCounters;
-        internal Stack<NakoParserFrame> frameStack;
-        internal Stack<NakoParserNodeState> stateStack;
+		internal Stack<NakoParserFrame> frameStack { get; set; }
+		internal Stack<NakoParserNodeState> stateStack { get; set; }
 
         public NakoParserBase(NakoTokenList tokens)
         {
@@ -117,14 +117,14 @@ namespace Libnako.JCompiler.Parser
 
     internal class NakoParserNodeState
     {
-        public NakoNode parentNode;
-        public NakoNode lastNode;
+		public NakoNode parentNode { get; set; }
+		public NakoNode lastNode { get; set; }
     }
 
     internal class NakoParserFrame
     {
-        public NakoVariables localVar;
-        public NakoNode lastNode;
-        public NakoNode parentNode;
+		public NakoVariables localVar { get; set; }
+		public NakoNode lastNode { get; set; }
+		public NakoNode parentNode { get; set; }
     }
 }

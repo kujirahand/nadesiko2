@@ -22,15 +22,18 @@ namespace Libnako.Interpreter
         protected NakoVariables localVar;
         protected Stack<NakoCallStack> callStack;
 
-        public String PrintLog;
-        public Boolean UseConsoleOut = false;
+        public String PrintLog { get; set; }
+		public Boolean UseConsoleOut { get; set; }
         protected int runpos = 0;
-        public Boolean debugMode = false;
+		public Boolean debugMode { get; set; }
         protected Boolean autoIncPos = true;
 
         public NakoInterpreter(NakoILCodeList list = null)
         {
-            this.list = list;
+			this.UseConsoleOut = false;
+			this.debugMode = false;
+
+			this.list = list;
             Reset();
         }
 
@@ -533,7 +536,7 @@ namespace Libnako.Interpreter
 
     public class NakoCallStack
     {
-        public NakoVariables localVar;
-        public int nextpos;
+		public NakoVariables localVar { get; set; }
+		public int nextpos { get; set; }
     }
 }

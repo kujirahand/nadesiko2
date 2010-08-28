@@ -8,9 +8,9 @@ namespace Libnako.JCompiler.Node
 {
     class NakoNodeRepeatTimes : NakoNode
     {
-        public NakoNode nodeTimes;
-        public NakoNode nodeBlocks;
-        public int loopVarNo;
+		public NakoNode nodeTimes { get; set; }
+		public NakoNode nodeBlocks { get; set; }
+		public int loopVarNo { get; set; }
 
         public NakoNodeRepeatTimes()
         {
