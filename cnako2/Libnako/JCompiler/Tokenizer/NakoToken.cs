@@ -7,10 +7,10 @@ namespace Libnako.JCompiler.Tokenizer
 {
     public class NakoToken
     {
-        public string value = null;
-        public int lineno = 0;
-        public int level = 0;
-        public string josi = "";
+		public string value { get; set; }
+		public int lineno { get; set; }
+		public int level { get; set; }
+		public string josi { get; set; }
         protected NakoTokenType _type = 0;
         public NakoTokenType type
         {
@@ -23,6 +23,8 @@ namespace Libnako.JCompiler.Tokenizer
             this.lineno = lineno;
             this.level = level;
             this.type = type;
+			this.josi = "";
+			this.value = null;
         }
 
         public String ToStringForDebug()

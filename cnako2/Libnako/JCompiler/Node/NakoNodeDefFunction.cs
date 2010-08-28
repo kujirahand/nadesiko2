@@ -10,11 +10,11 @@ namespace Libnako.JCompiler.Node
 {
     public class NakoNodeDefFunction : NakoNode
     {
-        public String funcName;
-        public NakoFunc func;
-        public NakoVariables localVar;
-        public NakoNode funcBody;
-        public NakoILCode defLabel;
+		public String funcName { get; set; }
+		public NakoFunc func { get; set; }
+		public NakoVariables localVar { get; set; }
+		public NakoNode funcBody { get; set; }
+		public NakoILCode defLabel { get; set; }
 
         public NakoNodeDefFunction()
         {

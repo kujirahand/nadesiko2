@@ -7,12 +7,14 @@ namespace Libnako.JCompiler.ILWriter
 {
     public class NakoILCode
     {
-        public NakoILType type = 0;
-        public Object value = null;
+		public NakoILType type { get; set; }
+		public Object value { get; set; }
 
-        public NakoILCode()
-        {
-        }
+		public NakoILCode()
+		{
+			this.type = 0;
+			this.value = null;
+		}
 
         public NakoILCode(NakoILType type, Object value = null)
         {

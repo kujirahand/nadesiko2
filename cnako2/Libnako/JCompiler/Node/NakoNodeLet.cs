@@ -7,7 +7,7 @@ namespace Libnako.JCompiler.Node
 {
     public class NakoNodeLet : NakoNode
     {
-        public NakoNodeVariable nodeVar;
+		public NakoNodeVariable nodeVar { get; set; }
 
         public NakoNodeLet()
         {

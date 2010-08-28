@@ -7,8 +7,8 @@ namespace Libnako.JCompiler.Node
 {
     public class NakoNode
     {
-        public NakoNodeType type = NakoNodeType.NOP;
-        public Object value = null;
+		public NakoNodeType type { get; set; }
+		public Object value { get; set; }
         private String _josi;
         public String josi
         {
@@ -46,6 +46,8 @@ namespace Libnako.JCompiler.Node
 
         public NakoNode()
         {
+			type = NakoNodeType.NOP;
+			this.value = null;
         }
 
         public void AddChild(NakoNode child)

@@ -8,13 +8,14 @@ namespace Libnako.JCompiler.Node
 {
     public class NakoNodeCalc : NakoNode
     {
-        public NakoNode nodeL;
-        public NakoNode nodeR;
-        public CalcType calc_type = CalcType.NOP;
+		public NakoNode nodeL { get; set; }
+		public NakoNode nodeR { get; set; }
+		public CalcType calc_type { get; set; }
 
         public NakoNodeCalc()
         {
-            type = NakoNodeType.CALC;
+            calc_type = CalcType.NOP;
+			type = NakoNodeType.CALC;
         }
 
         public override String ToTypeString()

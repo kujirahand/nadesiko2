@@ -20,8 +20,8 @@ namespace Libnako.JCompiler
     
     public class NakoVariable
     {
-        public NakoVariableType type;
-        public Object value;
+		public NakoVariableType type { get; set; }
+		public Object value { get; set; }
     }
 
 }

@@ -11,7 +11,7 @@ namespace Libnako.NakoAPI
 
     public class NakoAPIFunc : NakoFunc
     {
-        public SysCallDelegate FuncDl;
+		public SysCallDelegate FuncDl { get; set; }
 
         public NakoAPIFunc(String name, String argdef, NakoVariableType resultType, SysCallDelegate FuncDl)
             : base(name, argdef)

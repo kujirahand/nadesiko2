@@ -10,15 +10,15 @@ namespace Libnako.JCompiler.Function
     /// </summary>
     public class NakoFunc
     {
-        public int varNo;
-        public String name;
-        public NakoFuncArgs args;
-        public NakoFuncType funcType = NakoFuncType.UserCall;
-        public NakoVariableType resultType = NakoVariableType.Void;
+		public int varNo { get; set; }
+		public String name { get; set; }
+		public NakoFuncArgs args { get; set; }
+		public NakoFuncType funcType { get; set; }
+		public NakoVariableType resultType { get; set; }
 
         public NakoFunc()
         {
-            Init();
+			Init();
         }
 
         public NakoFunc(String name, String argdef)
@@ -30,6 +30,8 @@ namespace Libnako.JCompiler.Function
 
         public virtual void Init()
         {
+			funcType = NakoFuncType.UserCall;
+			resultType = NakoVariableType.Void;
             args = new NakoFuncArgs();
         }
 
