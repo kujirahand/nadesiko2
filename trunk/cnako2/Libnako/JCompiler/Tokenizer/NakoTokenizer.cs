@@ -67,9 +67,10 @@ namespace Libnako.JCompiler.Tokenizer
                 if (tokens.CurrentTokenType == NakoTokenType.WORD)
                 {
                     NakoToken token = tokens.CurrentToken;
-                    if (NakoDic.Instance.ContainsKey(token.value))
+                    string key = token.getValueAsName();
+                    if (NakoDic.Instance.ContainsKey(key))
                     {
-                        token.type = NakoDic.Instance[token.value];
+                        token.type = NakoDic.Instance[key];
                     }
                 }
                 tokens.MoveNext();
@@ -78,18 +79,49 @@ namespace Libnako.JCompiler.Tokenizer
         
         protected void TokenizeAnalize_DefFunction()
         {
+            NakoToken firstToken = tokens.CurrentToken;
             tokens.MoveNext(); // skip '*' (DEF_FUNCTION)
-            // 引数宣言をスキップ
+            
+            // 関数宣言を軽く舐めて、関数名を特定する
+            NakoToken fnameToken = null;
+            Boolean argMode = false;
             while (!tokens.IsEOF())
             {
-                // 行末のトークンが関数名
-                if (tokens.CurrentTokenType == NakoTokenType.WORD &&
-                    tokens.NextTokenType == NakoTokenType.EOL)
+                // 引数宣言に ( ... ) がある場合を考慮
+                if (argMode)
                 {
-                    // TODO: 関数定義を行う
-                    NakoToken t = tokens.CurrentToken;
-                    NakoDic.Instance[t.value] = NakoTokenType.FUNCTION_NAME;
-                    t.type = NakoTokenType.FUNCTION_NAME;
+                    if (tokens.Accept(NakoTokenType.PARENTHESES_R))
+                    {
+                        tokens.MoveNext();
+                        argMode = false;
+                        continue;
+                    }
+                    tokens.MoveNext();
+                    continue;
+                }
+                if (tokens.Accept(NakoTokenType.PARENTHESES_L))
+                {
+                    argMode = true;
+                    tokens.MoveNext();
+                    continue;
+                }
+                if (tokens.Accept(NakoTokenType.SCOPE_BEGIN))
+                {
+                    // 改行なら関数宣言の終了
+                    if (fnameToken == null)
+                    {
+                        throw new NakoTokenizerException("関数宣言で関数名がありません。", firstToken);
+                    }
+                    // 関数名を辞書に登録する
+                    NakoDic.Instance[fnameToken.getValueAsName()] = 
+                        NakoTokenType.FUNCTION_NAME;
+                    fnameToken.type = NakoTokenType.FUNCTION_NAME;
+                    break;
+                }
+                // 関数名の可能性
+                if (tokens.Accept(NakoTokenType.WORD))
+                {
+                    fnameToken = tokens.CurrentToken;
                 }
                 tokens.MoveNext();
             }

@@ -46,6 +46,11 @@ namespace Libnako.JCompiler.Tokenizer
             }
         }
 
+        public Boolean Accept(NakoTokenType t)
+        {
+            return (t == CurrentTokenType);
+        }
+
         public NakoToken NextToken
         {
             get

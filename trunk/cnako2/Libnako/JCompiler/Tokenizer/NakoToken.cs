@@ -29,5 +29,39 @@ namespace Libnako.JCompiler.Tokenizer
         {
             return "[" + _type.ToString() + ":" + value + "]" + josi + "(" + lineno + ")";
         }
+
+        public String getValueAsName()
+        {
+            return TrimOkurigana(value);
+        }
+
+        public static String TrimOkurigana(String name)
+        {
+            String s = "";
+            int cur = 0;
+            Char c;
+            if (name == "") return "";
+            c = name[cur];
+
+            // 一文字目がひらがななら省略は難しい
+            if (NakoTokenizer.IsHira(c))
+            {
+                return name;
+            }
+            s += c;
+            cur++;
+
+            // 送りがなを省略する
+            while (cur < name.Length)
+            {
+                c = name[cur];
+                if (!NakoTokenizer.IsHira(c))
+                {
+                    s += c;
+                }
+                cur++;
+            }
+            return s;
+        }
     }
 }

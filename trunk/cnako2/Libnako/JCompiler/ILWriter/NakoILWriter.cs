@@ -34,61 +34,6 @@ namespace Libnako.JCompiler.ILWriter
             this.labels = new Dictionary<NakoILCode, int>();
         }
 
-        public void Write(NakoNode topNode = null)
-        {
-            if (topNode != null) { this.topNode = topNode; }
-            Write_r(this.topNode);
-            FixLabel();
-        }
-
-        public void FixLabel()
-        {
-            // 現在のラベル位置を調べる
-            for (int i = 0; i < result.Count; i++)
-            {
-                NakoILCode code = result[i];
-                if (code.type != NakoILType.NOP) continue;
-                if (labels.ContainsKey(code))
-                {
-                    labels[code] = i;
-                }
-            }
-            // JUMP/BRANCH_TRUE/BRANCH_FALSE を解決する
-            for (int i = 0; i < result.Count; i++)
-            {
-                NakoILCode code = result[i];
-                switch (code.type)
-                {
-                    case NakoILType.JUMP:
-                    case NakoILType.BRANCH_TRUE:
-                    case NakoILType.BRANCH_FALSE:
-                        break;
-                    default:
-                        continue;
-                }
-                if (!(code.value is NakoILCode)) continue;
-                if (code.value is NakoILCode)
-                {
-                    if (labels.ContainsKey( (NakoILCode)code.value) )
-                    {
-                        code.value = (Object)labels[(NakoILCode)code.value];
-                        continue;
-                    }
-                    throw new NakoILWriterException("ラベルが解決できません");
-                }
-            }
-            
-        }
-
-        protected void Write_list(NakoNodeList list)
-        {
-            for (int i = 0; i < list.Count; i++)
-            {
-                NakoNode node = list[i];
-                Write_r(node);
-            }
-        }
-
         protected void Write_r(NakoNode node)
         {
             if (node == null) return;
@@ -136,10 +81,69 @@ namespace Libnako.JCompiler.ILWriter
                 case NakoNodeType.CALL_FUNCTION:
                     _call_function((NakoNodeCallFunction)node);
                     return;
+                case NakoNodeType.DEF_FUNCTION:
+                    _def_function((NakoNodeDefFunction)node);
+                    return;
             }
             // ---
             if (!node.hasChildren()) return;
             Write_list(node.Children);
+        }
+
+        public void Write(NakoNode topNode = null)
+        {
+            if (topNode != null) { this.topNode = topNode; }
+            Write_r(this.topNode);
+            FixLabel();
+        }
+
+        public void FixLabel()
+        {
+            // 現在のラベル位置を調べる
+            for (int i = 0; i < result.Count; i++)
+            {
+                NakoILCode code = result[i];
+                if (code.type != NakoILType.NOP) continue;
+                if (labels.ContainsKey(code))
+                {
+                    labels[code] = i;
+                }
+            }
+            // JUMP/BRANCH_TRUE/BRANCH_FALSE/CALL/USRCALL を解決する
+            for (int i = 0; i < result.Count; i++)
+            {
+                NakoILCode code = result[i];
+                switch (code.type)
+                {
+                    case NakoILType.JUMP:
+                    case NakoILType.BRANCH_TRUE:
+                    case NakoILType.BRANCH_FALSE:
+                    case NakoILType.USRCALL:
+                        break;
+                    default:
+                        continue;
+                }
+                if (!(code.value is NakoILCode)) continue;
+                if (code.value is NakoILCode)
+                {
+                    if (labels.ContainsKey( (NakoILCode)code.value) )
+                    {
+                        code.value = (Object)labels[(NakoILCode)code.value];
+                        continue;
+                    }
+                    throw new NakoILWriterException("ラベルが解決できません");
+                }
+            }
+            
+        }
+
+        protected void Write_list(NakoNodeList list)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                NakoNode node = list[i];
+                Write_r(node);
+            }
         }
 
         protected NakoILCode createLABEL(String labelName = "")
@@ -385,18 +389,56 @@ namespace Libnako.JCompiler.ILWriter
             {
                 Write_r(node.argNodes[i]);
             }
+            NakoILCode code = new NakoILCode();
             if (node.func.funcType == Function.NakoFuncType.SysCall)
             {
                 NakoAPIFunc f = (NakoAPIFunc)node.func;
-                NakoILCode code = new NakoILCode();
                 code.type = NakoILType.SYSCALL;
                 code.value = node.func.varNo;
                 result.Add(code);
             }
+            else // UserCall
+            {
+                NakoILCode defLabel = ((NakoNodeDefFunction)node.value).defLabel;
+                code.type = NakoILType.USRCALL;
+                code.value = defLabel;
+                result.Add(code);
+            }
         }
 
+        private void _def_function(NakoNodeDefFunction node)
+        {
+            // 必要なラベルを定義
+            NakoILCode end_of_def_func = createLABEL("END_OF_DEF_FUNC");
+            NakoILCode begin_def_func = createLABEL("FUNC_" + node.func.name);
+            node.defLabel = begin_def_func;
+            
+            // 関数の定義は実行しないので、end_of_def_func へ飛ぶ
+            result.Add(createJUMP(end_of_def_func));
+            // 関数の始まりラベルを定義
+            result.Add(begin_def_func);
+            // 引数をPOPする処理
+            NakoFunc func = node.func;
+            for (int i = 0; i < func.ArgCount; i++)
+            {
+                NakoFuncArg arg = func.args[i];
+                NakoILCode c = new NakoILCode(NakoILType.ST_LOCAL);
+                if (arg.varBy == VarByType.ByRef) {
+                    c.type = NakoILType.ST_LOCAL_REF;
+                }
+                c.value = i; // ローカル変数番号を登録
+                result.Add(c);
+            }
+            // 本文を定義
+            Write_r(node.funcBody);
+            // 戻り値(変数「それ」)をスタックに載せる
+            result.Add(new NakoILCode(NakoILType.LD_GLOBAL, (int)0));
+            result.Add(new NakoILCode(NakoILType.RET));
+            // 関数の終わりを定義
+            result.Add(end_of_def_func);
+        }
     }
-
+    
     public class NakoILWriterException : Exception
     {
         public NakoILWriterException(String message) : base(message) { }

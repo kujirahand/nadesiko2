@@ -14,8 +14,8 @@ namespace Libnako.JCompiler
     public class NakoVariables
     {
         // Globals and Locals
-        public static readonly NakoVariables Globals = new NakoVariables();
-        public static NakoVariables Locals = new NakoVariables();
+        public static readonly NakoVariables Globals = new NakoVariables(NakoVariableScope.Global);
+        public static NakoVariables Locals = new NakoVariables(NakoVariableScope.Local);
 
         /// <summary>
         /// 変数一覧をリストとして保持
@@ -27,10 +27,21 @@ namespace Libnako.JCompiler
         /// </summary>
         protected Dictionary<String, int> names;
 
-        public NakoVariables()
+        public NakoVariables(NakoVariableScope scope = NakoVariableScope.Local)
         {
             list = new List<NakoVariable>();
             names = new Dictionary<string, int>();
+
+            if (scope == NakoVariableScope.Global)
+            {
+                // 変数「それ」を登録
+                NakoVariable sore = new NakoVariable();
+                sore.type = NakoVariableType.Int;
+                sore.value = 0;
+                list.Add(sore);
+                names["それ"] = 0;
+            }
+
         }
 
         public int GetIndex(string name)
