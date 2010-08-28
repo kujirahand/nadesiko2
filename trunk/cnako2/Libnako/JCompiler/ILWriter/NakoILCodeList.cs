@@ -5,9 +5,11 @@ using System.Text;
 
 namespace Libnako.JCompiler.ILWriter
 {
-    public class NakoILCodeList : List<NakoILCode>
+    public class NakoILCodeList : IList<NakoILCode>
     {
-        public Boolean CheckTypes(NakoILType[] types)
+		private List<NakoILCode> _list = new List<NakoILCode>();
+
+		public Boolean CheckTypes(NakoILType[] types)
         {
             if (types.Length != this.Count) return false;
             for (int i = 0; i < types.Length; i++)
@@ -75,5 +77,94 @@ namespace Libnako.JCompiler.ILWriter
             }
             return r;
         }
-    }
+
+		#region IList<NakoILCode> メンバー
+
+		public int IndexOf(NakoILCode item)
+		{
+			return _list.IndexOf(item);
+		}
+
+		public void Insert(int index, NakoILCode item)
+		{
+			_list.Insert(index, item);
+		}
+
+		public void RemoveAt(int index)
+		{
+			_list.RemoveAt(index);
+		}
+
+		public NakoILCode this[int index]
+		{
+			get
+			{
+				return _list[index];
+			}
+			set
+			{
+				_list[index] = value;
+			}
+		}
+
+		#endregion
+
+		#region ICollection<NakoILCode> メンバー
+
+		public void Add(NakoILCode item)
+		{
+			_list.Add(item);
+		}
+
+		public void Clear()
+		{
+			_list.Clear();
+		}
+
+		public bool Contains(NakoILCode item)
+		{
+			return _list.Contains(item);
+		}
+
+		public void CopyTo(NakoILCode[] array, int arrayIndex)
+		{
+			_list.CopyTo(array, arrayIndex);
+		}
+
+		public int Count
+		{
+			get { return _list.Count; }
+		}
+
+		bool ICollection<NakoILCode>.IsReadOnly
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool Remove(NakoILCode item)
+		{
+			return _list.Remove(item);
+		}
+
+		#endregion
+
+		#region IEnumerable<NakoILCode> メンバー
+
+		public IEnumerator<NakoILCode> GetEnumerator()
+		{
+			return _list.GetEnumerator();
+		}
+
+		#endregion
+
+		#region IEnumerable メンバー
+
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		{
+			return _list.GetEnumerator();
+		}
+
+		#endregion
+
+	}
 }

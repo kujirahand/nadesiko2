@@ -5,9 +5,10 @@ using System.Text;
 
 namespace Libnako.JCompiler.Tokenizer
 {
-    public class NakoTokenList : List<NakoToken>
+    public class NakoTokenList : IList<NakoToken>
     {
-        protected int cur = 0;
+		private List<NakoToken> _list = new List<NakoToken>();
+		protected int cur = 0;
         private Stack<int> curStack = new Stack<int>();
 
         /// <summary>
@@ -178,5 +179,93 @@ namespace Libnako.JCompiler.Tokenizer
             return true;
         }
 
-    }
+
+		#region IList<NakoToken> メンバー
+
+		public int IndexOf(NakoToken item)
+		{
+			return _list.IndexOf(item);
+		}
+
+		public void Insert(int index, NakoToken item)
+		{
+			_list.Insert(index, item);
+		}
+
+		public void RemoveAt(int index)
+		{
+			_list.RemoveAt(index);
+		}
+
+		public NakoToken this[int index]
+		{
+			get
+			{
+				return _list[index];
+			}
+			set
+			{
+				_list[index] = value;
+			}
+		}
+
+		#endregion
+
+		#region ICollection<NakoToken> メンバー
+
+		public void Add(NakoToken item)
+		{
+			_list.Add(item);
+		}
+
+		public void Clear()
+		{
+			_list.Clear();
+		}
+
+		public bool Contains(NakoToken item)
+		{
+			return _list.Contains(item);
+		}
+
+		public void CopyTo(NakoToken[] array, int arrayIndex)
+		{
+			_list.CopyTo(array, arrayIndex);
+		}
+
+		public int Count
+		{
+			get { return _list.Count; }
+		}
+
+		bool ICollection<NakoToken>.IsReadOnly
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool Remove(NakoToken item)
+		{
+			return _list.Remove(item);
+		}
+
+		#endregion
+
+		#region IEnumerable<NakoToken> メンバー
+
+		public IEnumerator<NakoToken> GetEnumerator()
+		{
+			return _list.GetEnumerator();
+		}
+
+		#endregion
+
+		#region IEnumerable メンバー
+
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		{
+			return _list.GetEnumerator();
+		}
+
+		#endregion
+	}
 }

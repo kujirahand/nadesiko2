@@ -33,8 +33,97 @@ namespace Libnako.JCompiler.Node
 
     }
 
-    public class NakoNodeDefFunctionList : List<NakoNodeDefFunction>
+    public class NakoNodeDefFunctionList : IList<NakoNodeDefFunction>
     {
-    }
+		private List<NakoNodeDefFunction> _list = new List<NakoNodeDefFunction>();
+
+		#region IList<NakoNodeDefFunction> メンバー
+
+		public int IndexOf(NakoNodeDefFunction item)
+		{
+			return _list.IndexOf(item);
+		}
+
+		public void Insert(int index, NakoNodeDefFunction item)
+		{
+			_list.Insert(index, item);
+		}
+
+		public void RemoveAt(int index)
+		{
+			_list.RemoveAt(index);
+		}
+
+		public NakoNodeDefFunction this[int index]
+		{
+			get
+			{
+				return _list[index];
+			}
+			set
+			{
+				_list[index] = value;
+			}
+		}
+
+		#endregion
+
+		#region ICollection<NakoNodeDefFunction> メンバー
+
+		public void Add(NakoNodeDefFunction item)
+		{
+			_list.Add(item);
+		}
+
+		public void Clear()
+		{
+			_list.Clear();
+		}
+
+		public bool Contains(NakoNodeDefFunction item)
+		{
+			return _list.Contains(item);
+		}
+
+		public void CopyTo(NakoNodeDefFunction[] array, int arrayIndex)
+		{
+			_list.CopyTo(array, arrayIndex);
+		}
+
+		public int Count
+		{
+			get { return _list.Count; }
+		}
+
+		bool ICollection<NakoNodeDefFunction>.IsReadOnly
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool Remove(NakoNodeDefFunction item)
+		{
+			return _list.Remove(item);
+		}
+
+		#endregion
+
+		#region IEnumerable<NakoNodeDefFunction> メンバー
+
+		public IEnumerator<NakoNodeDefFunction> GetEnumerator()
+		{
+			return _list.GetEnumerator();
+		}
+
+		#endregion
+
+		#region IEnumerable メンバー
+
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		{
+			return _list.GetEnumerator();
+		}
+
+		#endregion
+	}
 }
 
