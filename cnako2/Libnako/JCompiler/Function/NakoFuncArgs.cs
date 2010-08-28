@@ -6,9 +6,11 @@ using Libnako.JCompiler.Tokenizer;
 
 namespace Libnako.JCompiler.Function
 {
-    public class NakoFuncArgs : List<NakoFuncArg>
+    public class NakoFuncArgs : IList<NakoFuncArg>
     {
-        /// <summary>
+		private List<NakoFuncArg> _list = new List<NakoFuncArg>();
+		
+		/// <summary>
         /// 引数の定義文字列を読んで、関数の引数として登録する
         /// </summary>
         public void analizeArgTokens(NakoTokenList tokens)
@@ -93,7 +95,95 @@ namespace Libnako.JCompiler.Function
             }
             return -1;
         }
-    }
+
+		#region IList<NakoFuncArg> メンバー
+
+		public int IndexOf(NakoFuncArg item)
+		{
+			return _list.IndexOf(item);
+		}
+
+		public void Insert(int index, NakoFuncArg item)
+		{
+			_list.Insert(index, item);
+		}
+
+		public void RemoveAt(int index)
+		{
+			_list.RemoveAt(index);
+		}
+
+		public NakoFuncArg this[int index]
+		{
+			get
+			{
+				return _list[index];
+			}
+			set
+			{
+				_list[index] = value;
+			}
+		}
+
+		#endregion
+
+		#region ICollection<NakoFuncArg> メンバー
+
+		public void Add(NakoFuncArg item)
+		{
+			_list.Add(item);
+		}
+
+		public void Clear()
+		{
+			_list.Clear();
+		}
+
+		public bool Contains(NakoFuncArg item)
+		{
+			return _list.Contains(item);
+		}
+
+		public void CopyTo(NakoFuncArg[] array, int arrayIndex)
+		{
+			_list.CopyTo(array, arrayIndex);
+		}
+
+		public int Count
+		{
+			get { return _list.Count; }
+		}
+
+		bool ICollection<NakoFuncArg>.IsReadOnly
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool Remove(NakoFuncArg item)
+		{
+			return _list.Remove(item);
+		}
+
+		#endregion
+
+		#region IEnumerable<NakoFuncArg> メンバー
+
+		public IEnumerator<NakoFuncArg> GetEnumerator()
+		{
+			return _list.GetEnumerator();
+		}
+
+		#endregion
+
+		#region IEnumerable メンバー
+
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		{
+			return _list.GetEnumerator();
+		}
+
+		#endregion
+	}
 
     internal class ArgOpt
     {

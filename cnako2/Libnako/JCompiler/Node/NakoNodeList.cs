@@ -4,9 +4,11 @@ using System.Text;
 
 namespace Libnako.JCompiler.Node
 {
-    public class NakoNodeList : List<NakoNode>
+    public class NakoNodeList : IList<NakoNode>
     {
-        public NakoNode Shift()
+		private List<NakoNode> _list = new List<NakoNode>();
+		
+		public NakoNode Shift()
         {
             if (this.Count == 0)
             {
@@ -67,5 +69,93 @@ namespace Libnako.JCompiler.Node
             }
             return r;
         }
-    }
+
+		#region IList<NakoNode> メンバー
+
+		public int IndexOf(NakoNode item)
+		{
+			return _list.IndexOf(item);
+		}
+
+		public void Insert(int index, NakoNode item)
+		{
+			_list.Insert(index, item);
+		}
+
+		public void RemoveAt(int index)
+		{
+			_list.RemoveAt(index);
+		}
+
+		public NakoNode this[int index]
+		{
+			get
+			{
+				return _list[index];
+			}
+			set
+			{
+				_list[index] = value;
+			}
+		}
+
+		#endregion
+
+		#region ICollection<NakoNode> メンバー
+
+		public void Add(NakoNode item)
+		{
+			_list.Add(item);
+		}
+
+		public void Clear()
+		{
+			_list.Clear();
+		}
+
+		public bool Contains(NakoNode item)
+		{
+			return _list.Contains(item);
+		}
+
+		public void CopyTo(NakoNode[] array, int arrayIndex)
+		{
+			_list.CopyTo(array, arrayIndex);
+		}
+
+		public int Count
+		{
+			get { return _list.Count; }
+		}
+
+		bool ICollection<NakoNode>.IsReadOnly
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public bool Remove(NakoNode item)
+		{
+			return _list.Remove(item);
+		}
+
+		#endregion
+
+		#region IEnumerable<NakoNode> メンバー
+
+		public IEnumerator<NakoNode> GetEnumerator()
+		{
+			return _list.GetEnumerator();
+		}
+
+		#endregion
+
+		#region IEnumerable メンバー
+
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		{
+			return _list.GetEnumerator();
+		}
+
+		#endregion
+	}
 }
