@@ -74,5 +74,34 @@ namespace TestNako
             runner.Run(codes);
             Assert.AreEqual(runner.PrintLog, "16");
         }
+        [Test]
+        public void TestSysFunc_sub()
+        {
+            codes = ns.Publish(
+                "PRINT 5から3を引く\n" +
+                "\n");
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "2");
+        }
+        [Test]
+        public void TestSysFunc_subEx()
+        {
+            codes = ns.Publish(
+                "A=10;B=3;" +
+                "AからBを引く!\n" +
+                "PRINT A");
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "7");
+        }
+        [Test]
+        public void TestUserFunc_sub2()
+        {
+            codes = ns.Publish(
+                "3を10から引く。\n" +
+                "PRINT それ\n" +
+                "\n");
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "7");
+        }
     }
 }

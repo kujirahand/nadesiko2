@@ -27,6 +27,8 @@ namespace Libnako.NakoAPI
             addFunc("表示", "Sと|Sを", NakoVariableType.Void, _show, "メッセージSを表示する", "ひょうじ");
             addFunc("足す", "AにBを|Aと", NakoVariableType.Object, _add, "値Aと値Bを足して返す", "たす");
             addFunc("足す!", "{参照渡し}AにBを|Aと", NakoVariableType.Object, _addEx, "変数Aと値Bを足して返す(変数A自身を書き換える)", "たす!");
+            addFunc("引く", "AからBを", NakoVariableType.Object, _sub, "値Aから値Bを引いて返す", "ひく");
+            addFunc("引く!", "{参照渡し}AからBを", NakoVariableType.Object, _subEx, "変数Aから値Bを引いて返す(変数A自身を書き換える)", "ひく!");
         }
 
         /// <summary>
@@ -83,6 +85,47 @@ namespace Libnako.NakoAPI
                 Double da = NakoValueConveter.ToDouble(a);
                 Double db = NakoValueConveter.ToDouble(b);
                 c = da + db;
+            }
+            // 結果をセット
+            ((NakoVariable)ar).value = c;
+            return (c);
+        }
+
+        public Object _sub(NakoFuncCallInfo info)
+        {
+            Object a = info.StackPop();
+            Object b = info.StackPop();
+            if (a.GetType() == typeof(Int32) && b.GetType() == typeof(Int32))
+            {
+                return ((int)a - (int)b);
+            }
+            else
+            {
+                Double da = NakoValueConveter.ToDouble(a);
+                Double db = NakoValueConveter.ToDouble(b);
+                return (da - db);
+            }
+        }
+
+        public Object _subEx(NakoFuncCallInfo info)
+        {
+            Object ar = info.StackPop();
+            Object b = info.StackPop();
+            if (!(ar is NakoVariable))
+            {
+                throw new NakoAPIError("『引く!』の引数が変数ではありません");
+            }
+            Object a = ((NakoVariable)ar).value;
+            Object c;
+            if (a.GetType() == typeof(Int32) && b.GetType() == typeof(Int32))
+            {
+                c = (int)a - (int)b;
+            }
+            else
+            {
+                Double da = NakoValueConveter.ToDouble(a);
+                Double db = NakoValueConveter.ToDouble(b);
+                c = da - db;
             }
             // 結果をセット
             ((NakoVariable)ar).value = c;
