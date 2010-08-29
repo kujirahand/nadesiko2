@@ -6,6 +6,9 @@ using Libnako.JCompiler.Parser;
 
 namespace Libnako.JCompiler.Node
 {
+    /// <summary>
+    /// 計算を表わすノード
+    /// </summary>
     public class NakoNodeCalc : NakoNode
     {
 		public NakoNode nodeL { get; set; }

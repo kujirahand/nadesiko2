@@ -16,17 +16,40 @@ namespace Libnako.Interpreter
     /// </summary>
     public class NakoInterpreter
     {
+        /// <summary>
+        /// 計算用のスタック
+        /// </summary>
         protected Stack<Object> stack;
+        /// <summary>
+        /// 仮想バイトコードの一覧
+        /// </summary>
         protected NakoILCodeList list = null;
+        /// <summary>
+        /// グローバル変数
+        /// </summary>
         protected NakoVariables globalVar;
+        /// <summary>
+        /// ローカル変数
+        /// </summary>
         protected NakoVariables localVar;
+        /// <summary>
+        /// ユーザー関数の呼び出し履歴
+        /// </summary>
         protected Stack<NakoCallStack> callStack;
-
+        /// <summary>
+        /// 現在実行しているリスト中の位置
+        /// </summary>
+        protected int runpos = 0;
+        /// <summary>
+        /// 自動的に runpos を進めるかどうか
+        /// </summary>
+        protected Boolean autoIncPos = true;
+        /// <summary>
+        /// デバッグ用のログ記録用変数
+        /// </summary>
         public String PrintLog { get; set; }
 		public Boolean UseConsoleOut { get; set; }
-        protected int runpos = 0;
 		public Boolean debugMode { get; set; }
-        protected Boolean autoIncPos = true;
 
         public NakoInterpreter(NakoILCodeList list = null)
         {
@@ -37,6 +60,9 @@ namespace Libnako.Interpreter
             Reset();
         }
 
+        /// <summary>
+        /// 環境のリセット
+        /// </summary>
         public void Reset()
         {
             stack = new Stack<Object>();
@@ -46,6 +72,11 @@ namespace Libnako.Interpreter
             PrintLog = "";
         }
 
+        /// <summary>
+        /// ILコードを実行する
+        /// </summary>
+        /// <param name="list">実行するILコードリスト</param>
+        /// <returns>実行が成功したかどうか</returns>
         public Boolean Run(NakoILCodeList list = null)
         {
             if (list != null)

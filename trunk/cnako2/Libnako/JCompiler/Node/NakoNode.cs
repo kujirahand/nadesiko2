@@ -5,6 +5,9 @@ using Libnako.JCompiler.Tokenizer;
 
 namespace Libnako.JCompiler.Node
 {
+    /// <summary>
+    /// なでしこの構文ノードを表わすクラス
+    /// </summary>
     public class NakoNode
     {
 		public NakoNodeType type { get; set; }
