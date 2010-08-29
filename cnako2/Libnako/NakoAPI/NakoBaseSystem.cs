@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
 using Libnako.JCompiler.Function;
 using Libnako.JCompiler;
 using Libnako.Interpreter;
+
+using System.Windows.Forms;
 
 namespace Libnako.NakoAPI
 {
@@ -38,14 +41,17 @@ namespace Libnako.NakoAPI
         /// <returns></returns>
         public Object _say(NakoFuncCallInfo info)
         {
-            String msg = (String)info.StackPop();
-            info.Runner.PrintLog += msg;
+            Object s = info.StackPop();
+            String msg = s.ToString();
+
+            MessageBox.Show(msg);
             return null;
         }
 
         public Object _show(NakoFuncCallInfo info)
         {
-            String msg = (String)info.StackPop();
+            Object s = info.StackPop();
+            String msg = s.ToString();
             info.Runner.PrintLog += msg;
             return null;
         }

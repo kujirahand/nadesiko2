@@ -40,9 +40,16 @@ namespace Libnako.JCompiler.Node
                 }
             }
             // 普通にPOP
-            NakoNode n = this[this.Count - 1];
-            this.RemoveAt(this.Count - 1);
-            return n;
+            if (this.Count > 0)
+            {
+                NakoNode n = this[this.Count - 1];
+                this.RemoveAt(this.Count - 1);
+                return n;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public void Push(NakoNode value)
