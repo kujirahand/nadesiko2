@@ -322,7 +322,58 @@ namespace Libnako.JCompiler.Parser
             return true;
         }
 
+        //> _arglist : '(' { _value } ')'
+        //>          ;
+
+        private Boolean _arglist(NakoNodeCallFunction node)
+        {
+            NakoToken firstT = tok.CurrentToken;
+            int nest = 0;
+            // '(' から始まるかチェック
+            if (!Accept(NakoTokenType.PARENTHESES_L))
+            {
+                return false;
+            }
+            tok.MoveNext(); // skip '('
+            nest++;
+            
+            // '(' .. ')' の間を取りだして別トークンとする
+            NakoTokenList par_list = new NakoTokenList();
+            while (!tok.IsEOF())
+            {
+                if (Accept(NakoTokenType.PARENTHESES_R))
+                {
+                    nest--;
+                    tok.MoveNext();
+                    if (nest == 0) break;
+                }
+                else if (Accept(NakoTokenType.PARENTHESES_L))
+                {
+                    nest++;
+                }
+                par_list.Add(tok.CurrentToken);
+                tok.MoveNext();
+            }
+            // 現在のトークン位置を保存
+            tok.Save();
+            NakoTokenList tmp_list = tok;
+            tok = par_list;
+            tok.MoveTop();
+            while (!tok.IsEOF())
+            {
+                if (!_value())
+                {
+                    throw new NakoParserException("関数の引数の配置エラー。", firstT);
+                }
+            }
+            // トークンリストを復元
+            tok = tmp_list;
+            tok.Restore();
+            return true;
+        }
+
         //> _callfunc : FUNCTION_NAME
+        //>           | FUNCTION_NAME _arglist
         //>           ;
         private Boolean _callfunc()
         {
@@ -332,6 +383,7 @@ namespace Libnako.JCompiler.Parser
             {
                 return false;
             }
+            tok.MoveNext(); // skip FUNCTION_NAME
 
             string fname = t.getValueAsName();
             NakoVariable var = NakoVariables.Globals.GetVar(fname);
@@ -359,6 +411,11 @@ namespace Libnako.JCompiler.Parser
             }
 
             // ---------------------------------
+            if (Accept(NakoTokenType.PARENTHESES_L))
+            {
+                _arglist(callNode);
+                // TODO ここで引数の数をチェックする処理
+            }
             // 引数の数だけノードを取得
             for (int i = 0; i < func.ArgCount; i++)
             {
@@ -378,7 +435,6 @@ namespace Libnako.JCompiler.Parser
             // 計算スタックに関数の呼び出しを追加
             calcStack.Push(callNode);
             this.lastNode = callNode;
-            tok.MoveNext();
 
             return true;
         }
@@ -615,7 +671,6 @@ namespace Libnako.JCompiler.Parser
                 case NakoTokenType.STRING:
                     break;
                 case NakoTokenType.FUNCTION_NAME:
-                    //TODO: 関数の後ろのカッコの中を評価する
                     if (_callfunc()) return true;
                     break;
                 default:

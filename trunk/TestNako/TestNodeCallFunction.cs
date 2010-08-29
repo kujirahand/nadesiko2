@@ -103,5 +103,26 @@ namespace TestNako
             runner.Run(codes);
             Assert.AreEqual(runner.PrintLog, "7");
         }
+        [Test]
+        public void TestStackCall_noJosi()
+        {
+            // memo:
+            // 敢えて、FORTH っぽく、助詞がなくても動くようにしたい!!
+            codes = ns.Publish(
+                "100,10,5,引く,足す,表示\n" +
+                "\n");
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "105");
+        }
+        [Test]
+        public void TestCall_likeBASIC()
+        {
+            // memo: 他の言語の関数ライクにコール
+            codes = ns.Publish(
+                "引く(10,4)を表示\n" +
+                "\n");
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "6");
+        }
     }
 }
