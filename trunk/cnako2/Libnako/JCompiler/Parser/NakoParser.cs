@@ -363,7 +363,7 @@ namespace Libnako.JCompiler.Parser
             for (int i = 0; i < func.ArgCount; i++)
             {
                 NakoFuncArg arg = func.args[func.ArgCount - i - 1];
-                NakoNode argNode = calcStack.Pop();
+                NakoNode argNode = calcStack.Pop(arg);
                 if (arg.varBy == VarByType.ByRef)
                 {
                     if (argNode.type == NakoNodeType.LD_VARIABLE)
