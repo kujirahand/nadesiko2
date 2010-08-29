@@ -344,8 +344,11 @@ namespace Libnako.JCompiler.Parser
                 if (Accept(NakoTokenType.PARENTHESES_R))
                 {
                     nest--;
-                    tok.MoveNext();
-                    if (nest == 0) break;
+                    if (nest == 0)
+                    {
+                        tok.MoveNext();
+                        break;
+                    }
                 }
                 else if (Accept(NakoTokenType.PARENTHESES_L))
                 {
