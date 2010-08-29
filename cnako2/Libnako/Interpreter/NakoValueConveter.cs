@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Libnako.Interpreter
 {
+    /// <summary>
+    /// Objectの値を変換するコンバーター
+    /// </summary>
     public class NakoValueConveter
     {
         protected Object value = null;

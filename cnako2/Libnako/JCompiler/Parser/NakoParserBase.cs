@@ -7,6 +7,10 @@ using Libnako.JCompiler.Tokenizer;
 
 namespace Libnako.JCompiler.Parser
 {
+    /// <summary>
+    /// トークンを読み込んで構文木に変換するクラス NakoParser のための下処理用クラス
+    /// NakoParser には、意味解析処理自体を記述し、このクラスで意味解析に必要な下処理を書く
+    /// </summary>
     public class NakoParserBase
     {
 		public NakoNode topNode { get; set; }

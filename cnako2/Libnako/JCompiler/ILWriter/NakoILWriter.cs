@@ -11,6 +11,9 @@ using Libnako.NakoAPI;
 
 namespace Libnako.JCompiler.ILWriter
 {
+    /// <summary>
+    /// 構文ノードから、なでしこ仮想バイトコードを書き出すクラス
+    /// </summary>
     public class NakoILWriter
     {
         protected NakoNode topNode = null;

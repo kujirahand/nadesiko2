@@ -7,6 +7,9 @@ using Libnako.Interpreter;
 
 namespace Libnako.JCompiler.Function
 {
+    /// <summary>
+    /// なでしこのシステム関数呼び出しの引数となる情報を定義したもの
+    /// </summary>
     public class NakoFuncCallInfo
     {
         private NakoInterpreter _runner;

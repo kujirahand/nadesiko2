@@ -8,6 +8,9 @@ using Libnako.Interpreter;
 
 namespace Libnako.NakoAPI
 {
+    /// <summary>
+    /// なでしこにシステム関数を登録するクラス(実際の関数の挙動もここで定義)
+    /// </summary>
     public class NakoBaseSystem : NakoAPIRegister
     {
         // C# Singleton
@@ -15,6 +18,9 @@ namespace Libnako.NakoAPI
 		public static NakoBaseSystem Instance { get { return _Instance; } }
         private NakoBaseSystem() { }
 
+        /// <summary>
+        /// システムに関数を登録する
+        /// </summary>
         public override void registerToSystem()
         {
             addFunc("言う", "Sと|Sを", NakoVariableType.Void, _say, "メッセージSを画面に表示する", "いう");
@@ -23,6 +29,11 @@ namespace Libnako.NakoAPI
             addFunc("足す!", "{参照渡し}AにBを|Aと", NakoVariableType.Object, _addEx, "変数Aと値Bを足して返す(変数A自身を書き換える)", "たす!");
         }
 
+        /// <summary>
+        /// システム関数「言う」命令を実装したモノ
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
         public Object _say(NakoFuncCallInfo info)
         {
             String msg = (String)info.StackPop();

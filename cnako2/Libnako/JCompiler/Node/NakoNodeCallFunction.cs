@@ -7,6 +7,9 @@ using Libnako.JCompiler.Function;
 
 namespace Libnako.JCompiler.Node
 {
+    /// <summary>
+    /// なでしこの関数呼び出しを行うノード
+    /// </summary>
     public class NakoNodeCallFunction : NakoNode
     {
         public List<NakoNode> argNodes = new List<NakoNode>();

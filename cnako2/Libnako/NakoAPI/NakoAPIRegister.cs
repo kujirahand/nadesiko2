@@ -37,6 +37,9 @@ namespace Libnako.NakoAPI
         }
     }
 
+    /// <summary>
+    /// APIの実行時エラーのための例外クラス
+    /// </summary>
     public class NakoAPIError : Exception
     {
         public NakoAPIError(string msg) : base (msg) {}

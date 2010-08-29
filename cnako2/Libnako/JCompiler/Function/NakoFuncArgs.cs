@@ -6,6 +6,9 @@ using Libnako.JCompiler.Tokenizer;
 
 namespace Libnako.JCompiler.Function
 {
+    /// <summary>
+    /// なでしこ関数の引数一覧を管理するクラス
+    /// </summary>
     public class NakoFuncArgs : IList<NakoFuncArg>
     {
 		private List<NakoFuncArg> _list = new List<NakoFuncArg>();

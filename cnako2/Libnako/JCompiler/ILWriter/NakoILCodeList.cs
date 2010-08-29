@@ -5,6 +5,9 @@ using System.Text;
 
 namespace Libnako.JCompiler.ILWriter
 {
+    /// <summary>
+    /// なでしこの仮想バイトコード一覧を管理するクラス
+    /// </summary>
     public class NakoILCodeList : IList<NakoILCode>
     {
 		private List<NakoILCode> _list = new List<NakoILCode>();
