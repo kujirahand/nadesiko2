@@ -4,18 +4,19 @@ using System.Text;
 
 namespace Libnako.JCompiler.Tokenizer
 {
-    public class NakoHalfFlag : Dictionary<Char, Char>
+    /// <summary>
+    /// 全角文字を半角文字に変換するクラス
+    /// </summary>
+	public static class NakoHalfFlag
     {
-        // Singleton class
-        private static NakoHalfFlag instance = null;
-        public static NakoHalfFlag GetInstance()
-        {
-            if (NakoHalfFlag.instance == null)
-            {
-                NakoHalfFlag.instance = new NakoHalfFlag();
-            }
-            return NakoHalfFlag.instance;
-        }
+		private static Dictionary<Char, Char> _dictionary;
+
+		/// <summary>
+		/// 全角文字を半角文字に変換する。
+		/// 変換できない文字の場合は変換対象文字をそのまま返す。
+		/// </summary>
+		/// <param name="c">変換対象文字</param>
+		/// <returns>変換された文字</returns>
         public static Char ConvertChar(Char c)
         {
             // 半角なら変換不要
@@ -37,55 +38,52 @@ namespace Libnako.JCompiler.Tokenizer
             }
 
             // 変換の可能性
-            NakoHalfFlag f = GetInstance();
-            if (f.ContainsKey(c)) {
-                return f[c];
+            if (_dictionary.ContainsKey(c))
+			{
+				return _dictionary[c];
             }
             return c;
         }
 
-        private NakoHalfFlag()
+        static NakoHalfFlag()
         {
-            Init();
-        }
-
-        public void Init()
-        {
-            this.Add('　', ' ');
-            this.Add('●','*');
-            this.Add('＊','*');
-            this.Add('！','!');
-            this.Add('＃','#');
-            this.Add('／','/');
-            this.Add('％','%');
-            this.Add('＆','&');
-            this.Add('’','\'');
-            this.Add('（','(');
-            this.Add('）',')');
-            this.Add('＝','=');
-            this.Add('－','-');
-            this.Add('～','~');
-            this.Add('＾','^');
-            this.Add('｜','|');
-            this.Add('￥','\\');
-            this.Add('｛','{');
-            this.Add('｝','}');
-            this.Add('【','[');
-            this.Add('】',']');
-            this.Add('［','[');
-            this.Add('］',']');
-            this.Add('：',':');
-            this.Add('；',';');
-            this.Add('＋','+');
-            this.Add('＜','<');
-            this.Add('＞','>');
-            this.Add('？','?');
-            this.Add('。',';');
-            this.Add('、',',');
-            this.Add('，',',');
-            this.Add('．', '.');
-            this.Add('＿', '_');
-            this.Add('※', '#');
+			_dictionary = new Dictionary<char, char>{
+				{'　', ' '},
+				{'●','*'},
+				{'＊','*'},
+				{'！','!'},
+				{'＃','#'},
+				{'／','/'},
+				{'％','%'},
+				{'＆','&'},
+				{'’','\''},
+				{'（','('},
+				{'）',')'},
+				{'＝','='},
+				{'－','-'},
+				{'～','~'},
+				{'＾','^'},
+				{'｜','|'},
+				{'￥','\\'},
+				{'｛','{'},
+				{'｝','}'},
+				{'【','['},
+				{'】',']'},
+				{'［','['},
+				{'］',']'},
+				{'：',':'},
+				{'；',';'},
+				{'＋','+'},
+				{'＜','<'},
+				{'＞','>'},
+				{'？','?'},
+				{'。',';'},
+				{'、',','},
+				{'，',','},
+				{'．', '.'},
+				{'＿', '_'},
+				{'※', '#'},
+			};
         }
     }
 }
