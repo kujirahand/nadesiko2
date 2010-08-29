@@ -20,7 +20,7 @@ namespace cnako
             runner.debugMode = true;
 
             string src =
-                "引く(10,3)を表示\n" +
+                "1+2に3を足して表示\n" +
                 "\n";
             _w(src);
 

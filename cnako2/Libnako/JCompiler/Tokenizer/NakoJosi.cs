@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Libnako.JCompiler.Tokenizer
 {
+    /// <summary>
+    /// なでしこ助詞リスト
+    /// </summary>
     public class NakoJosi : IList<String>
     {
 		private List<String> _list = new List<string>();
@@ -24,11 +27,24 @@ namespace Libnako.JCompiler.Tokenizer
 
         protected void Init()
         {
+            Add("について");
             Add("ならば");
+            Add("までを");
+            Add("までの");
+            Add("くらい");
+            Add("なのか");
             Add("なら");
             Add("から");
             Add("まで");
             Add("とは");
+            Add("して");
+            Add("とは");
+            Add("だけ");
+            Add("より");
+            Add("ほど");
+            Add("など");
+            Add("って");
+            Add("では");
             Add("は");
             Add("の");
             Add("が");
@@ -36,6 +52,8 @@ namespace Libnako.JCompiler.Tokenizer
             Add("に");
             Add("へ");
             Add("と");
+            Add("で");
+            Add("て");
             //
             SortAsLength();
         }

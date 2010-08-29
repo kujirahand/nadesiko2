@@ -115,11 +115,41 @@ namespace TestNako
             Assert.AreEqual(runner.PrintLog, "105");
         }
         [Test]
-        public void TestCall_likeBASIC()
+        public void TestCall_likeBASIC1()
         {
-            // memo: 他の言語の関数ライクにコール
+            // memo: BASICの関数のように関数をコール
+            codes = ns.Publish(
+                "PRINT 引く(10,4)\n" +
+                "\n");
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "6");
+        }
+        [Test]
+        public void TestCall_likeBASIC2()
+        {
+            // memo: BASICの関数のように関数をコール
             codes = ns.Publish(
                 "引く(10,4)を表示\n" +
+                "\n");
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "6");
+        }
+        [Test]
+        public void TestCall_likeBASIC3()
+        {
+            // memo: BASICの関数のように関数をコール
+            codes = ns.Publish(
+                "引く(足す(3,8),4)を表示\n" +
+                "\n");
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "7");
+        }
+        [Test]
+        public void TestCall_likeBASIC4()
+        {
+            // memo: BASICの関数のように関数をコール
+            codes = ns.Publish(
+                "1+2に3を足して表示\n" +
                 "\n");
             runner.Run(codes);
             Assert.AreEqual(runner.PrintLog, "6");
