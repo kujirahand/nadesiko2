@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Libnako.JCompiler.Function;
 
 namespace Libnako.JCompiler.Node
 {
@@ -19,8 +20,26 @@ namespace Libnako.JCompiler.Node
             return r;
         }
 
-        public NakoNode Pop()
+        public NakoNode Pop(NakoFuncArg arg = null)
         {
+            // 助詞リストをチェックする
+            if (arg != null)
+            {
+                foreach (String josi in arg.josiList)
+                {
+                    for (int i = 0; i < this.Count; i++)
+                    {
+                        int bi = Count - i - 1;
+                        NakoNode cn = this[bi];
+                        if (cn.josi == josi)
+                        {
+                            this.RemoveAt(bi);
+                            return cn;
+                        }
+                    }
+                }
+            }
+            // 普通にPOP
             NakoNode n = this[this.Count - 1];
             this.RemoveAt(this.Count - 1);
             return n;
