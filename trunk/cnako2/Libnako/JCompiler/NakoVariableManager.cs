@@ -5,18 +5,23 @@ using System.Text;
 
 namespace Libnako.JCompiler
 {
-
+    /// <summary>
+    /// 変数のスコープを表わす型
+    /// </summary>
     public enum NakoVariableScope
     {
         Global, Local
     }
 
-    public class NakoVariables
+    /// <summary>
+    /// なでしこの変数を管理するクラス
+    /// </summary>
+    public class NakoVariableManager
     {
         // Globals and Locals
-		private static readonly NakoVariables _Globals = new NakoVariables(NakoVariableScope.Global);
-		public static NakoVariables Globals { get { return _Globals; } }
-		public static NakoVariables Locals { get; set; }
+		private static readonly NakoVariableManager _Globals = new NakoVariableManager(NakoVariableScope.Global);
+		public static NakoVariableManager Globals { get { return _Globals; } }
+		public static NakoVariableManager Locals { get; set; }
 
         /// <summary>
         /// 変数一覧をリストとして保持
@@ -28,12 +33,12 @@ namespace Libnako.JCompiler
         /// </summary>
         protected Dictionary<String, int> names;
 
-		static NakoVariables()
+		static NakoVariableManager()
 		{
-			Locals = new NakoVariables(NakoVariableScope.Local);
+			Locals = new NakoVariableManager(NakoVariableScope.Local);
 		}
 
-        public NakoVariables(NakoVariableScope scope = NakoVariableScope.Local)
+        public NakoVariableManager(NakoVariableScope scope = NakoVariableScope.Local)
         {
             list = new List<NakoVariable>();
             names = new Dictionary<string, int>();
