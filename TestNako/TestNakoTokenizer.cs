@@ -129,7 +129,7 @@ namespace TestNako
         [Test(Description = "Josi")]
         public void TestNakoJosi()
         {
-            NakoJosi josiList = NakoJosi.GetInstance();
+            NakoJosi josiList = NakoJosi.Instance;
             String first_s = josiList[0];
             String last_s = josiList[josiList.Count - 1];
             Assert.IsTrue(first_s.Length > last_s.Length);

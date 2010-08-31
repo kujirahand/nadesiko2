@@ -376,6 +376,19 @@ namespace Libnako.JCompiler.Tokenizer
                     cur++;
                     CheckJosi(token);
                     return token;
+                case '[':
+                    token.type = NakoTokenType.BLACKETS_L;
+                    cur++;
+                    return token;
+                case ']':
+                    token.type = NakoTokenType.BLACKETS_R;
+                    cur++;
+                    CheckJosi(token);
+                    return token;
+                case '\\':
+                    token.type = NakoTokenType.YEN;
+                    cur++;
+                    return token;
                 default:
                     NakoToken tt = GetToken_NotFlag();
                     if (tt == null)
@@ -546,7 +559,7 @@ namespace Libnako.JCompiler.Tokenizer
             if (!IsHira(c)) return false;
 
             // 助詞を１つずつ調べる
-            NakoJosi JosiList = NakoJosi.GetInstance();
+            NakoJosi JosiList = NakoJosi.Instance;
             foreach (String josi in JosiList)
             {
                 if (this.CompareStr(josi))

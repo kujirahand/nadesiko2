@@ -609,29 +609,69 @@ namespace Libnako.JCompiler.Parser
             n.varNo = NakoVariables.Globals.CreateVar(name);
         }
 
-        //> _setVariable : WORD '[' VALUE ']'
+        //> _setVariable : WORD _variable_elements
         //>              | WORD ;
         private Boolean _setVariable()
         {
             if (!Accept(NakoTokenType.WORD)) return false;
 
-            // 配列アクセス
-            if (tok.NextTokenType == NakoTokenType.BLACKETS_L)
-            {
-                // TODO
-                throw new NakoParserException("Not supported", tok.CurrentToken);
-            }
-
-            // 変数アクセス
+            // 設定用変数の取得
             NakoNodeVariable n = new NakoNodeVariable();
             n.type = NakoNodeType.ST_VARIABLE;
             n.Token = tok.CurrentToken;
+            // 変数アクセス
             String name = (String)tok.CurrentToken.value;
             _variable__detectVariable(n, name);
+            tok.MoveNext();// skip WORD
+
+            // 要素へのアクセスがあるか
+            if (Accept(NakoTokenType.BLACKETS_L) || Accept(NakoTokenType.YEN))
+            {
+                _variable_elements(n);
+            }
+
             lastNode = n;
-            tok.MoveNext();
             return true;
         }
+
+        //> _variable_elements : '[' _value ']'
+        //>                    | '\' _value
+        //>                    ;
+        private Boolean _variable_elements(NakoNodeVariable n)
+        {
+            NakoToken firstT = tok.CurrentToken;
+            // 配列アクセス?
+            if (!Accept(NakoTokenType.BLACKETS_L) && !Accept(NakoTokenType.YEN))
+            {
+                return false;
+            }
+            n.elementNode = new NakoNode();
+            NakoTokenType t;
+            while (!tok.IsEOF())
+            {
+                t = tok.CurrentTokenType;
+                tok.MoveNext(); // skip '[' or YEN
+                if (!_value())
+                {
+                    throw new NakoParserException("変数要素へのアクセスで要素式にエラー。", firstT);
+                }
+                if (t == NakoTokenType.BLACKETS_L)
+                {
+                    if (!Accept(NakoTokenType.BLACKETS_R))
+                    {
+                        throw new NakoParserException("変数要素へのアクセスで閉じ角カッコがありません。", firstT);
+                    }
+                    tok.MoveNext(); // skip ']'
+                }
+                n.elementNode.AddChild(calcStack.Pop());
+                // 引き続き、変数要素へのアクセスがあるかどうか
+                if (Accept(NakoTokenType.BLACKETS_L)) continue;
+                if (Accept(NakoTokenType.YEN)) continue;
+                break;
+            }
+            return true;
+        }
+
 
         //> _variable : WORD '[' VALUE ']'
         //>           | WORD ;
@@ -639,13 +679,6 @@ namespace Libnako.JCompiler.Parser
         {
             if (!Accept(NakoTokenType.WORD)) return false;
             
-            // 配列アクセス
-            if (tok.NextTokenType == NakoTokenType.BLACKETS_L)
-            {
-                // TODO
-                throw new NakoParserException("Not supported", tok.CurrentToken);
-            }
-
             // 変数アクセス
             NakoNodeVariable n = new NakoNodeVariable();
             n.type = NakoNodeType.LD_VARIABLE;
@@ -655,7 +688,13 @@ namespace Libnako.JCompiler.Parser
             _variable__detectVariable(n, name);
             lastNode = n;
             tok.MoveNext();
-            
+
+            // 要素へのアクセスがあるか
+            if (Accept(NakoTokenType.BLACKETS_L) || Accept(NakoTokenType.YEN))
+            {
+                _variable_elements(n);
+            }
+
             calcStack.Push(n);
             return true;
         }
