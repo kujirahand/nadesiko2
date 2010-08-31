@@ -12,14 +12,14 @@ namespace Libnako.JCompiler.Node
     {
 		public String funcName { get; set; }
 		public NakoFunc func { get; set; }
-		public NakoVariables localVar { get; set; }
+		public NakoVariableManager localVar { get; set; }
 		public NakoNode funcBody { get; set; }
 		public NakoILCode defLabel { get; set; }
 
         public NakoNodeDefFunction()
         {
             type = NakoNodeType.DEF_FUNCTION;
-            localVar = new NakoVariables(NakoVariableScope.Local);
+            localVar = new NakoVariableManager(NakoVariableScope.Local);
         }
 
         public void RegistArgsToLocalVar()

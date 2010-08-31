@@ -389,7 +389,7 @@ namespace Libnako.JCompiler.Parser
             tok.MoveNext(); // skip FUNCTION_NAME
 
             string fname = t.getValueAsName();
-            NakoVariable var = NakoVariables.Globals.GetVar(fname);
+            NakoVariable var = NakoVariableManager.Globals.GetVar(fname);
             if (var == null)
             {
                 throw new NakoParserException("関数『" + fname + "』が見あたりません。", t);
@@ -472,7 +472,7 @@ namespace Libnako.JCompiler.Parser
             NakoVariable v = new NakoVariable();
             v.type = NakoVariableType.UserFunc;
             v.value = funcNode;
-            NakoVariables.Globals.CreateVar(userFunc.name, v);
+            NakoVariableManager.Globals.CreateVar(userFunc.name, v);
             // 関数の宣言は、ノードのトップ直下に追加する
             if (!this.topNode.hasChildren())
             {
@@ -597,7 +597,7 @@ namespace Libnako.JCompiler.Parser
                 return;
             }
             // global ?
-            varno = NakoVariables.Globals.GetIndex(name);
+            varno = NakoVariableManager.Globals.GetIndex(name);
             if (varno >= 0)
             {
                 n.scope = NakoVariableScope.Global;
@@ -606,7 +606,7 @@ namespace Libnako.JCompiler.Parser
             }
             // Create variable
             n.scope = NakoVariableScope.Global;
-            n.varNo = NakoVariables.Globals.CreateVar(name);
+            n.varNo = NakoVariableManager.Globals.CreateVar(name);
         }
 
         //> _setVariable : WORD _variable_elements

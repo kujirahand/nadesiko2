@@ -5,6 +5,10 @@ using System.Text;
 
 namespace Libnako.JCompiler
 {
+
+    /// <summary>
+    /// なでしこの型を表わすタイプ一覧
+    /// </summary>
     public enum NakoVariableType
     {
         Void,
@@ -12,19 +16,25 @@ namespace Libnako.JCompiler
         Int,
         Real,
         String,
-        Array,
+        Array,      // = NakoArray
         Group,
         UserFunc,
         SystemFunc
     }
     
+    /// <summary>
+    /// なでしこの変数を表わすクラス
+    /// </summary>
     public class NakoVariable
     {
 		public NakoVariableType type { get; set; }
 		public Object value { get; set; }
     }
 
-    public class NakoArray
+    /// <summary>
+    /// なでしこの配列型(配列とハッシュを扱える)
+    /// </summary>
+    public class NakoArray : IList<Object>
     {
         protected List<Object> list = new List<object>();
         protected Dictionary<string, int> keys = null;

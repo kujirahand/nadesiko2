@@ -79,7 +79,7 @@ namespace Libnako.JCompiler.Parser
             NakoParserFrame f = new NakoParserFrame();
             f.lastNode = lastNode;
             f.parentNode = parentNode;
-            f.localVar = NakoVariables.Locals;
+            f.localVar = NakoVariableManager.Locals;
             frameStack.Push(f);
         }
 
@@ -106,15 +106,15 @@ namespace Libnako.JCompiler.Parser
             this.parentNode = s.parentNode;
         }
 
-        protected NakoVariables localVar
+        protected NakoVariableManager localVar
         {
             get
             {
-                return NakoVariables.Locals;
+                return NakoVariableManager.Locals;
             }
             set
             {
-                NakoVariables.Locals = value;
+                NakoVariableManager.Locals = value;
             }
         }
     }
@@ -127,7 +127,7 @@ namespace Libnako.JCompiler.Parser
 
     internal class NakoParserFrame
     {
-		public NakoVariables localVar { get; set; }
+		public NakoVariableManager localVar { get; set; }
 		public NakoNode lastNode { get; set; }
 		public NakoNode parentNode { get; set; }
     }
