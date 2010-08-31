@@ -151,19 +151,21 @@ namespace Libnako.Interpreter
                 case NakoILType.NOP:
                     /* do nothing */
                     break;
+                // 定数をスタックに乗せる
                 case NakoILType.LD_CONST_INT:   stack.Push(code.value); break;
                 case NakoILType.LD_CONST_REAL:  stack.Push(code.value); break;
                 case NakoILType.LD_CONST_STR:   stack.Push(code.value); break;
+                // 変数の値をスタックに乗せる
                 case NakoILType.LD_GLOBAL:      ld_global((int)code.value); break;
                 case NakoILType.LD_LOCAL:       ld_local((int)code.value); break;
                 case NakoILType.LD_GLOBAL_REF:  ld_global_ref((int)code.value); break;
                 case NakoILType.LD_LOCAL_REF:   ld_local_ref((int)code.value); break;
                 case NakoILType.ST_GLOBAL:      st_global((int)code.value); break;
                 case NakoILType.ST_LOCAL:       st_local((int)code.value); break;
-                case NakoILType.NEW_ARR:
-                case NakoILType.ST_ARR_ELEM:
-                case NakoILType.LD_ARR_ELEM:
-                    break;
+                case NakoILType.LD_ELEM:        ld_elem(); break;
+                case NakoILType.LD_ELEM_REF:    ld_elem_ref(); break;
+                case NakoILType.ST_ELEM:        st_elem(); break;
+                // 計算処理
                 case NakoILType.ADD:        exec_calc(calc_method_add); break;
                 case NakoILType.SUB:        exec_calc(calc_method_sub); break;
                 case NakoILType.MUL:        exec_calc(calc_method_mul); break;
@@ -184,13 +186,19 @@ namespace Libnako.Interpreter
                 case NakoILType.OR:         exec_calc(calc_method_or); break;
                 case NakoILType.XOR:        exec_calc(calc_method_xor); break;
                 case NakoILType.NOT:        _not(); break;
+                // ジャンプ
                 case NakoILType.JUMP:           _jump(code); break;
+                // 条件ジャンプ
                 case NakoILType.BRANCH_TRUE:    _branch_true(code); break;
                 case NakoILType.BRANCH_FALSE:   _branch_false(code); break;
+                // 関数コール
                 case NakoILType.SYSCALL:        exec_syscall(code); break;
                 case NakoILType.USRCALL:        exec_usrcall(code); break;
                 case NakoILType.RET:            exec_ret(code); break;
+                // デバッグ用
                 case NakoILType.PRINT:          exec_print(); break;
+                default:
+                    throw new Exception("未実装のILコード");
             }
         }
 
@@ -315,6 +323,23 @@ namespace Libnako.Interpreter
         {
             NakoVariable v = globalVar.GetVar(no);
             stack.Push(v);
+        }
+
+        private void ld_elem()
+        {
+            Object idx = StackPop();
+            Object var = StackPop();
+            if (!(var is NakoVariable))
+            {
+                throw new NakoInterpreterException("配列操作でスタックの値が不正です");
+            }
+            NakoVariable var2 = (NakoVariable)var;
+        }
+        private void ld_elem_ref()
+        {
+        }
+        private void st_elem()
+        {
         }
 
         private void exec_print()

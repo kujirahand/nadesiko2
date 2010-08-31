@@ -290,25 +290,40 @@ namespace Libnako.JCompiler.ILWriter
         {
             NakoNodeVariable var = node.nodeVar;
             NakoNode value = node.Children[0];
-            NakoILCode st = new NakoILCode();
-
-            if (var.useElement)
+            
+            // 配列要素があるか確認
+            if (!var.useElement)
             {
-                // TODO: 配列アクセス
-            }
-            else
-            {
+                // + 通常の代入処理
+                // - 代入する値を書き込んで...
                 Write_r(value);
-                if (var.scope == NakoVariableScope.Global)
-                {
-                    st.type = NakoILType.ST_GLOBAL;
-                }
-                else
-                {
-                    st.type = NakoILType.ST_LOCAL;
-                }
+                // - セットする
+                NakoILCode st = new NakoILCode();
                 st.value = var.varNo;
+                st.type = (var.scope == NakoVariableScope.Global)
+                    ? NakoILType.ST_GLOBAL
+                    : NakoILType.ST_LOCAL;
                 result.Add(st);
+            }
+            else // 配列要素があるとき 
+            {
+                // + 配列への代入処理
+                // - 基本となる変数をセット
+                NakoILCode ldvar = new NakoILCode();
+                ldvar.value = var.varNo;
+                ldvar.type = (var.scope == NakoVariableScope.Global)
+                    ? NakoILType.LD_GLOBAL_REF
+                    : NakoILType.LD_LOCAL_REF;
+                result.Add(ldvar);
+                // - アクセス要素をセット
+                foreach (NakoNode n in var.Children)
+                {
+                    Write_r(n); // ノードの値
+                    result.Add(new NakoILCode(NakoILType.LD_ELEM_REF)); // 要素
+                }
+                // - 代入する値
+                Write_r(value);
+                addNewILCode(NakoILType.ST_ELEM);
             }
         }
 
@@ -317,33 +332,54 @@ namespace Libnako.JCompiler.ILWriter
             // _let() で処理されるのでここでは何もしない
         }
 
+        /// <summary>
+        /// ILコードのタイプを参照型に直す
+        /// </summary>
+        /// <param name="c">変更したいコード</param>
+        private void _varBy_change_ref(NakoILCode c)
+        {
+            switch (c.type)
+            {
+                case NakoILType.LD_LOCAL: c.type = NakoILType.LD_LOCAL_REF; break;
+                case NakoILType.LD_GLOBAL: c.type = NakoILType.LD_GLOBAL_REF; break;
+                case NakoILType.LD_ELEM: c.type = NakoILType.LD_ELEM_REF; break;
+            }
+        }
+
+
         private void _getVariable(NakoNodeVariable node)
         {
             NakoILCode ld = new NakoILCode();
-            if (node.useElement)
+            if (!node.useElement)
             {
-                // TODO: 配列アクセス
+                // + 変数アクセス
+                ld.type = (node.scope == NakoVariableScope.Global)
+                    ? NakoILType.LD_GLOBAL
+                    : NakoILType.LD_LOCAL;
+                if (node.varBy == VarByType.ByRef) _varBy_change_ref(ld);
+                ld.value = node.varNo;
+                result.Add(ld);
             }
             else
             {
-                if (node.scope == NakoVariableScope.Global)
-                {
-                    ld.type = NakoILType.LD_GLOBAL;
-                    if (node.varBy == VarByType.ByRef)
-                    {
-                        ld.type = NakoILType.LD_GLOBAL_REF;
-                    }
-                }
-                else
-                {
-                    ld.type = NakoILType.LD_LOCAL;
-                    if (node.varBy == VarByType.ByRef)
-                    {
-                        ld.type = NakoILType.LD_LOCAL_REF;
-                    }
-                }
+                // + 配列変数アクセス
+                // - 変数
+                ld.type = (node.scope == NakoVariableScope.Global)
+                    ? NakoILType.LD_GLOBAL_REF
+                    : NakoILType.LD_LOCAL_REF;
                 ld.value = node.varNo;
                 result.Add(ld);
+                // - 要素
+                NakoNodeList c = node.Children;
+                for (int i = 0; i < c.Count; i++)
+                {
+                    Write_r(c[i]);
+                    NakoILCode code = new NakoILCode();
+                    code.type = ((c.Count - 1) == i)
+                        ? NakoILType.LD_ELEM
+                        : NakoILType.LD_ELEM_REF;
+                    result.Add(code);
+                }
             }
         }
 
@@ -425,11 +461,7 @@ namespace Libnako.JCompiler.ILWriter
             for (int i = 0; i < func.ArgCount; i++)
             {
                 NakoFuncArg arg = func.args[i];
-                NakoILCode c = new NakoILCode(NakoILType.ST_LOCAL);
-                if (arg.varBy == VarByType.ByRef) {
-                    c.type = NakoILType.ST_LOCAL_REF;
-                }
-                c.value = i; // ローカル変数番号を登録
+                NakoILCode c = new NakoILCode(NakoILType.ST_LOCAL, i);
                 result.Add(c);
             }
             // 本文を定義

@@ -28,13 +28,12 @@ namespace Libnako.JCompiler.ILWriter
         // スタックから下ろして値を変数に記憶する set(varno)
         ST_GLOBAL         = 0x20, // {args:1, push:0, pop:1} 
         ST_LOCAL          = 0x21, // {args:1, push:0, pop:1} 
-        ST_GLOBAL_REF     = 0x22, // {args:1, push:0, pop:1} 
-        ST_LOCAL_REF      = 0x23, // {args:1, push:0, pop:1} 
-
+        
         // 配列
         NEW_ARR           = 0x30, // { args:1, push:1, pop:0 } 
-        ST_ARR_ELEM       = 0x31, // { args:0, push:0, pop:3 } stack [var, index, value]
-        LD_ARR_ELEM       = 0x32, // { args:0, push:1, pop:2 } stack [bar, index]
+        ST_ELEM           = 0x31, // { args:0, push:0, pop:3 }
+        LD_ELEM           = 0x32, // { args:0, push:0, pop:2 }
+        LD_ELEM_REF       = 0x33, // { args:0, push:0, pop:2 }
 
         // 計算する
         ADD              = 0x40, // { args:0, push:1, pop:2 } 

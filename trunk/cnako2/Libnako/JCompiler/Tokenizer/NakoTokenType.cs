@@ -54,6 +54,7 @@ namespace Libnako.JCompiler.Tokenizer
         DIV,
         MOD,
         POWER,
+        YEN,
         // 角カッコ
         BLACKETS_L,
         BLACKETS_R,

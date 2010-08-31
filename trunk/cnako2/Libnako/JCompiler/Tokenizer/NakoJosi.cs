@@ -10,21 +10,15 @@ namespace Libnako.JCompiler.Tokenizer
     public class NakoJosi : IList<String>
     {
 		private List<String> _list = new List<string>();
-		private static NakoJosi instance = null;
-        public static NakoJosi GetInstance()
-        {
-            if (instance == null)
-            {
-                instance = new NakoJosi();
-            }
-            return instance;
-        }
+        
+        // C# Singleton
+		private static NakoJosi _instance = new NakoJosi();
+        public static NakoJosi Instance { get { return _instance; } }
+        private NakoJosi() { Init(); }
 
-        private NakoJosi()
-        {
-            Init();
-        }
-
+        /// <summary>
+        /// 助詞一覧を単語辞書に追加する
+        /// </summary>
         protected void Init()
         {
             Add("について");
