@@ -34,7 +34,7 @@ namespace Libnako.JCompiler
     /// <summary>
     /// なでしこの配列型(配列とハッシュを扱える)
     /// </summary>
-    public class NakoArray : IList<Object>
+    public class NakoArray
     {
         protected List<Object> list = new List<object>();
         protected Dictionary<string, int> keys = null;
