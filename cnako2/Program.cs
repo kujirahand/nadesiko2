@@ -20,7 +20,7 @@ namespace cnako
             runner.debugMode = true;
 
             string src =
-                "A[1]=3;PRINT A[1]\n" +
+                "A[1]=3;A[1] 表示\n" +
                 "\n";
             _w(src);
 

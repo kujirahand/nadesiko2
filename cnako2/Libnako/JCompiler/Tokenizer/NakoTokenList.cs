@@ -105,9 +105,12 @@ namespace Libnako.JCompiler.Tokenizer
         {
             int i = cur;
             NakoToken t;
+            int par_nest = 0;
+            int bla_nest = 0;
             while (i < this.Count)
             {
                 t = this[i];
+                // break?
                 if (t.type == keytype)
                 {
                     return true;
@@ -115,6 +118,27 @@ namespace Libnako.JCompiler.Tokenizer
                 if (EOLStop)
                 {
                     if (t.type == NakoTokenType.EOL) break;
+                }
+                // ---
+                // nest check
+                if (t.type == NakoTokenType.BLACKETS_L)
+                {
+                    bla_nest++;
+                }
+                if (t.type == NakoTokenType.BLACKETS_R)
+                {
+                    bla_nest--;
+                    if (bla_nest < 0) return false; // tokenが見つかる前に角カッコの不整合を見つけた
+                }
+                // ---
+                if (t.type == NakoTokenType.PARENTHESES_L)
+                {
+                    par_nest++;
+                }
+                if (t.type == NakoTokenType.PARENTHESES_R)
+                {
+                    par_nest--;
+                    if (par_nest < 0) return false; // tokenが見つかる前に丸カッコの不整合を見つけた
                 }
                 i++;
             }
