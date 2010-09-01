@@ -570,18 +570,18 @@ namespace Libnako.JCompiler.Parser
             }
 
             NakoNodeLet node = new NakoNodeLet();
-            node.nodeVar = (NakoNodeVariable)lastNode;
+            node.nodeVar = (NakoNodeVariable)lastNode; // _setVariable のノード
             tok.MoveNext();
             if (!_value())
             {
                 throw new NakoParserException("代入文で値がありません。", tok.CurrentToken);
             }
-            node.AddChild(lastNode);
+            TokenFinally();
+
+            node.AddChild(calcStack.Pop());
             parentNode.AddChild(node);
             lastNode = node;
 
-            TokenFinally();
-            calcStack.Pop();
             return true;
         }
 
@@ -645,7 +645,6 @@ namespace Libnako.JCompiler.Parser
             {
                 return false;
             }
-            n.elementNode = new NakoNode();
             NakoTokenType t;
             while (!tok.IsEOF())
             {
@@ -663,7 +662,7 @@ namespace Libnako.JCompiler.Parser
                     }
                     tok.MoveNext(); // skip ']'
                 }
-                n.elementNode.AddChild(calcStack.Pop());
+                n.AddChild(calcStack.Pop());
                 // 引き続き、変数要素へのアクセスがあるかどうか
                 if (Accept(NakoTokenType.BLACKETS_L)) continue;
                 if (Accept(NakoTokenType.YEN)) continue;

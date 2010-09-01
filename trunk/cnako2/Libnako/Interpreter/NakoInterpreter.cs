@@ -329,17 +329,64 @@ namespace Libnako.Interpreter
         {
             Object idx = StackPop();
             Object var = StackPop();
-            if (!(var is NakoVariable))
+            Object r = null;
+            if (var is NakoArray)
             {
-                throw new NakoInterpreterException("配列操作でスタックの値が不正です");
+                NakoArray ary = (NakoArray)var;
+                if (idx is String)
+                {
+                    r = ary.GetValue((string)idx);
+                }
+                else
+                {
+                    r = ary.GetValue(int.Parse(idx.ToString()));
+                }
             }
-            NakoVariable var2 = (NakoVariable)var;
+            StackPush(r);
         }
+
         private void ld_elem_ref()
         {
+            Object idx = StackPop();
+            Object var = StackPop();
+            if (var is NakoArray)
+            {
+                NakoVarialbeLink r = new NakoVarialbeLink((NakoArray)var, idx);
+                StackPush(r);
+            }
+            else
+            {
+                StackPush(null);
+            }
         }
         private void st_elem()
         {
+            Object value = StackPop();
+            Object index = StackPop();
+            Object var = StackPop();
+            if (var is NakoVariable)
+            {
+                NakoVariable var2 = (NakoVariable)var;
+                // null なら NakoArray として生成
+                if (var2.value == null)
+                {
+                    var2.value = new NakoArray();
+                    var2.type = NakoVariableType.Array;
+                }
+                // NakoArray なら 要素にセット
+                if (var2.value is NakoArray)
+                {
+                    NakoArray var3 = (NakoArray)(var2.value);
+                    if (index is string)
+                    {
+                        var3.SetValue((string)index, value);
+                    }
+                    else if (index is int)
+                    {
+                        var3.SetValue((int)index, value);
+                    }
+                }
+            }
         }
 
         private void exec_print()

@@ -28,12 +28,7 @@ namespace Libnako.JCompiler.Node
         /// <summary>
         /// a[3] のように配列かプロパティへのアクセスかどうか？
         /// </summary>
-        public Boolean useElement { get { return (elementNode != null); } }
-        /// <summary>
-        /// 配列アクセスのとき、要素へアクセスするノードの一覧
-        /// この子ノードに各ノード一覧が入る
-        /// </summary>
-        public NakoNode elementNode = null;
+        public Boolean useElement { get { return this.hasChildren(); } }
 
         public Boolean IsVarTypeSimple()
         {

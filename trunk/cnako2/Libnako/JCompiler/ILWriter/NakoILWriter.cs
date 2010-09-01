@@ -294,7 +294,7 @@ namespace Libnako.JCompiler.ILWriter
             // 配列要素があるか確認
             if (!var.useElement)
             {
-                // + 通常の代入処理
+                // + 要素なしの代入処理
                 // - 代入する値を書き込んで...
                 Write_r(value);
                 // - セットする
@@ -316,14 +316,21 @@ namespace Libnako.JCompiler.ILWriter
                     : NakoILType.LD_LOCAL_REF;
                 result.Add(ldvar);
                 // - アクセス要素をセット
-                foreach (NakoNode n in var.Children)
+                int cnt = var.Children.Count;
+                for (int i = 0; i < cnt; i++)
                 {
+                    NakoNode n = var.Children[i];
                     Write_r(n); // ノードの値
-                    result.Add(new NakoILCode(NakoILType.LD_ELEM_REF)); // 要素
+                    if (i != (cnt - 1))
+                    {
+                        result.Add(new NakoILCode(NakoILType.LD_ELEM_REF)); // 要素
+                    }
+                    else
+                    {
+                        Write_r(value);
+                        addNewILCode(NakoILType.ST_ELEM);
+                    }
                 }
-                // - 代入する値
-                Write_r(value);
-                addNewILCode(NakoILType.ST_ELEM);
             }
         }
 
@@ -365,8 +372,8 @@ namespace Libnako.JCompiler.ILWriter
                 // + 配列変数アクセス
                 // - 変数
                 ld.type = (node.scope == NakoVariableScope.Global)
-                    ? NakoILType.LD_GLOBAL_REF
-                    : NakoILType.LD_LOCAL_REF;
+                    ? NakoILType.LD_GLOBAL
+                    : NakoILType.LD_LOCAL;
                 ld.value = node.varNo;
                 result.Add(ld);
                 // - 要素

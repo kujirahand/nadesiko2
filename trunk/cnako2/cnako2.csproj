@@ -56,7 +56,7 @@
     <Compile Include="Libnako\JCompiler\NakoCompiler.cs" />
     <Compile Include="Libnako\JCompiler\NakoLoader.cs" />
     <Compile Include="Libnako\JCompiler\NakoVariable.cs" />
-    <Compile Include="Libnako\JCompiler\NakoVariables.cs" />
+    <Compile Include="Libnako\JCompiler\NakoVariableManager.cs" />
     <Compile Include="Libnako\JCompiler\Node\NakoNode.cs" />
     <Compile Include="Libnako\JCompiler\Node\NakoNodeCalc.cs" />
     <Compile Include="Libnako\JCompiler\Node\NakoNodeCallFunction.cs" />
