@@ -20,7 +20,7 @@ namespace cnako
             runner.debugMode = true;
 
             string src =
-                "1+2に3を足して表示\n" +
+                "A[1]=3;PRINT A[1]\n" +
                 "\n";
             _w(src);
 
@@ -37,7 +37,8 @@ namespace cnako
             _w("token:" + ns.Tokens.toTypeString());
             _w("nodes:"+ns.TopNode.Children.toTypeString());
             _w("IL:\n"+ns.Codes.ToAddressString());
-            
+
+            _w("run:\n");
             runner.Run(ns.Codes);
             _w(runner.PrintLog);
 

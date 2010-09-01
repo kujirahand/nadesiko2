@@ -19,7 +19,8 @@ namespace Libnako.JCompiler
         Array,      // = NakoArray
         Group,
         UserFunc,
-        SystemFunc
+        SystemFunc,
+        Link
     }
     
     /// <summary>
@@ -31,13 +32,29 @@ namespace Libnako.JCompiler
 		public Object value { get; set; }
     }
 
+    public class NakoVarialbeLink : NakoVariable
+    {
+        public Object key { get; set; }
+        public NakoVarialbeLink(NakoVariable target, Object key)
+        {
+            this.type = NakoVariableType.Link;
+            this.value = target;
+            this.key = key;
+        }
+    }
+
     /// <summary>
     /// なでしこの配列型(配列とハッシュを扱える)
     /// </summary>
-    public class NakoArray
+    public class NakoArray : NakoVariable
     {
         protected List<Object> list = new List<object>();
         protected Dictionary<string, int> keys = null;
+
+        public NakoArray()
+        {
+            this.type = NakoVariableType.Array;
+        }
         
         public Object GetValue(int index)
         {
