@@ -134,9 +134,9 @@ namespace Libnako.Interpreter
                 s += String.Format("{0,-14}", code.type.ToString());
                 if (code.value != null)
                 {
-                    if (code.value is int)
+                    if (code.value is Int64)
                     {
-                        s += String.Format("({0,4:X4})", (int)code.value);
+                        s += String.Format("({0,4:X4})", (Int64)code.value);
                     }
                     else
                     {
@@ -211,7 +211,7 @@ namespace Libnako.Interpreter
             callStack.Push(c);
             // JUMP
             autoIncPos = false;
-            runpos = (int)code.value;
+            runpos = Convert.ToInt32((Int64)code.value);
         }
 
         private void exec_ret(NakoILCode code)
@@ -227,7 +227,7 @@ namespace Libnako.Interpreter
             if (NakoValueConveter.ToInt(v) > 0)
             {
                 autoIncPos = false;
-                runpos = (Int32)code.value;
+                runpos = Convert.ToInt32((Int64)code.value);
             }
         }
 
@@ -237,26 +237,26 @@ namespace Libnako.Interpreter
             if (NakoValueConveter.ToInt(v) == 0)
             {
                 autoIncPos = false;
-                runpos = (Int32)code.value;
+                runpos = Convert.ToInt32((Int64)code.value);
             }
         }
 
         private void _jump(NakoILCode code)
         {
             autoIncPos = false;
-            runpos = (Int32)(code.value);
+            runpos = Convert.ToInt32((Int64)(code.value));
         }
 
         private void _inc()
         {
-            Int32 v = (Int32)stack.Pop();
+            Int64 v = (Int64)stack.Pop();
             v++;
             stack.Push(v);
         }
 
         private void _dec()
         {
-            Int32 v = (Int32)stack.Pop();
+            Int64 v = (Int64)stack.Pop();
             v--;
             stack.Push(v);
         }
@@ -264,9 +264,9 @@ namespace Libnako.Interpreter
         private void _neg()
         {
             Object v = stack.Pop();
-            if (v is Int32)
+            if (v is Int64)
             {
-                stack.Push( (Int32)v * -1 );
+                stack.Push((Int64)v * -1);
             }
             if (v is Double)
             {
@@ -278,9 +278,9 @@ namespace Libnako.Interpreter
         private void _not()
         {
             Object v = stack.Pop();
-            if (v is Int32)
+            if (v is Int64)
             {
-                stack.Push( ((Int32)v == 0) ? 1 : 0);
+                stack.Push(((Int64)v == 0) ? 1 : 0);
             }
             if (v is Double)
             {
@@ -349,15 +349,40 @@ namespace Libnako.Interpreter
         {
             Object idx = StackPop();
             Object var = StackPop();
+            Object res = null;
+            int i;
+            NakoArray var_ary = null;
+            NakoVarialbeLink var_link;
+
+            // リンクを展開する
+            if (var is NakoVarialbeLink)
+            {
+                var = ((NakoVarialbeLink)var).value;
+            }
             if (var is NakoArray)
             {
-                NakoVarialbeLink r = new NakoVarialbeLink((NakoArray)var, idx);
-                StackPush(r);
+                var_ary = (NakoArray)var;
+                if (idx is String)
+                {
+                    res = var_ary.GetValue((String)idx);
+                }
+                else
+                {
+                    i = (int)NakoValueConveter.ToInt(idx);
+                    res = var_ary.GetValue(i);
+                }
+                var_link = new NakoVarialbeLink((NakoVariable)var_ary, idx);
             }
             else
             {
-                StackPush(null);
+                if (var == null)
+                {
+                    var_ary = new NakoArray();
+                }
+                StackPush(res);
             }
+            var_link = new NakoVarialbeLink(var_ary, idx);
+            StackPush(var_link);
         }
         private void st_elem()
         {
@@ -381,9 +406,9 @@ namespace Libnako.Interpreter
                     {
                         var3.SetValue((string)index, value);
                     }
-                    else if (index is int)
+                    else if (index is Int64)
                     {
-                        var3.SetValue((int)index, value);
+                        var3.SetValue((int)(Int64)index, value);
                     }
                 }
             }
@@ -429,7 +454,7 @@ namespace Libnako.Interpreter
 
         private Boolean IsBothInt(Object a, Object b)
         {
-            Boolean r = (a is Int32 && b is Int32);
+            Boolean r = (a is Int64 && b is Int64);
             return r;
         }
 
@@ -437,7 +462,7 @@ namespace Libnako.Interpreter
         {
             if (IsBothInt(a, b))
             {
-                Int32 i = (Int32)a + (Int32)b;
+                Int64 i = (Int64)a + (Int64)b;
                 return (Object)i;
             }
             else
@@ -450,7 +475,7 @@ namespace Libnako.Interpreter
         {
             if (IsBothInt(a, b))
             {
-                Int32 i = (Int32)a - (Int32)b;
+                Int64 i = (Int64)a - (Int64)b;
                 return (Object)i;
             }
             else
@@ -463,7 +488,7 @@ namespace Libnako.Interpreter
         {
             if (IsBothInt(a, b))
             {
-                Int32 i = (Int32)a * (Int32)b;
+                Int64 i = (Int64)a * (Int64)b;
                 return (Object)i;
             }
             else
@@ -480,7 +505,7 @@ namespace Libnako.Interpreter
         }
         private Object calc_method_mod(Object a, Object b)
         {
-            Int32 i = (Int32)a % (Int32)b;
+            Int64 i = (Int64)a % (Int64)b;
             return (Object)i;
         }
         private Object calc_method_power(Object a, Object b)
@@ -496,9 +521,9 @@ namespace Libnako.Interpreter
         }
         private Object calc_method_eq(Object a, Object b)
         {
-            if (a is Int32 && b is Int32)
+            if (a is Int64 && b is Int64)
             {
-                return (Int32)a == (Int32)b;
+                return (Int64)a == (Int64)b;
             }
             if (a is String || b is String)
             {
@@ -512,9 +537,9 @@ namespace Libnako.Interpreter
         }
         private Object calc_method_not_eq(Object a, Object b)
         {
-            if (a is Int32 && b is Int32)
+            if (a is Int64 && b is Int64)
             {
-                return (Int32)a != (Int32)b;
+                return (Int64)a != (Int64)b;
             }
             if (a is String || b is String)
             {
@@ -528,9 +553,9 @@ namespace Libnako.Interpreter
         }
         private Object calc_method_gt(Object a, Object b)
         {
-            if (a is Int32 && b is Int32)
+            if (a is Int64 && b is Int64)
             {
-                return (Int32)a > (Int32)b;
+                return (Int64)a > (Int64)b;
             }
             if (a is String || b is String)
             {
@@ -544,9 +569,9 @@ namespace Libnako.Interpreter
         }
         private Object calc_method_gteq(Object a, Object b)
         {
-            if (a is Int32 && b is Int32)
+            if (a is Int64 && b is Int64)
             {
-                return (Int32)a >= (Int32)b;
+                return (Int64)a >= (Int64)b;
             }
             if (a is String || b is String)
             {
@@ -560,9 +585,9 @@ namespace Libnako.Interpreter
         }
         private Object calc_method_lt(Object a, Object b)
         {
-            if (a is Int32 && b is Int32)
+            if (a is Int64 && b is Int64)
             {
-                return (Int32)a < (Int32)b;
+                return (Int64)a < (Int64)b;
             }
             if (a is String || b is String)
             {
@@ -576,9 +601,9 @@ namespace Libnako.Interpreter
         }
         private Object calc_method_lteq(Object a, Object b)
         {
-            if (a is Int32 && b is Int32)
+            if (a is Int64 && b is Int64)
             {
-                return (Int32)a <= (Int32)b;
+                return (Int64)a <= (Int64)b;
             }
             if (a is String || b is String)
             {
@@ -592,9 +617,9 @@ namespace Libnako.Interpreter
         }
         private Object calc_method_and(Object a, Object b)
         {
-            if (a is Int32 && b is Int32)
+            if (a is Int64 && b is Int64)
             {
-                return (Int32)a & (Int32)b;
+                return (Int64)a & (Int64)b;
             }
             if (a is Double || b is Double)
             {
@@ -604,9 +629,9 @@ namespace Libnako.Interpreter
         }
         private Object calc_method_or(Object a, Object b)
         {
-            if (a is Int32 && b is Int32)
+            if (a is Int64 && b is Int64)
             {
-                return (Int32)a | (Int32)b;
+                return (Int64)a | (Int64)b;
             }
             if (a is Double || b is Double)
             {
@@ -616,9 +641,9 @@ namespace Libnako.Interpreter
         }
         private Object calc_method_xor(Object a, Object b)
         {
-            if (a is Int32 && b is Int32)
+            if (a is Int64 && b is Int64)
             {
-                return (Int32)a ^ (Int32)b;
+                return (Int64)a ^ (Int64)b;
             }
             if (a is Double || b is Double)
             {

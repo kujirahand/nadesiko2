@@ -22,7 +22,7 @@ namespace Libnako.JCompiler.ILWriter
         {
             get { return result; }
         }
-        protected Dictionary<NakoILCode, int> labels = null;
+        protected Dictionary<NakoILCode, Int64> labels = null;
 
 
         public NakoILWriter(NakoNode topNode = null)
@@ -34,7 +34,7 @@ namespace Libnako.JCompiler.ILWriter
         public void Init()
         {
             this.result = new NakoILCodeList();
-            this.labels = new Dictionary<NakoILCode, int>();
+            this.labels = new Dictionary<NakoILCode, Int64>();
         }
 
         protected void Write_r(NakoNode node)
@@ -257,7 +257,7 @@ namespace Libnako.JCompiler.ILWriter
 
             // (1) 変数を初期化する
             result.Add(label_for_begin);
-            addNewILCode(NakoILType.LD_CONST_INT, 1);
+            addNewILCode(NakoILType.LD_CONST_INT, 1L);
             addNewILCode(NakoILType.ST_LOCAL, loopVarNo);
 
             // (2) 条件をコードにする
@@ -384,9 +384,12 @@ namespace Libnako.JCompiler.ILWriter
                 {
                     Write_r(c[i]);
                     NakoILCode code = new NakoILCode();
+                    /*
                     code.type = ((c.Count - 1) == i)
                         ? NakoILType.LD_ELEM
                         : NakoILType.LD_ELEM_REF;
+                     */
+                    code.type = NakoILType.LD_ELEM;
                     result.Add(code);
                 }
             }

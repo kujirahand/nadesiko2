@@ -994,7 +994,7 @@ namespace Libnako.JCompiler.Parser
             if (Accept(NakoTokenType.INT))
             {
                 node.type = NakoNodeType.INT;
-                node.value = Int32.Parse(node.Token.value);
+                node.value = Int64.Parse(node.Token.value);
                 lastNode = node;
                 tok.MoveNext();
                 calcStack.Push(node);

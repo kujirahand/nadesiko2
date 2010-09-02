@@ -73,7 +73,7 @@ namespace Libnako.JCompiler.ILWriter
                     case NakoILType.JUMP:
                     case NakoILType.BRANCH_FALSE:
                     case NakoILType.BRANCH_TRUE:
-                        r += "->" + String.Format("{0,0:X4}", (Int32)c.value);
+                        r += "->" + String.Format("{0,0:X4}", (Int64)c.value);
                         break;
                 }
                 r += "\n";
