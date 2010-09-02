@@ -21,6 +21,7 @@ namespace Libnako.JCompiler.Parser
         protected Stack<int> calcStackCounters;
 		internal Stack<NakoParserFrame> frameStack { get; set; }
 		internal Stack<NakoParserNodeState> stateStack { get; set; }
+        protected Boolean flag_set_variable = false;
 
         public NakoParserBase(NakoTokenList tokens)
         {
@@ -47,7 +48,7 @@ namespace Libnako.JCompiler.Parser
             return true;
         }
 
-        protected virtual Boolean _value() { return true; }
+        protected virtual Boolean _value(Boolean canCallJFunction = true) { return true; }
 
         protected Boolean Accept(NakoTokenType type)
         {
@@ -131,4 +132,5 @@ namespace Libnako.JCompiler.Parser
 		public NakoNode lastNode { get; set; }
 		public NakoNode parentNode { get; set; }
     }
+
 }

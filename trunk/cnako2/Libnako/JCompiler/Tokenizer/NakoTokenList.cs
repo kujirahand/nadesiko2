@@ -47,6 +47,11 @@ namespace Libnako.JCompiler.Tokenizer
             }
         }
 
+        public void InsertAfterCurrentToken(NakoToken t)
+        {
+            this.Insert(cur + 1, t);
+        }
+
         public Boolean Accept(NakoTokenType t)
         {
             return (t == CurrentTokenType);

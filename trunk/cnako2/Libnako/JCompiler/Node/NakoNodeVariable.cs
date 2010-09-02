@@ -37,12 +37,23 @@ namespace Libnako.JCompiler.Node
                 varType == NakoVariableType.String);
         }
 
-		public NakoNodeVariable()
+		public NakoNodeVariable(Object value = null) : base(value)
 		{
 			this.scope = NakoVariableScope.Global;
 			this.varType = NakoVariableType.Int;
 			this.varNo = -1;
 			this.varBy = VarByType.ByVal;
 		}
+
+        public override String ToTypeString()
+        {
+            string r = type.ToString();
+            r += "(" + this.varNo + ")";
+            if (useElement)
+            {
+                r += "[" + children.Count + "]";
+            }
+            return r;
+        }
     }
 }

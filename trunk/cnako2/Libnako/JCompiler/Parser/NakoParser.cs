@@ -25,6 +25,10 @@ namespace Libnako.JCompiler.Parser
             _program();
         }
 
+        //> // ノードの値 : 構文規則 ;
+        //> // 選択     => a | b
+        //> // 繰り返し => { a b }
+        //  // 省略可   => a [ b ] c
         //> _program : empty | _blocks ... ;
         private Boolean _program()
         {
@@ -53,8 +57,7 @@ namespace Libnako.JCompiler.Parser
         }
 
         //> _blocks : empty
-        //>         | _statement ... 
-        //>         | _eol
+        //>         | { _statement | _eol }
         //>         ;
         private Boolean _blocks()
         {
@@ -570,7 +573,7 @@ namespace Libnako.JCompiler.Parser
             }
 
             NakoNodeLet node = new NakoNodeLet();
-            node.nodeVar = (NakoNodeVariable)lastNode; // _setVariable のノード
+            node.VarNode = (NakoNodeVariable)lastNode; // _setVariable のノード
             tok.MoveNext();
             if (!_value())
             {
@@ -578,7 +581,7 @@ namespace Libnako.JCompiler.Parser
             }
             TokenFinally();
 
-            node.AddChild(calcStack.Pop());
+            node.ValueNode = calcStack.Pop();
             parentNode.AddChild(node);
             lastNode = node;
 
@@ -614,7 +617,6 @@ namespace Libnako.JCompiler.Parser
         private Boolean _setVariable()
         {
             if (!Accept(NakoTokenType.WORD)) return false;
-
             // 設定用変数の取得
             NakoNodeVariable n = new NakoNodeVariable();
             n.type = NakoNodeType.ST_VARIABLE;
@@ -627,7 +629,10 @@ namespace Libnako.JCompiler.Parser
             // 要素へのアクセスがあるか
             if (Accept(NakoTokenType.BLACKETS_L) || Accept(NakoTokenType.YEN))
             {
+                // TODO: ここで _value を読む前に setVariable フラグをたてる
+                flag_set_variable = true;
                 _variable_elements(n);
+                flag_set_variable = false;
             }
 
             lastNode = n;
@@ -649,20 +654,30 @@ namespace Libnako.JCompiler.Parser
             while (!tok.IsEOF())
             {
                 t = tok.CurrentTokenType;
-                tok.MoveNext(); // skip '[' or YEN
-                if (!_value())
-                {
-                    throw new NakoParserException("変数要素へのアクセスで要素式にエラー。", firstT);
-                }
+
                 if (t == NakoTokenType.BLACKETS_L)
                 {
+                    tok.MoveNext(); // skip ']'
+                    if (!_value())
+                    {
+                        throw new NakoParserException("変数要素へのアクセスで要素式にエラー。", firstT);
+                    }
                     if (!Accept(NakoTokenType.BLACKETS_R))
                     {
                         throw new NakoParserException("変数要素へのアクセスで閉じ角カッコがありません。", firstT);
                     }
                     tok.MoveNext(); // skip ']'
+                    n.AddChild(calcStack.Pop());
                 }
-                n.AddChild(calcStack.Pop());
+                else // t == NakoTokenType.YEN
+                {
+                    tok.MoveNext(); // skip '\'
+                    if (!_value(false))
+                    {
+                        throw new NakoParserException("変数要素へのアクセスで要素式にエラー。", firstT);
+                    }
+                    n.AddChild(calcStack.Pop());
+                }
                 // 引き続き、変数要素へのアクセスがあるかどうか
                 if (Accept(NakoTokenType.BLACKETS_L)) continue;
                 if (Accept(NakoTokenType.YEN)) continue;
@@ -699,7 +714,7 @@ namespace Libnako.JCompiler.Parser
         }
 
         //> _value : FUNCTION_NAME | _calc_fact ;
-        protected override Boolean _value()
+        protected override Boolean _value(Boolean canCallJFunction = true)
         {
             // TODO:
             // _value は再帰が多くコストが高いのであり得る値だけチェックする
@@ -717,30 +732,37 @@ namespace Libnako.JCompiler.Parser
                 default:
                     return false;
             }
-            // 関数があるか調べる
-            if (tok.SearchToken(NakoTokenType.FUNCTION_NAME, true))
+            
+            // 例外的な処理
+            // パーサーの副作用回避のため、
+            // 配列アクセスで円マークがある時、通常の関数呼び出しはしない
+            // (例) A\3を表示 → この場合、円マーク以降は明らかに関数呼び出しではない
+            if (canCallJFunction)
             {
-                TokenTry();
-                while (!tok.IsEOF())
+                // 関数があるか調べる
+                if (tok.SearchToken(NakoTokenType.FUNCTION_NAME, true))
                 {
-                    if (Accept(NakoTokenType.EOL)) break;
-                    if (Accept(NakoTokenType.FUNCTION_NAME))
+                    TokenTry();
+                    while (!tok.IsEOF())
                     {
-                        if (!_callfunc())
+                        if (Accept(NakoTokenType.EOL)) break;
+                        if (Accept(NakoTokenType.FUNCTION_NAME))
                         {
-                            TokenBack();
-                            return false;
+                            if (!_callfunc())
+                            {
+                                TokenBack();
+                                return false;
+                            }
+                            TokenFinally();
+                            return true;
                         }
-                        TokenFinally();
-                        return true;
-                    }
-                    if (!_calc_fact())
-                    {
-                        TokenBack(); return false;
+                        if (!_calc_fact())
+                        {
+                            TokenBack(); return false;
+                        }
                     }
                 }
-            }
-            
+            }            
             // 計算式を評価
             if (_calc_fact()) return true;
             return false;
@@ -887,6 +909,13 @@ namespace Libnako.JCompiler.Parser
             if (!_calc_term())
             {
                 return false;
+            }
+
+            // パーサーの例外的な処理
+            // →代入文の変数取得では、比較文の "=" は無効にし、代入の "=" と見なすこと。
+            if (flag_set_variable && Accept(NakoTokenType.EQ))
+            {
+                return true; // "="以降は読まない
             }
 
             while

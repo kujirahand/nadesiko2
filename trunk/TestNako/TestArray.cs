@@ -52,5 +52,17 @@ namespace TestNako
             runner.Run(codes);
             Assert.AreEqual(runner.PrintLog, "566");
         }
+
+        [Test]
+        public void Test_array_yen_access()
+        {
+            codes = ns.Publish(
+                "A￥3=999\n" +
+                "A￥3を表示\n" +
+                ""
+                );
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "999");
+        }
     }
 }
