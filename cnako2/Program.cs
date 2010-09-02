@@ -20,7 +20,8 @@ namespace cnako
             runner.debugMode = true;
 
             string src =
-                "A[1]=3;A[1]を表示\n" +
+                "A[1]=333;A[1]を表示" +
+                //"A[1][2]=3;A[1][2]を表示\n" +
                 "\n";
             _w(src);
 
@@ -34,9 +35,9 @@ namespace cnako
             ns.Publish(src);
 
             // DESCRIPT
-            _w("token:" + ns.Tokens.toTypeString());
-            _w("nodes:"+ns.TopNode.Children.toTypeString());
-            _w("IL:\n"+ns.Codes.ToAddressString());
+            _w("* token:\n" + ns.Tokens.toTypeString());
+            _w("* nodes:\n"+ns.TopNode.Children.toTypeString());
+            _w("* IL:\n"+ns.Codes.ToAddressString());
 
             _w("run:\n");
             runner.Run(ns.Codes);

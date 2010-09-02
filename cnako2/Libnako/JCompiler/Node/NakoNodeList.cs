@@ -71,16 +71,25 @@ namespace Libnako.JCompiler.Node
             }
             return true;
         }
+
+        // FOR DEBUG
         public String toTypeString(int level = 0)
         {
+            // for indent
+            String indent = "- ";
+            for (int i = 0; i < level; i++)
+            {
+                indent += "|-- ";
+            }
+            // this children
             String r = "";
             foreach (NakoNode n in this)
             {
-                if (r != "")
+                r += indent + n.ToTypeString() + "\n";
+                if (n.hasChildren())
                 {
-                    r += ",";
+                    r += n.Children.toTypeString(level + 1);
                 }
-                r += n.ToTypeString();
             }
             return r;
         }

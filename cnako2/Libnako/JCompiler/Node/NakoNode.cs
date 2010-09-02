@@ -47,10 +47,10 @@ namespace Libnako.JCompiler.Node
             }
         }
 
-        public NakoNode()
+        public NakoNode(Object value = null)
         {
 			type = NakoNodeType.NOP;
-			this.value = null;
+			this.value = value;
         }
 
         public void AddChild(NakoNode child)

@@ -288,19 +288,19 @@ namespace Libnako.JCompiler.ILWriter
 
         private void _let(NakoNodeLet node)
         {
-            NakoNodeVariable var = node.nodeVar;
-            NakoNode value = node.Children[0];
+            NakoNodeVariable varNode = node.VarNode;
+            NakoNode valueNode = node.ValueNode;
             
             // 配列要素があるか確認
-            if (!var.useElement)
+            if (!varNode.useElement)
             {
                 // + 要素なしの代入処理
                 // - 代入する値を書き込んで...
-                Write_r(value);
+                Write_r(valueNode);
                 // - セットする
                 NakoILCode st = new NakoILCode();
-                st.value = var.varNo;
-                st.type = (var.scope == NakoVariableScope.Global)
+                st.value = varNode.varNo;
+                st.type = (varNode.scope == NakoVariableScope.Global)
                     ? NakoILType.ST_GLOBAL
                     : NakoILType.ST_LOCAL;
                 result.Add(st);
@@ -310,24 +310,26 @@ namespace Libnako.JCompiler.ILWriter
                 // + 配列への代入処理
                 // - 基本となる変数をセット
                 NakoILCode ldvar = new NakoILCode();
-                ldvar.value = var.varNo;
-                ldvar.type = (var.scope == NakoVariableScope.Global)
+                ldvar.value = varNode.varNo;
+                ldvar.type = (varNode.scope == NakoVariableScope.Global)
                     ? NakoILType.LD_GLOBAL_REF
                     : NakoILType.LD_LOCAL_REF;
                 result.Add(ldvar);
                 // - アクセス要素をセット
-                int cnt = var.Children.Count;
-                for (int i = 0; i < cnt; i++)
+                int count = varNode.Children.Count;
+                for (int i = 0; i < count; i++)
                 {
-                    NakoNode n = var.Children[i];
+                    NakoNode n = varNode.Children[i];
                     Write_r(n); // ノードの値
-                    if (i != (cnt - 1))
+
+                    if (i < count - 1)
                     {
                         result.Add(new NakoILCode(NakoILType.LD_ELEM_REF)); // 要素
                     }
                     else
                     {
-                        Write_r(value);
+                        // 値ノード
+                        Write_r(valueNode);
                         addNewILCode(NakoILType.ST_ELEM);
                     }
                 }

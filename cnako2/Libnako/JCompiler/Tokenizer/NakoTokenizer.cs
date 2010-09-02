@@ -60,10 +60,11 @@ namespace Libnako.JCompiler.Tokenizer
 
         protected void TokenizeCheckWord()
         {
-            // 予約語句のチェック
+            // 予約語句のチェックなど
             tokens.MoveTop();
             while (!tokens.IsEOF())
             {
+                // 予約語句の置き換え
                 if (tokens.CurrentTokenType == NakoTokenType.WORD)
                 {
                     NakoToken token = tokens.CurrentToken;
@@ -72,6 +73,12 @@ namespace Libnako.JCompiler.Tokenizer
                     {
                         token.type = NakoDic.Instance[key];
                     }
+                }
+                // 助詞が「は」ならば、代入文に変える
+                if (tokens.CurrentToken.josi == "は")
+                {
+                    tokens.CurrentToken.josi = "";
+                    tokens.InsertAfterCurrentToken(new NakoToken(NakoTokenType.EQ));
                 }
                 tokens.MoveNext();
             }
