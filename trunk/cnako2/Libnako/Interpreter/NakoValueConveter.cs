@@ -17,25 +17,24 @@ namespace Libnako.Interpreter
             this.value = v;
         }
 
-        public static Int32 ToInt(Object value)
+        public static Int64 ToInt(Object value)
         {
-            Type t = value.GetType();
-            if (t == typeof(Int32))
+            if (value is Int64)
             {
-                return (Int32)value;
+                return (Int64)value;
             }
-            if (t == typeof(Boolean))
+            if (value is Boolean)
             {
                 return (Boolean)value ? 1 : 0;
             }
-            if (t == typeof(Double))
+            if (value is Double)
             {
-                return (Int32)((Double)value);
+                return (Int64)((Double)value);
             }
-            if (t == typeof(String))
+            if (value is String)
             {
-                Int32 i;
-                if (Int32.TryParse((String)value, out i)) { return i; } else { return 0; }
+                Int64 i;
+                if (Int64.TryParse((String)value, out i)) { return i; } else { return 0; }
             }
             return 0;
         }
@@ -43,9 +42,9 @@ namespace Libnako.Interpreter
         public static Double ToDouble(Object value)
         {
             Type t = value.GetType();
-            if (t == typeof(Int32))
+            if (t == typeof(Int64))
             {
-                int tmpi = (Int32)value;
+                Int64 tmpi = (Int64)value;
                 Double tmpd = (Double)tmpi;
                 return tmpd;
             }

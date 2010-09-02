@@ -13,9 +13,9 @@ namespace Libnako.JCompiler
     {
         Void,
         Object,
-        Int,
-        Real,
-        String,
+        Int,        // = Int64
+        Real,       // = Double
+        String,     // = String
         Array,      // = NakoArray
         Group,
         UserFunc,

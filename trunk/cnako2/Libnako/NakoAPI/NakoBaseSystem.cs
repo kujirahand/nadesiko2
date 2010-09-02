@@ -60,9 +60,9 @@ namespace Libnako.NakoAPI
         {
             Object a = info.StackPop();
             Object b = info.StackPop();
-            if (a.GetType() == typeof(Int32) && b.GetType() == typeof(Int32))
+            if (a is Int64 && b is Int64)
             {
-                return ((int)a + (int)b);
+                return ((Int64)a + (Int64)b);
             }
             else
             {
@@ -82,9 +82,9 @@ namespace Libnako.NakoAPI
             }
             Object a = ((NakoVariable)ar).value;
             Object c;
-            if (a.GetType() == typeof(Int32) && b.GetType() == typeof(Int32))
+            if (a is Int64 && b is Int64)
             {
-                c = (int)a + (int)b;
+                c = (Int64)a + (Int64)b;
             }
             else
             {
@@ -101,9 +101,9 @@ namespace Libnako.NakoAPI
         {
             Object a = info.StackPop();
             Object b = info.StackPop();
-            if (a.GetType() == typeof(Int32) && b.GetType() == typeof(Int32))
+            if (a is Int64 && b is Int64)
             {
-                return ((int)a - (int)b);
+                return ((Int64)a - (Int64)b);
             }
             else
             {
@@ -123,9 +123,9 @@ namespace Libnako.NakoAPI
             }
             Object a = ((NakoVariable)ar).value;
             Object c;
-            if (a.GetType() == typeof(Int32) && b.GetType() == typeof(Int32))
+            if (a is Int64 && b is Int64)
             {
-                c = (int)a - (int)b;
+                c = (Int64)a - (Int64)b;
             }
             else
             {
