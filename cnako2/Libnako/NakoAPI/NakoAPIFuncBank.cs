@@ -45,7 +45,7 @@ namespace Libnako.NakoAPI
             {
                 NakoVariable var = new NakoVariable();
                 var.type = NakoVariableType.SystemFunc;
-                var.value = i;
+                var.body = i;
                 NakoAPIFunc call = list[i];
                 NakoVariableManager.Globals.CreateVar(call.name, var);
             }

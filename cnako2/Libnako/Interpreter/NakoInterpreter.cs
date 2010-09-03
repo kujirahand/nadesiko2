@@ -224,7 +224,7 @@ namespace Libnako.Interpreter
         private void _branch_true(NakoILCode code)
         {
             Object v = stack.Pop();
-            if (NakoValueConveter.ToInt(v) > 0)
+            if (NakoValueConveter.ToLong(v) > 0)
             {
                 autoIncPos = false;
                 runpos = Convert.ToInt32((Int64)code.value);
@@ -234,7 +234,7 @@ namespace Libnako.Interpreter
         private void _branch_false(NakoILCode code)
         {
             Object v = stack.Pop();
-            if (NakoValueConveter.ToInt(v) == 0)
+            if (NakoValueConveter.ToLong(v) == 0)
             {
                 autoIncPos = false;
                 runpos = Convert.ToInt32((Int64)code.value);
@@ -335,7 +335,7 @@ namespace Libnako.Interpreter
                 NakoArray ary = (NakoArray)var;
                 if (idx is String)
                 {
-                    r = ary.GetValue((string)idx);
+                    r = ary.GetValueFromKey((string)idx);
                 }
                 else
                 {
@@ -345,44 +345,43 @@ namespace Libnako.Interpreter
             StackPush(r);
         }
 
+        /// <summary>
+        /// 配列要素をスタックに乗せるが、その時、配列オブジェクトへのリンクを乗せる
+        /// </summary>
         private void ld_elem_ref()
         {
             Object idx = StackPop();
             Object var = StackPop();
-            Object res = null;
-            int i;
-            NakoArray var_ary = null;
-            NakoVarialbeLink var_link;
+            NakoArray var_ary;
 
-            // リンクを展開する
-            if (var is NakoVarialbeLink)
+            // var が不正なら null を乗せて帰る
+            if (!(var is NakoVariable))
             {
-                var = ((NakoVarialbeLink)var).value;
+                StackPush(null);
+                return;
             }
-            if (var is NakoArray)
+
+            if (((NakoVariable)var).body == null)
             {
-                var_ary = (NakoArray)var;
-                if (idx is String)
+                ((NakoVariable)var).body = new NakoArray();
+                ((NakoVariable)var).type = NakoVariableType.Array;
+            }
+
+            if (((NakoVariable)var).body is NakoArray)
+            {
+                var_ary = (NakoArray)((NakoVariable)var).body;
+                NakoVariable elem = var_ary.GetVarFromObj(idx);
+                if (elem == null)
                 {
-                    res = var_ary.GetValue((String)idx);
+                    elem = new NakoVariable();
+                    var_ary.SetVarFromObj(idx, elem);
                 }
-                else
-                {
-                    i = (int)NakoValueConveter.ToInt(idx);
-                    res = var_ary.GetValue(i);
-                }
-                var_link = new NakoVarialbeLink((NakoVariable)var_ary, idx);
+                StackPush(elem);
             }
             else
             {
-                if (var == null)
-                {
-                    var_ary = new NakoArray();
-                }
-                StackPush(res);
+                StackPush(null);
             }
-            var_link = new NakoVarialbeLink(var_ary, idx);
-            StackPush(var_link);
         }
         private void st_elem()
         {
@@ -393,22 +392,21 @@ namespace Libnako.Interpreter
             {
                 NakoVariable var2 = (NakoVariable)var;
                 // null なら NakoArray として生成
-                if (var2.value == null)
+                if (var2.body == null)
                 {
-                    var2.value = new NakoArray();
+                    var2.body = new NakoArray();
                     var2.type = NakoVariableType.Array;
                 }
                 // NakoArray なら 要素にセット
-                if (var2.value is NakoArray)
+                if (var2.body is NakoArray)
                 {
-                    NakoArray var3 = (NakoArray)(var2.value);
-                    if (index is string)
+                    NakoArray var3 = (NakoArray)(var2.body);
+                    NakoVariable elem = var3.GetVarFromObj(index);
+                    if (elem == null)
                     {
-                        var3.SetValue((string)index, value);
-                    }
-                    else if (index is Int64)
-                    {
-                        var3.SetValue((int)(Int64)index, value);
+                        elem = new NakoVariable();
+                        elem.SetBodyAutoType(value);
+                        var3.SetVarFromObj(index, elem);
                     }
                 }
             }
@@ -623,7 +621,7 @@ namespace Libnako.Interpreter
             }
             if (a is Double || b is Double)
             {
-                return NakoValueConveter.ToInt(a) & NakoValueConveter.ToInt(b);
+                return NakoValueConveter.ToLong(a) & NakoValueConveter.ToLong(b);
             }
             throw new NakoInterpreterException("オブジェクトは論理演算できません");
         }
@@ -635,7 +633,7 @@ namespace Libnako.Interpreter
             }
             if (a is Double || b is Double)
             {
-                return NakoValueConveter.ToInt(a) | NakoValueConveter.ToInt(b);
+                return NakoValueConveter.ToLong(a) | NakoValueConveter.ToLong(b);
             }
             throw new NakoInterpreterException("オブジェクトは論理演算できません");
         }
@@ -647,7 +645,7 @@ namespace Libnako.Interpreter
             }
             if (a is Double || b is Double)
             {
-                return NakoValueConveter.ToInt(a) ^ NakoValueConveter.ToInt(b);
+                return NakoValueConveter.ToLong(a) ^ NakoValueConveter.ToLong(b);
             }
             throw new NakoInterpreterException("オブジェクトは論理演算できません");
         }

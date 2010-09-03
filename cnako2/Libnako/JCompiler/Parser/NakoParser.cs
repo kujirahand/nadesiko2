@@ -405,13 +405,13 @@ namespace Libnako.JCompiler.Parser
 
             if (var.type == NakoVariableType.SystemFunc)
             {
-                int funcNo = (int)var.value;
+                int funcNo = (int)var.body;
                 func = NakoAPIFuncBank.Instance.list[funcNo];
                 callNode.func = func;
             }
             else
             {
-                NakoNodeDefFunction defNode = (NakoNodeDefFunction)var.value;
+                NakoNodeDefFunction defNode = (NakoNodeDefFunction)var.body;
                 func = callNode.func = defNode.func;
                 callNode.value = defNode;
             }
@@ -474,7 +474,7 @@ namespace Libnako.JCompiler.Parser
             // グローバル変数に登録
             NakoVariable v = new NakoVariable();
             v.type = NakoVariableType.UserFunc;
-            v.value = funcNode;
+            v.body = funcNode;
             NakoVariableManager.Globals.CreateVar(userFunc.name, v);
             // 関数の宣言は、ノードのトップ直下に追加する
             if (!this.topNode.hasChildren())
@@ -629,7 +629,7 @@ namespace Libnako.JCompiler.Parser
             // 要素へのアクセスがあるか
             if (Accept(NakoTokenType.BLACKETS_L) || Accept(NakoTokenType.YEN))
             {
-                // TODO: ここで _value を読む前に setVariable フラグをたてる
+                // _value を読む前に setVariable のフラグをたてる
                 flag_set_variable = true;
                 _variable_elements(n);
                 flag_set_variable = false;

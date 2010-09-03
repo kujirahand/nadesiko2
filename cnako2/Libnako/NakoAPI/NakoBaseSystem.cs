@@ -42,6 +42,7 @@ namespace Libnako.NakoAPI
         public Object _say(NakoFuncCallInfo info)
         {
             Object s = info.StackPop();
+            if (s == null) s = "";
             String msg = s.ToString();
 
             MessageBox.Show(msg);
@@ -51,7 +52,8 @@ namespace Libnako.NakoAPI
         public Object _show(NakoFuncCallInfo info)
         {
             Object s = info.StackPop();
-            String msg = s.ToString();
+            String msg = "";
+            if (s != null) { msg = s.ToString(); }
             info.Runner.PrintLog += msg;
             return null;
         }
@@ -80,7 +82,7 @@ namespace Libnako.NakoAPI
             {
                 throw new NakoAPIError("『足す!』の引数が変数ではありません");
             }
-            Object a = ((NakoVariable)ar).value;
+            Object a = ((NakoVariable)ar).body;
             Object c;
             if (a is Int64 && b is Int64)
             {
@@ -93,7 +95,7 @@ namespace Libnako.NakoAPI
                 c = da + db;
             }
             // 結果をセット
-            ((NakoVariable)ar).value = c;
+            ((NakoVariable)ar).body = c;
             return (c);
         }
 
@@ -121,7 +123,7 @@ namespace Libnako.NakoAPI
             {
                 throw new NakoAPIError("『引く!』の引数が変数ではありません");
             }
-            Object a = ((NakoVariable)ar).value;
+            Object a = ((NakoVariable)ar).body;
             Object c;
             if (a is Int64 && b is Int64)
             {
@@ -134,7 +136,7 @@ namespace Libnako.NakoAPI
                 c = da - db;
             }
             // 結果をセット
-            ((NakoVariable)ar).value = c;
+            ((NakoVariable)ar).body = c;
             return (c);
         }
     }

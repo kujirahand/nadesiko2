@@ -48,7 +48,7 @@ namespace Libnako.JCompiler
                 // 変数「それ」を登録
                 NakoVariable sore = new NakoVariable();
                 sore.type = NakoVariableType.Int;
-                sore.value = 0;
+                sore.body = 0;
                 list.Add(sore);
                 names["それ"] = 0;
             }
@@ -126,7 +126,7 @@ namespace Libnako.JCompiler
                 }
                 v = list[index];
             }
-            v.value = value;
+            v.body = value;
         }
 
         public Object GetValue(int index)
@@ -141,7 +141,7 @@ namespace Libnako.JCompiler
                 }
                 SetVar(index, v);
             }
-            return v.value;
+            return v.body;
         }
     }
 }
