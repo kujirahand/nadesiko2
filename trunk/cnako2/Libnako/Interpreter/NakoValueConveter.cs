@@ -17,7 +17,12 @@ namespace Libnako.Interpreter
             this.value = v;
         }
 
-        public static Int64 ToInt(Object value)
+        public static int ToInt(Object value)
+        {
+            return Convert.ToInt32(value);
+        }
+
+        public static Int64 ToLong(Object value)
         {
             if (value is Int64)
             {

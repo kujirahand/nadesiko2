@@ -29,7 +29,7 @@ namespace TestNako
             runner.Run(w.Result);
             o = runner.StackTop;
             Assert.IsNotNull(o);
-            Assert.IsTrue(7 == NakoValueConveter.ToInt(o));
+            Assert.IsTrue(7 == NakoValueConveter.ToLong(o));
 
             // 2
             ns.source = "(1+2)*3";
@@ -39,7 +39,7 @@ namespace TestNako
             runner.Run(w.Result);
             o = runner.StackTop;
             Assert.IsNotNull(o);
-            Assert.IsTrue(9 == NakoValueConveter.ToInt(o));
+            Assert.IsTrue(9 == NakoValueConveter.ToLong(o));
 
             // 3
             ns.source = "1+4/2";
@@ -49,7 +49,7 @@ namespace TestNako
             runner.Run(w.Result);
             o = runner.StackTop;
             Assert.IsNotNull(o);
-            Assert.IsTrue(3 == NakoValueConveter.ToInt(o));
+            Assert.IsTrue(3 == NakoValueConveter.ToLong(o));
 
         }
         [Test]

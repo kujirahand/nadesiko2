@@ -22,8 +22,8 @@ namespace cnako
             string src =
                 //"A[1]=333;A[1]を表示" +
                 //"A[1][2]=3;A[1][2]を表示\n" +
-                "3回\n" +
-                "　　PRINT `a`\n" +
+                "A￥3=999\n" +
+                "A￥3を表示\n" +
                 "\n";
             _w(src);
 
