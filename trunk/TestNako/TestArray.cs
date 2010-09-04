@@ -64,5 +64,28 @@ namespace TestNako
             runner.Run(codes);
             Assert.AreEqual(runner.PrintLog, "999");
         }
+
+        [Test]
+        public void Test_array_array1()
+        {
+            codes = ns.Publish(
+                "B[3][45]=222\n" +
+                "PRINT B[3][45]\n" +
+                ""
+                );
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "222");
+        }
+        [Test]
+        public void Test_array_array2()
+        {
+            codes = ns.Publish(
+                "C￥１￥２￥３=2222\n" +
+                "C￥１￥２￥３を表示。\n" +
+                ""
+                );
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "2222");
+        }
     }
 }

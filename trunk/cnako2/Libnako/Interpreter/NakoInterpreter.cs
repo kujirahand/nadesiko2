@@ -405,8 +405,12 @@ namespace Libnako.Interpreter
                     if (elem == null)
                     {
                         elem = new NakoVariable();
-                        elem.SetBodyAutoType(value);
+                        elem.body = value;
                         var3.SetVarFromObj(index, elem);
+                    }
+                    else
+                    {
+                        elem.body = value;
                     }
                 }
             }
