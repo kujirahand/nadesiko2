@@ -7,8 +7,6 @@ using Libnako.JCompiler.Function;
 using Libnako.JCompiler;
 using Libnako.Interpreter;
 
-using System.Windows.Forms;
-
 namespace Libnako.NakoAPI
 {
     /// <summary>
@@ -26,7 +24,6 @@ namespace Libnako.NakoAPI
         /// </summary>
         public override void registerToSystem()
         {
-            addFunc("言う", "Sと|Sを", NakoVariableType.Void, _say, "メッセージSを画面に表示する", "いう");
             addFunc("表示", "Sと|Sを", NakoVariableType.Void, _show, "メッセージSを表示する", "ひょうじ");
             addFunc("足す", "AにBを|Aと", NakoVariableType.Object, _add, "値Aと値Bを足して返す", "たす");
             addFunc("足す!", "{参照渡し}AにBを|Aと", NakoVariableType.Object, _addEx, "変数Aと値Bを足して返す(変数A自身を書き換える)", "たす!");
@@ -34,11 +31,7 @@ namespace Libnako.NakoAPI
             addFunc("引く!", "{参照渡し}AからBを", NakoVariableType.Object, _subEx, "変数Aから値Bを引いて返す(変数A自身を書き換える)", "ひく!");
         }
 
-        /// <summary>
-        /// システム関数「言う」命令を実装したモノ
-        /// </summary>
-        /// <param name="info"></param>
-        /// <returns></returns>
+        /*
         public Object _say(NakoFuncCallInfo info)
         {
             Object s = info.StackPop();
@@ -48,6 +41,7 @@ namespace Libnako.NakoAPI
             MessageBox.Show(msg);
             return null;
         }
+         */
 
         public Object _show(NakoFuncCallInfo info)
         {
