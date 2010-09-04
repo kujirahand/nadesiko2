@@ -94,12 +94,13 @@ namespace Libnako.JCompiler.Parser
         }
 
         //> _statement : _let
-        //>            | _def_function
         //>            | _if_stmt
         //>            | _white
         //>            | _for
-        //>            | _callfunc_stmt
         //>            | _repeat_times
+        //>            | _def_function
+        //>            | _def_variable
+        //>            | _callfunc_stmt
         //>            | _print
         //>            ;
         private Boolean _statement()
@@ -107,13 +108,14 @@ namespace Libnako.JCompiler.Parser
             if (tok.IsEOF()) return true;
 
             if (_let()) return true;
-            if (_def_function()) return true;
             if (_if_stmt()) return true;
             if (_while()) return true;
             if (_for()) return true;
             if (_repeat_times()) return true;
-            if (_print()) return true;
+            if (_def_function()) return true;
+            if (_def_variable()) return true;
             if (_callfunc_stmt()) return true;
+            if (_print()) return true;
 
             // 突然の字下げも構文の１つと考える
             if (Accept(NakoTokenType.SCOPE_BEGIN))
@@ -127,9 +129,17 @@ namespace Libnako.JCompiler.Parser
             return false;
         }
 
-        // _scope_or_statement : _scope
-        //                     | _statement
-        //                     ;
+        //> _def_variable : _scope
+        //>               | _statement
+        //>               ;
+        private Boolean _def_variable()
+        {
+            return false;
+        }
+
+        //> _scope_or_statement : _scope
+        //>                     | _statement
+        //>                     ;
         private NakoNode _scope_or_statement()
         {
             while (Accept(NakoTokenType.EOL)) tok.MoveNext();
