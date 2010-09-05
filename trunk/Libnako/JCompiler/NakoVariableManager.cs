@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NakoPlugin;
 
 namespace Libnako.JCompiler
 {
@@ -41,8 +42,8 @@ namespace Libnako.JCompiler
             {
                 // 変数「それ」を登録
                 NakoVariable sore = new NakoVariable();
-                sore.type = NakoVariableType.Int;
-                sore.body = 0;
+                sore.Type = NakoVarType.Int;
+                sore.Body = 0;
                 list.Add(sore);
                 names["それ"] = 0;
             }
@@ -120,7 +121,7 @@ namespace Libnako.JCompiler
                 v = new NakoVariable();
                 SetVar(index, v);
             }
-            v.body = value;
+            v.Body = value;
         }
 
         public Object GetValue(int index)
@@ -135,7 +136,7 @@ namespace Libnako.JCompiler
                 }
                 SetVar(index, v);
             }
-            return v.body;
+            return v.Body;
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Libnako.JCompiler.Parser;
 using Libnako.JCompiler.Function;
+using NakoPlugin;
 
 namespace Libnako.JCompiler.Node
 {
@@ -12,7 +13,7 @@ namespace Libnako.JCompiler.Node
         /// <summary>
         /// 変数タイプ
         /// </summary>
-		public NakoVariableType varType { get; set; }
+		public NakoVarType varType { get; set; }
 		/// <summary>
 		/// 変数番号
 		/// </summary>
@@ -32,15 +33,15 @@ namespace Libnako.JCompiler.Node
 
         public Boolean IsVarTypeSimple()
         {
-            return (varType == NakoVariableType.Int ||
-                varType == NakoVariableType.Double ||
-                varType == NakoVariableType.String);
+            return (varType == NakoVarType.Int ||
+                varType == NakoVarType.Double ||
+                varType == NakoVarType.String);
         }
 
 		public NakoNodeVariable(Object value = null) : base(value)
 		{
 			this.scope = NakoVariableScope.Global;
-			this.varType = NakoVariableType.Int;
+			this.varType = NakoVarType.Int;
 			this.varNo = -1;
 			this.varBy = VarByType.ByVal;
 		}

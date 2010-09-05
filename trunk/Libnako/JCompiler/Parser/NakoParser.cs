@@ -5,6 +5,7 @@ using Libnako.JCompiler.Node;
 using Libnako.JCompiler.Tokenizer;
 using Libnako.JCompiler.Function;
 using Libnako.NakoAPI;
+using NakoPlugin;
 
 namespace Libnako.JCompiler.Parser
 {
@@ -134,23 +135,23 @@ namespace Libnako.JCompiler.Parser
         private Boolean _def_variable()
         {
             if (!Accept(NakoTokenType.WORD)) return false;
-            NakoVariableType st = NakoVariableType.Object;
+            NakoVarType st = NakoVarType.Object;
             switch (tok.NextTokenType)
             {
                 case NakoTokenType.DIM_VARIABLE:
-                    st = NakoVariableType.Object;
+                    st = NakoVarType.Object;
                     break;
                 case NakoTokenType.DIM_NUMBER:
-                    st = NakoVariableType.Double;
+                    st = NakoVarType.Double;
                     break;
                 case NakoTokenType.DIM_INT:
-                    st = NakoVariableType.Int;
+                    st = NakoVarType.Int;
                     break;
                 case NakoTokenType.DIM_STRING:
-                    st = NakoVariableType.String;
+                    st = NakoVarType.String;
                     break;
                 case NakoTokenType.DIM_ARRAY:
-                    st = NakoVariableType.Array;
+                    st = NakoVarType.Array;
                     break;
                 default:
                     return false;
@@ -158,7 +159,7 @@ namespace Libnako.JCompiler.Parser
             NakoToken t = tok.CurrentToken;
             int varNo = localVar.CreateVar(t.getValueAsName());
             NakoVariable v = localVar.GetVar(varNo);
-            v.type = st;
+            v.Type = st;
             tok.MoveNext(); // skip WORD
             tok.MoveNext(); // skip DIM_xxx
 
@@ -459,15 +460,15 @@ namespace Libnako.JCompiler.Parser
             NakoFunc func = null;
             callNode.Token = t;
 
-            if (var.type == NakoVariableType.SystemFunc)
+            if (var.Type == NakoVarType.SystemFunc)
             {
-                int funcNo = (int)var.body;
-                func = NakoAPIFuncBank.Instance.list[funcNo];
+                int funcNo = (int)var.Body;
+                func = NakoAPIFuncBank.Instance.FuncList[funcNo];
                 callNode.func = func;
             }
             else
             {
-                NakoNodeDefFunction defNode = (NakoNodeDefFunction)var.body;
+                NakoNodeDefFunction defNode = (NakoNodeDefFunction)var.Body;
                 func = callNode.func = defNode.func;
                 callNode.value = defNode;
             }
@@ -529,8 +530,8 @@ namespace Libnako.JCompiler.Parser
             PopFrame();
             // グローバル変数に登録
             NakoVariable v = new NakoVariable();
-            v.type = NakoVariableType.UserFunc;
-            v.body = funcNode;
+            v.Type = NakoVarType.UserFunc;
+            v.Body = funcNode;
             globalVar.CreateVar(userFunc.name, v);
             // 関数の宣言は、ノードのトップ直下に追加する
             if (!this.topNode.hasChildren())

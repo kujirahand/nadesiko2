@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using NakoPlugin;
 
 namespace Libnako.JCompiler.Function
 {
@@ -14,7 +15,7 @@ namespace Libnako.JCompiler.Function
 		public String name { get; set; }
 		public NakoFuncArgs args { get; set; }
 		public NakoFuncType funcType { get; set; }
-		public NakoVariableType resultType { get; set; }
+		public NakoVarType resultType { get; set; }
 
         public NakoFunc()
         {
@@ -31,7 +32,7 @@ namespace Libnako.JCompiler.Function
         public virtual void Init()
         {
 			funcType = NakoFuncType.UserCall;
-			resultType = NakoVariableType.Void;
+			resultType = NakoVarType.Void;
             args = new NakoFuncArgs();
         }
 

@@ -7,6 +7,7 @@ using Libnako.JCompiler.Function;
 using Libnako.JCompiler;
 using Libnako.Interpreter;
 using Libnako.NakoAPI.WrapLib;
+using NakoPlugin;
 
 namespace Libnako.NakoAPI
 {
@@ -26,20 +27,23 @@ namespace Libnako.NakoAPI
         {
             //+システム
             //-バージョン情報
-            addFunc("ナデシコバージョン", "", NakoVariableType.Double, _nakoVersion, "なでしこのバージョン番号を返す", "なでしこばーじょん");
-            addFunc("OSバージョン", "", NakoVariableType.String, _osVersion, "OSのバージョン番号を返す", "OSばーじょん");
-            addFunc("OS", "", NakoVariableType.String, _os, "OSの種類を返す", "OS");
+            addFunc("ナデシコバージョン", "", NakoVarType.Double, _nakoVersion, "なでしこのバージョン番号を返す", "なでしこばーじょん");
+            addFunc("OSバージョン", "", NakoVarType.String, _osVersion, "OSのバージョン番号を返す", "OSばーじょん");
+            addFunc("OS", "", NakoVarType.String, _os, "OSの種類を返す", "OS");
             
+            //-基本定数
+            addVar("はい", 1, "1", "はい");
+            addVar("いいえ", 0, "0", "いいえ");
             
             //+コンソールデバッグ用
-            addFunc("表示", "Sと|Sを", NakoVariableType.Void, _show, "メッセージSを表示する", "ひょうじ");
+            addFunc("表示", "Sと|Sを", NakoVarType.Void, _show, "メッセージSを表示する", "ひょうじ");
             //+計算
-            addFunc("足す", "AにBを|Aと", NakoVariableType.Object, _add, "値Aと値Bを足して返す", "たす");
-            addFunc("足す!", "{参照渡し}AにBを|Aと", NakoVariableType.Object, _addEx, "変数Aと値Bを足して返す(変数A自身を書き換える)", "たす!");
-            addFunc("引く", "AからBを", NakoVariableType.Object, _sub, "値Aから値Bを引いて返す", "ひく");
-            addFunc("引く!", "{参照渡し}AからBを", NakoVariableType.Object, _subEx, "変数Aから値Bを引いて返す(変数A自身を書き換える)", "ひく!");
+            addFunc("足す", "AにBを|Aと", NakoVarType.Object, _add, "値Aと値Bを足して返す", "たす");
+            addFunc("足す!", "{参照渡し}AにBを|Aと", NakoVarType.Object, _addEx, "変数Aと値Bを足して返す(変数A自身を書き換える)", "たす!");
+            addFunc("引く", "AからBを", NakoVarType.Object, _sub, "値Aから値Bを引いて返す", "ひく");
+            addFunc("引く!", "{参照渡し}AからBを", NakoVarType.Object, _subEx, "変数Aから値Bを引いて返す(変数A自身を書き換える)", "ひく!");
             //+文字列操作
-            addFunc("何文字目", "SでSSが|Sの", NakoVariableType.String, _strpos, "文字列Sで文字列SSが何文字目にあるか調べて返す", "なんもじめ");
+            addFunc("何文字目", "SでSSが|Sの", NakoVarType.String, _strpos, "文字列Sで文字列SSが何文字目にあるか調べて返す", "なんもじめ");
         }
 
         /*
@@ -102,7 +106,7 @@ namespace Libnako.NakoAPI
             {
                 throw new NakoAPIError("『足す!』の引数が変数ではありません");
             }
-            Object a = ((NakoVariable)ar).body;
+            Object a = ((NakoVariable)ar).Body;
             Object c;
             if (a is Int64 && b is Int64)
             {
@@ -115,7 +119,7 @@ namespace Libnako.NakoAPI
                 c = da + db;
             }
             // 結果をセット
-            ((NakoVariable)ar).body = c;
+            ((NakoVariable)ar).Body = c;
             return (c);
         }
 
@@ -143,7 +147,7 @@ namespace Libnako.NakoAPI
             {
                 throw new NakoAPIError("『引く!』の引数が変数ではありません");
             }
-            Object a = ((NakoVariable)ar).body;
+            Object a = ((NakoVariable)ar).Body;
             Object c;
             if (a is Int64 && b is Int64)
             {
@@ -156,7 +160,7 @@ namespace Libnako.NakoAPI
                 c = da - db;
             }
             // 結果をセット
-            ((NakoVariable)ar).body = c;
+            ((NakoVariable)ar).Body = c;
             return (c);
         }
 
