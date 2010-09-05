@@ -69,9 +69,9 @@ namespace Libnako.JCompiler.Tokenizer
                 {
                     NakoToken token = tokens.CurrentToken;
                     string key = token.getValueAsName();
-                    if (NakoDic.Instance.ContainsKey(key))
+                    if (NakoDicReservedWord.Instance.ContainsKey(key))
                     {
-                        token.type = NakoDic.Instance[key];
+                        token.type = NakoDicReservedWord.Instance[key];
                     }
                 }
                 // 助詞が「は」ならば、代入文に変える
@@ -120,7 +120,7 @@ namespace Libnako.JCompiler.Tokenizer
                         throw new NakoTokenizerException("関数宣言で関数名がありません。", firstToken);
                     }
                     // 関数名を辞書に登録する
-                    NakoDic.Instance[fnameToken.getValueAsName()] = 
+                    NakoDicReservedWord.Instance[fnameToken.getValueAsName()] = 
                         NakoTokenType.FUNCTION_NAME;
                     fnameToken.type = NakoTokenType.FUNCTION_NAME;
                     break;
