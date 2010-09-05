@@ -89,5 +89,18 @@ namespace TestNako
             ni.Run(nc.Codes);
             Assert.AreEqual("2222", ni.PrintLog);
         }
+        [Test]
+        public void Test_localVar_array()
+        {
+            NakoCompiler nc = new NakoCompiler();
+            NakoInterpreter ni = new NakoInterpreter();
+            nc.DirectSource =
+                "Cとは変数\n"+
+                "C￥１￥２￥３=2222\n" +
+                "C￥１￥２￥３を表示。\n" +
+                "";
+            ni.Run(nc.Codes);
+            Assert.AreEqual("2222", ni.PrintLog);
+        }
     }
 }

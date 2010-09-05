@@ -6,6 +6,7 @@ using System.Text;
 using Libnako.JCompiler.Function;
 using Libnako.JCompiler;
 using Libnako.Interpreter;
+using Libnako.NakoAPI.WrapLib;
 
 namespace Libnako.NakoAPI
 {
@@ -23,11 +24,22 @@ namespace Libnako.NakoAPI
         /// </summary>
         protected override void DefineFunction()
         {
+            //+システム
+            //-バージョン情報
+            addFunc("ナデシコバージョン", "", NakoVariableType.Double, _nakoVersion, "なでしこのバージョン番号を返す", "なでしこばーじょん");
+            addFunc("OSバージョン", "", NakoVariableType.String, _osVersion, "OSのバージョン番号を返す", "OSばーじょん");
+            addFunc("OS", "", NakoVariableType.String, _os, "OSの種類を返す", "OS");
+            
+            
+            //+コンソールデバッグ用
             addFunc("表示", "Sと|Sを", NakoVariableType.Void, _show, "メッセージSを表示する", "ひょうじ");
+            //+計算
             addFunc("足す", "AにBを|Aと", NakoVariableType.Object, _add, "値Aと値Bを足して返す", "たす");
             addFunc("足す!", "{参照渡し}AにBを|Aと", NakoVariableType.Object, _addEx, "変数Aと値Bを足して返す(変数A自身を書き換える)", "たす!");
             addFunc("引く", "AからBを", NakoVariableType.Object, _sub, "値Aから値Bを引いて返す", "ひく");
             addFunc("引く!", "{参照渡し}AからBを", NakoVariableType.Object, _subEx, "変数Aから値Bを引いて返す(変数A自身を書き換える)", "ひく!");
+            //+文字列操作
+            addFunc("何文字目", "SでSSが|Sの", NakoVariableType.String, _strpos, "文字列Sで文字列SSが何文字目にあるか調べて返す", "なんもじめ");
         }
 
         /*
@@ -41,6 +53,21 @@ namespace Libnako.NakoAPI
             return null;
         }
          */
+
+        public Object _nakoVersion(NakoFuncCallInfo info)
+        {
+            return NakoInfo.NakoVersion;
+        }
+
+        public Object _osVersion(NakoFuncCallInfo info)
+        {
+            return System.Environment.OSVersion.Version;
+        }
+
+        public Object _os(NakoFuncCallInfo info)
+        {
+            return NWEnviroment.osVersionStr();
+        }
 
         public Object _show(NakoFuncCallInfo info)
         {
@@ -131,6 +158,14 @@ namespace Libnako.NakoAPI
             // 結果をセット
             ((NakoVariable)ar).body = c;
             return (c);
+        }
+
+        public Object _strpos(NakoFuncCallInfo info)
+        {
+            String s = info.StackPopAsString();
+            String ss = info.StackPopAsString();
+            int i = s.IndexOf(ss);
+            return (i + 1); // 1からはじまるので
         }
     }
 }

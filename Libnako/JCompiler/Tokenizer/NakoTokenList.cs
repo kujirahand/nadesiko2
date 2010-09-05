@@ -158,6 +158,10 @@ namespace Libnako.JCompiler.Tokenizer
             {
                 if (s != "") { s += ","; }
                 s += t.type.ToString();
+                if (t.value is string)
+                {
+                    s += "(" + (string)t.value + ")";
+                }
             }
             return s;
         }

@@ -29,6 +29,7 @@ namespace Libnako.JCompiler.Tokenizer
             dic.AddWord("整数", NakoTokenType.DIM_INT);
             dic.AddWord("文字列", NakoTokenType.DIM_STRING);
             dic.AddWord("変数", NakoTokenType.DIM_VARIABLE);
+            dic.AddWord("配列変数", NakoTokenType.DIM_ARRAY);
         }
     }
 }
