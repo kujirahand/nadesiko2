@@ -7,18 +7,18 @@ namespace Libnako.JCompiler.Tokenizer
     /// <summary>
     /// なでしこ単語管理クラス
     /// </summary>
-    public class NakoDic : IDictionary<string, NakoTokenType>
+    public class NakoDicReservedWord : IDictionary<string, NakoTokenType>
     {
 		/// <summary>
 		/// Dictionaryの実体
 		/// </summary>
 		private Dictionary<string, NakoTokenType> _dictionary = new Dictionary<string, NakoTokenType>();
-        private static readonly NakoDic _Instance = new NakoDic();
+        private static readonly NakoDicReservedWord _Instance = new NakoDicReservedWord();
 		/// <summary>
         /// Singleton でインスタンス管理
         /// </summary>
-		public static NakoDic Instance { get { return _Instance; } }
-        private NakoDic()
+		public static NakoDicReservedWord Instance { get { return _Instance; } }
+        private NakoDicReservedWord()
         {
             Init();
         }

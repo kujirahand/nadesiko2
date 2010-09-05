@@ -14,7 +14,7 @@ namespace TestNako
         [Test(Description = "First Test")]
         public void test1()
         {
-            NakoDic dic = NakoDic.Instance;
+            NakoDicReservedWord dic = NakoDicReservedWord.Instance;
             if (dic.ContainsKey("hoge_")) {
                 Assert.Fail("hoge has not element!");
             }

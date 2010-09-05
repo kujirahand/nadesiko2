@@ -30,7 +30,7 @@ namespace Libnako.NakoAPI
         public void RegisterToSystem(NakoVariableManager globalVar)
         {
             // Tokenizer.NakoDic に登録
-            NakoDic dic = NakoDic.Instance;
+            NakoDicReservedWord dic = NakoDicReservedWord.Instance;
             for (int i = 0; i < list.Count; i++)
             {
                 NakoAPIFunc call = list[i];
