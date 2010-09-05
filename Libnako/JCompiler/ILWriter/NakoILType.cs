@@ -14,6 +14,7 @@ namespace Libnako.JCompiler.ILWriter
         // 何もしない
         NOP               = 0x00, // {args:0, push:0, pop:0} 
 
+        // --- STACKへのPUSH系統 ---
         // 定数をスタックに乗せる
         LD_CONST_INT      = 0x01, // {args:1, push:1, pop:0} 
         LD_CONST_REAL     = 0x02, // {args:1, push:1, pop:0} 
@@ -25,10 +26,13 @@ namespace Libnako.JCompiler.ILWriter
         LD_GLOBAL_REF     = 0x12, // {args:1, push:1, pop:0}
         LD_LOCAL_REF      = 0x13, // {args:1, push:1, pop:0}     
 
+        // --- STACKからのPOP系統 ---
         // スタックから下ろして値を変数に記憶する set(varno)
         ST_GLOBAL         = 0x20, // {args:1, push:0, pop:1} 
-        ST_LOCAL          = 0x21, // {args:1, push:0, pop:1} 
-        
+        ST_LOCAL          = 0x21, // {args:1, push:0, pop:1}
+        POP               = 0x22, // {args:1, push:0, pop:1}
+
+        // --- STACKからの配列操作 ---
         // 配列
         NEW_ARR           = 0x30, // { args:1, push:1, pop:0 } 
         ST_ELEM           = 0x31, // { args:0, push:0, pop:3 }

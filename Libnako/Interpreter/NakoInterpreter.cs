@@ -116,11 +116,20 @@ namespace Libnako.Interpreter
 
         public Object StackPop()
         {
-            return stack.Pop();
+            Object v = stack.Pop();
+            if (debugMode)
+            {
+                Console.WriteLine("- POP:" + Convert.ToString(v));
+            }
+            return v;
         }
 
         public void StackPush(Object v)
         {
+            if (debugMode)
+            {
+                Console.WriteLine("- PUSH:" + Convert.ToString(v));
+            }
             stack.Push(v);
         }
 
@@ -151,10 +160,11 @@ namespace Libnako.Interpreter
                 case NakoILType.NOP:
                     /* do nothing */
                     break;
+                case NakoILType.POP:            StackPop(); break;
                 // 定数をスタックに乗せる
-                case NakoILType.LD_CONST_INT:   stack.Push(code.value); break;
-                case NakoILType.LD_CONST_REAL:  stack.Push(code.value); break;
-                case NakoILType.LD_CONST_STR:   stack.Push(code.value); break;
+                case NakoILType.LD_CONST_INT:   StackPush(code.value); break;
+                case NakoILType.LD_CONST_REAL:  StackPush(code.value); break;
+                case NakoILType.LD_CONST_STR:   StackPush(code.value); break;
                 // 変数の値をスタックに乗せる
                 case NakoILType.LD_GLOBAL:      ld_global((int)code.value); break;
                 case NakoILType.LD_LOCAL:       ld_local((int)code.value); break;
@@ -251,14 +261,14 @@ namespace Libnako.Interpreter
         {
             Int64 v = (Int64)stack.Pop();
             v++;
-            stack.Push(v);
+            StackPush(v);
         }
 
         private void _dec()
         {
             Int64 v = (Int64)stack.Pop();
             v--;
-            stack.Push(v);
+            StackPush(v);
         }
 
         private void _neg()
@@ -266,11 +276,11 @@ namespace Libnako.Interpreter
             Object v = stack.Pop();
             if (v is Int64)
             {
-                stack.Push((Int64)v * -1);
+                StackPush((Int64)v * -1);
             }
             if (v is Double)
             {
-                stack.Push((Double)v * -1);
+                StackPush((Double)v * -1);
             }
             throw new NakoInterpreterException("数値以外にマイナスをつけました");
         }
@@ -280,11 +290,11 @@ namespace Libnako.Interpreter
             Object v = stack.Pop();
             if (v is Int64)
             {
-                stack.Push(((Int64)v == 0) ? 1 : 0);
+                StackPush(((Int64)v == 0) ? 1 : 0);
             }
             if (v is Double)
             {
-                stack.Push(((Double)v == 0) ? 1 : 0);
+                StackPush(((Double)v == 0) ? 1 : 0);
             }
             throw new NakoInterpreterException("数値以外にマイナスをつけました");
         }
@@ -304,25 +314,36 @@ namespace Libnako.Interpreter
         private void ld_local(int no)
         {
             Object p = localVar.GetValue(no);
-            stack.Push(p);
+            StackPush(p);
         }
 
         private void ld_global(int no)
         {
             Object p = globalVar.GetValue(no);
-            stack.Push(p);
+            StackPush(p);
         }
 
         private void ld_local_ref(int no)
         {
             NakoVariable v = localVar.GetVar(no);
-            stack.Push(v);
+            if (v == null)
+            {
+                v = new NakoVariable();
+                localVar.SetVar(no, v);
+            }
+            StackPush(v);
         }
 
         private void ld_global_ref(int no)
         {
             NakoVariable v = globalVar.GetVar(no);
-            stack.Push(v);
+            if (v == null)
+            {
+                v = new NakoVariable();
+                v.varNo = no;
+                globalVar.SetVar(no, v);
+            }
+            StackPush(v);
         }
 
         private void ld_elem()
@@ -330,16 +351,12 @@ namespace Libnako.Interpreter
             Object idx = StackPop();
             Object var = StackPop();
             Object r = null;
-            if (var is NakoArray)
+            if (var is NakoVariable)
             {
-                NakoArray ary = (NakoArray)var;
-                if (idx is String)
+                if (((NakoVariable)var).body is NakoArray)
                 {
-                    r = ary.GetValueFromKey((string)idx);
-                }
-                else
-                {
-                    r = ary.GetValue(int.Parse(idx.ToString()));
+                    NakoArray ary = (NakoArray)((NakoVariable)var).body;
+                    r = ary.GetValueFromObj(idx);
                 }
             }
             StackPush(r);
@@ -406,6 +423,10 @@ namespace Libnako.Interpreter
                     {
                         elem = new NakoVariable();
                         elem.body = value;
+                        if (index is Int64)
+                        {
+                            elem.varNo = Convert.ToInt32(index);
+                        }
                         var3.SetVarFromObj(index, elem);
                     }
                     else
@@ -446,7 +467,7 @@ namespace Libnako.Interpreter
         {
             Object b = stack.Pop();
             Object a = stack.Pop();
-            stack.Push(f(a, b));
+            StackPush(f(a, b));
         }
 
         private Double ToDouble(Object v)

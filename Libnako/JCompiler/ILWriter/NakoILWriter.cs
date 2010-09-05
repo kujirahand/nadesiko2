@@ -57,6 +57,9 @@ namespace Libnako.JCompiler.ILWriter
                 case NakoNodeType.STRING:
                     result.Add(new NakoILCode(NakoILType.LD_CONST_STR, node.value));
                     return;
+                case NakoNodeType.POP:
+                    result.Add(new NakoILCode(NakoILType.POP));
+                    return;
                 case NakoNodeType.PRINT:
                     _print(node);
                     return;
@@ -374,8 +377,8 @@ namespace Libnako.JCompiler.ILWriter
                 // + 配列変数アクセス
                 // - 変数
                 ld.type = (node.scope == NakoVariableScope.Global)
-                    ? NakoILType.LD_GLOBAL
-                    : NakoILType.LD_LOCAL;
+                    ? NakoILType.LD_GLOBAL_REF
+                    : NakoILType.LD_LOCAL_REF;
                 ld.value = node.varNo;
                 result.Add(ld);
                 // - 要素

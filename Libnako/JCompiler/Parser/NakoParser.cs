@@ -322,16 +322,19 @@ namespace Libnako.JCompiler.Parser
             }
             TokenFinally();
             
+            // 計算用スタックの管理
             if (calcStack.Count > 0)
             {
                 while (calcStack.Count > 0)
                 {
                     NakoNode n = calcStack.Shift();
                     parentNode.AddChild(n);
+                    parentNode.AddChild(new NakoNodePop());
                 }
-                //throw new NakoParserException("余剰スタックがあります", tok.CurrentToken);
             }
-            // TODO: スタックを空にする or 余剰なスタックがあればエラーに。
+            // ここで本来ならば
+            // スタックを空にする or 余剰なスタックがあればエラーにするのが筋だが...
+            // 連続関数呼び出しに対応するためエラーにしない
             return true;
         }
 
