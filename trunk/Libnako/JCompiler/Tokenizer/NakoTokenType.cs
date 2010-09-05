@@ -69,6 +69,7 @@ namespace Libnako.JCompiler.Tokenizer
         DIM_INT,
         DIM_STRING,
         DIM_VARIABLE,
+        DIM_ARRAY,
         // DEBUG
         PRINT
     }

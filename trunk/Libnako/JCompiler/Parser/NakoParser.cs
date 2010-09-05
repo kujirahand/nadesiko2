@@ -129,7 +129,7 @@ namespace Libnako.JCompiler.Parser
             return false;
         }
 
-        //> _def_variable : WORD (DIM_VARIABLE|DIM_NUMBER|DIM_INT|DIM_STRING) [=_value]
+        //> _def_variable : WORD (DIM_VARIABLE|DIM_NUMBER|DIM_INT|DIM_STRING|DIM_ARRAY) [=_value]
         //>               ;
         private Boolean _def_variable()
         {
@@ -148,6 +148,9 @@ namespace Libnako.JCompiler.Parser
                     break;
                 case NakoTokenType.DIM_STRING:
                     st = NakoVariableType.String;
+                    break;
+                case NakoTokenType.DIM_ARRAY:
+                    st = NakoVariableType.Array;
                     break;
                 default:
                     return false;

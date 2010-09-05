@@ -439,9 +439,12 @@ namespace Libnako.JCompiler.ILWriter
         private void _call_function(NakoNodeCallFunction node)
         {
             // push args values
-            for (int i = 0; i < node.argNodes.Count; i++)
+            if (node.argNodes != null)
             {
-                Write_r(node.argNodes[i]);
+                for (int i = 0; i < node.argNodes.Count; i++)
+                {
+                    Write_r(node.argNodes[i]);
+                }
             }
             NakoILCode code = new NakoILCode();
             if (node.func.funcType == Function.NakoFuncType.SysCall)
