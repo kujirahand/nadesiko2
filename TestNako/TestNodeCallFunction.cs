@@ -96,12 +96,14 @@ namespace TestNako
         [Test]
         public void TestUserFunc_sub2()
         {
-            codes = ns.Publish(
+            NakoCompiler nc = new NakoCompiler();
+            NakoInterpreter ni = new NakoInterpreter();
+            nc.Publish(
                 "3を10から引く。\n" +
                 "PRINT それ\n" +
                 "\n");
-            runner.Run(codes);
-            Assert.AreEqual(runner.PrintLog, "7");
+            ni.Run(nc.Codes);
+            Assert.AreEqual("7", ni.PrintLog);
         }
         [Test]
         public void TestStackCall_noJosi()
@@ -112,7 +114,7 @@ namespace TestNako
                 "100,10,5,引く,足す,表示\n" +
                 "\n");
             runner.Run(codes);
-            Assert.AreEqual(runner.PrintLog, "105");
+            Assert.AreEqual("105",runner.PrintLog);
         }
         [Test]
         public void TestCall_likeBASIC1()
@@ -122,7 +124,7 @@ namespace TestNako
                 "PRINT 引く(10,4)\n" +
                 "\n");
             runner.Run(codes);
-            Assert.AreEqual(runner.PrintLog, "6");
+            Assert.AreEqual("6",runner.PrintLog);
         }
         [Test]
         public void TestCall_likeBASIC2()
@@ -132,7 +134,7 @@ namespace TestNako
                 "引く(10,4)を表示\n" +
                 "\n");
             runner.Run(codes);
-            Assert.AreEqual(runner.PrintLog, "6");
+            Assert.AreEqual("6", runner.PrintLog);
         }
         [Test]
         public void TestCall_likeBASIC3()

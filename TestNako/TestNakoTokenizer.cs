@@ -15,6 +15,7 @@ namespace TestNako
         public void TestCountIndent()
         {
             NakoTokenizer tok = new NakoTokenizer(null);
+            NakoDicReservedWord.Init(tok.TokenDic);
             tok.Source = "    *";
             Assert.AreEqual(tok.CountIndent(), 4);
             tok.Source = "    ";
@@ -30,6 +31,7 @@ namespace TestNako
         {
             Boolean r;
             NakoTokenizer tok = new NakoTokenizer(null);
+            NakoDicReservedWord.Init(tok.TokenDic);
             tok.Source = "から";
             Assert.IsTrue(tok.CompareStr("から"));
             // 2
@@ -53,6 +55,7 @@ namespace TestNako
         {
             // 1
             NakoTokenizer tok = new NakoTokenizer(null);
+            NakoDicReservedWord.Init(tok.TokenDic);
             Boolean r;
             tok.Source = "1";
             tok.Tokenize();
@@ -86,9 +89,11 @@ namespace TestNako
         public void TestBlockLevel()
         {
             NakoTokenizer tok = new NakoTokenizer(null);
+            NakoDicReservedWord.Init(tok.TokenDic);
             Boolean r;
             //
-            tok.Source = "もし、A=1ならば\n" +
+            tok.Source =
+                "もし、A=1ならば\n" +
                 "  PRINT A\n" +
                 "違えば\n" +
                 "  PRINT A\n";

@@ -19,7 +19,7 @@ namespace Libnako.Interpreter
         /// <summary>
         /// 計算用のスタック
         /// </summary>
-        protected Stack<Object> stack;
+        protected Stack<Object> calcStack;
         /// <summary>
         /// 仮想バイトコードの一覧
         /// </summary>
@@ -65,7 +65,7 @@ namespace Libnako.Interpreter
         /// </summary>
         public void Reset()
         {
-            stack = new Stack<Object>();
+            calcStack = new Stack<Object>();
             globalVar = new NakoVariableManager(NakoVariableScope.Global);
             localVar = new NakoVariableManager();
             callStack = new Stack<NakoCallStack>();
@@ -109,14 +109,14 @@ namespace Libnako.Interpreter
         public Object StackTop
         {
             get {
-                if (stack.Count == 0) return null;
-                return stack.Peek();
+                if (calcStack.Count == 0) return null;
+                return calcStack.Peek();
             }
         }
 
         public Object StackPop()
         {
-            Object v = stack.Pop();
+            Object v = calcStack.Pop();
             if (debugMode)
             {
                 Console.WriteLine("- POP:" + Convert.ToString(v));
@@ -130,7 +130,7 @@ namespace Libnako.Interpreter
             {
                 Console.WriteLine("- PUSH:" + Convert.ToString(v));
             }
-            stack.Push(v);
+            calcStack.Push(v);
         }
 
         protected void Run_NakoIL(NakoILCode code)
@@ -233,7 +233,7 @@ namespace Libnako.Interpreter
 
         private void _branch_true(NakoILCode code)
         {
-            Object v = stack.Pop();
+            Object v = calcStack.Pop();
             if (NakoValueConveter.ToLong(v) > 0)
             {
                 autoIncPos = false;
@@ -243,7 +243,7 @@ namespace Libnako.Interpreter
 
         private void _branch_false(NakoILCode code)
         {
-            Object v = stack.Pop();
+            Object v = calcStack.Pop();
             if (NakoValueConveter.ToLong(v) == 0)
             {
                 autoIncPos = false;
@@ -259,21 +259,21 @@ namespace Libnako.Interpreter
 
         private void _inc()
         {
-            Int64 v = (Int64)stack.Pop();
+            Int64 v = (Int64)calcStack.Pop();
             v++;
             StackPush(v);
         }
 
         private void _dec()
         {
-            Int64 v = (Int64)stack.Pop();
+            Int64 v = (Int64)calcStack.Pop();
             v--;
             StackPush(v);
         }
 
         private void _neg()
         {
-            Object v = stack.Pop();
+            Object v = calcStack.Pop();
             if (v is Int64)
             {
                 StackPush((Int64)v * -1);
@@ -287,7 +287,7 @@ namespace Libnako.Interpreter
 
         private void _not()
         {
-            Object v = stack.Pop();
+            Object v = calcStack.Pop();
             if (v is Int64)
             {
                 StackPush(((Int64)v == 0) ? 1 : 0);
@@ -301,13 +301,13 @@ namespace Libnako.Interpreter
 
         private void st_local(int no)
         {
-            Object p = stack.Pop();
+            Object p = calcStack.Pop();
             localVar.SetValue(no, p);
         }
 
         private void st_global(int no)
         {
-            Object p = stack.Pop();
+            Object p = calcStack.Pop();
             globalVar.SetValue(no, p);
         }
 
@@ -351,7 +351,11 @@ namespace Libnako.Interpreter
             Object idx = StackPop();
             Object var = StackPop();
             Object r = null;
-            if (var is NakoVariable)
+            if (var is NakoArray)
+            {
+                r = ((NakoArray)var).GetValueFromObj(idx);
+            }
+            else if (var is NakoVariable)
             {
                 if (((NakoVariable)var).body is NakoArray)
                 {
@@ -439,7 +443,7 @@ namespace Libnako.Interpreter
 
         private void exec_print()
         {
-            Object o = stack.Pop();
+            Object o = calcStack.Pop();
             String s;
             if (o == null) {
                 s = "";
@@ -465,8 +469,8 @@ namespace Libnako.Interpreter
 
         private void exec_calc(CalcMethodType f)
         {
-            Object b = stack.Pop();
-            Object a = stack.Pop();
+            Object b = calcStack.Pop();
+            Object a = calcStack.Pop();
             StackPush(f(a, b));
         }
 

@@ -2,6 +2,9 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestNako", "TestNako\TestNako.csproj", "{6A26AF1C-6734-4B03-BD92-F5D0FB0F9C0F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F9297385-ACE0-43AD-AD66-819C5A60FE80} = {F9297385-ACE0-43AD-AD66-819C5A60FE80}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Libnako", "Libnako\Libnako.csproj", "{F9297385-ACE0-43AD-AD66-819C5A60FE80}"
 EndProject
