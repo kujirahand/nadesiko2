@@ -6,6 +6,7 @@ using NUnit.Framework;
 
 using Libnako.JCompiler.Node;
 using Libnako.JCompiler;
+using Libnako.Interpreter;
 
 namespace TestNako
 {
@@ -13,7 +14,7 @@ namespace TestNako
     public class TestNakoParser
     {
         [Test]
-        public void TestLet()
+        public void TestCalc()
         {
             // 1
             NakoCompiler ns = new NakoCompiler(null);
@@ -40,6 +41,18 @@ namespace TestNako
             r = ns.TopNode.Children.checkNodeType(new NakoNodeType[] {
                 NakoNodeType.LET
             });
+        }
+
+        [Test]
+        public void TestDef()
+        {
+            NakoCompiler c = new NakoCompiler();
+            NakoInterpreter i = new NakoInterpreter();
+            c.DirectSource =
+                "Aとは変数=30" +
+                "PRINT A";
+            i.Run(c.Codes);
+            Assert.AreEqual("30", i.PrintLog);
         }
     }
 }

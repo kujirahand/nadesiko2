@@ -9,6 +9,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Libnako", "Libnako\Libnako.csproj", "{F9297385-ACE0-43AD-AD66-819C5A60FE80}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cnako2", "cnako2\cnako2.csproj", "{6A22E146-C2AC-473B-9F3C-0D88DE3FDF3E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{6A26AF1C-6734-4B03-BD92-F5D0FB0F9C0F} = {6A26AF1C-6734-4B03-BD92-F5D0FB0F9C0F}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

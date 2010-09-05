@@ -64,9 +64,12 @@ namespace Libnako.JCompiler.Tokenizer
         // 波括弧(中括弧)
         BRACES_L,
         BRACES_R,
+        // 数値、整数、文字列
+        DIM_NUMBER,
+        DIM_INT,
+        DIM_STRING,
+        DIM_VARIABLE,
         // DEBUG
-        PRINT,
-
-        END_OF_TOKEN
+        PRINT
     }
 }

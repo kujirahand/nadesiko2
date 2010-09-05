@@ -18,8 +18,8 @@ namespace cnako2
             // Compile
             NakoCompiler compiler = new NakoCompiler();
             compiler.DirectSource =
-                "3を10から引く。\n" +
-                "PRINT それ\n" +
+                "Aとは変数=30" +
+                "PRINT A"+
                 "";
             cout = "----------";
             cout = "* TOKENS:";

@@ -30,7 +30,7 @@ namespace Libnako.JCompiler.Tokenizer
             Add("なら");
             Add("から");
             Add("まで");
-            Add("とは");
+            Add("とは"); // 変数定義
             Add("して");
             Add("とは");
             Add("だけ");
@@ -39,7 +39,7 @@ namespace Libnako.JCompiler.Tokenizer
             Add("など");
             Add("って");
             Add("では");
-            Add("は");
+            Add("は"); // 代入
             Add("の");
             Add("が");
             Add("を");
