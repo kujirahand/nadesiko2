@@ -43,6 +43,11 @@ namespace Libnako.JCompiler
         }
         protected Object _body = null;
 
+        /// <summary>
+        /// 変数の管理番号
+        /// </summary>
+        public int varNo = -1;
+
         public void SetBodyAutoType(Object value)
         {
             _body = value;
@@ -128,6 +133,16 @@ namespace Libnako.JCompiler
                 int index = Convert.ToInt32(key);
                 return GetVar(index);
             }
+        }
+
+        public Object GetValueFromObj(Object key)
+        {
+            NakoVariable v = GetVarFromObj(key);
+            if (v != null)
+            {
+                return v.body;
+            }
+            return null;
         }
 
         public Object GetValueFromKey(string key)

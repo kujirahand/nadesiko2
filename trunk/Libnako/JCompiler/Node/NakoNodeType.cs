@@ -10,6 +10,7 @@ namespace Libnako.JCompiler.Node
     {
         // NODE
         NOP,
+        POP,
 
         // Blocks
         BLOCK,

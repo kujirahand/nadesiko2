@@ -64,6 +64,7 @@
     <Compile Include="JCompiler\Node\NakoNodeIf.cs" />
     <Compile Include="JCompiler\Node\NakoNodeLet.cs" />
     <Compile Include="JCompiler\Node\NakoNodeList.cs" />
+    <Compile Include="JCompiler\Node\NakoNodePop.cs" />
     <Compile Include="JCompiler\Node\NakoNodeRepeatTimes.cs" />
     <Compile Include="JCompiler\Node\NakoNodeType.cs" />
     <Compile Include="JCompiler\Node\NakoNodeVariable.cs" />

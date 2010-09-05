@@ -76,6 +76,11 @@ namespace Libnako.JCompiler
 
         public void SetVar(int index, NakoVariable v)
         {
+            // Create Var
+            while (index >= list.Count)
+            {
+                list.Add(null);
+            }
             list[index] = v;
         }
 
@@ -112,13 +117,8 @@ namespace Libnako.JCompiler
             NakoVariable v = GetVar(index);
             if (v == null)
             {
-                // Create Var
-                while (index >= list.Count)
-                {
-                    v = new NakoVariable();
-                    list.Add(v);
-                }
-                v = list[index];
+                v = new NakoVariable();
+                SetVar(index, v);
             }
             v.body = value;
         }
