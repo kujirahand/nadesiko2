@@ -22,6 +22,20 @@ namespace Libnako.JCompiler.Parser
 		internal Stack<NakoParserFrame> frameStack { get; set; }
 		internal Stack<NakoParserNodeState> stateStack { get; set; }
         protected Boolean flag_set_variable = false;
+        public NakoVariableManager localVar { get; set; }
+        public NakoVariableManager globalVar
+        {
+            get
+            {
+                if (_globalVar == null)
+                {
+                    throw new Exception("グローバル変数が設定されていません!!");
+                }
+                return _globalVar;
+            }
+            set { _globalVar = value; }
+        }
+        private NakoVariableManager _globalVar = null;
 
         public NakoParserBase(NakoTokenList tokens)
         {
@@ -33,6 +47,7 @@ namespace Libnako.JCompiler.Parser
             calcStack = new NakoNodeList();
             calcStackCounters = new Stack<int>();
             lastNode = null;
+            localVar = new NakoVariableManager(NakoVariableScope.Local);
         }
 
         /// <summary>
@@ -80,7 +95,7 @@ namespace Libnako.JCompiler.Parser
             NakoParserFrame f = new NakoParserFrame();
             f.lastNode = lastNode;
             f.parentNode = parentNode;
-            f.localVar = NakoVariableManager.Locals;
+            f.localVar = localVar;
             frameStack.Push(f);
         }
 
@@ -107,17 +122,6 @@ namespace Libnako.JCompiler.Parser
             this.parentNode = s.parentNode;
         }
 
-        protected NakoVariableManager localVar
-        {
-            get
-            {
-                return NakoVariableManager.Locals;
-            }
-            set
-            {
-                NakoVariableManager.Locals = value;
-            }
-        }
     }
 
     internal class NakoParserNodeState

@@ -27,7 +27,7 @@ namespace Libnako.Interpreter
         /// <summary>
         /// グローバル変数
         /// </summary>
-        protected NakoVariableManager globalVar;
+        public NakoVariableManager globalVar { get; set; }
         /// <summary>
         /// ローカル変数
         /// </summary>
@@ -66,8 +66,8 @@ namespace Libnako.Interpreter
         public void Reset()
         {
             stack = new Stack<Object>();
-            globalVar = NakoVariableManager.Globals;
-            localVar = NakoVariableManager.Locals = new NakoVariableManager(NakoVariableScope.Local);
+            globalVar = new NakoVariableManager(NakoVariableScope.Global);
+            localVar = new NakoVariableManager();
             callStack = new Stack<NakoCallStack>();
             PrintLog = "";
         }

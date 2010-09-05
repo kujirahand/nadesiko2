@@ -15,17 +15,43 @@ namespace cnako2
         {
             // Compile
             NakoCompiler compiler = new NakoCompiler();
-            NakoILCodeList codes;
-            codes = compiler.Publish(
-                "a=4;PRINT a;"
-             );
+            compiler.DirectSource =
+                "A[3]=566\n"+
+                "A[3]を表示\n"+
+                "A[`a`]=566\n" +
+                "A[`a`]を表示\n" +
+                ""
+                ;
+            cout = "----------";
+            cout = "* TOKENS:";
+            cout = compiler.Tokens.toTypeString();
+            cout = "----------";
+            cout = "* NODES:";
+            cout = compiler.TopNode.Children.toTypeString();
+            cout = "----------";
+            cout = "* CODES:";
+            cout = compiler.Codes.ToAddressString();
+
             // Run
-            NakoInterpreter runner = new NakoInterpreter(codes);
+            cout = "----------";
+            cout = "* RUN";
+            NakoInterpreter runner = new NakoInterpreter(compiler.Codes);
             runner.Run();
             Console.WriteLine(runner.PrintLog);
 
             // Wait
+            cout = "ok.";
             Console.ReadLine();
+        }
+
+        static void _w(string s)
+        {
+            Console.WriteLine(s);
+        }
+
+        static string cout
+        {
+            set { Console.WriteLine(value); }
         }
     }
 }

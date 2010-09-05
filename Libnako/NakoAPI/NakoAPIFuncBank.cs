@@ -6,6 +6,7 @@ using Libnako.Interpreter;
 using Libnako.JCompiler.Function;
 using Libnako.JCompiler;
 using Libnako.JCompiler.Tokenizer;
+using Libnako.JCompiler.Parser;
 
 namespace Libnako.NakoAPI
 {
@@ -17,7 +18,6 @@ namespace Libnako.NakoAPI
         // Singleton
         public static readonly NakoAPIFuncBank Instance = new NakoAPIFuncBank();
         private NakoAPIFuncBank() { }
-        private static Boolean FlagInit = false;
 
         public List<NakoAPIFunc> list = new List<NakoAPIFunc>();
 
@@ -27,11 +27,8 @@ namespace Libnako.NakoAPI
             s.varNo = list.Count - 1;
         }
 
-        public void RegisterToSystem()
+        public void RegisterToSystem(NakoVariableManager globalVar)
         {
-            // 二重初期化を防ぐ
-            if (FlagInit) return; FlagInit = true;
-            //
             // Tokenizer.NakoDic に登録
             NakoDic dic = NakoDic.Instance;
             for (int i = 0; i < list.Count; i++)
@@ -47,7 +44,7 @@ namespace Libnako.NakoAPI
                 var.type = NakoVariableType.SystemFunc;
                 var.body = i;
                 NakoAPIFunc call = list[i];
-                NakoVariableManager.Globals.CreateVar(call.name, var);
+                globalVar.CreateVar(call.name, var);
             }
         }
     }
