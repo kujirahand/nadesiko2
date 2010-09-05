@@ -242,13 +242,6 @@ namespace Libnako.JCompiler.Parser
             }
             tok.MoveNext();
 
-            NakoNodeFor fornode = new NakoNodeFor();
-            NakoNodeVariable v = new NakoNodeVariable();
-            fornode.loopVar = v;
-            v.scope = NakoVariableScope.Local;
-            v.Token = tokVar;
-            v.varNo = localVar.CreateVar(tokVar.value);
-
             // get argument * 2
             if (!_value())
             {
@@ -260,6 +253,13 @@ namespace Libnako.JCompiler.Parser
                 TokenBack();
                 return false;
             }
+
+            NakoNodeFor fornode = new NakoNodeFor();
+            NakoNodeVariable v = new NakoNodeVariable();
+            fornode.loopVar = v;
+            v.scope = NakoVariableScope.Local;
+            v.Token = tokVar;
+            v.varNo = localVar.CreateVar(tokVar.value);
 
             fornode.nodeTo = calcStack.Pop();
             fornode.nodeFrom = calcStack.Pop();
@@ -402,7 +402,7 @@ namespace Libnako.JCompiler.Parser
             tok.MoveNext(); // skip FUNCTION_NAME
 
             string fname = t.getValueAsName();
-            NakoVariable var = NakoVariableManager.Globals.GetVar(fname);
+            NakoVariable var = globalVar.GetVar(fname);
             if (var == null)
             {
                 throw new NakoParserException("関数『" + fname + "』が見あたりません。", t);
@@ -444,7 +444,7 @@ namespace Libnako.JCompiler.Parser
                         ((NakoNodeVariable)argNode).varBy = VarByType.ByRef;
                     }
                 }
-                callNode.argNodes.Add(argNode);
+                callNode.AddChild(argNode);
             }
 
             // ---------------------------------
@@ -485,7 +485,7 @@ namespace Libnako.JCompiler.Parser
             NakoVariable v = new NakoVariable();
             v.type = NakoVariableType.UserFunc;
             v.body = funcNode;
-            NakoVariableManager.Globals.CreateVar(userFunc.name, v);
+            globalVar.CreateVar(userFunc.name, v);
             // 関数の宣言は、ノードのトップ直下に追加する
             if (!this.topNode.hasChildren())
             {
@@ -610,7 +610,7 @@ namespace Libnako.JCompiler.Parser
                 return;
             }
             // global ?
-            varno = NakoVariableManager.Globals.GetIndex(name);
+            varno = globalVar.GetIndex(name);
             if (varno >= 0)
             {
                 n.scope = NakoVariableScope.Global;
@@ -619,7 +619,7 @@ namespace Libnako.JCompiler.Parser
             }
             // Create variable
             n.scope = NakoVariableScope.Global;
-            n.varNo = NakoVariableManager.Globals.CreateVar(name);
+            n.varNo = globalVar.CreateVar(name);
         }
 
         //> _setVariable : WORD _variable_elements

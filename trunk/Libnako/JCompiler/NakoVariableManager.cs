@@ -18,11 +18,6 @@ namespace Libnako.JCompiler
     /// </summary>
     public class NakoVariableManager
     {
-        // Globals and Locals
-		private static readonly NakoVariableManager _Globals = new NakoVariableManager(NakoVariableScope.Global);
-		public static NakoVariableManager Globals { get { return _Globals; } }
-		public static NakoVariableManager Locals { get; set; }
-
         /// <summary>
         /// 変数一覧をリストとして保持
         /// </summary>
@@ -35,7 +30,6 @@ namespace Libnako.JCompiler
 
 		static NakoVariableManager()
 		{
-			Locals = new NakoVariableManager(NakoVariableScope.Local);
 		}
 
         public NakoVariableManager(NakoVariableScope scope = NakoVariableScope.Local)

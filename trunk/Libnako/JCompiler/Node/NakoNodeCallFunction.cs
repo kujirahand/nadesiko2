@@ -12,12 +12,23 @@ namespace Libnako.JCompiler.Node
     /// </summary>
     public class NakoNodeCallFunction : NakoNode
     {
-        public List<NakoNode> argNodes = new List<NakoNode>();
         public NakoFunc func = new NakoFunc();
 
         public NakoNodeCallFunction()
         {
             type = NakoNodeType.CALL_FUNCTION;
+        }
+
+        public NakoNodeList argNodes
+        {
+            get { return this.Children; }
+        }
+
+        public override String ToTypeString()
+        {
+            string r = type.ToString();
+            r += "(" + this.func.name + "{args:" + func.args.Count + "})";
+            return r;
         }
     }
 }

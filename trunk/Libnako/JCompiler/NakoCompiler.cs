@@ -32,6 +32,8 @@ namespace Libnako.JCompiler
         {
             get { return codes; }
         }
+        // global variables
+        public NakoVariableManager globalVar = new NakoVariableManager();
 
         public NakoCompiler(String source = null)
         {
@@ -58,6 +60,7 @@ namespace Libnako.JCompiler
         public void Parse()
         {
             NakoParser parser = new NakoParser(tokens);
+            parser.globalVar = this.globalVar;
             parser.Parse();
             this.topNode = parser.topNode;
         }
@@ -89,6 +92,14 @@ namespace Libnako.JCompiler
             return Codes;
         }
 
+        /// <summary>
+        /// Publish メソッドを変数風に呼ぶセッター
+        /// </summary>
+        public string DirectSource
+        {
+            set { this.Publish(value); }
+        }
+
         public void ParseOnlyValue()
         {
             NakoParser paser = new NakoParser(tokens);
@@ -99,9 +110,9 @@ namespace Libnako.JCompiler
         protected void RegisterSysCall()
         {
             // APIをBankに登録
-            NakoBaseSystem.Instance.registerToSystem();
+            NakoBaseSystem baseSystem = NakoBaseSystem.Instance;
             // Bankをシステムに登録
-            NakoAPIFuncBank.Instance.RegisterToSystem();
+            NakoAPIFuncBank.Instance.RegisterToSystem(globalVar);
         }
     }
 }

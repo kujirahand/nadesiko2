@@ -53,6 +53,7 @@ namespace Libnako.JCompiler.Node
             {
                 r += "[" + children.Count + "]";
             }
+            r += ":" + scope.ToString();
             return r;
         }
     }

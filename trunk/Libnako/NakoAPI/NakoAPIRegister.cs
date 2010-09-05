@@ -9,11 +9,17 @@ namespace Libnako.NakoAPI
 {
     /// <summary>
     /// なでしこのシステム関数を登録する専用の基底クラス
-    /// 実際には、このクラスを継承した、NakoSysCallBaseSystem で実際のシステム関数の登録を行っている
+    /// 実際には、このクラスを継承した、NakoSysCallBaseSystem などで実際のシステム関数の登録を行っている
     /// システム関数の登録を補助するヘルパークラス
     /// </summary>
     public class NakoAPIRegister
     {
+        // 継承先は Singleton にしなくてはならない
+        protected NakoAPIRegister()
+        {
+            DefineFunction();
+        }
+
         /// <summary>
         /// 関数をシステムに追加する
         /// </summary>
@@ -32,7 +38,7 @@ namespace Libnako.NakoAPI
         /// <summary>
         /// このメソッドを override してここでシステム関数の登録を行う
         /// </summary>
-        public virtual void registerToSystem()
+        protected virtual void DefineFunction()
         {
         }
     }

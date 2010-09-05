@@ -17,12 +17,11 @@ namespace Libnako.NakoAPI
         // C# Singleton
         private static readonly NakoBaseSystem _Instance = new NakoBaseSystem();
 		public static NakoBaseSystem Instance { get { return _Instance; } }
-        private NakoBaseSystem() { }
 
         /// <summary>
         /// システムに関数を登録する
         /// </summary>
-        public override void registerToSystem()
+        protected override void DefineFunction()
         {
             addFunc("表示", "Sと|Sを", NakoVariableType.Void, _show, "メッセージSを表示する", "ひょうじ");
             addFunc("足す", "AにBを|Aと", NakoVariableType.Object, _add, "値Aと値Bを足して返す", "たす");
