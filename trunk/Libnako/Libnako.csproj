@@ -72,9 +72,9 @@
     <Compile Include="JCompiler\Parser\NakoParser.cs" />
     <Compile Include="JCompiler\Parser\NakoParserBase.cs" />
     <Compile Include="JCompiler\Parser\NakoParserException.cs" />
-    <Compile Include="JCompiler\Tokenizer\NakoDicReservedWord.cs" />
     <Compile Include="JCompiler\Tokenizer\NakoHalfFlag.cs" />
     <Compile Include="JCompiler\Tokenizer\NakoJosi.cs" />
+    <Compile Include="JCompiler\Tokenizer\NakoReservedWord.cs" />
     <Compile Include="JCompiler\Tokenizer\NakoToken.cs" />
     <Compile Include="JCompiler\Tokenizer\NakoTokenDic.cs" />
     <Compile Include="JCompiler\Tokenizer\NakoTokenizer.cs" />

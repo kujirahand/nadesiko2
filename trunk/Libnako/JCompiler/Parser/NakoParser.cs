@@ -129,12 +129,52 @@ namespace Libnako.JCompiler.Parser
             return false;
         }
 
-        //> _def_variable : _scope
-        //>               | _statement
+        //> _def_variable : WORD (DIM_VARIABLE|DIM_NUMBER|DIM_INT|DIM_STRING) [=_value]
         //>               ;
         private Boolean _def_variable()
         {
-            return false;
+            if (!Accept(NakoTokenType.WORD)) return false;
+            NakoVariableType st = NakoVariableType.Object;
+            switch (tok.NextTokenType)
+            {
+                case NakoTokenType.DIM_VARIABLE:
+                    st = NakoVariableType.Object;
+                    break;
+                case NakoTokenType.DIM_NUMBER:
+                    st = NakoVariableType.Double;
+                    break;
+                case NakoTokenType.DIM_INT:
+                    st = NakoVariableType.Int;
+                    break;
+                case NakoTokenType.DIM_STRING:
+                    st = NakoVariableType.String;
+                    break;
+                default:
+                    return false;
+            }
+            NakoToken t = tok.CurrentToken;
+            int varNo = localVar.CreateVar(t.getValueAsName());
+            NakoVariable v = localVar.GetVar(varNo);
+            v.type = st;
+            tok.MoveNext(); // skip WORD
+            tok.MoveNext(); // skip DIM_xxx
+
+            // 変数の初期化があるか？
+            if (!Accept(NakoTokenType.EQ)) return true; // なければ正常値として戻る
+            tok.MoveNext();// skip EQ
+
+            if (!_value())
+            {
+                throw new NakoParserException("変数の初期化文でエラー。", t);
+            }
+            // 代入文を作る
+            NakoNodeLet let = new NakoNodeLet();
+            let.VarNode = new NakoNodeVariable();
+            let.VarNode.varNo = varNo;
+            let.VarNode.scope = NakoVariableScope.Local;
+            let.ValueNode.AddChild(calcStack.Pop());
+            this.parentNode.AddChild(let);
+            return true;
         }
 
         //> _scope_or_statement : _scope

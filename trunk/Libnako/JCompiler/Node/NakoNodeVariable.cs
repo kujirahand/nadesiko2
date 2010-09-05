@@ -33,7 +33,7 @@ namespace Libnako.JCompiler.Node
         public Boolean IsVarTypeSimple()
         {
             return (varType == NakoVariableType.Int ||
-                varType == NakoVariableType.Real ||
+                varType == NakoVariableType.Double ||
                 varType == NakoVariableType.String);
         }
 

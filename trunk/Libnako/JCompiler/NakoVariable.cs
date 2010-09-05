@@ -14,7 +14,7 @@ namespace Libnako.JCompiler
         Void,
         Object,
         Int,        // = Int64
-        Real,       // = Double
+        Double,     // = Double
         String,     // = String
         Array,      // = NakoArray
         Group,
@@ -63,7 +63,7 @@ namespace Libnako.JCompiler
             }
             else if (value is Double)
             {
-                type = NakoVariableType.Real;
+                type = NakoVariableType.Double;
             }
             else if (value is string)
             {
