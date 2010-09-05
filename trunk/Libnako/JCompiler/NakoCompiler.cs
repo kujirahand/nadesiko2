@@ -33,7 +33,9 @@ namespace Libnako.JCompiler
             get { return codes; }
         }
         // global variables
-        public NakoVariableManager globalVar = new NakoVariableManager();
+        public readonly NakoVariableManager globalVar = new NakoVariableManager();
+        // NakoTokenDic
+        public readonly NakoTokenDic TokenDic = new NakoTokenDic();
 
         public NakoCompiler(String source = null)
         {
@@ -49,6 +51,7 @@ namespace Libnako.JCompiler
         public void Tokenize()
         {
             NakoTokenizer tok = new NakoTokenizer(source);
+            tok.TokenDic = this.TokenDic;
             tok.Tokenize();
             tokens = tok.Tokens;
         }
@@ -112,7 +115,7 @@ namespace Libnako.JCompiler
             // APIをBankに登録
             NakoBaseSystem baseSystem = NakoBaseSystem.Instance;
             // Bankをシステムに登録
-            NakoAPIFuncBank.Instance.RegisterToSystem(globalVar);
+            NakoAPIFuncBank.Instance.RegisterToSystem(TokenDic, globalVar);
         }
     }
 }

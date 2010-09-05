@@ -5,27 +5,6 @@ using System.Text;
 namespace Libnako.JCompiler.Tokenizer
 {
     /// <summary>
-    /// なでしこ単語管理クラス
-    /// </summary>
-    public class NakoDicReservedWord
-    {
-        public static void Init(NakoTokenDic dic)
-        {
-            dic.AddWord("ナデシコ", NakoTokenType.RESERVED);
-            dic.AddWord("もし", NakoTokenType.IF);
-            dic.AddWord("ならば", NakoTokenType.THEN);
-            dic.AddWord("違えば", NakoTokenType.ELSE);
-            dic.AddWord("ここまで", NakoTokenType.KOKOMADE);
-            dic.AddWord("繰り返す", NakoTokenType.FOR);
-            dic.AddWord("間", NakoTokenType.WHILE);
-            dic.AddWord("回", NakoTokenType.REPEAT_TIMES);
-            dic.AddWord("条件分岐", NakoTokenType.SWITCH);
-            dic.AddWord("PRINT", NakoTokenType.PRINT);
-        }
-
-    }
-
-    /// <summary>
     /// [単語:トークンタイプ]を覚えておくための辞書
     /// </summary>
     public class NakoTokenDic : IDictionary<string, NakoTokenType>
@@ -40,7 +19,7 @@ namespace Libnako.JCompiler.Tokenizer
         public void AddWord(string key, NakoTokenType type)
         {
             key = NakoToken.TrimOkurigana(key);
-            this._TokenDic.Add(key, type);
+            this._dictionary.Add(key, type);
         }
 
         #region IDictionary<string,NakoTokenType> メンバー

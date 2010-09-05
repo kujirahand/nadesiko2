@@ -13,7 +13,7 @@ namespace Libnako.JCompiler.Tokenizer
         protected int level;
         protected int indentCount;
         protected int lineno;
-        protected NakoDicReservedWord dic;
+        public NakoTokenDic TokenDic { get; set; }
         protected NakoTokenType last_token_type;
 
         protected string source;
@@ -37,7 +37,6 @@ namespace Libnako.JCompiler.Tokenizer
             indentCount = 0;
             last_token_type = NakoTokenType.UNKNOWN;
             tokens = new NakoTokenList();
-            dic = NakoDicReservedWord.Instance;
         }
 
         public Boolean CheckTokenType(NakoTokenType[] checker)
