@@ -7,7 +7,7 @@ namespace Libnako.JCompiler.Tokenizer
     /// <summary>
     /// なでしこ単語管理クラス
     /// </summary>
-    public class NakoDicReservedWord
+    public class NakoReservedWord
     {
         public static void Init(NakoTokenDic dic)
         {

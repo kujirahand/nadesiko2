@@ -113,7 +113,7 @@ namespace Libnako.JCompiler
         protected void RegisterSysCall()
         {
             // トークンに予約語句を追加
-            NakoDicReservedWord.Init(TokenDic);
+            NakoReservedWord.Init(TokenDic);
             // APIをBankに登録
             NakoBaseSystem baseSystem = NakoBaseSystem.Instance;
             // Bankをシステムに登録
