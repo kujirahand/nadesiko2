@@ -6,6 +6,7 @@ using System.Text;
 using Libnako.JCompiler;
 using Libnako.Interpreter;
 using Libnako.JCompiler.ILWriter;
+using Libnako.JCompiler.Tokenizer;
 
 namespace cnako2
 {
@@ -17,12 +18,9 @@ namespace cnako2
             // Compile
             NakoCompiler compiler = new NakoCompiler();
             compiler.DirectSource =
-                "A[`a`][3]=566\n" +
-                "A[`a`][3]を表示\n" +
-                "A[3][1]=566\n" +
-                "A[3][1]を表示\n" +
-                ""
-                ;
+                "3を10から引く。\n" +
+                "PRINT それ\n" +
+                "";
             cout = "----------";
             cout = "* TOKENS:";
             cout = compiler.Tokens.toTypeString();
@@ -42,35 +40,6 @@ namespace cnako2
             runner.Run();
             Console.WriteLine("LOG="+runner.PrintLog);
             cout = "----------";
-
-            // --------------------------------------------------
-            // Compile2
-            NakoCompiler compiler2 = new NakoCompiler();
-            compiler2.DirectSource =
-                "A[3]=566\n" +
-                "A[3]を表示\n" +
-                "A[`a`]=566\n" +
-                "A[`a`]を表示\n" +
-                ""
-                ;
-            cout = "----------";
-            cout = "* TOKENS2:";
-            cout = compiler2.Tokens.toTypeString();
-            cout = "----------";
-            cout = "* NODES2:";
-            cout = compiler2.TopNode.Children.toTypeString();
-            cout = "----------";
-            cout = "* CODES2:";
-            cout = compiler2.Codes.ToAddressString();
-
-            // --------------------------------------------------
-            // Run2
-            cout = "----------";
-            cout = "* RUN2";
-            NakoInterpreter runner2 = new NakoInterpreter(compiler2.Codes);
-            runner2.debugMode = true;
-            runner2.Run();
-            Console.WriteLine("LOG2=" + runner2.PrintLog);
 
             // Wait
             cout = "ok.";

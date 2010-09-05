@@ -377,8 +377,8 @@ namespace Libnako.JCompiler.ILWriter
                 // + 配列変数アクセス
                 // - 変数
                 ld.type = (node.scope == NakoVariableScope.Global)
-                    ? NakoILType.LD_GLOBAL_REF
-                    : NakoILType.LD_LOCAL_REF;
+                    ? NakoILType.LD_GLOBAL
+                    : NakoILType.LD_LOCAL;
                 ld.value = node.varNo;
                 result.Add(ld);
                 // - 要素

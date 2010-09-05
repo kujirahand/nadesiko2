@@ -13,7 +13,14 @@ namespace Libnako.JCompiler.Tokenizer
         protected int level;
         protected int indentCount;
         protected int lineno;
-        public NakoTokenDic TokenDic { get; set; }
+        private NakoTokenDic _TokenDic = null;
+        public NakoTokenDic TokenDic {
+            get {
+                if (_TokenDic == null) { _TokenDic = new NakoTokenDic(); }
+                return _TokenDic;
+            }
+            set { _TokenDic = value; }
+        }
         protected NakoTokenType last_token_type;
 
         protected string source;

@@ -33,7 +33,7 @@ namespace Libnako.JCompiler
             get { return codes; }
         }
         // global variables
-        public readonly NakoVariableManager GlobalVar = new NakoVariableManager();
+        public readonly NakoVariableManager GlobalVar = new NakoVariableManager(NakoVariableScope.Global);
         // NakoTokenDic
         public readonly NakoTokenDic TokenDic = new NakoTokenDic();
 
@@ -112,6 +112,8 @@ namespace Libnako.JCompiler
 
         protected void RegisterSysCall()
         {
+            // トークンに予約語句を追加
+            NakoDicReservedWord.Init(TokenDic);
             // APIをBankに登録
             NakoBaseSystem baseSystem = NakoBaseSystem.Instance;
             // Bankをシステムに登録
