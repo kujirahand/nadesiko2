@@ -3,45 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using NakoPlugin;
+
 namespace Libnako.JCompiler
 {
-
-    /// <summary>
-    /// なでしこの型を表わすタイプ一覧
-    /// </summary>
-    public enum NakoVariableType
-    {
-        Void,
-        Object,
-        Int,        // = Int64
-        Double,     // = Double
-        String,     // = String
-        Array,      // = NakoArray
-        Group,
-        UserFunc,
-        SystemFunc,
-        Link
-    }
-    
     /// <summary>
     /// なでしこの変数を表わすクラス
     /// </summary>
-    public class NakoVariable
+    public class NakoVariable : INakoVariable
     {
 		/// <summary>
 		/// 変数のタイプ
 		/// </summary>
-        public NakoVariableType type { get; set; }
+        public NakoVarType Type { get; set; }
 		
         /// <summary>
         /// 変数の値
         /// </summary>
-        public Object body
-        {
-            get { return _body; }
-            set { _body = value; }
-        }
-        protected Object _body = null;
+        public Object Body { get; set; }
 
         /// <summary>
         /// 変数の管理番号
@@ -50,55 +29,53 @@ namespace Libnako.JCompiler
 
         public void SetBodyAutoType(Object value)
         {
-            _body = value;
             // detect type
             if (value is int)
             {
-                type = NakoVariableType.Int;
-                _body = Convert.ToInt64(value);
+                Type = NakoVarType.Int;
+                Body = Convert.ToInt64(value);
             }
             else if (value is Int64)
             {
-                type = NakoVariableType.Int;
+                Type = NakoVarType.Int;
+                Body = value;
             }
             else if (value is Double)
             {
-                type = NakoVariableType.Double;
+                Type = NakoVarType.Double;
+                Body = value;
             }
             else if (value is string)
             {
-                type = NakoVariableType.String;
+                Type = NakoVarType.String;
+                Body = value;
             }
-            else if (value is NakoArray)
+            else if (value is NakoVarArray)
             {
-                type = NakoVariableType.Array;
+                Type = NakoVarType.Array;
+                Body = value;
             }
-        }
-        
-    }
-
-    public class NakoVarialbeLink : NakoVariable
-    {
-        public Object key { get; set; }
-        public NakoVarialbeLink(NakoVariable target, Object key)
-        {
-            this.type = NakoVariableType.Link;
-            this.body = target;
-            this.key = key;
+            else
+            {
+                Body = value;
+            }
         }
     }
 
     /// <summary>
     /// なでしこの配列型(配列とハッシュを扱える)
     /// </summary>
-    public class NakoArray : NakoVariable
+    public class NakoVarArray : INakoVariable, INakoVarArray
     {
         protected List<NakoVariable> list = new List<NakoVariable>();
         protected Dictionary<string, int> keys = null;
 
-        public NakoArray()
+        public NakoVarType Type { get; set; }
+        public Object Body { get; set; }
+
+        public NakoVarArray()
         {
-            this.type = NakoVariableType.Array;
+            this.Type = NakoVarType.Array;
         }
 
         public NakoVariable GetVar(int index)
@@ -112,7 +89,7 @@ namespace Libnako.JCompiler
         {
             NakoVariable v = GetVar(index);
             if (v == null) return null;
-            return v.body;
+            return v.Body;
         }
 
         public NakoVariable GetVarFromKey(string key)
@@ -140,7 +117,7 @@ namespace Libnako.JCompiler
             NakoVariable v = GetVarFromObj(key);
             if (v != null)
             {
-                return v.body;
+                return v.Body;
             }
             return null;
         }
@@ -192,14 +169,14 @@ namespace Libnako.JCompiler
         public void SetValue(int index, Object value)
         {
             NakoVariable v = new NakoVariable();
-            v.body = value;
+            v.Body = value;
             this.SetVar(index, v);
         }
 
         public void SetValueFromKey(String key, Object value)
         {
             NakoVariable v = new NakoVariable();
-            v.body = value;
+            v.Body = value;
             this.SetVarFromKey(key, v);
         }
     }

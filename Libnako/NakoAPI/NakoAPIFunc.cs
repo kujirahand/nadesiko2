@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Libnako.JCompiler.Function;
 using Libnako.JCompiler;
+using NakoPlugin;
 
 namespace Libnako.NakoAPI
 {
@@ -13,7 +14,7 @@ namespace Libnako.NakoAPI
     {
 		public SysCallDelegate FuncDl { get; set; }
 
-        public NakoAPIFunc(String name, String argdef, NakoVariableType resultType, SysCallDelegate FuncDl)
+        public NakoAPIFunc(String name, String argdef, NakoVarType resultType, SysCallDelegate FuncDl)
             : base(name, argdef)
         {
             this.FuncDl = FuncDl;

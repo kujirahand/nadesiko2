@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Libnako.JCompiler;
 using Libnako.JCompiler.Tokenizer;
+using NakoPlugin;
 
 namespace Libnako.NakoAPI
 {
@@ -29,11 +30,16 @@ namespace Libnako.NakoAPI
         /// <param name="f">実際に処理を行うC#のdelegate</param>
         /// <param name="desc">関数の説明</param>
         /// <param name="kana">命令のよみがな</param>
-        protected void addFunc(String name, String argdef, NakoVariableType resultType, SysCallDelegate f, String desc, String kana)
+        protected void addFunc(String name, String argdef, NakoVarType resultType, SysCallDelegate f, String desc, String kana)
         {
             name = NakoToken.TrimOkurigana(name);
             NakoAPIFunc s = new NakoAPIFunc(name, argdef, resultType, f);
             NakoAPIFuncBank.Instance.AddFunc(s);
+        }
+        protected void addVar(String name, Object value, String desc, String kane)
+        {
+            name = NakoToken.TrimOkurigana(name);
+            NakoAPIFuncBank.Instance.AddVar(name, value);
         }
         /// <summary>
         /// このメソッドを override してここでシステム関数の登録を行う

@@ -6,6 +6,7 @@ using Libnako.JCompiler.ILWriter;
 using Libnako.JCompiler;
 using Libnako.NakoAPI;
 using Libnako.JCompiler.Function;
+using NakoPlugin;
 
 namespace Libnako.Interpreter
 {
@@ -351,15 +352,15 @@ namespace Libnako.Interpreter
             Object idx = StackPop();
             Object var = StackPop();
             Object r = null;
-            if (var is NakoArray)
+            if (var is NakoVarArray)
             {
-                r = ((NakoArray)var).GetValueFromObj(idx);
+                r = ((NakoVarArray)var).GetValueFromObj(idx);
             }
             else if (var is NakoVariable)
             {
-                if (((NakoVariable)var).body is NakoArray)
+                if (((NakoVariable)var).Body is NakoVarArray)
                 {
-                    NakoArray ary = (NakoArray)((NakoVariable)var).body;
+                    NakoVarArray ary = (NakoVarArray)((NakoVariable)var).Body;
                     r = ary.GetValueFromObj(idx);
                 }
             }
@@ -373,7 +374,7 @@ namespace Libnako.Interpreter
         {
             Object idx = StackPop();
             Object var = StackPop();
-            NakoArray var_ary;
+            NakoVarArray var_ary;
 
             // var が不正なら null を乗せて帰る
             if (!(var is NakoVariable))
@@ -382,15 +383,15 @@ namespace Libnako.Interpreter
                 return;
             }
 
-            if (((NakoVariable)var).body == null)
+            if (((NakoVariable)var).Body == null)
             {
-                ((NakoVariable)var).body = new NakoArray();
-                ((NakoVariable)var).type = NakoVariableType.Array;
+                ((NakoVariable)var).Body = new NakoVarArray();
+                ((NakoVariable)var).Type = NakoVarType.Array;
             }
 
-            if (((NakoVariable)var).body is NakoArray)
+            if (((NakoVariable)var).Body is NakoVarArray)
             {
-                var_ary = (NakoArray)((NakoVariable)var).body;
+                var_ary = (NakoVarArray)((NakoVariable)var).Body;
                 NakoVariable elem = var_ary.GetVarFromObj(idx);
                 if (elem == null)
                 {
@@ -413,20 +414,20 @@ namespace Libnako.Interpreter
             {
                 NakoVariable var2 = (NakoVariable)var;
                 // null なら NakoArray として生成
-                if (var2.body == null)
+                if (var2.Body == null)
                 {
-                    var2.body = new NakoArray();
-                    var2.type = NakoVariableType.Array;
+                    var2.Body = new NakoVarArray();
+                    var2.Type = NakoVarType.Array;
                 }
                 // NakoArray なら 要素にセット
-                if (var2.body is NakoArray)
+                if (var2.Body is NakoVarArray)
                 {
-                    NakoArray var3 = (NakoArray)(var2.body);
+                    NakoVarArray var3 = (NakoVarArray)(var2.Body);
                     NakoVariable elem = var3.GetVarFromObj(index);
                     if (elem == null)
                     {
                         elem = new NakoVariable();
-                        elem.body = value;
+                        elem.Body = value;
                         if (index is Int64)
                         {
                             elem.varNo = Convert.ToInt32(index);
@@ -435,7 +436,7 @@ namespace Libnako.Interpreter
                     }
                     else
                     {
-                        elem.body = value;
+                        elem.Body = value;
                     }
                 }
             }
@@ -460,7 +461,7 @@ namespace Libnako.Interpreter
         private void exec_syscall(NakoILCode code)
         {
             int funcNo = (int)code.value;
-            NakoAPIFunc s = NakoAPIFuncBank.Instance.list[funcNo];
+            NakoAPIFunc s = NakoAPIFuncBank.Instance.FuncList[funcNo];
             NakoFuncCallInfo f = new NakoFuncCallInfo(this);
             Object result = s.FuncDl(f);
             globalVar.SetValue(0, result); // 変数「それ」に値をセット
