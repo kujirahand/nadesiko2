@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 
 using Libnako.Interpreter;
+using NakoPlugin;
 
 namespace Libnako.JCompiler.Function
 {
     /// <summary>
     /// なでしこのシステム関数呼び出しの引数となる情報を定義したもの
     /// </summary>
-    public class NakoFuncCallInfo
+    public class NakoFuncCallInfo : INakoFuncCallInfo
     {
         private NakoInterpreter _runner;
 
@@ -23,6 +24,12 @@ namespace Libnako.JCompiler.Function
         {
             get { return _runner; }
         }
+
+        public void WriteLog(string s)
+        {
+            Runner.PrintLog += s;
+        }
+
 
         public Object StackPop()
         {

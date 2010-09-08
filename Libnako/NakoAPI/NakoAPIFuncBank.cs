@@ -14,22 +14,37 @@ namespace Libnako.NakoAPI
     /// <summary>
     /// なでしこ２のシステム関数の一覧を保持するリスト
     /// </summary>
-    public class NakoAPIFuncBank
+    public class NakoAPIFuncBank : INakoPluginBank
     {
         // Singleton
         public static readonly NakoAPIFuncBank Instance = new NakoAPIFuncBank();
         private NakoAPIFuncBank() { }
 
+        #region INakoPluginBank の実装
+        public void AddFunc(string name, string argdef, NakoVarType resultType, NakoPlugin.SysCallDelegate f, string desc, string kana)
+        {
+            name = NakoToken.TrimOkurigana(name);
+            NakoAPIFunc s = new NakoAPIFunc(name, argdef, resultType, f);
+            this.AddFuncToList(s);
+        }
+
+        public void AddVar(String name, Object value, String desc, String kane)
+        {
+            name = NakoToken.TrimOkurigana(name);
+            this.AddVarToList(name, value);
+        }
+        #endregion
+
         public List<NakoAPIFunc> FuncList = new List<NakoAPIFunc>();
         public Dictionary<string, Object> VarList = new Dictionary<string, Object>();
 
-        public void AddFunc(NakoAPIFunc s)
+        private void AddFuncToList(NakoAPIFunc s)
         {
             FuncList.Add(s);
             s.varNo = FuncList.Count - 1;
         }
 
-        public void AddVar(string name, Object value)
+        private void AddVarToList(string name, Object value)
         {
             VarList.Add(name, value);
         }
@@ -63,5 +78,6 @@ namespace Libnako.NakoAPI
             }
 
         }
+
     }
 }

@@ -115,7 +115,8 @@ namespace Libnako.JCompiler
             // トークンに予約語句を追加
             NakoReservedWord.Init(TokenDic);
             // APIをBankに登録
-            NakoBaseSystem baseSystem = NakoBaseSystem.Instance;
+            NakoBaseSystem baseSystem = new NakoBaseSystem();
+            baseSystem.DefineFunction(NakoAPIFuncBank.Instance);
             // Bankをシステムに登録
             NakoAPIFuncBank.Instance.RegisterToSystem(TokenDic, GlobalVar);
         }

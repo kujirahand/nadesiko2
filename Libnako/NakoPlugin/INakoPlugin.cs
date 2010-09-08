@@ -47,6 +47,9 @@ namespace NakoPlugin
 
     public interface INakoFuncCallInfo
     {
+        Object StackPop();
+        String StackPopAsString();
+        void WriteLog(string s);
     }
 
     /// <summary>
@@ -70,7 +73,8 @@ namespace NakoPlugin
         /// <param name="f">実際に処理を行うC#のdelegate</param>
         /// <param name="desc">関数の説明</param>
         /// <param name="kana">命令のよみがな</param>
-        void addFunc(String name, String argdef, NakoVarType resultType, SysCallDelegate f, String desc, String kana);
+        void AddFunc(String name, String argdef, NakoVarType resultType, SysCallDelegate f, String desc, String kana);
+        void AddVar(String name, Object value, String desc, String kane);
     }
 
 

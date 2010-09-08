@@ -8,8 +8,6 @@ using NakoPlugin;
 
 namespace Libnako.NakoAPI
 {
-    public delegate Object SysCallDelegate(NakoFuncCallInfo info);
-
     public class NakoAPIFunc : NakoFunc
     {
 		public SysCallDelegate FuncDl { get; set; }
