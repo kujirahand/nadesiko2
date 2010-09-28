@@ -53,16 +53,19 @@ namespace cnako2
                 if (arg == "-desc" || arg == "-descript")
                 {
                     DescriptMode = true;
+                    i++;
                     continue;
                 }
                 if (arg == "-debug")
                 {
                     DebugMode = true;
+                    i++;
                     continue;
                 }
-                if (arg == "wait")
+                if (arg == "-wait")
                 {
                     WaitMode = true;
+                    i++;
                     continue;
                 }
                 // other

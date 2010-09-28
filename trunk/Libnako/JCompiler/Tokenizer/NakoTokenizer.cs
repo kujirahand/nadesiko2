@@ -218,6 +218,9 @@ namespace Libnako.JCompiler.Tokenizer
             // SWITCH
             switch (c) {
                 // Check EOL
+                case '\r':
+                    cur++;
+                    return null;
                 case '\n':
                     token.type = NakoTokenType.EOL;
                     cur++;
