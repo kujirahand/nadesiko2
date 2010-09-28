@@ -561,7 +561,7 @@ namespace Libnako.Interpreter
             {
                 return NakoValueConveter.ToDouble(a) == NakoValueConveter.ToDouble(b);
             }
-            return a == b;
+            return NakoValueConveter.ToString(a) == NakoValueConveter.ToString(b);
         }
         private Object calc_method_not_eq(Object a, Object b)
         {

@@ -4,6 +4,7 @@ using System.Text;
 
 using NakoPlugin;
 using System.Windows.Forms;
+using Microsoft.VisualBasic;
 
 namespace NakoPluginDialog
 {
@@ -26,7 +27,9 @@ namespace NakoPluginDialog
 
         public void DefineFunction(INakoPluginBank bank)
         {
-            bank.AddFunc("言う", "Sを|Sと|Sの", NakoVarType.Void, _say, "文字列Sをダイアログに表示する", "いう");
+            bank.AddFunc("言う", "Sを|Sと|Sの", NakoVarType.Void, _say, "文字列Sをダイアログに表示して出す", "いう");
+            bank.AddFunc("二択", "Sで|Sと|Sを", NakoVarType.Int, _yesNo, "文字列Sをダイアログに表示し、[はい]か[いいえ]で質問するダイアログを出す", "にたく");
+            bank.AddFunc("尋ねる", "Sを|Sと", NakoVarType.String, _inputBox, "文字列Sをダイアログに表示し、一行入力ダイアログを出して、結果を「それ」に返す", "たずねる");
         }
 
         public Object _say(INakoFuncCallInfo info)
@@ -35,6 +38,22 @@ namespace NakoPluginDialog
             MessageBox.Show(s, "メッセージ",
                 MessageBoxButtons.OK);
             return null;
+        }
+
+        public Object _yesNo(INakoFuncCallInfo info)
+        {
+            String s = info.StackPopAsString();
+            DialogResult res = MessageBox.Show(s, "メッセージ",
+                MessageBoxButtons.YesNo);
+            Object result = (res == DialogResult.Yes) ? 1 : 0;
+            return result;
+        }
+
+        public Object _inputBox(INakoFuncCallInfo info)
+        {
+            String s = info.StackPopAsString();
+            String res = Interaction.InputBox(s);
+            return res;
         }
     }
 }

@@ -13,25 +13,40 @@ namespace Libnako.NakoAPI
     public class NakoPluginLoader
     {
         List<NakoPluginInfo> plugins = new List<NakoPluginInfo>();
-        
+
+        // プラグインインターフェイスのフルパスを調べる
+        string INakoPluginsPath = typeof(INakoPlugin).FullName;
+
         public NakoPluginInfo[] FindPlugins()
         {
-            // プラグインインターフェイスのフルパスを調べる
-            string INakoPluginsPath = typeof(INakoPlugin).FullName;
-
-            // プラグインパスを調べる
+            // プラグインのあるパスを調べる
+            // アプリケーションディレクトリ
             string appdir = System.IO.Path.GetDirectoryName(
                 System.Reflection.Assembly.GetExecutingAssembly().Location);
-            string plugdir = appdir + "\\plug-ins";
-            if (!System.IO.Directory.Exists(plugdir))
+
+            if (System.IO.Directory.Exists(appdir))
             {
-                return null;
+                CheckDllFiles(appdir);
+            }
+            // プラグイン専用ディレクトリ
+            string plugdir = appdir + "\\plug-ins";
+            if (System.IO.Directory.Exists(plugdir))
+            {
+                CheckDllFiles(plugdir);
             }
 
+            return plugins.ToArray();
+        }
+
+        void CheckDllFiles(string plugdir)
+        {
             // プラグインフォルダのDLLを列挙
             string[] dlls = System.IO.Directory.GetFiles(plugdir, "*.dll");
             foreach (string dll in dlls)
             {
+                // 例外をチェック
+                string name = System.IO.Path.GetFileName(dll);
+                if (name == "Libnako.dll") continue;
                 // アセンブリを読み込む
                 try
                 {
@@ -51,11 +66,12 @@ namespace Libnako.NakoAPI
                 }
                 catch
                 {
+                    throw new Exception("プラグイン読込みエラー。");
                 }
 
             }
-            return plugins.ToArray();
         }
+
     }
     /// <summary>
     /// プラグイン情報を表わすクラス
