@@ -6,6 +6,7 @@ using Libnako.JCompiler.Tokenizer;
 using Libnako.JCompiler.ILWriter;
 using Libnako.JCompiler.Parser;
 using Libnako.NakoAPI;
+using NakoPlugin;
 
 namespace Libnako.JCompiler
 {
@@ -114,11 +115,28 @@ namespace Libnako.JCompiler
         {
             // トークンに予約語句を追加
             NakoReservedWord.Init(TokenDic);
+
             // APIをBankに登録
             NakoBaseSystem baseSystem = new NakoBaseSystem();
             baseSystem.DefineFunction(NakoAPIFuncBank.Instance);
+
+            // プラグインを登録
+            LoadPlugins();
+
             // Bankをシステムに登録
             NakoAPIFuncBank.Instance.RegisterToSystem(TokenDic, GlobalVar);
+        }
+
+        protected void LoadPlugins()
+        {
+            // プラグインを読込み
+            NakoPluginLoader loader = new NakoPluginLoader();
+            NakoPluginInfo[] plugs = loader.FindPlugins();
+            foreach (NakoPluginInfo info in plugs)
+            {
+                INakoPlugin p = info.CreateInstance();
+                p.DefineFunction(NakoAPIFuncBank.Instance);
+            }
         }
     }
 }
