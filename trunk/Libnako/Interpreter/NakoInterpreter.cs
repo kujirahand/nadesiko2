@@ -52,13 +52,19 @@ namespace Libnako.Interpreter
 		public Boolean UseConsoleOut { get; set; }
 		public Boolean debugMode { get; set; }
 
-        public NakoInterpreter(NakoILCodeList list = null)
+        public NakoInterpreter(NakoILCodeList list)
         {
 			this.UseConsoleOut = false;
 			this.debugMode = false;
 
 			this.list = list;
             Reset();
+        }
+        public NakoInterpreter()
+        {
+			this.UseConsoleOut = false;
+			this.debugMode = false;
+			Reset();
         }
 
         /// <summary>
@@ -68,7 +74,7 @@ namespace Libnako.Interpreter
         {
             calcStack = new Stack<Object>();
             globalVar = new NakoVariableManager(NakoVariableScope.Global);
-            localVar = new NakoVariableManager();
+            localVar = new NakoVariableManager(NakoVariableScope.Local);
             callStack = new Stack<NakoCallStack>();
             PrintLog = "";
         }
@@ -78,7 +84,7 @@ namespace Libnako.Interpreter
         /// </summary>
         /// <param name="list">実行するILコードリスト</param>
         /// <returns>実行が成功したかどうか</returns>
-        public Boolean Run(NakoILCodeList list = null)
+        public Boolean Run(NakoILCodeList list)
         {
             if (list != null)
             {
@@ -87,6 +93,10 @@ namespace Libnako.Interpreter
             }
             runpos = 0;
             return _run();
+        }
+        public Boolean Run()
+        {
+        	return Run(null);
         }
 
         protected Boolean _run()
@@ -218,7 +228,7 @@ namespace Libnako.Interpreter
             NakoCallStack c = new NakoCallStack();
             c.localVar = localVar;
             c.nextpos = runpos + 1;
-            this.localVar = new NakoVariableManager();
+            this.localVar = new NakoVariableManager(NakoVariableScope.Local);
             callStack.Push(c);
             // JUMP
             autoIncPos = false;

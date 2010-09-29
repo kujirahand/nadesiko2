@@ -771,7 +771,7 @@ namespace Libnako.JCompiler.Parser
         }
 
         //> _value : FUNCTION_NAME | _calc_fact ;
-        protected override Boolean _value(Boolean canCallJFunction = true)
+        protected override Boolean _value(Boolean canCallJFunction)
         {
             // TODO:
             // _value は再帰が多くコストが高いのであり得る値だけチェックする

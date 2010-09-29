@@ -37,7 +37,16 @@ namespace Libnako.JCompiler.Node
                 varType == NakoVarType.String);
         }
 
-		public NakoNodeVariable(Object value = null) : base(value)
+		public NakoNodeVariable() : base()
+		{
+			Init();
+		}
+		public NakoNodeVariable(Object value) : base(value)
+		{
+			Init();
+		}
+		
+		public void Init()
 		{
 			this.scope = NakoVariableScope.Global;
 			this.varType = NakoVarType.Int;

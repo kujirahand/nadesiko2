@@ -11,6 +11,7 @@ namespace DemoCNako2
 {
     class Program
     {
+        [STAThread]
         static void Main(string[] args)
         {
             // --------------------------------------------------

@@ -38,9 +38,14 @@ namespace Libnako.JCompiler
         // NakoTokenDic
         public readonly NakoTokenDic TokenDic = new NakoTokenDic();
 
-        public NakoCompiler(String source = null)
+        public NakoCompiler(String source)
         {
             this.source = source;
+            // システムの初期化
+            RegisterSysCall();
+        }
+        public NakoCompiler()
+        {
             // システムの初期化
             RegisterSysCall();
         }
@@ -84,7 +89,7 @@ namespace Libnako.JCompiler
         /// 字句解析と構文解析を一気に行う
         /// </summary>
         /// <param name="source">必要なら新たにソースを指定</param>
-        public NakoILCodeList Publish(String source = null)
+        public NakoILCodeList Publish(String source)
         {
             if (source != null)
             {

@@ -5,16 +5,16 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6A22E146-C2AC-473B-9F3C-0D88DE3FDF3E}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{B991E428-E0FE-4957-90F7-CD88C4937573}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>cnako2</RootNamespace>
-    <AssemblyName>cnako2</AssemblyName>
+    <RootNamespace>NakoPluginCtrl</RootNamespace>
+    <AssemblyName>NakoPluginCtrl</AssemblyName>
     <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
-    <SourceAnalysisOverrideSettingsFile>C:\Users\kujira\AppData\Roaming\ICSharpCode/SharpDevelop4.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
+    <SourceAnalysisOverrideSettingsFile>C:\Users\kujira\AppData\Roaming\ICSharpCode/SharpDevelop3.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
     <OutputPath>bin\Debug\</OutputPath>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <NoStdLib>False</NoStdLib>
@@ -28,6 +28,9 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DefineConstants>TRACE</DefineConstants>
@@ -48,31 +51,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="NakoPluginCtrl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Libnako\Libnako.csproj">
       <Project>{F9297385-ACE0-43AD-AD66-819C5A60FE80}</Project>
       <Name>Libnako</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NakoPluginCtrl\NakoPluginCtrl.csproj">
-      <Project>{B991E428-E0FE-4957-90F7-CD88C4937573}</Project>
-      <Name>NakoPluginCtrl</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NakoPluginDialog\NakoPluginDialog.csproj">
-      <Project>{F8E88E7E-7ACF-4D1A-926F-146D2130AD2C}</Project>
-      <Name>NakoPluginDialog</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NakoPluginFile\NakoPluginFile.csproj">
-      <Project>{29BCC59A-E35E-4096-B417-16335E41CF93}</Project>
-      <Name>NakoPluginFile</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
