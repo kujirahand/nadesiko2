@@ -20,7 +20,11 @@ namespace Libnako.JCompiler.Node
             return r;
         }
 
-        public NakoNode Pop(NakoFuncArg arg = null)
+        public NakoNode Pop()
+        {
+        	return this.Pop(null);
+        }
+        public NakoNode Pop(NakoFuncArg arg)
         {
             // 助詞リストをチェックする
             if (arg != null)
@@ -73,7 +77,11 @@ namespace Libnako.JCompiler.Node
         }
 
         // FOR DEBUG
-        public String toTypeString(int level = 0)
+        public String toTypeString()
+        {
+        	return this.toTypeString(0);
+        }
+        public String toTypeString(int level)
         {
             // for indent
             String indent = "- ";

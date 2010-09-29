@@ -63,7 +63,14 @@ namespace Libnako.JCompiler.Parser
             return true;
         }
 
-        protected virtual Boolean _value(Boolean canCallJFunction = true) { return true; }
+        protected virtual Boolean _value()
+        {
+        	return _value(true);
+        }
+        protected virtual Boolean _value(Boolean canCallJFunction)
+        {
+        	return true;
+        }
 
         protected Boolean Accept(NakoTokenType type)
         {

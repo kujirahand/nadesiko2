@@ -24,9 +24,13 @@ namespace Libnako.JCompiler.ILWriter
         protected Dictionary<NakoILCode, Int64> labels = null;
 
 
-        public NakoILWriter(NakoNode topNode = null)
+        public NakoILWriter(NakoNode topNode)
         {
             this.topNode = topNode;
+            Init();
+        }
+        public NakoILWriter()
+        {
             Init();
         }
 
@@ -95,7 +99,7 @@ namespace Libnako.JCompiler.ILWriter
             Write_list(node.Children);
         }
 
-        public void Write(NakoNode topNode = null)
+        public void Write(NakoNode topNode)
         {
             if (topNode != null) { this.topNode = topNode; }
             Write_r(this.topNode);
@@ -151,7 +155,7 @@ namespace Libnako.JCompiler.ILWriter
             }
         }
 
-        protected NakoILCode createLABEL(String labelName = "")
+        protected NakoILCode createLABEL(String labelName)
         {
             NakoILCode r = NakoILCode.newNop();
             r.value = labelName;
@@ -204,9 +208,13 @@ namespace Libnako.JCompiler.ILWriter
             result.Add(label_while_end);
         }
 
-        private void addNewILCode(NakoILType type, Object value = null)
+        private void addNewILCode(NakoILType type, Object value)
         {
             result.Add(new NakoILCode(type, value));
+        }
+        private void addNewILCode(NakoILType type)
+        {
+        	addNewILCode(type, null);
         }
 
         private void _for(NakoNodeFor node)

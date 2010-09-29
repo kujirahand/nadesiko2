@@ -18,7 +18,16 @@ namespace Libnako.JCompiler.Tokenizer
             set { _type = value; }
         }
 
-        public NakoToken(NakoTokenType type = 0, int lineno = 0, int level = 0)
+        public NakoToken(NakoTokenType type, int lineno, int level)
+        {
+        	Init(type, lineno, level);
+        }
+        public NakoToken(NakoTokenType type)
+        {
+        	Init(type, 0, 0);
+        }
+        
+        public void Init(NakoTokenType type, int lineno, int level)
         {
             this.lineno = lineno;
             this.level = level;

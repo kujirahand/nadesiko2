@@ -33,7 +33,7 @@ namespace Libnako.JCompiler
 		{
 		}
 
-        public NakoVariableManager(NakoVariableScope scope = NakoVariableScope.Local)
+        public NakoVariableManager(NakoVariableScope scope)
         {
             list = new List<NakoVariable>();
             names = new Dictionary<string, int>();
@@ -95,7 +95,11 @@ namespace Libnako.JCompiler
             list[i] = v;
         }
 
-        public int CreateVar(string name, NakoVariable v = null)
+        public int CreateVar(string name)
+        {
+        	return CreateVar(name, null);
+        }
+        public int CreateVar(string name, NakoVariable v)
         {
             if (v == null)
             {
@@ -107,10 +111,14 @@ namespace Libnako.JCompiler
             return i;
         }
 
-        public int CreateVarNameless(NakoVariable v = null)
+        public int CreateVarNameless(NakoVariable v)
         {
             string name = ";nameless_" + list.Count; // あり得ない変数名を作る
             return CreateVar(name, v);
+        }
+        public int CreateVarNameless()
+        {
+        	return CreateVarNameless(null);
         }
 
         public void SetValue(int index, Object value)

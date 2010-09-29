@@ -99,13 +99,17 @@ namespace Libnako.JCompiler.Tokenizer
             return (cur >= this.Count);
         }
 
+        public Boolean SearchToken(NakoTokenType keytype)
+        {
+        	return SearchToken(keytype, false);
+        }
         /// <summary>
         /// 現在のカーソル位置から keytype のトークンがないか調べる (EOLStop=trueのときはEOLまで)
         /// </summary>
         /// <param name="keytype"></param>
         /// <param name="EOLStop"></param>
         /// <returns></returns>
-        public Boolean SearchToken(NakoTokenType keytype, Boolean EOLStop = false)
+        public Boolean SearchToken(NakoTokenType keytype, Boolean EOLStop)
         {
             int i = cur;
             NakoToken t;

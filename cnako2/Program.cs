@@ -24,7 +24,8 @@ namespace cnako2
             _w("# >cnako2 (sourcefile)");
             _w("# >cnako2 -e (one liner code)");
         }
-        
+
+        [STAThread]
         static void Main(string[] args)
         {
             

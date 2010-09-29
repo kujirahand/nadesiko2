@@ -47,7 +47,11 @@ namespace Libnako.JCompiler.Node
             }
         }
 
-        public NakoNode(Object value = null)
+        public NakoNode()
+        {
+			type = NakoNodeType.NOP;
+        }
+        public NakoNode(Object value)
         {
 			type = NakoNodeType.NOP;
 			this.value = value;

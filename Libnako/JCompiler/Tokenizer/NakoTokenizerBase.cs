@@ -83,7 +83,11 @@ namespace Libnako.JCompiler.Tokenizer
             return (source.Substring(cur, str.Length) == str);
         }
 
-        public String GetToSplitter(String splitter, Boolean need_splitter = false)
+        public String GetToSplitter(String splitter)
+        {
+        	return GetToSplitter(splitter, false);
+        }
+        public String GetToSplitter(String splitter, Boolean need_splitter)
         {
             String r = "";
             while (!IsEOF())
@@ -104,7 +108,11 @@ namespace Libnako.JCompiler.Tokenizer
             return r;
         }
 
-        public String GetToSplitter(Char splitter, Boolean need_splitter = false)
+        public String GetToSplitter(Char splitter)
+        {
+        	return GetToSplitter(splitter, false);
+        }
+        public String GetToSplitter(Char splitter, Boolean need_splitter)
         {
             String r = "";
             while (!IsEOF())
