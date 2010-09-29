@@ -18,8 +18,7 @@ namespace DemoCNako2
             // Compile
             NakoCompiler compiler = new NakoCompiler();
             compiler.DirectSource =
-                "OS\n" +
-                "それを表示\n" +
+                "OSを「os.txt」へ保存\n" +
                 "";
             cout = "----------";
             cout = "* TOKENS:";

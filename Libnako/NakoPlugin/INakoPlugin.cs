@@ -77,6 +77,16 @@ namespace NakoPlugin
         void AddVar(String name, Object value, String desc, String kane);
     }
 
+    /// <summary>
+    /// プラグイン内の関数によるランタイムエラー
+    /// </summary>
+    public class NakoPluginRuntimeException : Exception
+    {
+        public NakoPluginRuntimeException(string message)
+            : base(message)
+        {
+        }
+    }
 
 }
 
