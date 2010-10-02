@@ -7,7 +7,7 @@ namespace Libnako.JCompiler.ILWriter
     /// <summary>
     /// なでしこの仮想バイトコード(IL)を表わすクラス
     /// </summary>
-    public class NakoILCode
+    public class NakoILCode : IEquatable<NakoILCode>
     {
 		public NakoILType type { get; set; }
 		public Object value { get; set; }
@@ -35,5 +35,34 @@ namespace Libnako.JCompiler.ILWriter
             c.type = NakoILType.NOP;
             return c;
         }
+
+		public override int GetHashCode()
+		{
+			return type.GetHashCode() ^ value.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (obj == null)
+			{
+				return false;
+			}
+
+			return ((IEquatable<NakoILCode>)this).Equals(obj as NakoILCode);
+		}
+
+        #region IEquatable<NakoILCode> メンバ
+
+		bool IEquatable<NakoILCode>.Equals(NakoILCode other)
+		{
+			if (other == null)
+			{
+				return false;
+			}
+
+			return (this.type == other.type) && (this.value == other.value);
+		}
+
+        #endregion
     }
 }
