@@ -83,7 +83,7 @@ namespace NakoPlugin
     /// <summary>
     /// プラグイン内の関数によるランタイムエラー
     /// </summary>
-    public class NakoPluginRuntimeException : Exception
+    public class NakoPluginRuntimeException : ApplicationException
     {
         public NakoPluginRuntimeException(string message)
             : base(message)

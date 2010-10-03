@@ -219,7 +219,7 @@ namespace Libnako.Interpreter
                 // デバッグ用
                 case NakoILType.PRINT:          exec_print(); break;
                 default:
-                    throw new Exception("未実装のILコード");
+                    throw new NakoInterpreterException("未実装のILコード");
             }
         }
 
@@ -692,7 +692,7 @@ namespace Libnako.Interpreter
         
     }
 
-    internal class NakoInterpreterException : Exception
+    internal class NakoInterpreterException : ApplicationException
     {
         internal NakoInterpreterException(String message) : base(message)
         {

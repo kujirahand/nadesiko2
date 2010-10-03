@@ -48,7 +48,7 @@ namespace Libnako.NakoAPI
             try {
                 VarList.Add(name, value);
             } catch (Exception e) {
-                throw new Exception("NakoDic Register error:" + name + "/" + e.Message);
+                throw new ApplicationException("NakoDic Register error:" + name + "/" + e.Message);
             }
         }
 

@@ -5,7 +5,7 @@ using Libnako.JCompiler.Tokenizer;
 
 namespace Libnako.JCompiler.Parser
 {
-    public class NakoParserException : Exception
+    public class NakoParserException : ApplicationException
     {
         public NakoParserException(String message, NakoToken tok) : base(message + ":" + tok.ToStringForDebug())
         {
