@@ -48,7 +48,16 @@ namespace Libnako.Interpreter
         /// <summary>
         /// デバッグ用のログ記録用変数
         /// </summary>
-        public String PrintLog { get; set; }
+		public String PrintLog
+		{
+			get { return _printLog.ToString(); }
+			set { _printLog.Remove(0, _printLog.Length); _printLog.Append(value); }
+		}
+		public void AddPrintLog(string str)
+		{
+			_printLog.Append(str);
+		}
+		private StringBuilder _printLog = new StringBuilder();
 		public Boolean UseConsoleOut { get; set; }
 		public Boolean debugMode { get; set; }
 
@@ -465,7 +474,8 @@ namespace Libnako.Interpreter
             {
                 Console.Write(s);
             }
-            PrintLog += s;
+            //PrintLog += s;
+			AddPrintLog(s);
         }
 
         private void exec_syscall(NakoILCode code)

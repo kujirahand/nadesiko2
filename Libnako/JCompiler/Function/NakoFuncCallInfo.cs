@@ -26,7 +26,7 @@ namespace Libnako.JCompiler.Function
 
         public void WriteLog(string s)
         {
-            Runner.PrintLog += s;
+            Runner.AddPrintLog(s);
         }
 
 
