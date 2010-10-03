@@ -22,7 +22,8 @@ namespace Libnako.JCompiler.ILWriter
             get { return result; }
         }
         protected Dictionary<NakoILCode, Int64> labels = null;
-
+		private int _labelId = 0;
+		private int GetLableId() { ++_labelId; return _labelId; }
 
         public NakoILWriter(NakoNode topNode)
         {
@@ -170,12 +171,13 @@ namespace Libnako.JCompiler.ILWriter
 
         private void _if(NakoNodeIf node)
         {
+			int labelId = GetLableId();
             // (1) 条件文をコードにする
             Write_r(node.nodeCond);
             // (2) コードの結果により分岐する
             // 分岐先をラベルとして作成
-            NakoILCode label_endif = createLABEL("ENDIF");
-            NakoILCode label_else = createLABEL("ELSE");
+			NakoILCode label_endif = createLABEL("ENDIF" + labelId.ToString());
+			NakoILCode label_else = createLABEL("ELSE" + labelId.ToString());
             result.Add(new NakoILCode(NakoILType.BRANCH_FALSE, label_else));
             // (3) TRUE
             if (node.nodeTrue != null)
@@ -194,13 +196,14 @@ namespace Libnako.JCompiler.ILWriter
 
         private void _while(NakoNodeWhile node)
         {
-            // (1) 条件をコードにする
-            NakoILCode label_while_begin = createLABEL("WHILE_BEGIN");
+			int labelId = GetLableId();
+			// (1) 条件をコードにする
+			NakoILCode label_while_begin = createLABEL("WHILE_BEGIN" + labelId.ToString());
             result.Add(label_while_begin);
             Write_r(node.nodeCond);
             // (2) コードの結果により分岐する
             // 分岐先をラベルとして作成
-            NakoILCode label_while_end = createLABEL("WHILE_END");
+			NakoILCode label_while_end = createLABEL("WHILE_END" + labelId.ToString());
             addNewILCode(NakoILType.BRANCH_FALSE, label_while_end);
             // (3) ループブロックを書き込む
             Write_r(node.nodeBlocks);
@@ -220,10 +223,11 @@ namespace Libnako.JCompiler.ILWriter
         private void _for(NakoNodeFor node)
         {
             int loopVarNo = node.loopVar.varNo;
+			int labelId = GetLableId();
 
             // (0)
-            NakoILCode label_for_begin = createLABEL("FOR_BEGIN");
-            NakoILCode label_for_end = createLABEL("FOR_END");
+			NakoILCode label_for_begin = createLABEL("FOR_BEGIN" + labelId.ToString());
+			NakoILCode label_for_end = createLABEL("FOR_END" + labelId.ToString());
 
             // (1) 変数を初期化する
             result.Add(label_for_begin);
@@ -232,7 +236,7 @@ namespace Libnako.JCompiler.ILWriter
 
             // (2) 条件をコードにする
             // i <= iTo
-            NakoILCode label_for_cond = createLABEL("FOR_COND");
+			NakoILCode label_for_cond = createLABEL("FOR_COND" + labelId.ToString());
             result.Add(label_for_cond);
             // L
             addNewILCode(NakoILType.LD_LOCAL, loopVarNo);
@@ -260,10 +264,11 @@ namespace Libnako.JCompiler.ILWriter
         {
             // (1)
             int loopVarNo = node.loopVarNo;
+			int labelId = GetLableId();
 
             // (0)
-            NakoILCode label_for_begin = createLABEL("TIMES_BEGIN");
-            NakoILCode label_for_end = createLABEL("TIMES_END");
+			NakoILCode label_for_begin = createLABEL("TIMES_BEGIN" + labelId.ToString());
+			NakoILCode label_for_end = createLABEL("TIMES_END" + labelId.ToString());
 
             // (1) 変数を初期化する
             result.Add(label_for_begin);
@@ -272,7 +277,7 @@ namespace Libnako.JCompiler.ILWriter
 
             // (2) 条件をコードにする
             // i <= iTo
-            NakoILCode label_for_cond = createLABEL("TIMES_COND");
+			NakoILCode label_for_cond = createLABEL("TIMES_COND" + labelId.ToString());
             result.Add(label_for_cond);
             // L
             addNewILCode(NakoILType.LD_LOCAL, loopVarNo);
@@ -473,7 +478,7 @@ namespace Libnako.JCompiler.ILWriter
         private void _def_function(NakoNodeDefFunction node)
         {
             // 必要なラベルを定義
-            NakoILCode end_of_def_func = createLABEL("END_OF_DEF_FUNC");
+			NakoILCode end_of_def_func = createLABEL("END_OF_DEF_FUNC_" + node.func.name);
             NakoILCode begin_def_func = createLABEL("FUNC_" + node.func.name);
             node.defLabel = begin_def_func;
             
