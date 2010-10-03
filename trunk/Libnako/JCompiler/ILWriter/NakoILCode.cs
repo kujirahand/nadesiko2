@@ -38,7 +38,7 @@ namespace Libnako.JCompiler.ILWriter
 
 		public override int GetHashCode()
 		{
-			return type.GetHashCode() ^ value.GetHashCode();
+			return type.GetHashCode() ^ (value == null ? 0 : value.GetHashCode());
 		}
 
 		public override bool Equals(object obj)
