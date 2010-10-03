@@ -96,6 +96,7 @@ namespace Libnako.JCompiler
                 this.source = source;
             }
             Tokenize();
+            // Console.WriteLine(this.Tokens.toTypeString());
             Parse();
             WriteIL();
             return Codes;
@@ -115,20 +116,26 @@ namespace Libnako.JCompiler
             paser.ParseOnlyValue();
             this.topNode = paser.topNode;
         }
-
+		
+        protected static bool RegisterSysCallFlag = false;
         protected void RegisterSysCall()
         {
+            // 仕様識別フラグをリセット
+            NakoAPIFuncBank.Instance.ResetUsedFlag();
+            
             // トークンに予約語句を追加
             NakoReservedWord.Init(TokenDic);
 
             // APIをBankに登録
-            NakoBaseSystem baseSystem = new NakoBaseSystem();
-            baseSystem.DefineFunction(NakoAPIFuncBank.Instance);
-
-            // プラグインを登録
-            LoadPlugins();
-
-            // Bankをシステムに登録
+            if (RegisterSysCallFlag == false)
+            {
+                RegisterSysCallFlag = true;
+                NakoBaseSystem baseSystem = new NakoBaseSystem();
+                baseSystem.DefineFunction(NakoAPIFuncBank.Instance);
+                // プラグインを登録
+                LoadPlugins();
+            }
+            // Global変数とシステム辞書に単語を登録
             NakoAPIFuncBank.Instance.RegisterToSystem(TokenDic, GlobalVar);
         }
 

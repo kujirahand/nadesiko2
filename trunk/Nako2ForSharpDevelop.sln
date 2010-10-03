@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-# SharpDevelop 4.0.0.6721
+# SharpDevelop 3.2.0.5777
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestNako", "TestNako\TestNako.csproj", "{6A26AF1C-6734-4B03-BD92-F5D0FB0F9C0F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{F9297385-ACE0-43AD-AD66-819C5A60FE80} = {F9297385-ACE0-43AD-AD66-819C5A60FE80}

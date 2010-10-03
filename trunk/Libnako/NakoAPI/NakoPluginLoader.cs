@@ -46,7 +46,8 @@ namespace Libnako.NakoAPI
             {
                 // 例外をチェック
                 string name = System.IO.Path.GetFileName(dll);
-                if (name == "Libnako.dll") continue;
+                name = name.ToLower();
+                if (name == "libnako.dll") continue;
                 // アセンブリを読み込む
                 try
                 {

@@ -45,7 +45,11 @@ namespace Libnako.NakoAPI
 
         private void AddVarToList(string name, Object value)
         {
-            VarList.Add(name, value);
+            try {
+                VarList.Add(name, value);
+            } catch (Exception e) {
+                throw new Exception("NakoDic Register error:" + name + "/" + e.Message);
+            }
         }
 
         public void RegisterToSystem(NakoTokenDic dic, NakoVariableManager globalVar)
@@ -75,7 +79,14 @@ namespace Libnako.NakoAPI
                 var.SetBodyAutoType(VarList[name]);
                 globalVar.CreateVar(name, var);
             }
-
+        }
+        
+        public void ResetUsedFlag()
+        {
+            foreach (NakoAPIFunc func in FuncList)
+            {
+                func.Used = false;
+            }
         }
 
     }

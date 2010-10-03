@@ -45,6 +45,9 @@ namespace NakoPlugin
 
     }
 
+    /// <summary>
+    /// プラグイン関数呼び出しに使うインターフェイス
+    /// </summary>
     public interface INakoFuncCallInfo
     {
         Object StackPop();

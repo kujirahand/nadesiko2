@@ -711,6 +711,8 @@ namespace Libnako.JCompiler.Tokenizer
                     tmp = "";
                     // &
                     tokens.Add(new NakoToken(NakoTokenType.AND, t.lineno, t.level));
+                    // "("
+                    tokens.Add(new NakoToken(NakoTokenType.PARENTHESES_L, t.lineno, t.lineno));
                     // 再帰的にトークン解析を行う
                     NakoTokenizer tok = new NakoTokenizer(str_ex);
                     tok.lineno = t.lineno;
@@ -720,6 +722,8 @@ namespace Libnako.JCompiler.Tokenizer
                     {
                         tokens.Add(st);
                     }
+                    // ")"
+                    tokens.Add(new NakoToken(NakoTokenType.PARENTHESES_R, t.lineno, t.lineno));
                     continue;
                 }
                 tmp += c;
