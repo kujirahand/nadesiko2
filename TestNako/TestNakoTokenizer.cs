@@ -278,7 +278,9 @@ namespace TestNako
             r = tok.CheckTokenType(new NakoTokenType[] {
                 NakoTokenType.STRING,
                 NakoTokenType.AND,
-                NakoTokenType.INT
+                NakoTokenType.PARENTHESES_L,
+                NakoTokenType.INT,
+                NakoTokenType.PARENTHESES_R
             });
             Assert.IsTrue(r);
             // 3
@@ -287,7 +289,9 @@ namespace TestNako
             r = tok.CheckTokenType(new NakoTokenType[] {
                 NakoTokenType.STRING,
                 NakoTokenType.AND,
-                NakoTokenType.STRING
+                NakoTokenType.PARENTHESES_L,
+                NakoTokenType.STRING,
+                NakoTokenType.PARENTHESES_R
             });
             Assert.IsTrue(r);
             //4
@@ -296,9 +300,11 @@ namespace TestNako
             r = tok.CheckTokenType(new NakoTokenType[] {
                 NakoTokenType.STRING,
                 NakoTokenType.AND,
+                NakoTokenType.PARENTHESES_L,
                 NakoTokenType.STRING,
                 NakoTokenType.AND,
-                NakoTokenType.INT
+                NakoTokenType.INT,
+                NakoTokenType.PARENTHESES_R
             });
             Assert.IsTrue(r);
         }

@@ -11,6 +11,9 @@ namespace DemoCNako2
 {
     class Program
     {
+        static NakoCompiler nc2 = new NakoCompiler();
+        static NakoInterpreter ni2 = new NakoInterpreter();
+        
         [STAThread]
         static void Main(string[] args)
         {
@@ -18,8 +21,8 @@ namespace DemoCNako2
             // Compile
             NakoCompiler compiler = new NakoCompiler();
             compiler.DirectSource =
-                "OSを「os.txt」へ保存\n" +
-                "";
+                "a=30\n" +
+                "「**{a/3}**」を表示";
             cout = "----------";
             cout = "* TOKENS:";
             cout = compiler.Tokens.toTypeString();

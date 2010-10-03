@@ -29,6 +29,8 @@ namespace TestNako
         {
             NakoCompiler nc = new NakoCompiler();
             NakoInterpreter ni = new NakoInterpreter();
+            ni.debugMode = true;
+            ni.UseConsoleOut = true;
             nc.DirectSource =
                 "A[`a`]=566\n" +
                 "A[`a`]を表示\n" +
@@ -83,8 +85,11 @@ namespace TestNako
             NakoInterpreter ni = new NakoInterpreter();
             nc.DirectSource =
                 "C￥１￥２￥３=2222\n" +
-                "C￥１￥２￥３を表示。\n" +
+                "C￥１￥２￥３を表示\n" +
                 "";
+            Console.WriteLine(nc.Codes);
+            ni.UseConsoleOut = true;
+            ni.debugMode = true;
             ni.Run(nc.Codes);
             Assert.AreEqual("2222", ni.PrintLog);
         }
