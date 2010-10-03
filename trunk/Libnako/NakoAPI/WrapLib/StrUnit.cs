@@ -241,7 +241,7 @@ namespace Libnako.NakoAPI.WrapLib
             // TODO: EUC-JP を読むようにする
             else
             {
-                throw new Exception("[Source Code Encoding Error]: " + filename);
+                throw new ApplicationException("[Source Code Encoding Error]: " + filename);
             }
 
             return src;

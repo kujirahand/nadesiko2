@@ -29,7 +29,7 @@ namespace Libnako.JCompiler.Parser
             {
                 if (_globalVar == null)
                 {
-                    throw new Exception("グローバル変数が設定されていません!!");
+                    throw new ApplicationException("グローバル変数が設定されていません!!");
                 }
                 return _globalVar;
             }

@@ -941,7 +941,7 @@ namespace Libnako.JCompiler.Parser
                     case NakoTokenType.AND:
                         node.calc_type = CalcType.ADD_STR; break;
                     default:
-                        throw new Exception("System Error");
+                        throw new ApplicationException("System Error");
                 }
                 TokenTry();
                 tok.MoveNext();
@@ -997,7 +997,7 @@ namespace Libnako.JCompiler.Parser
                     case NakoTokenType.EQ_EQ: node.calc_type = CalcType.EQ; break;
                     case NakoTokenType.NOT_EQ: node.calc_type = CalcType.NOT_EQ; break;
                     default:
-                        throw new Exception("[Nako System Error] Operator not set.");
+                        throw new ApplicationException("[Nako System Error] Operator not set.");
                 }
                 TokenTry();
                 tok.MoveNext();

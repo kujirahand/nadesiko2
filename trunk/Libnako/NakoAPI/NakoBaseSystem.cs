@@ -115,7 +115,7 @@ namespace Libnako.NakoAPI
             Object b = info.StackPop();
             if (!(ar is NakoVariable))
             {
-                throw new Exception("『足す!』の引数が変数ではありません");
+                throw new ApplicationException("『足す!』の引数が変数ではありません");
             }
             Object a = ((NakoVariable)ar).Body;
             Object c;
@@ -156,7 +156,7 @@ namespace Libnako.NakoAPI
             Object b = info.StackPop();
             if (!(ar is NakoVariable))
             {
-                throw new Exception("『引く!』の引数が変数ではありません");
+                throw new ApplicationException("『引く!』の引数が変数ではありません");
             }
             Object a = ((NakoVariable)ar).Body;
             Object c;

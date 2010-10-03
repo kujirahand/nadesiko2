@@ -499,7 +499,7 @@ namespace Libnako.JCompiler.ILWriter
         }
     }
     
-    public class NakoILWriterException : Exception
+    public class NakoILWriterException : ApplicationException
     {
         public NakoILWriterException(String message) : base(message) { }
     }
