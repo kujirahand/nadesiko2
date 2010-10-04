@@ -498,7 +498,7 @@ namespace Libnako.JCompiler.ILWriter
             Write_r(node.funcBody);
             // 戻り値(変数「それ」)をスタックに載せる
             result.Add(new NakoILCode(NakoILType.LD_GLOBAL, (int)0));
-            result.Add(new NakoILCode(NakoILType.RET));
+			result.Add(new NakoILCode(NakoILType.RET, func.updateSore));
             // 関数の終わりを定義
             result.Add(end_of_def_func);
         }

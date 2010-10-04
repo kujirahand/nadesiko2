@@ -237,6 +237,7 @@ namespace Libnako.Interpreter
             NakoCallStack c = new NakoCallStack();
             c.localVar = localVar;
             c.nextpos = runpos + 1;
+			c.sore = globalVar.GetValue(0);
             this.localVar = new NakoVariableManager(NakoVariableScope.Local);
             callStack.Push(c);
             // JUMP
@@ -249,6 +250,8 @@ namespace Libnako.Interpreter
             autoIncPos = false;
             NakoCallStack c = callStack.Pop();
             this.runpos = c.nextpos;
+			if (((bool)code.value) == false)
+				globalVar.SetValue(0, c.sore);// "それ"を関数実行前に戻す
         }
 
         private void _branch_true(NakoILCode code)
@@ -484,7 +487,8 @@ namespace Libnako.Interpreter
             NakoAPIFunc s = NakoAPIFuncBank.Instance.FuncList[funcNo];
             NakoFuncCallInfo f = new NakoFuncCallInfo(this);
             Object result = s.FuncDl(f);
-            globalVar.SetValue(0, result); // 変数「それ」に値をセット
+			if (s.updateSore)
+				globalVar.SetValue(0, result); // 変数「それ」に値をセット
             StackPush(result); // 関数の結果を PUSH する
         }
 
@@ -714,5 +718,6 @@ namespace Libnako.Interpreter
     {
 		public NakoVariableManager localVar { get; set; }
 		public int nextpos { get; set; }
+		public Object sore { get; set; }
     }
 }

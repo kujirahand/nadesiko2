@@ -15,6 +15,7 @@ namespace Libnako.JCompiler.Function
 		public NakoFuncArgs args { get; set; }
 		public NakoFuncType funcType { get; set; }
 		public NakoVarType resultType { get; set; }
+		public bool updateSore { get; set; }
 
         public NakoFunc()
         {
@@ -33,6 +34,7 @@ namespace Libnako.JCompiler.Function
 			funcType = NakoFuncType.UserCall;
 			resultType = NakoVarType.Void;
             args = new NakoFuncArgs();
+			updateSore = true;
         }
 
         public virtual void Execute() { }
