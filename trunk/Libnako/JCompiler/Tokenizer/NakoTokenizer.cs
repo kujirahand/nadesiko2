@@ -681,49 +681,54 @@ namespace Libnako.JCompiler.Tokenizer
                         if (str_ex == "\\t")
                         {
                             tmp += '\t';
-                            continue;
+                            str_ex = "";
                         }
-                        if (str_ex == "\\n")
+                        else if (str_ex == "\\n")
                         {
                             tmp += '\n';
-                            continue;
+                            str_ex = "";
                         }
-                        if (IsNumber(str_ex[1])) // \0
+                        else if (IsNumber(str_ex[1])) // \0
                         {
                             str_ex = str_ex.Substring(1);
                             int i_ex = int.Parse(str_ex);
                             tmp += (Char)i_ex;
-                            continue;
+                            str_ex = "";
                         }
-                        if (str_ex[1] == '$')
+                        else if (str_ex[1] == '$')
                         {
                             str_ex = "0x" + str_ex.Substring(2);
                             int i_ex = int.Parse(str_ex);
                             tmp += (Char)i_ex;
-                            continue;
+                            str_ex = "";
                         }
-                        new NakoTokenizerException("展開あり文字列内の利用できない`\\'メソッド:" + str_ex, t);
+                        else {
+                        	new NakoTokenizerException("展開あり文字列内の利用できない`\\'メソッド:" + str_ex, t);
+                        }
                     }
                     // string
                     NakoToken tt = new NakoToken(NakoTokenType.STRING, t.lineno, t.level);
                     tt.value = tmp;
                     tokens.Add(tt);
                     tmp = "";
-                    // &
-                    tokens.Add(new NakoToken(NakoTokenType.AND, t.lineno, t.level));
-                    // "("
-                    tokens.Add(new NakoToken(NakoTokenType.PARENTHESES_L, t.lineno, t.lineno));
-                    // 再帰的にトークン解析を行う
-                    NakoTokenizer tok = new NakoTokenizer(str_ex);
-                    tok.lineno = t.lineno;
-                    tok.level = t.level;
-                    tok.TokenizeFirst(); // とりあえず区切るだけ
-                    foreach (NakoToken st in tok.tokens)
+                    if (str_ex != "")
                     {
-                        tokens.Add(st);
+	                    // &
+	                    tokens.Add(new NakoToken(NakoTokenType.AND, t.lineno, t.level));
+	                    // "("
+	                    tokens.Add(new NakoToken(NakoTokenType.PARENTHESES_L, t.lineno, t.lineno));
+	                    // 再帰的にトークン解析を行う
+	                    NakoTokenizer tok = new NakoTokenizer(str_ex);
+	                    tok.lineno = t.lineno;
+	                    tok.level = t.level;
+	                    tok.TokenizeFirst(); // とりあえず区切るだけ
+	                    foreach (NakoToken st in tok.tokens)
+	                    {
+	                        tokens.Add(st);
+	                    }
+	                    // ")"
+	                    tokens.Add(new NakoToken(NakoTokenType.PARENTHESES_R, t.lineno, t.lineno));
                     }
-                    // ")"
-                    tokens.Add(new NakoToken(NakoTokenType.PARENTHESES_R, t.lineno, t.lineno));
                     continue;
                 }
                 tmp += c;

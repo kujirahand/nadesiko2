@@ -18,6 +18,11 @@ namespace Libnako.NakoAPI
         public SysCallDelegate FuncDl { get; set; }
         
         public Boolean Used { get; set; }
+        
+        /// <summary>
+        /// INakoPlugin Instance
+        /// </summary>
+        public INakoPlugin PluginInstance { get; set; }
 
         public NakoAPIFunc(String name, String argdef, NakoVarType resultType, SysCallDelegate FuncDl)
             : base(name, argdef)

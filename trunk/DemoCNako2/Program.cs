@@ -21,8 +21,8 @@ namespace DemoCNako2
             // Compile
             NakoCompiler compiler = new NakoCompiler();
             compiler.DirectSource =
-                "a=30\n" +
-                "「**{a/3}**」を表示";
+				"「abc」をコピー。\n" +
+				"クリップボードを表示。";
             cout = "----------";
             cout = "* TOKENS:";
             cout = compiler.Tokens.toTypeString();

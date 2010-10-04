@@ -89,7 +89,13 @@ namespace Libnako.JCompiler.Parser
             if (tok.IsEOF()) return false;
             if (Accept(NakoTokenType.EOL))
             {
-                tok.MoveNext(); return true;
+            	if (calcStack.Count > 0)
+            	{
+            		throw new NakoParserException(
+            			"意味のない単語があります。(余剰スタックによる文法チェック)",
+            			tok.CurrentToken);
+            	}
+            	tok.MoveNext(); return true;
             }
             return false;
         }
@@ -350,6 +356,7 @@ namespace Libnako.JCompiler.Parser
         //>           ;
         private Boolean _callfunc_stmt()
         {
+        	NakoToken startToken = tok.CurrentToken;
             TokenTry();
             while (!tok.IsEOF())
             {
@@ -365,15 +372,21 @@ namespace Libnako.JCompiler.Parser
                 }
             }
             TokenFinally();
-            
+            //TODO: _callfunc_stmt
             // 計算用スタックの管理
             if (calcStack.Count > 0)
             {
-                while (calcStack.Count > 0)
+            	while (calcStack.Count > 0)
                 {
                     NakoNode n = calcStack.Shift();
+                    if (!(n is NakoNodeCallFunction))
+                    {
+                    	throw new NakoParserException(
+                    		"無効な式か値があります。(余剰スタックのチェック)",
+                    		startToken);
+                    }
                     parentNode.AddChild(n);
-                    parentNode.AddChild(new NakoNodePop());
+	                parentNode.AddChild(new NakoNodePop());
                 }
             }
             // ここで本来ならば
@@ -381,10 +394,9 @@ namespace Libnako.JCompiler.Parser
             // 連続関数呼び出しに対応するためエラーにしない
             return true;
         }
-
+        
         //> _arglist : '(' { _value } ')'
         //>          ;
-
         private Boolean _arglist(NakoNodeCallFunction node)
         {
             NakoToken firstT = tok.CurrentToken;
@@ -794,6 +806,7 @@ namespace Libnako.JCompiler.Parser
             // パーサーの副作用回避のため、
             // 配列アクセスで円マークがある時、通常の関数呼び出しはしない
             // (例) A\3を表示 → この場合、円マーク以降は明らかに関数呼び出しではない
+            // OK: (A\3)を表示 NG: A (\3を表示)
             if (canCallJFunction)
             {
                 // 関数があるか調べる

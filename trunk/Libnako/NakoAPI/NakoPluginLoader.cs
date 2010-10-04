@@ -6,7 +6,6 @@ using NakoPlugin;
 
 namespace Libnako.NakoAPI
 {
-
     /// <summary>
     /// プラグインをロードするクラス
     /// </summary>
@@ -17,12 +16,14 @@ namespace Libnako.NakoAPI
         // プラグインインターフェイスのフルパスを調べる
         string INakoPluginsPath = typeof(INakoPlugin).FullName;
 
-        public NakoPluginInfo[] FindPlugins()
+        protected NakoPluginInfo[] FindPlugins()
         {
             // プラグインのあるパスを調べる
             // アプリケーションディレクトリ
-            string appdir = System.IO.Path.GetDirectoryName(
-                System.Reflection.Assembly.GetExecutingAssembly().Location);
+            string basefile = 
+                //System.Reflection.Assembly.GetCallingAssembly().Location;
+                System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string appdir = System.IO.Path.GetDirectoryName(basefile);
 
             if (System.IO.Directory.Exists(appdir))
             {
@@ -72,7 +73,21 @@ namespace Libnako.NakoAPI
 
             }
         }
-
+        
+        /// <summary>
+        /// プラグインの取り込みを行う
+        /// </summary>
+        public void LoadPlugins()
+        {
+            NakoAPIFuncBank bank = NakoAPIFuncBank.Instance;
+            NakoPluginInfo[] plugs = FindPlugins();
+            foreach (NakoPluginInfo info in plugs)
+            {
+                INakoPlugin p = info.CreateInstance();
+                bank.SetPluginInstance(p);
+                p.DefineFunction(bank);
+            }
+        }
     }
     /// <summary>
     /// プラグイン情報を表わすクラス

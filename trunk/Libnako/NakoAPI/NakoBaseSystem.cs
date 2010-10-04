@@ -30,6 +30,8 @@ namespace Libnako.NakoAPI
         {
             get { return "システム関数を定義したプラグイン"; }
         }
+        
+        public bool Used { get; set; }
 
         /// <summary>
         /// システムに関数を登録する

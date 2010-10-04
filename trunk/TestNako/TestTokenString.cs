@@ -65,14 +65,12 @@ namespace TestNako
         [Test]
         public void Test_StrExtract4()
         {
-        	/* todo
             ns.Publish(
-                "PRINT 「ab{\\n}cd」\n"+
+                "PRINT  「ab{\\t}cd」\n"+
                 ""
                 );
             runner.Run(ns.Codes);
-            Assert.AreEqual(runner.PrintLog, "ab\ncd");
-            */
+            Assert.AreEqual(runner.PrintLog, "ab\tcd");
         }
     }
 }

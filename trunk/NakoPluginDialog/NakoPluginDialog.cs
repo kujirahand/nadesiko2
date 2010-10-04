@@ -24,6 +24,8 @@ namespace NakoPluginDialog
         {
             get { return "各種ダイアログを表示するプラグイン"; }
         }
+        
+        public bool Used { get; set; }
 
         public void DefineFunction(INakoPluginBank bank)
         {
