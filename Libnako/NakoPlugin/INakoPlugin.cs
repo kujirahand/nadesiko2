@@ -10,10 +10,11 @@ namespace NakoPlugin
     /// </summary>
     public interface INakoPlugin
     {
-        String Name { get; }
-        Double PluginVersion { get; }
-        String Description { get; }
-        void DefineFunction(INakoPluginBank bank);
+        string      Name            { get; }
+        double      PluginVersion   { get; }
+        string      Description     { get; }
+        bool        Used            { get; }
+        void        DefineFunction(INakoPluginBank bank);
     }
 
     /// <summary>
@@ -65,6 +66,7 @@ namespace NakoPlugin
     /// <summary>
     /// プラグインにシステム関数を追加する
     /// </summary>
+    /// <see cref="Libnako.NakoAPI.NakoAPIFuncBank">実際の定義</see>
     public interface INakoPluginBank
     {
         /// <summary>
@@ -76,6 +78,7 @@ namespace NakoPlugin
         /// <param name="f">実際に処理を行うC#のdelegate</param>
         /// <param name="desc">関数の説明</param>
         /// <param name="kana">命令のよみがな</param>
+        void SetPluginInstance(INakoPlugin plugin);
         void AddFunc(String name, String argdef, NakoVarType resultType, SysCallDelegate f, String desc, String kana);
         void AddVar(String name, Object value, String desc, String kane);
     }

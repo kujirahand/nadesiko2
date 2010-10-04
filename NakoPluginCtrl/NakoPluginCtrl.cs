@@ -4,13 +4,16 @@ using System.Text;
 
 using NakoPlugin;
 using System.Windows.Forms;
+using Microsoft.VisualBasic;
 
 
 namespace NakoPluginCtrl
 {
     public class NakoPluginCtrl : INakoPlugin
     {
-        public string Name
+    	public static string getPluginGuid() { return "44313FC9-22C5-457E-A523-96E4AA868BC0"; }
+    	
+    	public string Name
         {
             get { return this.GetType().FullName; }
         }
@@ -24,11 +27,14 @@ namespace NakoPluginCtrl
         {
             get { return "外部アプリとの連携を行うプラグイン"; }
         }
+        
+        public bool Used { get; set; }
 
         public void DefineFunction(INakoPluginBank bank)
         {
             bank.AddFunc("コピー", "Sを|Sの", NakoVarType.Void, _copyToClipboard, "文字列Sをクリップボードにコピーする", "こぴー");
             bank.AddFunc("クリップボード", "", NakoVarType.Void, _getFromClipboard, "クリップボードの文字列を取得する", "くりっぷぼーど");
+            bank.AddFunc("キー送信", "KEYSを", NakoVarType.Void, _sendKeys, "ウィンドウのタイトルTITLEに文字列KEYSを送信する", "きーそうしん");
         }
             
         // Define Method
@@ -44,5 +50,11 @@ namespace NakoPluginCtrl
             return Clipboard.GetText();
         }
 
+        public Object _sendKeys(INakoFuncCallInfo info)
+        {
+            String keys  = info.StackPopAsString();
+            SendKeys.Send(keys);
+            return null;
+        }
     }
 }

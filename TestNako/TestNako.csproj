@@ -28,7 +28,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -51,6 +51,7 @@
     <Compile Include="TestNakoInterpreter.cs" />
     <Compile Include="TestNakoNodeIF.cs" />
     <Compile Include="TestNakoParser.cs" />
+    <Compile Include="TestNakoPluginCtrl.cs" />
     <Compile Include="TestNakoTokenizer.cs" />
     <Compile Include="TestNodeCallFunction.cs" />
     <Compile Include="TestNodeFor.cs" />
@@ -61,6 +62,10 @@
     <ProjectReference Include="..\Libnako\Libnako.csproj">
       <Project>{F9297385-ACE0-43AD-AD66-819C5A60FE80}</Project>
       <Name>Libnako</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NakoPluginCtrl\NakoPluginCtrl.csproj">
+      <Project>{B991E428-E0FE-4957-90F7-CD88C4937573}</Project>
+      <Name>NakoPluginCtrl</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

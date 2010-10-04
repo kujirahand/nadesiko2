@@ -2,6 +2,11 @@
 
 [ツール]
 
+プロジェクトのコンパイルには、SharpDevelop を使います。
+MonoDevelop でもコンパイルできることを確認しています。
+
+あるいは・・・
+
 ●Visual Studio 2010 Express 日本語版
 http://www.microsoft.com/japan/msdn/vstudio/express/
 

@@ -24,6 +24,8 @@ namespace NakoPluginFile
             get { return "ファイルの入出力プラグイン"; }
         }
 
+        public bool Used { get; set; }
+        
         public void DefineFunction(INakoPluginBank bank)
         {
             bank.AddFunc("開く", "FILEを|FILEから", NakoVarType.String, _openFile, "ファイル名FILEのテキストを全部読み込んで返す。この時、自動的に文字コードを判定して読み込む。", "ひらく");

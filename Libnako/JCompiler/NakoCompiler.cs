@@ -12,9 +12,10 @@ namespace Libnako.JCompiler
 {
     public class NakoCompiler
     {
-		public String name { get; set; }
-		public String fullpath { get; set; }
-		public String source { get; set; }
+        public NakoCompilerLoaderInfo loaderInfo { get; set; }
+        public String name { get; set; }
+        public String fullpath { get; set; }
+        public String source { get; set; }
         // token
         protected NakoTokenList tokens = null;
         public NakoTokenList Tokens
@@ -44,11 +45,19 @@ namespace Libnako.JCompiler
             // システムの初期化
             RegisterSysCall();
         }
+        
         public NakoCompiler()
         {
             // システムの初期化
             RegisterSysCall();
         }
+        
+        /*
+        public NakoCompiler(NakoCompilerLoaderInfo info)
+        {
+            //todo: loaderInfo
+        }
+        */
 
         /// <summary>
         /// 字句解析(トークンの分割)を行う
@@ -130,6 +139,7 @@ namespace Libnako.JCompiler
             if (RegisterSysCallFlag == false)
             {
                 RegisterSysCallFlag = true;
+                // 
                 NakoBaseSystem baseSystem = new NakoBaseSystem();
                 baseSystem.DefineFunction(NakoAPIFuncBank.Instance);
                 // プラグインを登録
@@ -141,14 +151,14 @@ namespace Libnako.JCompiler
 
         protected void LoadPlugins()
         {
-            // プラグインを読込み
-            NakoPluginLoader loader = new NakoPluginLoader();
-            NakoPluginInfo[] plugs = loader.FindPlugins();
-            foreach (NakoPluginInfo info in plugs)
-            {
-                INakoPlugin p = info.CreateInstance();
-                p.DefineFunction(NakoAPIFuncBank.Instance);
-            }
+        	NakoPluginLoader loader = new NakoPluginLoader();
+        	loader.LoadPlugins();
         }
+    }
+    
+    public class NakoCompilerLoaderInfo
+    {
+        public string source = "";
+        public INakoPlugin[] PreloadModules;
     }
 }

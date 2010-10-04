@@ -20,10 +20,16 @@ namespace Libnako.NakoAPI
         private NakoAPIFuncBank() { }
 
         #region INakoPluginBank の実装
+        public void SetPluginInstance(INakoPlugin plugin)
+        {
+            PluginInstance = plugin;
+        }
+        
         public void AddFunc(string name, string argdef, NakoVarType resultType, NakoPlugin.SysCallDelegate f, string desc, string kana)
         {
             name = NakoToken.TrimOkurigana(name);
             NakoAPIFunc s = new NakoAPIFunc(name, argdef, resultType, f);
+            s.PluginInstance = PluginInstance;
             this.AddFuncToList(s);
         }
 
@@ -36,6 +42,7 @@ namespace Libnako.NakoAPI
 
         public List<NakoAPIFunc> FuncList = new List<NakoAPIFunc>();
         public Dictionary<string, Object> VarList = new Dictionary<string, Object>();
+        private INakoPlugin PluginInstance = null;
 
         private void AddFuncToList(NakoAPIFunc s)
         {
