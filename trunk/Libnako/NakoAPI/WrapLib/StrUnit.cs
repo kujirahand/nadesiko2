@@ -191,9 +191,10 @@ namespace Libnako.NakoAPI.WrapLib
             }
             //M. Takahashi's suggestion
             //utf8 += utf8 / 2;
-
+			/*
             System.Diagnostics.Debug.WriteLine(
                 string.Format("sjis = {0}, euc = {1}, utf8 = {2}", sjis, euc, utf8));
+            */
             if (euc > sjis && euc > utf8)
             {
                 //EUC
@@ -226,19 +227,31 @@ namespace Libnako.NakoAPI.WrapLib
             byte[] data = System.IO.File.ReadAllBytes(filename);
             System.Text.Encoding enc = GetCode(data);
 
+            // UTF-8
             if (enc == Encoding.UTF8)
             {
                 src = Encoding.UTF8.GetString(data);
             }
-            else if (enc == System.Text.Encoding.GetEncoding(932))
-            {
-                src = System.Text.Encoding.GetEncoding(932).GetString(data);
-            }
+            // UNICODE
             else if (enc == Encoding.Unicode)
             {
                 src = Encoding.Unicode.GetString(data);
             }
-            // TODO: EUC-JP を読むようにする
+            // Shift_JIS
+            else if (enc == System.Text.Encoding.GetEncoding(932))
+            {
+                src = System.Text.Encoding.GetEncoding(932).GetString(data);
+            }
+            // JIS
+            else if (enc == Encoding.GetEncoding(50220))
+            {
+                src = System.Text.Encoding.GetEncoding(50220).GetString(data);
+            }
+            // EUC-JP
+            else if (enc == Encoding.GetEncoding(51932))
+            {
+                src = System.Text.Encoding.GetEncoding(51932).GetString(data);
+            }
             else
             {
                 throw new ApplicationException("[Source Code Encoding Error]: " + filename);

@@ -785,8 +785,7 @@ namespace Libnako.JCompiler.Parser
         //> _value : FUNCTION_NAME | _calc_fact ;
         protected override Boolean _value(Boolean canCallJFunction)
         {
-            // TODO:
-            // _value は再帰が多くコストが高いのであり得る値だけチェックする
+            // TODO: _value は再帰が多くコストが高いのであり得る値だけチェックする
             switch (tok.CurrentTokenType)
             {
                 case NakoTokenType.PARENTHESES_L:
@@ -839,10 +838,38 @@ namespace Libnako.JCompiler.Parser
             return false;
         }
 
-        //> _calc_value : _const | _variable 
+        //> _calc_value : [MINUS] _const | _variable 
         //>             ;
         private Boolean _calc_value()
         {
+        	// MINUS?
+        	if (Accept(NakoTokenType.MINUS))
+        	{
+        		tok.MoveNext();
+        		if (Accept(NakoTokenType.INT)||Accept(NakoTokenType.NUMBER))
+        		{
+        			_const();
+        			NakoNodeConst c = (NakoNodeConst)calcStack.Pop();
+        			if (c.value is Int64) {
+        				c.value = ((Int64)(c.value) * -1);
+        			} else {
+        				c.value = ((Double)(c.value) * -1);
+        			}
+        			calcStack.Push(c);
+        			lastNode = c;
+        			return true;
+        		}
+        		NakoNodeCalc nc = new NakoNodeCalc();
+        		nc.calc_type = CalcType.MUL;
+        		NakoNodeConst m1 = new NakoNodeConst();
+        		m1.value = -1;
+        		m1.type = NakoNodeType.INT;
+        		NakoNode v = calcStack.Pop();
+        		nc.nodeL = v;
+        		nc.nodeR = m1;
+        		calcStack.Push(nc);
+        		return true;
+        	}
             if (_const()) return true;
             if (_variable()) return true;
             return false;
@@ -1030,25 +1057,10 @@ namespace Libnako.JCompiler.Parser
         }
 
 
-        //> _calc_fact : MINUS  _calc_comp
-        //>            | _calc_comp
+        //> _calc_fact : _calc_comp
         //>            ;
         private Boolean _calc_fact()
         {
-            if (Accept(NakoTokenType.MINUS))
-            {
-                NakoNodeCalc node = new NakoNodeCalc();
-                node.Token = tok.CurrentToken;
-                tok.MoveNext(); // skip '-'
-                if (!_calc_comp())
-                {
-                    throw new NakoParserException("「-」記号の後に値がありません。", tok.CurrentToken);
-                }
-                node.nodeL = calcStack.Pop();
-                lastNode = node;
-                calcStack.Push(node);
-                return true;
-            }
             if (_calc_comp())
             {
                 return true;
