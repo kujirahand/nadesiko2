@@ -10,9 +10,8 @@ namespace Libnako.JCompiler.Function
     /// </summary>
     public class NakoFuncArgs : IList<NakoFuncArg>
     {
-		private List<NakoFuncArg> _list = new List<NakoFuncArg>();
-		
-		/// <summary>
+        private List<NakoFuncArg> _list = new List<NakoFuncArg>();
+        /// <summary>
         /// 引数の定義文字列を読んで、関数の引数として登録する
         /// </summary>
         public void analizeArgTokens(NakoTokenList tokens)

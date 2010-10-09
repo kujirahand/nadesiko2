@@ -16,7 +16,7 @@ namespace TestNako
         public void TestCalc()
         {
             // 1
-            NakoCompiler ns = new NakoCompiler(null);
+            NakoCompiler ns = new NakoCompiler();
             ns.source = "1+2*3";
             ns.Tokenize();
             ns.ParseOnlyValue();

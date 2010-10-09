@@ -12,7 +12,7 @@ namespace Libnako.JCompiler
 {
     public class NakoCompiler
     {
-        public NakoCompilerLoaderInfo loaderInfo { get; set; }
+        public NakoCompilerLoaderInfo LoaderInfo { get; set; }
         public String name { get; set; }
         public String fullpath { get; set; }
         public String source { get; set; }
@@ -39,25 +39,27 @@ namespace Libnako.JCompiler
         // NakoTokenDic
         public readonly NakoTokenDic TokenDic = new NakoTokenDic();
 
-        public NakoCompiler(String source)
-        {
-            this.source = source;
-            // システムの初期化
-            RegisterSysCall();
-        }
-        
         public NakoCompiler()
         {
             // システムの初期化
+            LoaderInfo = new NakoCompilerLoaderInfo();
+            LoaderInfo.Init();
             RegisterSysCall();
         }
         
-        /*
         public NakoCompiler(NakoCompilerLoaderInfo info)
         {
             //todo: loaderInfo
+            if (info == null)
+            {
+                throw new NakoCompilerException("LoaderInfo is null!");
+            }
+            this.LoaderInfo = info;
+            if (info.source != null) {
+                this.source = info.source;
+            }
+            RegisterSysCall();
         }
-        */
 
         /// <summary>
         /// 字句解析(トークンの分割)を行う
@@ -125,40 +127,69 @@ namespace Libnako.JCompiler
             paser.ParseOnlyValue();
             this.topNode = paser.topNode;
         }
-		
+
         protected static bool RegisterSysCallFlag = false;
         protected void RegisterSysCall()
         {
-            // 仕様識別フラグをリセット
-            NakoAPIFuncBank.Instance.ResetUsedFlag();
+            NakoAPIFuncBank bank = NakoAPIFuncBank.Instance;
             
             // トークンに予約語句を追加
             NakoReservedWord.Init(TokenDic);
-
-            // APIをBankに登録
+            
+            // LoaderInfo で指定のプラグインのみプリロード
+            foreach (INakoPlugin plugin in LoaderInfo.PreloadModules)
+            {
+                int i = bank.PluginList.IndexOf(plugin.GetType().FullName);
+                if (i < 0) {
+                    bank.PluginList.Add(plugin.GetType().FullName);
+                    bank.SetPluginInstance(plugin);
+                    plugin.DefineFunction(bank);
+                }
+            }
+            // 使用識別フラグをリセット
+            bank.ResetUsedFlag();
+            
             if (RegisterSysCallFlag == false)
             {
                 RegisterSysCallFlag = true;
-                // 
-                NakoBaseSystem baseSystem = new NakoBaseSystem();
-                baseSystem.DefineFunction(NakoAPIFuncBank.Instance);
                 // プラグインを登録
                 LoadPlugins();
             }
+            
             // Global変数とシステム辞書に単語を登録
             NakoAPIFuncBank.Instance.RegisterToSystem(TokenDic, GlobalVar);
         }
 
         protected void LoadPlugins()
         {
-        	NakoPluginLoader loader = new NakoPluginLoader();
-        	loader.LoadPlugins();
+            NakoPluginLoader loader = new NakoPluginLoader();
+            loader.LoadPlugins();
         }
     }
     
     public class NakoCompilerLoaderInfo
     {
         public string source = "";
-        public INakoPlugin[] PreloadModules;
+        public INakoPlugin[] PreloadModules = null;
+        public bool UsePlugins { get; set; }
+        
+        public NakoCompilerLoaderInfo()
+        {
+        }
+        
+        public void Init()
+        {
+            source = "";
+            PreloadModules = new INakoPlugin[] {
+                new NakoBaseSystem()
+            };
+        }
+    }
+    
+    public class NakoCompilerException : ApplicationException
+    {
+        public NakoCompilerException(string msg) : base(msg)
+        {
+        }
     }
 }

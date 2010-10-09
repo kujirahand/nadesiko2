@@ -89,13 +89,13 @@ namespace Libnako.JCompiler.Parser
             if (tok.IsEOF()) return false;
             if (Accept(NakoTokenType.EOL))
             {
-            	if (calcStack.Count > 0)
-            	{
-            		throw new NakoParserException(
-            			"意味のない単語があります。(余剰スタックによる文法チェック)",
-            			tok.CurrentToken);
-            	}
-            	tok.MoveNext(); return true;
+                if (calcStack.Count > 0)
+                {
+                    throw new NakoParserException(
+                        "意味のない単語があります。(余剰スタックによる文法チェック)",
+                        tok.CurrentToken);
+                }
+                tok.MoveNext(); return true;
             }
             return false;
         }
@@ -376,17 +376,17 @@ namespace Libnako.JCompiler.Parser
             // 計算用スタックの管理
             if (calcStack.Count > 0)
             {
-            	while (calcStack.Count > 0)
+                while (calcStack.Count > 0)
                 {
                     NakoNode n = calcStack.Shift();
                     if (!(n is NakoNodeCallFunction))
                     {
-                    	throw new NakoParserException(
-                    		"無効な式か値があります。(余剰スタックのチェック)",
-                    		startToken);
+                        throw new NakoParserException(
+                            "無効な式か値があります。(余剰スタックのチェック)",
+                            startToken);
                     }
                     parentNode.AddChild(n);
-	                parentNode.AddChild(new NakoNodePop());
+                    parentNode.AddChild(new NakoNodePop());
                 }
             }
             // ここで本来ならば
@@ -781,7 +781,7 @@ namespace Libnako.JCompiler.Parser
             calcStack.Push(n);
             return true;
         }
-
+        
         //> _value : FUNCTION_NAME | _calc_fact ;
         protected override Boolean _value(Boolean canCallJFunction)
         {
@@ -794,6 +794,7 @@ namespace Libnako.JCompiler.Parser
                 case NakoTokenType.NUMBER:
                 case NakoTokenType.WORD:
                 case NakoTokenType.STRING:
+                case NakoTokenType.MINUS:
                     break;
                 case NakoTokenType.FUNCTION_NAME:
                     if (_callfunc()) return true;

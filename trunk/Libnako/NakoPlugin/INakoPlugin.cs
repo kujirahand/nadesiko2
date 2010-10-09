@@ -13,7 +13,7 @@ namespace NakoPlugin
         string      Name            { get; }
         double      PluginVersion   { get; }
         string      Description     { get; }
-        bool        Used            { get; }
+        bool        Used            { get; set; }
         void        DefineFunction(INakoPluginBank bank);
     }
 
@@ -52,7 +52,9 @@ namespace NakoPlugin
     public interface INakoFuncCallInfo
     {
         Object StackPop();
-        String StackPopAsString();
+        string StackPopAsString();
+        Int64 StackPopAsInt();
+        double StackPopAsDouble();
         void WriteLog(string s);
     }
 

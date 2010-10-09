@@ -38,7 +38,8 @@ namespace Libnako.JCompiler
         /// <param name="src"></param>
         public void ParseEx(string src, string filename)
         {
-            cur = new NakoCompiler(src);
+            cur = new NakoCompiler();
+            cur.source = src;
             cur.fullpath = filename;
             cur.name = this.GetNamespaceFromPath(filename);
             cur.Tokenize();

@@ -11,9 +11,7 @@ namespace NakoPluginCtrl
 {
     public class NakoPluginCtrl : INakoPlugin
     {
-    	public static string getPluginGuid() { return "44313FC9-22C5-457E-A523-96E4AA868BC0"; }
-    	
-    	public string Name
+        public string Name
         {
             get { return this.GetType().FullName; }
         }
@@ -56,5 +54,6 @@ namespace NakoPluginCtrl
             SendKeys.Send(keys);
             return null;
         }
+        
     }
 }

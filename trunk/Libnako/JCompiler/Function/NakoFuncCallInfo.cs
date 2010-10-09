@@ -29,7 +29,6 @@ namespace Libnako.JCompiler.Function
             Runner.AddPrintLog(s);
         }
 
-
         public Object StackPop()
         {
             return _runner.StackPop();
@@ -39,6 +38,17 @@ namespace Libnako.JCompiler.Function
         {
             Object s = _runner.StackPop();
             return Convert.ToString(s);
+        }
+        
+        public Int64 StackPopAsInt()
+        {
+            Object o = _runner.StackPop();
+            return Convert.ToInt64(o);
+        }
+        public double StackPopAsDouble()
+        {
+            Object o = _runner.StackPop();
+            return Convert.ToDouble(o);
         }
 
         /*
