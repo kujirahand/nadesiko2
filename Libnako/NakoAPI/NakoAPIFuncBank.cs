@@ -18,7 +18,14 @@ namespace Libnako.NakoAPI
         // Singleton
         public static readonly NakoAPIFuncBank Instance = new NakoAPIFuncBank();
         private NakoAPIFuncBank() { }
-
+        
+        // FuncList & Token Dictionary
+        public List<NakoAPIFunc> FuncList = new List<NakoAPIFunc>();
+        public Dictionary<string, Object> VarList = new Dictionary<string, Object>();
+        public List<string> PluginList = new List<string>();
+        //
+        private INakoPlugin PluginInstance = null;
+        
         #region INakoPluginBank の実装
         public void SetPluginInstance(INakoPlugin plugin)
         {
@@ -39,10 +46,6 @@ namespace Libnako.NakoAPI
             this.AddVarToList(name, value);
         }
         #endregion
-
-        public List<NakoAPIFunc> FuncList = new List<NakoAPIFunc>();
-        public Dictionary<string, Object> VarList = new Dictionary<string, Object>();
-        private INakoPlugin PluginInstance = null;
 
         private void AddFuncToList(NakoAPIFunc s)
         {
@@ -93,6 +96,7 @@ namespace Libnako.NakoAPI
             foreach (NakoAPIFunc func in FuncList)
             {
                 func.Used = false;
+                func.PluginInstance.Used = false;
             }
         }
 

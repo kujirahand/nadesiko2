@@ -83,9 +83,13 @@ namespace Libnako.NakoAPI
             NakoPluginInfo[] plugs = FindPlugins();
             foreach (NakoPluginInfo info in plugs)
             {
-                INakoPlugin p = info.CreateInstance();
-                bank.SetPluginInstance(p);
-                p.DefineFunction(bank);
+                if (bank.PluginList.IndexOf(info.ClassName) < 0)
+                {
+                    INakoPlugin p = info.CreateInstance();
+                    bank.SetPluginInstance(p);
+                    p.DefineFunction(bank);
+                    bank.PluginList.Add(info.ClassName);
+                }
             }
         }
     }

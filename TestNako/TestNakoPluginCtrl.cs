@@ -10,42 +10,48 @@ using System.Text;
 using NUnit.Framework;
 using Libnako.JCompiler;
 using Libnako.Interpreter;
+using Libnako.NakoAPI;
 
 using NakoPluginCtrl;
 
 namespace TestNako
 {
-	/// <summary>
-	/// Test for NakoPluginCtrl.
-	/// </summary>
+    /// <summary>
+    /// Test for NakoPluginCtrl.
+    /// </summary>
     [TestFixture]
-	public class TestNakoPluginCtrl
-	{
-		NakoCompiler com = new NakoCompiler();
-		NakoInterpreter runner = new NakoInterpreter();
-		
-		public TestNakoPluginCtrl()
-		{
-		}
-		
-		[Test]
-		public void TestName() 
-		{
-			// DLLをテストするのに、リンクが必要なので、無理やり作った適当なメソッド
-			string guid = NakoPluginCtrl.NakoPluginCtrl.getPluginGuid();
-			Assert.AreEqual(guid, "44313FC9-22C5-457E-A523-96E4AA868BC0");
-		}
-		
-		[Test]
-		public void TestClipboad()
-		{
-		    /*
-			com.DirectSource = 
-				"「abc」をコピー。\n" +
-				"クリップボードを表示。";
-			runner.Run(com.Codes);
-			Assert.AreEqual("abc", runner.PrintLog);
-			*/
-		}
-	}
+    public class TestNakoPluginCtrl
+    {
+        NakoCompiler com;
+        NakoInterpreter runner = new NakoInterpreter();
+        
+        public TestNakoPluginCtrl()
+        {
+            NakoCompilerLoaderInfo info = new NakoCompilerLoaderInfo();
+            info.PreloadModules = new NakoPlugin.INakoPlugin[] {
+                new NakoBaseSystem(),
+                new NakoPluginCtrl.NakoPluginCtrl()
+            };
+            com = new NakoCompiler(info);
+        }
+        
+        [Test][STAThreadAttribute]
+        public void TestClipboad()
+        {
+            com.DirectSource = 
+                "「abc」をコピー。\n" +
+                "クリップボードを表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual("abc", runner.PrintLog);
+        }
+        [Test][STAThreadAttribute]
+        public void TestClipboad2()
+        {
+            com.DirectSource = 
+                "10をコピー。\n" +
+                "クリップボードを表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual("10", runner.PrintLog);
+        }
+    }
 }

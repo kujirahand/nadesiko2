@@ -7,10 +7,10 @@ namespace Libnako.JCompiler.Tokenizer
 {
     public class NakoToken
     {
-		public string value { get; set; }
-		public int lineno { get; set; }
-		public int level { get; set; }
-		public string josi { get; set; }
+        public string value { get; set; }
+        public int lineno   { get; set; }
+        public int level    { get; set; }
+        public string josi  { get; set; }
         protected NakoTokenType _type = 0;
         public NakoTokenType type
         {
@@ -73,6 +73,32 @@ namespace Libnako.JCompiler.Tokenizer
                 cur++;
             }
             return s;
+        }
+        
+        public bool isCalcFlag()
+        {
+            bool result = false;
+            switch (_type) {
+                case NakoTokenType.AND:
+                case NakoTokenType.AND_AND:
+                case NakoTokenType.EQ_EQ:
+                case NakoTokenType.GT:
+                case NakoTokenType.GT_EQ:
+                case NakoTokenType.LT:
+                case NakoTokenType.LT_EQ:
+                case NakoTokenType.MINUS:
+                case NakoTokenType.MOD:
+                case NakoTokenType.MUL:
+                case NakoTokenType.NOT:
+                case NakoTokenType.NOT_EQ:
+                case NakoTokenType.OR:
+                case NakoTokenType.OR_OR:
+                case NakoTokenType.PLUS:
+                case NakoTokenType.POWER:
+                    result = true;
+                    break;
+            }
+            return result;
         }
     }
 }

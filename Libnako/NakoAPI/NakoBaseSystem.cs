@@ -55,6 +55,9 @@ namespace Libnako.NakoAPI
             bank.AddFunc("足す!", "{参照渡し}AにBを|Aと", NakoVarType.Object, _addEx, "変数Aと値Bを足して返す(変数A自身を書き換える)", "たす!");
             bank.AddFunc("引く", "AからBを", NakoVarType.Object, _sub, "値Aから値Bを引いて返す", "ひく");
             bank.AddFunc("引く!", "{参照渡し}AからBを", NakoVarType.Object, _subEx, "変数Aから値Bを引いて返す(変数A自身を書き換える)", "ひく!");
+            bank.AddFunc("乱数", "Nの", NakoVarType.Int, _random, "0から(N-1)までの範囲の乱数を返す", "らんすう");
+            bank.AddFunc("絶対値", "Vの", NakoVarType.Int, _abs, "値Vの絶対値を返す", "ぜったいち");
+            bank.AddFunc("ABS", "V", NakoVarType.Int, _abs, "値Vの絶対値を返す", "ABS");
             //+文字列操作
             bank.AddFunc("何文字目", "SでSSが|Sの", NakoVarType.String, _strpos, "文字列Sで文字列SSが何文字目にあるか調べて返す", "なんもじめ");
         }
@@ -183,6 +186,24 @@ namespace Libnako.NakoAPI
             String ss = info.StackPopAsString();
             int i = s.IndexOf(ss);
             return (i + 1); // 1からはじまるので
+        }
+        
+        private Random _randObj = null;
+        public Object _random(INakoFuncCallInfo info)
+        {
+            Int64 range = info.StackPopAsInt();
+            if (_randObj == null) {
+                _randObj = new Random();
+            }
+            int v = _randObj.Next((int)range);
+            return (Int64)v;
+        }
+        
+        public Object _abs(INakoFuncCallInfo info)
+        {
+            double v = info.StackPopAsDouble();
+            v = Math.Abs(v);
+            return v;
         }
 
     }

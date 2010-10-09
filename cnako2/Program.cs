@@ -28,7 +28,6 @@ namespace cnako2
         [STAThread]
         static void Main(string[] args)
         {
-            
             // --------------------------------------------------
             // Read Source Code
             if (args.Length == 0)

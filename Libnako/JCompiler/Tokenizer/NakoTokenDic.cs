@@ -9,7 +9,7 @@ namespace Libnako.JCompiler.Tokenizer
     /// </summary>
     public class NakoTokenDic : IDictionary<string, NakoTokenType>
     {
-		private Dictionary<string, NakoTokenType> _dictionary = new Dictionary<string, NakoTokenType>();
+        private Dictionary<string, NakoTokenType> _dictionary = new Dictionary<string, NakoTokenType>();
 
         /// <summary>
         /// 単語を辞書に追加する
