@@ -60,6 +60,8 @@ namespace Libnako.NakoAPI
             bank.AddFunc("ABS", "V", NakoVarType.Int, _abs, "値Vの絶対値を返す", "ABS");
             //+文字列操作
             bank.AddFunc("何文字目", "SでSSが|Sの", NakoVarType.String, _strpos, "文字列Sで文字列SSが何文字目にあるか調べて返す", "なんもじめ");
+            //+サウンド
+            bank.AddFunc("BEEP", "", NakoVarType.Void, _beep, "BEEP音を鳴らす", "BEEP");
         }
 
         /*
@@ -87,6 +89,13 @@ namespace Libnako.NakoAPI
         public Object _os(INakoFuncCallInfo info)
         {
             return NWEnviroment.osVersionStr();
+        }
+        
+        public Object _beep(INakoFuncCallInfo info)
+        {
+        	// BEEP
+        	System.Media.SystemSounds.Beep.Play();
+            return null;
         }
 
         public Object _show(INakoFuncCallInfo info)

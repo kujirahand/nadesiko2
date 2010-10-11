@@ -22,7 +22,7 @@ namespace DemoCNako2
             NakoCompiler compiler = new NakoCompiler();
             compiler.DirectSource =
                 "" +
-                "-3.1415の絶対値を表示。\n" +
+                "マイドキュメントを表示\n" +
                 "";
             cout = "----------";
             cout = "* TOKENS:";
