@@ -56,6 +56,10 @@ namespace NakoPlugin
         Int64 StackPopAsInt();
         double StackPopAsDouble();
         void WriteLog(string s);
+        INakoVariable GetVariable(string varname);
+        void SetVariable(string varname, INakoVariable value);
+        Object GetVariableValue(string varname);
+        void SetVariableValue(string varname, Object value);
     }
 
     /// <summary>
