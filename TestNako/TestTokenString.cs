@@ -83,5 +83,17 @@ namespace TestNako
             runner.Run(ns.Codes);
             Assert.AreEqual(runner.PrintLog, "ab\r\ncd");
         }
+        
+        [Test]
+        public void Test_String_NotHalfnize()
+        {
+            ns.Publish(
+                @"PRINT 「本日は、晴天なり。」&『本日は、晴天なり。』"+
+                ""
+                );
+            runner.Run(ns.Codes);
+            Assert.AreEqual(runner.PrintLog, @"本日は、晴天なり。本日は、晴天なり。");
+        }
+        
     }
 }

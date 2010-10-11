@@ -474,7 +474,7 @@ namespace Libnako.JCompiler.Tokenizer
                     cur += eos.Length;
                     break;
                 }
-                c = CurrentChar;
+                c = CurrentCharRaw;
                 str += c;
                 cur++;
                 if (c == '\n')
