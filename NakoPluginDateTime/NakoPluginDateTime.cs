@@ -35,6 +35,7 @@ namespace NakoPluginDateTime
             bank.AddFunc("秒待つ", "SEC", NakoVarType.Void, _wait, "SEC秒だけ待機する", "びょうまつ");
             bank.AddFunc("今日", "", NakoVarType.String, _today, "今日の日付を取得して返す", "きょう");
             bank.AddFunc("今", "", NakoVarType.String, _now, "今の時間を取得して返す", "いま");
+            bank.AddFunc("システム時間", "", NakoVarType.Int, _systime, "(擬似的な)システム時間をミリ秒単位で取得して返す", "しすてむじかん");
         }
             
         // Define Method
@@ -64,6 +65,18 @@ namespace NakoPluginDateTime
         	                       	d.Second);
             return s;
         }
+        
+        System.Diagnostics.Stopwatch stopwatch_systime = null;
+        public Object _systime(INakoFuncCallInfo info)
+        {
+        	if (stopwatch_systime == null)
+        	{
+        		stopwatch_systime = new System.Diagnostics.Stopwatch();
+        		stopwatch_systime.Start();
+        	}
+            return stopwatch_systime.ElapsedMilliseconds;
+        }
+        
         
     }
 }

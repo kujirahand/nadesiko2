@@ -22,8 +22,8 @@ namespace DemoCNako2
             NakoCompiler compiler = new NakoCompiler();
             compiler.DirectSource =
                 "" +
-                "今日を表示;\n「>>>」を表示;" +
-                "今を表示。";
+                "システム時間を表示;\n１秒待つ;" +
+                "「>>>」を表示。システム時間を表示。";
             cout = "----------";
             cout = "* TOKENS:";
             cout = compiler.Tokens.toTypeString();
