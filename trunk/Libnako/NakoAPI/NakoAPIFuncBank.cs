@@ -69,7 +69,14 @@ namespace Libnako.NakoAPI
             for (int i = 0; i < FuncList.Count; i++)
             {
                 NakoAPIFunc call = FuncList[i];
-                dic.Add(call.name, NakoTokenType.FUNCTION_NAME);
+                if (!dic.ContainsKey(call.name))
+                {
+	                dic.Add(call.name, NakoTokenType.FUNCTION_NAME);
+                }
+                else
+                {
+                	dic[call.name] = NakoTokenType.FUNCTION_NAME;
+                }
             }
 
             // NakoVariables に登録
@@ -79,7 +86,7 @@ namespace Libnako.NakoAPI
                 var.Type = NakoVarType.SystemFunc;
                 var.Body = i;
                 NakoAPIFunc call = FuncList[i];
-                globalVar.CreateVar(call.name, var);
+                globalVar.SetVar(call.name, var);
             }
 
             // --- 変数
@@ -87,7 +94,7 @@ namespace Libnako.NakoAPI
             {
                 NakoVariable var = new NakoVariable();
                 var.SetBodyAutoType(VarList[name]);
-                globalVar.CreateVar(name, var);
+                globalVar.SetVar(name, var);
             }
         }
         

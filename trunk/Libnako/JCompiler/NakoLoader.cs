@@ -13,6 +13,7 @@ namespace Libnako.JCompiler
         protected List<NakoCompiler> namespaceList;
         protected string basePath;
         public NakoCompiler cur;
+        public NakoCompilerLoaderInfo LoaderInfo = null;
 
         private static NakoLoader instance = null;
         public static NakoLoader Instance
@@ -38,7 +39,7 @@ namespace Libnako.JCompiler
         /// <param name="src"></param>
         public void ParseEx(string src, string filename)
         {
-            cur = new NakoCompiler();
+            cur = new NakoCompiler(LoaderInfo);
             cur.source = src;
             cur.fullpath = filename;
             cur.name = this.GetNamespaceFromPath(filename);

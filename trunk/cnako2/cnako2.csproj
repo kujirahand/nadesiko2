@@ -22,6 +22,7 @@
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <DebugSymbols>false</DebugSymbols>
+    <StartArguments>-desc -debug -wait test.txt</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <ErrorReport>prompt</ErrorReport>
@@ -36,6 +37,7 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <Optimize>False</Optimize>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <StartAction>Project</StartAction>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <RegisterForComInterop>False</RegisterForComInterop>
@@ -50,6 +52,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NakoPluginConsole.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -61,6 +64,10 @@
     <ProjectReference Include="..\NakoPluginCtrl\NakoPluginCtrl.csproj">
       <Project>{B991E428-E0FE-4957-90F7-CD88C4937573}</Project>
       <Name>NakoPluginCtrl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NakoPluginDateTime\NakoPluginDateTime.csproj">
+      <Project>{CD0D883A-284E-4DDE-859A-A303952EC2BC}</Project>
+      <Name>NakoPluginDateTime</Name>
     </ProjectReference>
     <ProjectReference Include="..\NakoPluginDialog\NakoPluginDialog.csproj">
       <Project>{F8E88E7E-7ACF-4D1A-926F-146D2130AD2C}</Project>
