@@ -65,6 +65,15 @@ namespace Libnako.JCompiler.Tokenizer
             }
         }
         
+        public Char CurrentCharRaw
+        {
+            get
+            {
+                if (IsEOF()) return '\0';
+                return source[cur];
+            }
+        }
+        
         public Char NextChar
         {
             get
