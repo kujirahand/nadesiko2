@@ -93,10 +93,21 @@ namespace cnako2
             }
 
         }
+        
+        static NakoCompilerLoaderInfo GetLoaderInfo()
+        {
+        	//TODO: CNAKO2 LOADER INFO
+        	NakoCompilerLoaderInfo loaderInfo = new NakoCompilerLoaderInfo();
+        	loaderInfo.Init();
+        	loaderInfo.ImportantModules = new NakoPlugin.INakoPlugin[] {
+        		new NakoPluginConsole.NakoPluginConsole()
+        	};
+        	return loaderInfo;
+        }
 
         static void OneLinerMode(string code)
         {
-            NakoCompiler compiler = new NakoCompiler();
+        	NakoCompiler compiler = new NakoCompiler(GetLoaderInfo());
             compiler.DirectSource = code;
             if (DescriptMode)
             {
@@ -130,6 +141,7 @@ namespace cnako2
         static void RunFileMode(string sourcefile)
         {
             NakoLoader loader = NakoLoader.Instance;
+            loader.LoaderInfo = GetLoaderInfo();
             loader.LoadFromFile(sourcefile);
             NakoCompiler compiler = loader.cur;
             if (DescriptMode)

@@ -49,11 +49,12 @@ namespace Libnako.JCompiler
         
         public NakoCompiler(NakoCompilerLoaderInfo info)
         {
-            //todo: loaderInfo
             if (info == null)
             {
-                throw new NakoCompilerException("LoaderInfo is null!");
+            	LoaderInfo = new NakoCompilerLoaderInfo();
+            	LoaderInfo.Init();
             }
+            
             this.LoaderInfo = info;
             if (info.source != null) {
                 this.source = info.source;
@@ -128,40 +129,57 @@ namespace Libnako.JCompiler
             this.topNode = paser.topNode;
         }
 
-        protected static bool RegisterSysCallFlag = false;
         protected void RegisterSysCall()
         {
             NakoAPIFuncBank bank = NakoAPIFuncBank.Instance;
             
+            // (1) LoaderInfo で指定のプラグインのみプリロード
+            if (LoaderInfo.PreloadModules != null)
+            {
+	            foreach (INakoPlugin plugin in LoaderInfo.PreloadModules)
+	            {
+	                int i = bank.PluginList.IndexOf(plugin.GetType().FullName);
+	                if (i < 0) {
+	                    bank.PluginList.Add(plugin.GetType().FullName);
+	                    bank.SetPluginInstance(plugin);
+	                    plugin.DefineFunction(bank);
+	                }
+	            }
+            }
+            
+            // (2) プラグインを登録
+            LoadPlugins();
+            
+            // (3) 重要プラグインをロード
+            if (LoaderInfo.ImportantModules != null)
+            {
+	            foreach (INakoPlugin plugin in LoaderInfo.ImportantModules)
+	            {
+	                int i = bank.PluginList.IndexOf(plugin.GetType().FullName);
+	                if (i < 0) {
+	                    bank.PluginList.Add(plugin.GetType().FullName);
+	                    bank.SetPluginInstance(plugin);
+	                    plugin.DefineFunction(bank);
+	                }
+	            }
+            }
+            
+            // --- 各種登録作業 ---
             // トークンに予約語句を追加
             NakoReservedWord.Init(TokenDic);
-            
-            // LoaderInfo で指定のプラグインのみプリロード
-            foreach (INakoPlugin plugin in LoaderInfo.PreloadModules)
-            {
-                int i = bank.PluginList.IndexOf(plugin.GetType().FullName);
-                if (i < 0) {
-                    bank.PluginList.Add(plugin.GetType().FullName);
-                    bank.SetPluginInstance(plugin);
-                    plugin.DefineFunction(bank);
-                }
-            }
             // 使用識別フラグをリセット
             bank.ResetUsedFlag();
-            
-            if (RegisterSysCallFlag == false)
-            {
-                RegisterSysCallFlag = true;
-                // プラグインを登録
-                LoadPlugins();
-            }
-            
             // Global変数とシステム辞書に単語を登録
             NakoAPIFuncBank.Instance.RegisterToSystem(TokenDic, GlobalVar);
         }
-
+        
+        private static bool FlagPluginLoaded = false;
         protected void LoadPlugins()
         {
+        	// Was the plug-in loaded?
+        	if (FlagPluginLoaded) return;
+        	FlagPluginLoaded = true;
+        	
             NakoPluginLoader loader = new NakoPluginLoader();
             loader.LoadPlugins();
         }
@@ -171,6 +189,7 @@ namespace Libnako.JCompiler
     {
         public string source = "";
         public INakoPlugin[] PreloadModules = null;
+        public INakoPlugin[] ImportantModules = null;
         public bool UsePlugins { get; set; }
         
         public NakoCompilerLoaderInfo()
