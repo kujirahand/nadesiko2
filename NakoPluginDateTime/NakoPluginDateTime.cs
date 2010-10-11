@@ -31,8 +31,10 @@ namespace NakoPluginDateTime
         public void DefineFunction(INakoPluginBank bank)
         {
         	//+日付時間処理
-        	//-時間
+        	//-日付時間
             bank.AddFunc("秒待つ", "SEC", NakoVarType.Void, _wait, "SEC秒だけ待機する", "びょうまつ");
+            bank.AddFunc("今日", "", NakoVarType.String, _today, "今日の日付を取得して返す", "きょう");
+            bank.AddFunc("今", "", NakoVarType.String, _now, "今の時間を取得して返す", "いま");
         }
             
         // Define Method
@@ -43,6 +45,24 @@ namespace NakoPluginDateTime
         	int msec = Convert.ToInt32(Math.Floor(sec));
         	Thread.Sleep(msec);
             return null;
+        }
+        public Object _today(INakoFuncCallInfo info)
+        {
+        	DateTime d = DateTime.Today;
+        	string s = String.Format("{0:D4}-{1:D2}-{2:D2}",
+        	                        d.Year,
+        	                       	d.Month,
+        	                       	d.Day);
+            return s;
+        }
+        public Object _now(INakoFuncCallInfo info)
+        {
+        	DateTime d = DateTime.Now;
+        	string s = String.Format("{0:D2}:{1:D2}:{2:D2}",
+        	                        d.Hour,
+        	                       	d.Minute,
+        	                       	d.Second);
+            return s;
         }
         
     }
