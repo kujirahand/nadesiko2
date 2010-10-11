@@ -72,5 +72,16 @@ namespace TestNako
             runner.Run(ns.Codes);
             Assert.AreEqual(runner.PrintLog, "ab\tcd");
         }
+        
+        [Test]
+        public void Test_StrExtractRET()
+        {
+            ns.Publish(
+                "PRINT  「ab{~}cd」"+
+                ""
+                );
+            runner.Run(ns.Codes);
+            Assert.AreEqual(runner.PrintLog, "ab\r\ncd");
+        }
     }
 }

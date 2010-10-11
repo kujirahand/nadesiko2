@@ -45,12 +45,12 @@ namespace Libnako.JCompiler.Function
             Object o = _runner.StackPop();
             return Convert.ToInt64(o);
         }
+        
         public double StackPopAsDouble()
         {
             Object o = _runner.StackPop();
             return Convert.ToDouble(o);
         }
-
         /*
          * 基本的に PUSH は不要
         public void StackPush(Object v)
@@ -58,6 +58,23 @@ namespace Libnako.JCompiler.Function
             _runner.StackPush(v);
         }
         */
-
+       public INakoVariable GetVariable(string varname)
+       {
+       		return _runner.globalVar.GetVar(varname);
+       }
+       public void SetVariable(string varname, INakoVariable value)
+       {
+       		_runner.globalVar.SetVar(varname, (NakoVariable)value);
+       }
+        public Object GetVariableValue(string varname)
+        {
+        	int index = _runner.globalVar.GetIndex(varname);
+        	return _runner.globalVar.GetValue(index);
+        }
+        public void SetVariableValue(string varname, Object value)
+        {
+        	int index = _runner.globalVar.GetIndex(varname);
+        	_runner.globalVar.SetValue(index, value);
+        }
     }
 }

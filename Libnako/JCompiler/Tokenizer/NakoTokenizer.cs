@@ -683,6 +683,11 @@ namespace Libnako.JCompiler.Tokenizer
                             tmp += '\t';
                             str_ex = "";
                         }
+                        else if (str_ex == "\\r")
+                        {
+                            tmp += '\r';
+                            str_ex = "";
+                        }
                         else if (str_ex == "\\n")
                         {
                             tmp += '\n';
@@ -705,6 +710,12 @@ namespace Libnako.JCompiler.Tokenizer
                         else {
                         	new NakoTokenizerException("展開あり文字列内の利用できない`\\'メソッド:" + str_ex, t);
                         }
+                    }
+                    // 文字列展開だけの特殊メソッド
+                    if (str_ex.Length == 1 && str_ex[0] == '~')
+                    {
+                    	tmp += "\r\n";
+                        str_ex = "";
                     }
                     // string
                     NakoToken tt = new NakoToken(NakoTokenType.STRING, t.lineno, t.level);

@@ -42,7 +42,11 @@ namespace NakoPluginFile
             bank.AddFunc("隠し起動待機", "CMDを", NakoVarType.Void, _execCommandHiddenWait, "コマンドCMDを隠しモード出起動して待機する", "かくしきどうたいき");
             //-存在
             bank.AddFunc("存在?", "FILEが|FILEの", NakoVarType.Int, _exists, "ファイルFILEが存在するかどうか調べて結果(1:はい,0:いいえ)を返す", "そんざい");
-            //-特殊パス
+            //+特殊フォルダ
+            //-なでしこパス
+            bank.AddFunc("母艦パス", "", NakoVarType.String, _getBokanDir, "プログラムの起動したディレクトリを取得して返す", "ぼかんぱす");
+            bank.AddFunc("ランタイムパス", "", NakoVarType.String, _getRuntimeDir, "ランタイムの起動したディレクトリを取得して返す", "らんたいむぱす");
+            //-パス
             bank.AddFunc("SYSTEMパス", "", NakoVarType.String, _getSystemDir, "SYSTEMフォルダを取得して返す", "SYSTEMぱす");
             bank.AddFunc("テンポラリフォルダ", "", NakoVarType.String, _getTempDir, "テンポラリフォルダを取得して返す", "てんぽらりふぉるだ");
             bank.AddFunc("デスクトップ", "", NakoVarType.String, _getDesktopDir, "デスクトップのフォルダを取得して返す", "ですくとっぷ");
@@ -123,46 +127,54 @@ namespace NakoPluginFile
         
         private string _path(string dir)
         {
-        	if (dir.EndsWith(Path.DirectorySeparatorChar.ToString()))
-        	{
-        		return dir;
-        	}
-        	return dir + Path.DirectorySeparatorChar;
+        	return NWEnviroment.AppendLastPathFlag(dir);
         }
         
-        private string SpecialDir(Environment.SpecialFolder dir)
+        public Object _getBokanDir(INakoFuncCallInfo info)
+        {
+        	//TODO:母艦パスが未実装
+        	return _path(NWEnviroment.AppPath);
+        }
+        
+        public Object _getRuntimeDir(INakoFuncCallInfo info)
+        {
+        	return _path(NWEnviroment.AppPath);
+        }
+        
+        //------------------------------------------------------------------
+        // システムの特殊ディレクトリ
+        private string GetSpecialDir(Environment.SpecialFolder dir)
         {
         	string path = Environment.GetFolderPath(dir);
         	return _path(path);
         }
-        
         public Object _getMyPicture(INakoFuncCallInfo info)
         {
-        	return SpecialDir(Environment.SpecialFolder.MyPictures);
+        	return GetSpecialDir(Environment.SpecialFolder.MyPictures);
         }
         public Object _getDesktopDir(INakoFuncCallInfo info)
         {
-        	return SpecialDir(Environment.SpecialFolder.DesktopDirectory);
+        	return GetSpecialDir(Environment.SpecialFolder.DesktopDirectory);
         }
         public Object _getSendToDir(INakoFuncCallInfo info)
         {
-        	return SpecialDir(Environment.SpecialFolder.SendTo);
+        	return GetSpecialDir(Environment.SpecialFolder.SendTo);
         }
         public Object _getStartupDir(INakoFuncCallInfo info)
         {
-        	return SpecialDir(Environment.SpecialFolder.Startup);
+        	return GetSpecialDir(Environment.SpecialFolder.Startup);
         }
         public Object _getStartmenuDir(INakoFuncCallInfo info)
         {
-        	return SpecialDir(Environment.SpecialFolder.System);
+        	return GetSpecialDir(Environment.SpecialFolder.System);
         }
         public Object _getMyDocument(INakoFuncCallInfo info)
         {
-        	return SpecialDir(Environment.SpecialFolder.MyDocuments);
+        	return GetSpecialDir(Environment.SpecialFolder.MyDocuments);
         }
         public Object _getMyMusic(INakoFuncCallInfo info)
         {
-        	return SpecialDir(Environment.SpecialFolder.MyMusic);
+        	return GetSpecialDir(Environment.SpecialFolder.MyMusic);
         }
         public Object _getUserHomeDir(INakoFuncCallInfo info)
         {
@@ -174,7 +186,7 @@ namespace NakoPluginFile
         }
         public Object _getSystemDir(INakoFuncCallInfo info)
         {
-        	return SpecialDir(Environment.SpecialFolder.System);
+        	return GetSpecialDir(Environment.SpecialFolder.System);
         }
         public Object _getTempDir(INakoFuncCallInfo info)
         {
@@ -182,7 +194,7 @@ namespace NakoPluginFile
         }
         public Object _getAppDataDir(INakoFuncCallInfo info)
         {
-        	return SpecialDir(Environment.SpecialFolder.LocalApplicationData);
+        	return GetSpecialDir(Environment.SpecialFolder.LocalApplicationData);
         }
         
     }

@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.IO;
 
 namespace Libnako.NakoAPI.WrapLib
 {
@@ -81,13 +80,17 @@ namespace Libnako.NakoAPI.WrapLib
             get
             {
                 string path = System.IO.Path.GetDirectoryName(ExePath);
-                return CheckPathD(path);
+                return AppendLastPathFlag(path);
             }
         }
-        public static string CheckPathD(string path)
+        
+        public static string AppendLastPathFlag(string dir)
         {
-            if (path[path.Length - 1] == '\\') return path;
-            return path + "\\";
+        	if (dir.EndsWith(Path.DirectorySeparatorChar.ToString()))
+        	{
+        		return dir;
+        	}
+        	return dir + Path.DirectorySeparatorChar;
         }
     }
 }

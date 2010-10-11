@@ -47,6 +47,12 @@ namespace Libnako.NakoAPI
             //-基本定数
             bank.AddVar("はい", 1, "1", "はい");
             bank.AddVar("いいえ", 0, "0", "いいえ");
+            bank.AddVar("OK", 1, "1", "OK");
+            bank.AddVar("NG", 0, "0", "NG");
+            bank.AddVar("真", 1, "1", "しん");
+            bank.AddVar("偽", 0, "0", "ぎ");
+            bank.AddVar("改行", "\r\n", "改行", "かいぎょう");
+            bank.AddVar("タブ", "\t", "タブ文字", "たぶ");
             
             //+コンソールデバッグ用
             bank.AddFunc("表示", "Sと|Sを", NakoVarType.Void, _show, "メッセージSを表示する", "ひょうじ");
