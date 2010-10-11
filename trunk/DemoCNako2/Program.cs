@@ -22,8 +22,8 @@ namespace DemoCNako2
             NakoCompiler compiler = new NakoCompiler();
             compiler.DirectSource =
                 "" +
-                "マイドキュメントを表示\n" +
-                "";
+                "マイドキュメントを表示;\n" +
+                "1秒待つ。\nマイピクチャを表示。";
             cout = "----------";
             cout = "* TOKENS:";
             cout = compiler.Tokens.toTypeString();
