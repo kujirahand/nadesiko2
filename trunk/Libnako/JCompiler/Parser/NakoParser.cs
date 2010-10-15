@@ -794,9 +794,10 @@ namespace Libnako.JCompiler.Parser
                 case NakoTokenType.WORD:
                 case NakoTokenType.STRING:
                 case NakoTokenType.MINUS:
-                    break;
+            		break;
                 case NakoTokenType.FUNCTION_NAME:
-                    if (_callfunc()) return true;
+                    //TODO: 関数の後に演算子がつながるとエラーになるので直す
+            		if (_callfunc()) return true;
                     break;
                 default:
                     return false;

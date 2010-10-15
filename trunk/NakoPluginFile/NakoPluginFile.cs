@@ -58,6 +58,11 @@ namespace NakoPluginFile
             bank.AddFunc("マイミュージック", "", NakoVarType.String, _getMyMusic, "マイミュージックのフォルダを取得して返す", "まいみゅーじっく");
             bank.AddFunc("ユーザーホームフォルダ", "", NakoVarType.String, _getUserHomeDir, "ユーザーのホームディレクトリのフォルダを取得して返す", "ゆーざーほーむふぉるだ");
             bank.AddFunc("個人設定フォルダ", "", NakoVarType.String, _getAppDataDir, "%APPDATA%のフォルダを取得して返す", "こじんせっていふぉるだ");
+            //-コピー移動削除作成
+            bank.AddFunc("ファイルコピー", "F1からF2へ|F1をF2に", NakoVarType.Void, _copyFile, "", "ふぁいるこぴー");
+            bank.AddFunc("ファイル移動", "F1からF2へ|F1をF2に", NakoVarType.Void, _moveFile, "", "ふぁいるいどう");
+            bank.AddFunc("ファイル削除", "Fを|Fの", NakoVarType.Void, _removeFile, "", "ふぁいるさくじょ");
+            bank.AddFunc("フォルダ作成", "Fへ|Fに|Fの", NakoVarType.Void, _makeDir, "", "ふぉるださくせい");
         }
 
         // Define Method
@@ -197,5 +202,33 @@ namespace NakoPluginFile
         	return GetSpecialDir(Environment.SpecialFolder.LocalApplicationData);
         }
         
+        //------------------------------------------------------------------
+        // 移動コピー削除
+        public Object _copyFile(INakoFuncCallInfo info)
+        {
+        	string f1 = info.StackPopAsString();
+        	string f2 = info.StackPopAsString();
+        	File.Copy(f1, f2);
+        	return null;
+        }
+        public Object _moveFile(INakoFuncCallInfo info)
+        {
+        	string f1 = info.StackPopAsString();
+        	string f2 = info.StackPopAsString();
+        	File.Move(f1, f2);
+        	return null;
+        }
+        public Object _removeFile(INakoFuncCallInfo info)
+        {
+        	string f = info.StackPopAsString();
+        	File.Delete(f);
+        	return null;
+        }
+        public Object _makeDir(INakoFuncCallInfo info)
+        {
+        	string f = info.StackPopAsString();
+        	Directory.CreateDirectory(f);
+        	return null;
+        }
     }
 }
