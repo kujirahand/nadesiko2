@@ -10,7 +10,7 @@ using Libnako.JCompiler.ILWriter;
 namespace TestNako
 {
     [TestFixture]
-    class TestNakoNodeWhile
+    public class TestNakoNodeWhile
     {
         [Test]
         public void TestNormal()

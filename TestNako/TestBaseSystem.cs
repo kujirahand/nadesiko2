@@ -8,7 +8,7 @@ using Libnako.Interpreter;
 namespace TestNako
 {
     [TestFixture]
-    class TestBaseSystem
+    public class TestBaseSystem
     {
         [Test]
         public void Test_strpos()

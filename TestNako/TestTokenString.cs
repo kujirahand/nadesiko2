@@ -10,7 +10,7 @@ using Libnako.JCompiler.ILWriter;
 namespace TestNako
 {
     [TestFixture]
-    class TestTokenString
+    public class TestTokenString
     {
         NakoCompiler ns = new NakoCompiler();
         NakoInterpreter runner = new NakoInterpreter();
