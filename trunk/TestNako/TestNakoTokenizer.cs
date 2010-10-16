@@ -8,7 +8,7 @@ using Libnako.JCompiler.Tokenizer;
 namespace TestNako
 {
     [TestFixture]
-    class TestNakoTokenizer
+    public class TestNakoTokenizer
     {
         [Test(Description="Tokenizer.indent")]
         public void TestCountIndent()

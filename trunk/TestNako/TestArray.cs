@@ -9,7 +9,7 @@ using Libnako.Interpreter;
 namespace TestNako
 {
     [TestFixture]
-    class TestArray
+    public class TestArray
     {
         [Test]
         public void Test_array1()

@@ -10,7 +10,7 @@ using Libnako.JCompiler.ILWriter;
 namespace TestNako
 {
     [TestFixture]
-    class TestNakoCalc
+    public class TestNakoCalc
     {
         NakoCompiler ns = new NakoCompiler();
         NakoInterpreter runner = new NakoInterpreter();

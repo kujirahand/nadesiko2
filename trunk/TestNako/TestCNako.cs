@@ -8,7 +8,7 @@ using Libnako.JCompiler.Tokenizer;
 namespace TestNako
 {
     [TestFixture]
-    class TestCNako
+    public class TestCNako
     {
         [Test(Description = "First Test")]
         public void test1()
