@@ -24,6 +24,7 @@ namespace TestNako
             Boolean r = ns.TopNode.Children.checkNodeType(new NakoNodeType[] {
                 NakoNodeType.CALC
             });
+            Assert.IsTrue(r);
             // 2
             ns.source = "(1+2)*3";
             ns.Tokenize();
@@ -32,6 +33,7 @@ namespace TestNako
             r = ns.TopNode.Children.checkNodeType(new NakoNodeType[] {
                 NakoNodeType.CALC
             });
+            Assert.IsTrue(r);
             // 3
             ns.source = "A=5";
             ns.Tokenize();
@@ -40,6 +42,7 @@ namespace TestNako
             r = ns.TopNode.Children.checkNodeType(new NakoNodeType[] {
                 NakoNodeType.LET
             });
+            Assert.IsTrue(r);
         }
 
         [Test]
