@@ -34,6 +34,7 @@ namespace NakoPluginDialog
             bank.AddFunc("尋ねる", "Sを|Sと", NakoVarType.String, _inputBox, "文字列Sをダイアログに表示し、一行入力ダイアログを出して、結果を「それ」に返す", "たずねる");
             bank.AddFunc("ファイル選択", "Sの", NakoVarType.String, _openFileDialog, "拡張子Sのファイルを選択するダイアログを出して、ファイル名を返す。キャンセルなら空を返す。", "ふぁいるせんたく");
             bank.AddFunc("保存ファイル選択", "Sの", NakoVarType.String, _saveFileDialog, "拡張子Sの保存ファイルを選択するダイアログを出して、ファイル名を返す。キャンセルなら空を返す。", "ほぞんふぁいるせんたく");
+            bank.AddFunc("フォルダ選択", "Sで｜Sの", NakoVarType.String, _directoryDialog, "初期フォルダSでフォルダを選択して返す", "ふぉるだせんたく");
         }
 
         public Object _say(INakoFuncCallInfo info)
@@ -58,6 +59,23 @@ namespace NakoPluginDialog
             String s = info.StackPopAsString();
             String res = Interaction.InputBox(s, null, "", -1, -1);
             return res;
+        }
+
+        public Object _directoryDialog(INakoFuncCallInfo info)
+        {
+            string s = info.StackPopAsString();
+
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+
+            //RootFolderには特殊フォルダしか指定できないのでとりあえずSelectedPathで代用
+            fbd.SelectedPath = s;
+            //ダイアログを表示する
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                //OKボタンがクリックされたとき
+                return fbd.SelectedPath;
+            }
+            return null;
         }
 
         public Object _openFileDialog(INakoFuncCallInfo info)
