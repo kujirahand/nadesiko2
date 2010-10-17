@@ -16,21 +16,17 @@ namespace Libnako.NakoAPI
     /// </summary>
     public class NakoBaseSystem : INakoPlugin
     {
+        public double TargetNakoVersion { get { return 2.0; } }
+        
         public string Name
         {
             get { return this.GetType().FullName; }
         }
-
-        public double PluginVersion
-        {
-            get { return 1.0; }
-        }
-
+        public double PluginVersion { get { return 1.0; } }
         public string Description
         {
             get { return "システム関数を定義したプラグイン"; }
         }
-        
         public bool Used { get; set; }
 
         /// <summary>

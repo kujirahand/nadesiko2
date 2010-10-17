@@ -10,23 +10,16 @@ namespace NakoPluginDialog
 {
     public class NakoPluginDialog : INakoPlugin
     {
-        public string Name
-        {
-            get { return this.GetType().FullName; }
-        }
-
-        public double PluginVersion
-        {
-            get { return 1.0; }
-        }
-
-        public string Description
-        {
-            get { return "各種ダイアログを表示するプラグイン"; }
-        }
-        
+    	//--- プラグインの宣言 ---
+    	string _description = "各種ダイアログを表示するためのプラグイン";
+    	double _version = 1.0;
+        //--- プラグイン共通の部分 ---
+    	public double TargetNakoVersion { get { return 2.0; } }
         public bool Used { get; set; }
-
+        public string Name { get { return this.GetType().FullName; } }
+        public double PluginVersion { get { return _version; } }
+        public string Description { get { return _description; } }
+        //--- 関数の定義 ---
         public void DefineFunction(INakoPluginBank bank)
         {
             bank.AddFunc("言う", "Sを|Sと|Sの", NakoVarType.Void, _say, "文字列Sをダイアログに表示して出す", "いう");
