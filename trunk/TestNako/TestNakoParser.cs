@@ -12,6 +12,9 @@ namespace TestNako
     [TestFixture]    
     public class TestNakoParser
     {
+    	NakoCompiler com = new NakoCompiler();
+        NakoInterpreter runner = new NakoInterpreter();
+        
         [Test]
         public void TestCalc()
         {
@@ -55,6 +58,24 @@ namespace TestNako
                 "PRINT A";
             i.Run(c.Codes);
             Assert.AreEqual("30", i.PrintLog);
+        }
+        
+        [Test]
+        public void TestCallFuncInLetSentense()
+        {
+        	com.DirectSource = "A=10に2を掛けて4を足す。PRINT A";
+        	runner.Run(com.Codes);
+        	Assert.AreEqual("24", runner.PrintLog);
+        }
+        
+        [Test]
+        public void TestCallFuncInLetSentense2()
+        {
+        	com.DirectSource = "A=(2に3を掛けて4を足す)＋8。PRINT A";
+        	// TODO: 関数直後の演算子がパースエラーになる
+        	// com.DirectSource = "A=2に3を掛けて4を足す＋8。PRINT A"; 
+        	runner.Run(com.Codes);
+        	Assert.AreEqual("18", runner.PrintLog);
         }
     }
 }
