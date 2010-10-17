@@ -650,7 +650,12 @@ namespace Libnako.JCompiler.Parser
             }
             TokenFinally();
 
-            node.ValueNode = calcStack.Pop();
+            NakoNodeLetValue valuenode = new NakoNodeLetValue();
+            while (calcStack.Count > 0) 
+            {
+            	valuenode.AddChild(calcStack.Shift());
+            }
+            node.ValueNode = (NakoNode)valuenode;
             parentNode.AddChild(node);
             lastNode = node;
 
@@ -741,7 +746,7 @@ namespace Libnako.JCompiler.Parser
                 else // t == NakoTokenType.YEN
                 {
                     tok.MoveNext(); // skip '\'
-                    if (!_value(false))
+                    if (!_value_nojfunc())
                     {
                         throw new NakoParserException("変数要素へのアクセスで要素式にエラー。", firstT);
                     }
@@ -782,8 +787,21 @@ namespace Libnako.JCompiler.Parser
             return true;
         }
         
+        private bool _canCallJFunction = true;
+        protected Boolean _value_nojfunc()
+        {
+        	bool tmp = _canCallJFunction;
+        	try {
+	        	_canCallJFunction = false;
+    	    	return _value();
+        	}
+        	finally {
+        		_canCallJFunction = tmp;
+        	}
+        }
+        
         //> _value : FUNCTION_NAME | _calc_fact ;
-        protected override Boolean _value(Boolean canCallJFunction)
+        protected override Boolean _value()
         {
             // TODO: _value は再帰が多くコストが高いのであり得る値だけチェックする
             switch (tok.CurrentTokenType)
@@ -794,58 +812,86 @@ namespace Libnako.JCompiler.Parser
                 case NakoTokenType.WORD:
                 case NakoTokenType.STRING:
                 case NakoTokenType.MINUS:
-            		break;
                 case NakoTokenType.FUNCTION_NAME:
-                    //TODO: 関数の後に演算子がつながるとエラーになるので直す
-            		if (_callfunc()) return true;
                     break;
                 default:
                     return false;
             }
+        	
+            // TODO:計算式の中での関数呼び出し
+            // FUNCTION(with args)
+        	if (_callfunc_with_args()) return true;
             
-            // 例外的な処理
-            // パーサーの副作用回避のため、
-            // 配列アクセスで円マークがある時、通常の関数呼び出しはしない
-            // (例) A\3を表示 → この場合、円マーク以降は明らかに関数呼び出しではない
-            // OK: (A\3)を表示 NG: A (\3を表示)
-            if (canCallJFunction)
-            {
-                // 関数があるか調べる
-                if (tok.SearchToken(NakoTokenType.FUNCTION_NAME, true))
-                {
-                    TokenTry();
-                    while (!tok.IsEOF())
-                    {
-                        if (Accept(NakoTokenType.EOL)) break;
-                        if (Accept(NakoTokenType.FUNCTION_NAME))
-                        {
-                            if (!_callfunc())
-                            {
-                                TokenBack();
-                                return false;
-                            }
-                            TokenFinally();
-                            return true;
-                        }
-                        if (!_calc_fact())
-                        {
-                            TokenBack(); return false;
-                        }
-                    }
-                }
-            }            
             // 計算式を評価
             if (_calc_fact()) return true;
             return false;
         }
 
-        //> _calc_value : [MINUS] _const | _variable 
+        //> _calc_value : _simple_value 
+        //>             | _callfunc
+        //>             | { _simple_value } _callfunc
         //>             ;
         private Boolean _calc_value()
         {
+        	// FUNCTION(no args)
+        	if (_callfunc()) return true;
+        	return _simple_value();
+        }
+        
+        //> _simple_value : [MINUS] _const | _variable 
+        //>               ;
+        private Boolean _simple_value()
+        {
+        	// --- CHECK CONST or VARIABLE
         	// MINUS?
-        	if (Accept(NakoTokenType.MINUS))
-        	{
+        	if (Accept(NakoTokenType.MINUS)) return _minus_flag();
+            // CONST?
+        	if (_const()) return true;
+            // VARIABLE?
+        	if (_variable()) return true;
+        	return false;
+        }
+        
+        private Boolean _callfunc_with_args()
+        {
+            // 例外的な処理
+            // パーサーの副作用回避のため、
+            // 配列アクセスで円マークがある時、通常の関数呼び出しはしない
+            // (例) A\3を表示 → この場合、円マーク以降は明らかに関数呼び出しではない
+            // OK: (A\3)を表示 NG: A (\3を表示)
+            if (!_canCallJFunction) return false;
+            
+            // 関数があるか調べる
+            if (!tok.SearchToken(NakoTokenType.FUNCTION_NAME, true)) return false;
+            
+            // 関数として処理を継続
+            TokenTry();
+            while (!tok.IsEOF())
+            {
+                if (Accept(NakoTokenType.EOL)) break;
+                if (Accept(NakoTokenType.FUNCTION_NAME))
+                {
+                    if (!_callfunc())
+                    {
+                        TokenBack();
+                        return false;
+                    }
+                    // 継続した関数呼び出しがあるかチェック！
+                    _callfunc_with_args();
+                    TokenFinally();
+                    return true;
+                }
+                if (!_calc_fact())
+                {
+                    TokenBack(); return false;
+                }
+            }
+            TokenBack();
+            return false;
+        }
+        
+        private Boolean _minus_flag()
+        {
         		tok.MoveNext();
         		if (Accept(NakoTokenType.INT)||Accept(NakoTokenType.NUMBER))
         		{
@@ -870,12 +916,8 @@ namespace Libnako.JCompiler.Parser
         		nc.nodeR = m1;
         		calcStack.Push(nc);
         		return true;
-        	}
-            if (_const()) return true;
-            if (_variable()) return true;
-            return false;
         }
-
+        
         //> _calc_formula : PARENTHESES_L _value PARENTHESES_R 
         //>               | _calc_value
         //>               ;

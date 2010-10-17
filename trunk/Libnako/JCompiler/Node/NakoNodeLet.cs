@@ -39,4 +39,11 @@ namespace Libnako.JCompiler.Node
             }
         }
     }
+    public class NakoNodeLetValue : NakoNode
+    {
+    	public NakoNodeLetValue()
+    	{
+            type = NakoNodeType.LET_VALUE;
+    	}
+    }
 }
