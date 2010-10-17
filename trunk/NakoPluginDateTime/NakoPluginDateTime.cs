@@ -11,23 +11,16 @@ namespace NakoPluginDateTime
 	/// </summary>
     public class NakoPluginDateTime : INakoPlugin
     {
-        public string Name
-        {
-            get { return this.GetType().FullName; }
-        }
-
-        public double PluginVersion
-        {
-            get { return 1.0; }
-        }
-
-        public string Description
-        {
-            get { return "日付時間の処理を行うプラグイン"; }
-        }
-        
+    	//--- プラグインの宣言 ---
+    	string _description = "日付時間処理を行うプラグイン";
+    	double _version = 1.0;
+        //--- プラグイン共通の部分 ---
+    	public double TargetNakoVersion { get { return 2.0; } }
         public bool Used { get; set; }
-
+        public string Name { get { return this.GetType().FullName; } }
+        public double PluginVersion { get { return _version; } }
+        public string Description { get { return _description; } }
+        //--- 関数の定義 ---
         public void DefineFunction(INakoPluginBank bank)
         {
         	//+日付時間処理

@@ -11,6 +11,7 @@ namespace NakoPluginCtrl
 {
     public class NakoPluginCtrl : INakoPlugin
     {
+        public double TargetNakoVersion { get { return 2.0; } }
         public string Name
         {
             get { return this.GetType().FullName; }

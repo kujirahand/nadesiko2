@@ -10,10 +10,31 @@ namespace NakoPlugin
     /// </summary>
     public interface INakoPlugin
     {
+        /// <summary>
+        /// 対応プラグインのバージョン番号 (現在は必ず 2.0 を返すようにする)
+        /// </summary>
+        double      TargetNakoVersion	{ get; }
+    	/// <summary>
+    	/// プラグインの名前 ( this.GetType().FullName とクラスのフルパスを指定する )
+    	/// </summary>
         string      Name            { get; }
+        /// <summary>
+        /// プラグインのバージョン（任意の値を返すことができる）
+        /// </summary>
         double      PluginVersion   { get; }
+        /// <summary>
+        /// プラグインの説明を返す
+        /// </summary>
         string      Description     { get; }
+        /// <summary>
+        /// プラグインが利用されたかどうかを判別する (自動的に設定されるので定義するだけでOK)
+        /// </summary>
         bool        Used            { get; set; }
+        /// <summary>
+        /// プラグインでなでしこの関数を定義する
+        /// <see cref="Libnako.NakoAPI.NakoBaseSystem.DefineFunction">登録例</see>
+        /// </summary>
+        /// <param name="bank">このオブジェクトに命令を登録する</param>
         void        DefineFunction(INakoPluginBank bank);
     }
 
