@@ -16,22 +16,16 @@ namespace Libnako.NakoAPI
     /// </summary>
     public class NakoBaseSystem : INakoPlugin
     {
-        public double TargetNakoVersion { get { return 2.0; } }
-        
-        public string Name
-        {
-            get { return this.GetType().FullName; }
-        }
-        public double PluginVersion { get { return 1.0; } }
-        public string Description
-        {
-            get { return "システム関数を定義したプラグイン"; }
-        }
+    	//--- プラグインの宣言 ---
+    	string _description = "システム関数を定義したプラグイン";
+    	double _version = 1.0;
+        //--- プラグイン共通の部分 ---
+    	public double TargetNakoVersion { get { return 2.0; } }
         public bool Used { get; set; }
-
-        /// <summary>
-        /// システムに関数を登録する
-        /// </summary>
+        public string Name { get { return this.GetType().FullName; } }
+        public double PluginVersion { get { return _version; } }
+        public string Description { get { return _description; } }
+        //--- 関数の定義 ---
         public void DefineFunction(INakoPluginBank bank)
         {
             //+システム
@@ -53,10 +47,14 @@ namespace Libnako.NakoAPI
             //+コンソールデバッグ用
             bank.AddFunc("表示", "Sと|Sを", NakoVarType.Void, _show, "メッセージSを表示する", "ひょうじ");
             //+計算
+            //-四則演算
             bank.AddFunc("足す", "AにBを|Aと", NakoVarType.Object, _add, "値Aと値Bを足して返す", "たす");
             bank.AddFunc("足す!", "{参照渡し}AにBを|Aと", NakoVarType.Object, _addEx, "変数Aと値Bを足して返す(変数A自身を書き換える)", "たす!");
             bank.AddFunc("引く", "AからBを", NakoVarType.Object, _sub, "値Aから値Bを引いて返す", "ひく");
             bank.AddFunc("引く!", "{参照渡し}AからBを", NakoVarType.Object, _subEx, "変数Aから値Bを引いて返す(変数A自身を書き換える)", "ひく!");
+            bank.AddFunc("掛ける", "AにBを", NakoVarType.Object, _mul, "値Aと値Bを掛けて返す", "かける");
+            bank.AddFunc("掛ける!", "{参照渡し}AにBを", NakoVarType.Object, _mulEx, "変数Aと値Bを掛けて返す(変数A自身を書き換える)", "かける!");
+            //-計算関数
             bank.AddFunc("乱数", "Nの", NakoVarType.Int, _random, "0から(N-1)までの範囲の乱数を返す", "らんすう");
             bank.AddFunc("絶対値", "Vの", NakoVarType.Int, _abs, "値Vの絶対値を返す", "ぜったいち");
             bank.AddFunc("ABS", "V", NakoVarType.Int, _abs, "値Vの絶対値を返す", "ABS");
@@ -191,6 +189,47 @@ namespace Libnako.NakoAPI
             return (c);
         }
 
+        public Object _mul(INakoFuncCallInfo info)
+        {
+            Object a = info.StackPop();
+            Object b = info.StackPop();
+            if (a is Int64 && b is Int64)
+            {
+                return ((Int64)a * (Int64)b);
+            }
+            else
+            {
+                Double da = NakoValueConveter.ToDouble(a);
+                Double db = NakoValueConveter.ToDouble(b);
+                return (da * db);
+            }
+        }
+
+        public Object _mulEx(INakoFuncCallInfo info)
+        {
+            Object ar = info.StackPop();
+            Object b = info.StackPop();
+            if (!(ar is NakoVariable))
+            {
+                throw new ApplicationException("『掛ける!』の引数が変数ではありません");
+            }
+            Object a = ((NakoVariable)ar).Body;
+            Object c;
+            if (a is Int64 && b is Int64)
+            {
+                c = (Int64)a * (Int64)b;
+            }
+            else
+            {
+                Double da = NakoValueConveter.ToDouble(a);
+                Double db = NakoValueConveter.ToDouble(b);
+                c = da * db;
+            }
+            // 結果をセット
+            ((NakoVariable)ar).Body = c;
+            return (c);
+        }
+        
         public Object _strpos(INakoFuncCallInfo info)
         {
             String s = info.StackPopAsString();

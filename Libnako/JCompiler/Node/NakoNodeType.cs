@@ -34,6 +34,7 @@ namespace Libnako.JCompiler.Node
 
         // Let
         LET,
+        LET_VALUE,
         ST_VARIABLE,
 
         // Function

@@ -62,19 +62,10 @@ namespace Libnako.JCompiler.Parser
             topNode.AddChild(lastNode);
             return true;
         }
-
-        /// <summary>
-        /// 値を取得して calcStack に値を載せる
-        /// </summary>
-        /// <see cref="NakoParser._value()">実際の定義</see>
-        /// <returns></returns>
+        
         protected virtual Boolean _value()
         {
-        	return _value(true);
-        }
-        protected virtual Boolean _value(Boolean canCallJFunction)
-        {
-        	return true;
+        	return false;
         }
 
         protected Boolean Accept(NakoTokenType type)
