@@ -21,8 +21,8 @@ namespace DemoCNako2
             // Compile
             NakoCompiler compiler = new NakoCompiler();
             compiler.DirectSource =
-            	"A=10に2を掛けて、4を足す。" +
-            	"Aを表示";
+                "A=10に2を掛けたもの+5" +
+                "Aを表示";
             cout = "----------";
             cout = "* TOKENS:";
             cout = compiler.Tokens.toTypeString();

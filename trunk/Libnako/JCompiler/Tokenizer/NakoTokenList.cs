@@ -6,8 +6,8 @@ namespace Libnako.JCompiler.Tokenizer
 {
     public class NakoTokenList : IList<NakoToken>
     {
-		private List<NakoToken> _list = new List<NakoToken>();
-		protected int cur = 0;
+        private List<NakoToken> _list = new List<NakoToken>();
+        protected int cur = 0;
         private Stack<int> curStack = new Stack<int>();
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Libnako.JCompiler.Tokenizer
 
         public Boolean SearchToken(NakoTokenType keytype)
         {
-        	return SearchToken(keytype, false);
+            return SearchToken(keytype, false);
         }
         /// <summary>
         /// 現在のカーソル位置から keytype のトークンがないか調べる (EOLStop=trueのときはEOLまで)
