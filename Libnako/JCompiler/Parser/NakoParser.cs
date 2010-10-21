@@ -356,7 +356,7 @@ namespace Libnako.JCompiler.Parser
         //>           ;
         private Boolean _callfunc_stmt()
         {
-        	NakoToken startToken = tok.CurrentToken;
+            NakoToken startToken = tok.CurrentToken;
             TokenTry();
             while (!tok.IsEOF())
             {
@@ -653,7 +653,7 @@ namespace Libnako.JCompiler.Parser
             NakoNodeLetValue valuenode = new NakoNodeLetValue();
             while (calcStack.Count > 0) 
             {
-            	valuenode.AddChild(calcStack.Shift());
+                valuenode.AddChild(calcStack.Shift());
             }
             node.ValueNode = (NakoNode)valuenode;
             parentNode.AddChild(node);
@@ -790,14 +790,14 @@ namespace Libnako.JCompiler.Parser
         private bool _canCallJFunction = true;
         protected Boolean _value_nojfunc()
         {
-        	bool tmp = _canCallJFunction;
-        	try {
-	        	_canCallJFunction = false;
-    	    	return _value();
-        	}
-        	finally {
-        		_canCallJFunction = tmp;
-        	}
+            bool tmp = _canCallJFunction;
+            try {
+                _canCallJFunction = false;
+                return _value();
+            }
+            finally {
+                _canCallJFunction = tmp;
+            }
         }
         
         //> _value : FUNCTION_NAME | _calc_fact ;
@@ -817,10 +817,21 @@ namespace Libnako.JCompiler.Parser
                 default:
                     return false;
             }
-        	
             // TODO:計算式の中での関数呼び出し
             // FUNCTION(with args)
-        	if (_callfunc_with_args()) return true;
+            if (_callfunc_with_args())
+            {
+                // 計算符号があるか？
+                if (!tok.IsEOF()) {
+                    if (tok.CurrentToken.isCalcFlag()) {
+                        //TODO: 計算処理
+                        throw new NakoParserException(
+                            "すみません。現在のところ、関数呼び出しの後に、計算フラグを置くことはできません。",
+                           tok.CurrentToken);
+                    }
+                }
+                return true;
+            }
             
             // 計算式を評価
             if (_calc_fact()) return true;
@@ -833,23 +844,23 @@ namespace Libnako.JCompiler.Parser
         //>             ;
         private Boolean _calc_value()
         {
-        	// FUNCTION(no args)
-        	if (_callfunc()) return true;
-        	return _simple_value();
+            // FUNCTION(no args)
+            if (_callfunc()) return true;
+            return _simple_value();
         }
         
         //> _simple_value : [MINUS] _const | _variable 
         //>               ;
         private Boolean _simple_value()
         {
-        	// --- CHECK CONST or VARIABLE
-        	// MINUS?
-        	if (Accept(NakoTokenType.MINUS)) return _minus_flag();
+            // --- CHECK CONST or VARIABLE
+            // MINUS?
+            if (Accept(NakoTokenType.MINUS)) return _minus_flag();
             // CONST?
-        	if (_const()) return true;
+            if (_const()) return true;
             // VARIABLE?
-        	if (_variable()) return true;
-        	return false;
+            if (_variable()) return true;
+            return false;
         }
         
         private Boolean _callfunc_with_args()
@@ -892,30 +903,30 @@ namespace Libnako.JCompiler.Parser
         
         private Boolean _minus_flag()
         {
-        		tok.MoveNext();
-        		if (Accept(NakoTokenType.INT)||Accept(NakoTokenType.NUMBER))
-        		{
-        			_const();
-        			NakoNodeConst c = (NakoNodeConst)calcStack.Pop();
-        			if (c.value is Int64) {
-        				c.value = ((Int64)(c.value) * -1);
-        			} else {
-        				c.value = ((Double)(c.value) * -1);
-        			}
-        			calcStack.Push(c);
-        			lastNode = c;
-        			return true;
-        		}
-        		NakoNodeCalc nc = new NakoNodeCalc();
-        		nc.calc_type = CalcType.MUL;
-        		NakoNodeConst m1 = new NakoNodeConst();
-        		m1.value = -1;
-        		m1.type = NakoNodeType.INT;
-        		NakoNode v = calcStack.Pop();
-        		nc.nodeL = v;
-        		nc.nodeR = m1;
-        		calcStack.Push(nc);
-        		return true;
+            tok.MoveNext();
+            if (Accept(NakoTokenType.INT)||Accept(NakoTokenType.NUMBER))
+            {
+                _const();
+                NakoNodeConst c = (NakoNodeConst)calcStack.Pop();
+                if (c.value is Int64) {
+                    c.value = ((Int64)(c.value) * -1);
+                } else {
+                    c.value = ((Double)(c.value) * -1);
+                }
+                calcStack.Push(c);
+                lastNode = c;
+                return true;
+            }
+            NakoNodeCalc nc = new NakoNodeCalc();
+            nc.calc_type = CalcType.MUL;
+            NakoNodeConst m1 = new NakoNodeConst();
+            m1.value = -1;
+            m1.type = NakoNodeType.INT;
+            NakoNode v = calcStack.Pop();
+            nc.nodeL = v;
+            nc.nodeR = m1;
+            calcStack.Push(nc);
+            return true;
         }
         
         //> _calc_formula : PARENTHESES_L _value PARENTHESES_R 
