@@ -24,6 +24,7 @@ namespace NakoPluginDialog
         {
             bank.AddFunc("言う", "Sを|Sと|Sの", NakoVarType.Void, _say, "文字列Sをダイアログに表示して出す", "いう");
             bank.AddFunc("二択", "Sで|Sと|Sを", NakoVarType.Int, _yesNo, "文字列Sをダイアログに表示し、[はい]か[いいえ]で質問するダイアログを出す", "にたく");
+            bank.AddFunc("三択", "Sで|Sと|Sを", NakoVarType.Int, _yesNoCancel, "文字列Sをダイアログに表示し、[はい]か[いいえ][キャンセル]で質問するダイアログを出す", "さんたく");
             bank.AddFunc("尋ねる", "Sを|Sと", NakoVarType.String, _inputBox, "文字列Sをダイアログに表示し、一行入力ダイアログを出して、結果を「それ」に返す", "たずねる");
             bank.AddFunc("ファイル選択", "Sの", NakoVarType.String, _openFileDialog, "拡張子Sのファイルを選択するダイアログを出して、ファイル名を返す。キャンセルなら空を返す。", "ふぁいるせんたく");
             bank.AddFunc("保存ファイル選択", "Sの", NakoVarType.String, _saveFileDialog, "拡張子Sの保存ファイルを選択するダイアログを出して、ファイル名を返す。キャンセルなら空を返す。", "ほぞんふぁいるせんたく");
@@ -47,6 +48,21 @@ namespace NakoPluginDialog
             return result;
         }
 
+        public Object _yesNoCancel(INakoFuncCallInfo info)
+        {
+            String s = info.StackPopAsString();
+            DialogResult res = MessageBox.Show(s, "メッセージ",
+                MessageBoxButtons.YesNoCancel);
+            Object r = 0;
+            switch (res)
+            {
+                case DialogResult.Yes: r = 1; break;
+                case DialogResult.No: r = 0; break;
+                case DialogResult.Cancel: r = 2; break;
+            }
+            return r;
+        }
+        
         public Object _inputBox(INakoFuncCallInfo info)
         {
             String s = info.StackPopAsString();
