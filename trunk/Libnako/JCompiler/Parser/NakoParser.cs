@@ -826,7 +826,8 @@ namespace Libnako.JCompiler.Parser
                     if (tok.CurrentToken.isCalcFlag()) {
                         //TODO: 計算処理
                         throw new NakoParserException(
-                            "すみません。現在のところ、関数呼び出しの後に、計算フラグを置くことはできません。",
+                            "すみません。現在のところ、関数呼び出しの後に、計算フラグを置くことはできません。" +
+                            "関数呼び出しを()で括ると問題なく計算できます。",
                            tok.CurrentToken);
                     }
                 }
