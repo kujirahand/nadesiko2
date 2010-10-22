@@ -13,29 +13,37 @@ namespace NakoPlugin
         /// <summary>
         /// 対応プラグインのバージョン番号 (現在は必ず 2.0 を返すようにする)
         /// </summary>
-        double      TargetNakoVersion	{ get; }
-    	/// <summary>
-    	/// プラグインの名前 ( this.GetType().FullName とクラスのフルパスを指定する )
-    	/// </summary>
-        string      Name            { get; }
+        double TargetNakoVersion { get; }
+        /// <summary>
+        /// プラグインの名前 ( this.GetType().FullName とクラスのフルパスを指定する )
+        /// </summary>
+        string Name { get; }
         /// <summary>
         /// プラグインのバージョン（任意の値を返すことができる）
         /// </summary>
-        double      PluginVersion   { get; }
+        double PluginVersion { get; }
         /// <summary>
         /// プラグインの説明を返す
         /// </summary>
-        string      Description     { get; }
+        string Description { get; }
         /// <summary>
         /// プラグインが利用されたかどうかを判別する (自動的に設定されるので定義するだけでOK)
         /// </summary>
-        bool        Used            { get; set; }
+        bool Used { get; set; }
         /// <summary>
         /// プラグインでなでしこの関数を定義する
         /// <see cref="Libnako.NakoAPI.NakoBaseSystem.DefineFunction">登録例</see>
         /// </summary>
         /// <param name="bank">このオブジェクトに命令を登録する</param>
-        void        DefineFunction(INakoPluginBank bank);
+        void DefineFunction(INakoPluginBank bank);
+        /// <summary>
+        /// アプリ開始時に実行する処理
+        /// </summary>
+        void PluginInit();
+        /// <summary>
+        /// アプリ終了時に実行する処理(メモリの解放など)
+        /// </summary>
+        void PluginFin();
     }
 
     /// <summary>

@@ -11,11 +11,11 @@ namespace NakoPluginDateTime
 	/// </summary>
     public class NakoPluginDateTime : INakoPlugin
     {
-    	//--- プラグインの宣言 ---
-    	string _description = "日付時間処理を行うプラグイン";
-    	double _version = 1.0;
+        //--- プラグインの宣言 ---
+        string _description = "日付時間処理を行うプラグイン";
+        double _version = 1.0;
         //--- プラグイン共通の部分 ---
-    	public double TargetNakoVersion { get { return 2.0; } }
+        public double TargetNakoVersion { get { return 2.0; } }
         public bool Used { get; set; }
         public string Name { get { return this.GetType().FullName; } }
         public double PluginVersion { get { return _version; } }
@@ -23,14 +23,23 @@ namespace NakoPluginDateTime
         //--- 関数の定義 ---
         public void DefineFunction(INakoPluginBank bank)
         {
-        	//+日付時間処理
-        	//-日付時間
+            //+日付時間処理
+            //-日付時間
             bank.AddFunc("秒待つ", "SEC", NakoVarType.Void, _wait, "SEC秒だけ待機する", "びょうまつ");
             bank.AddFunc("今日", "", NakoVarType.String, _today, "今日の日付を取得して返す", "きょう");
             bank.AddFunc("今", "", NakoVarType.String, _now, "今の時間を取得して返す", "いま");
             bank.AddFunc("システム時間", "", NakoVarType.Int, _systime, "(擬似的な)システム時間をミリ秒単位で取得して返す", "しすてむじかん");
         }
-            
+        
+        // プラグインの初期化処理
+        public void PluginInit()
+        {
+        }
+        // プラグインの終了処理
+        public void PluginFin()
+        {
+        }
+        
         // Define Method
         public Object _wait(INakoFuncCallInfo info)
         {

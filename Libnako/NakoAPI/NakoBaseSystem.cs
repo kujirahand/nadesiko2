@@ -16,11 +16,11 @@ namespace Libnako.NakoAPI
     /// </summary>
     public class NakoBaseSystem : INakoPlugin
     {
-    	//--- プラグインの宣言 ---
-    	string _description = "システム関数を定義したプラグイン";
-    	double _version = 1.0;
+        //--- プラグインの宣言 ---
+        string _description = "システム関数を定義したプラグイン";
+        double _version = 1.0;
         //--- プラグイン共通の部分 ---
-    	public double TargetNakoVersion { get { return 2.0; } }
+        public double TargetNakoVersion { get { return 2.0; } }
         public bool Used { get; set; }
         public string Name { get { return this.GetType().FullName; } }
         public double PluginVersion { get { return _version; } }
@@ -62,6 +62,14 @@ namespace Libnako.NakoAPI
             bank.AddFunc("何文字目", "SでSSが|Sの", NakoVarType.String, _strpos, "文字列Sで文字列SSが何文字目にあるか調べて返す", "なんもじめ");
             //+サウンド
             bank.AddFunc("BEEP", "", NakoVarType.Void, _beep, "BEEP音を鳴らす", "BEEP");
+        }
+        // プラグインの初期化処理
+        public void PluginInit()
+        {
+        }
+        // プラグインの終了処理
+        public void PluginFin()
+        {
         }
 
         /*
