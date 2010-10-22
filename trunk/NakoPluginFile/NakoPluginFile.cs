@@ -58,11 +58,11 @@ namespace NakoPluginFile
             bank.AddFunc("フォルダ作成", "Fへ|Fに|Fの", NakoVarType.Void, _makeDir, "", "ふぉるださくせい");
         }
         // プラグインの初期化処理
-        public void PluginInit()
+        public void PluginInit(INakoInterpreter runner)
         {
         }
         // プラグインの終了処理
-        public void PluginFin()
+        public void PluginFin(INakoInterpreter runner)
         {
         }
         

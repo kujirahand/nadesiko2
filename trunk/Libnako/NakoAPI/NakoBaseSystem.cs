@@ -64,11 +64,11 @@ namespace Libnako.NakoAPI
             bank.AddFunc("BEEP", "", NakoVarType.Void, _beep, "BEEP音を鳴らす", "BEEP");
         }
         // プラグインの初期化処理
-        public void PluginInit()
+        public void PluginInit(INakoInterpreter runner)
         {
         }
         // プラグインの終了処理
-        public void PluginFin()
+        public void PluginFin(INakoInterpreter runner)
         {
         }
 

@@ -31,11 +31,11 @@ namespace NakoPluginConsole
             bank.AddFunc("標準入力取得", "CNTの", NakoVarType.String, _cin, "コンソールの標準入力からCNTバイト取得して返す", "ひょうじゅんにゅうりょくしゅとく");
         }
         // プラグインの初期化処理
-        public void PluginInit()
+        public void PluginInit(INakoInterpreter runner)
         {
         }
         // プラグインの終了処理
-        public void PluginFin()
+        public void PluginFin(INakoInterpreter runner)
         {
         }
         

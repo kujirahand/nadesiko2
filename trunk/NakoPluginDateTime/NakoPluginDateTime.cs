@@ -6,9 +6,9 @@ using NakoPlugin;
 
 namespace NakoPluginDateTime
 {
-	/// <summary>
-	/// 日付時間処理を行うプラグイン
-	/// </summary>
+    /// <summary>
+    /// 日付時間処理を行うプラグイン
+    /// </summary>
     public class NakoPluginDateTime : INakoPlugin
     {
         //--- プラグインの宣言 ---
@@ -32,11 +32,11 @@ namespace NakoPluginDateTime
         }
         
         // プラグインの初期化処理
-        public void PluginInit()
+        public void PluginInit(INakoInterpreter runner)
         {
         }
         // プラグインの終了処理
-        public void PluginFin()
+        public void PluginFin(INakoInterpreter runner)
         {
         }
         

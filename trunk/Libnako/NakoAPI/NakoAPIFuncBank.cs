@@ -22,7 +22,7 @@ namespace Libnako.NakoAPI
         // FuncList & Token Dictionary
         public List<NakoAPIFunc> FuncList = new List<NakoAPIFunc>();
         public Dictionary<string, Object> VarList = new Dictionary<string, Object>();
-        public List<string> PluginList = new List<string>();
+        public Dictionary<string, INakoPlugin> PluginList = new Dictionary<string, INakoPlugin>();
         //
         private INakoPlugin PluginInstance = null;
         

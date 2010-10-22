@@ -28,11 +28,11 @@ namespace NakoPluginCtrl
             bank.AddFunc("キー送信", "KEYSを", NakoVarType.Void, _sendKeys, "ウィンドウのタイトルTITLEに文字列KEYSを送信する", "きーそうしん");
         }
         // プラグインの初期化処理
-        public void PluginInit()
+        public void PluginInit(INakoInterpreter runner)
         {
         }
         // プラグインの終了処理
-        public void PluginFin()
+        public void PluginFin(INakoInterpreter runner)
         {
         }
         

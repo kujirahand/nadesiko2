@@ -31,11 +31,11 @@ namespace NakoPluginDialog
             bank.AddFunc("フォルダ選択", "Sで｜Sの", NakoVarType.String, _directoryDialog, "初期フォルダSでフォルダを選択して返す", "ふぉるだせんたく");
         }
         // プラグインの初期化処理
-        public void PluginInit()
+        public void PluginInit(INakoInterpreter runner)
         {
         }
         // プラグインの終了処理
-        public void PluginFin()
+        public void PluginFin(INakoInterpreter runner)
         {
         }
 
