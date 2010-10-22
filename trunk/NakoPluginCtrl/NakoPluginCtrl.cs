@@ -11,11 +11,11 @@ namespace NakoPluginCtrl
 {
     public class NakoPluginCtrl : INakoPlugin
     {
-    	//--- プラグインの宣言 ---
-    	string _description = "外部アプリとの連携を行うプラグイン";
-    	double _version = 1.0;
+        //--- プラグインの宣言 ---
+        string _description = "外部アプリとの連携を行うプラグイン";
+        double _version = 1.0;
         //--- プラグイン共通の部分 ---
-    	public double TargetNakoVersion { get { return 2.0; } }
+        public double TargetNakoVersion { get { return 2.0; } }
         public bool Used { get; set; }
         public string Name { get { return this.GetType().FullName; } }
         public double PluginVersion { get { return _version; } }
@@ -27,7 +27,15 @@ namespace NakoPluginCtrl
             bank.AddFunc("クリップボード", "", NakoVarType.Void, _getFromClipboard, "クリップボードの文字列を取得する", "くりっぷぼーど");
             bank.AddFunc("キー送信", "KEYSを", NakoVarType.Void, _sendKeys, "ウィンドウのタイトルTITLEに文字列KEYSを送信する", "きーそうしん");
         }
-            
+        // プラグインの初期化処理
+        public void PluginInit()
+        {
+        }
+        // プラグインの終了処理
+        public void PluginFin()
+        {
+        }
+        
         // Define Method
         public Object _copyToClipboard(INakoFuncCallInfo info)
         {

@@ -12,11 +12,11 @@ namespace NakoPluginFile
 {
     public class NakoPluginFile : INakoPlugin
     {
-    	//--- プラグインの宣言 ---
-    	string _description = "ファイル入出力を行うプラグイン";
-    	double _version = 1.0;
+        //--- プラグインの宣言 ---
+        string _description = "ファイル入出力を行うプラグイン";
+        double _version = 1.0;
         //--- プラグイン共通の部分 ---
-    	public double TargetNakoVersion { get { return 2.0; } }
+        public double TargetNakoVersion { get { return 2.0; } }
         public bool Used { get; set; }
         public string Name { get { return this.GetType().FullName; } }
         public double PluginVersion { get { return _version; } }
@@ -57,7 +57,15 @@ namespace NakoPluginFile
             bank.AddFunc("ファイル削除", "Fを|Fの", NakoVarType.Void, _removeFile, "", "ふぁいるさくじょ");
             bank.AddFunc("フォルダ作成", "Fへ|Fに|Fの", NakoVarType.Void, _makeDir, "", "ふぉるださくせい");
         }
-
+        // プラグインの初期化処理
+        public void PluginInit()
+        {
+        }
+        // プラグインの終了処理
+        public void PluginFin()
+        {
+        }
+        
         // Define Method
         public Object _openFile(INakoFuncCallInfo info)
         {

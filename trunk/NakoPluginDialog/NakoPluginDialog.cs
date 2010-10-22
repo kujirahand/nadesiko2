@@ -10,11 +10,11 @@ namespace NakoPluginDialog
 {
     public class NakoPluginDialog : INakoPlugin
     {
-    	//--- プラグインの宣言 ---
-    	string _description = "各種ダイアログを表示するためのプラグイン";
-    	double _version = 1.0;
+        //--- プラグインの宣言 ---
+        string _description = "各種ダイアログを表示するためのプラグイン";
+        double _version = 1.0;
         //--- プラグイン共通の部分 ---
-    	public double TargetNakoVersion { get { return 2.0; } }
+        public double TargetNakoVersion { get { return 2.0; } }
         public bool Used { get; set; }
         public string Name { get { return this.GetType().FullName; } }
         public double PluginVersion { get { return _version; } }
@@ -29,6 +29,14 @@ namespace NakoPluginDialog
             bank.AddFunc("ファイル選択", "Sの", NakoVarType.String, _openFileDialog, "拡張子Sのファイルを選択するダイアログを出して、ファイル名を返す。キャンセルなら空を返す。", "ふぁいるせんたく");
             bank.AddFunc("保存ファイル選択", "Sの", NakoVarType.String, _saveFileDialog, "拡張子Sの保存ファイルを選択するダイアログを出して、ファイル名を返す。キャンセルなら空を返す。", "ほぞんふぁいるせんたく");
             bank.AddFunc("フォルダ選択", "Sで｜Sの", NakoVarType.String, _directoryDialog, "初期フォルダSでフォルダを選択して返す", "ふぉるだせんたく");
+        }
+        // プラグインの初期化処理
+        public void PluginInit()
+        {
+        }
+        // プラグインの終了処理
+        public void PluginFin()
+        {
         }
 
         public Object _say(INakoFuncCallInfo info)
