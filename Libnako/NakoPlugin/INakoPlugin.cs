@@ -39,11 +39,11 @@ namespace NakoPlugin
         /// <summary>
         /// アプリ開始時に実行する処理
         /// </summary>
-        void PluginInit();
+        void PluginInit(INakoInterpreter runner);
         /// <summary>
         /// アプリ終了時に実行する処理(メモリの解放など)
         /// </summary>
-        void PluginFin();
+        void PluginFin(INakoInterpreter runner);
     }
 
     /// <summary>
@@ -117,7 +117,14 @@ namespace NakoPlugin
         void AddFunc(String name, String argdef, NakoVarType resultType, SysCallDelegate f, String desc, String kana);
         void AddVar(String name, Object value, String desc, String kane);
     }
-
+    
+    /// <summary>
+    /// なでしこインタプリタを表わすインターフェイス
+    /// </summary>
+    public interface INakoInterpreter
+    {
+    }
+    
     /// <summary>
     /// プラグイン内の関数によるランタイムエラー
     /// </summary>

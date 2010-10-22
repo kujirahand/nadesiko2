@@ -136,15 +136,16 @@ namespace Libnako.JCompiler
             // (1) LoaderInfo で指定のプラグインのみプリロード
             if (LoaderInfo.PreloadModules != null)
             {
-	            foreach (INakoPlugin plugin in LoaderInfo.PreloadModules)
-	            {
-	                int i = bank.PluginList.IndexOf(plugin.GetType().FullName);
-	                if (i < 0) {
-	                    bank.PluginList.Add(plugin.GetType().FullName);
-	                    bank.SetPluginInstance(plugin);
-	                    plugin.DefineFunction(bank);
-	                }
-	            }
+                foreach (INakoPlugin plugin in LoaderInfo.PreloadModules)
+                {
+                    string fullname = plugin.GetType().FullName;
+                    if (!bank.PluginList.ContainsKey(fullname))
+                    {
+                        bank.PluginList[fullname] = plugin;
+                        bank.SetPluginInstance(plugin);
+                        plugin.DefineFunction(bank);
+                    }
+                }
             }
             
             // (2) プラグインを登録
@@ -153,15 +154,15 @@ namespace Libnako.JCompiler
             // (3) 重要プラグインをロード
             if (LoaderInfo.ImportantModules != null)
             {
-	            foreach (INakoPlugin plugin in LoaderInfo.ImportantModules)
-	            {
-	                int i = bank.PluginList.IndexOf(plugin.GetType().FullName);
-	                if (i < 0) {
-	                    bank.PluginList.Add(plugin.GetType().FullName);
-	                    bank.SetPluginInstance(plugin);
-	                    plugin.DefineFunction(bank);
-	                }
-	            }
+                foreach (INakoPlugin plugin in LoaderInfo.ImportantModules)
+                {
+                    string fullname = plugin.GetType().FullName;
+                    if (!bank.PluginList.ContainsKey(fullname)) {
+                        bank.PluginList[fullname] = plugin;
+                        bank.SetPluginInstance(plugin);
+                        plugin.DefineFunction(bank);
+                    }
+                }
             }
             
             // --- 各種登録作業 ---
