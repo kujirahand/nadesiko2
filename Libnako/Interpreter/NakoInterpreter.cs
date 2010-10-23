@@ -60,6 +60,13 @@ namespace Libnako.Interpreter
         private StringBuilder _printLog = new StringBuilder();
         public Boolean UseConsoleOut { get; set; }
         public Boolean debugMode { get; set; }
+        
+        /// <summary>
+        /// インタプリタ識別用ID
+        /// </summary>
+        public int InterpreterId { get { return _interpreter_id; } }
+        private int _interpreter_id;
+        private static int _interpreter_id_count = 0;
 
         public NakoInterpreter(NakoILCodeList list)
         {
@@ -81,6 +88,10 @@ namespace Libnako.Interpreter
         /// </summary>
         public void Reset()
         {
+            // インタプリタ識別番号の設定
+            _interpreter_id = _interpreter_id_count;
+            _interpreter_id_count++;
+            // スタックや変数などを生成
             calcStack = new Stack<Object>();
             globalVar = new NakoVariableManager(NakoVariableScope.Global);
             localVar = new NakoVariableManager(NakoVariableScope.Local);
@@ -90,20 +101,21 @@ namespace Libnako.Interpreter
         }
         
         /// <summary>
-        /// プラグインの初期化（一度だけ行われる）
+        /// プラグインの初期化
         /// </summary>
         void InitPlugins()
         {
-            // プラグインの初期化処理（初めの一回のみ)
             NakoAPIFuncBank bank = NakoAPIFuncBank.Instance;
             foreach (INakoPlugin plugin in bank.PluginList.Values)
             {
                 plugin.PluginInit(this);
             }
         }
+        /// <summary>
+        /// プラグインの終了処理
+        /// </summary>
         void FinPlugins()
         {
-            // プラグインの初期化処理（初めの一回のみ)
             NakoAPIFuncBank bank = NakoAPIFuncBank.Instance;
             foreach (INakoPlugin plugin in bank.PluginList.Values)
             {

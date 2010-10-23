@@ -131,5 +131,12 @@ namespace TestNako
             runner.Run(w.Result);
             Assert.AreEqual("54", runner.PrintLog);
         }
+        [Test]
+        public void TestInterpreterId()
+        {
+            NakoInterpreter runner1 = new NakoInterpreter();
+            NakoInterpreter runner2 = new NakoInterpreter();
+            Assert.AreNotEqual(runner1.InterpreterId, runner2.InterpreterId);
+        }
     }
 }

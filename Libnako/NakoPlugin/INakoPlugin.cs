@@ -123,6 +123,7 @@ namespace NakoPlugin
     /// </summary>
     public interface INakoInterpreter
     {
+        int InterpreterId { get; }
     }
     
     /// <summary>
