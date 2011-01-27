@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 
 using System.Text;
-using Libnako.JCompiler.ILWriter;
-using Libnako.JCompiler;
+using Libnako.JPNCompiler.ILWriter;
+using Libnako.JPNCompiler;
 using Libnako.NakoAPI;
-using Libnako.JCompiler.Function;
+using Libnako.JPNCompiler.Function;
 using NakoPlugin;
 
 namespace Libnako.Interpreter

@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Libnako.JCompiler.Node;
-using Libnako.JCompiler.Tokenizer;
-using Libnako.JCompiler.ILWriter;
-using Libnako.JCompiler.Parser;
+using Libnako.JPNCompiler.Node;
+using Libnako.JPNCompiler.Tokenizer;
+using Libnako.JPNCompiler.ILWriter;
+using Libnako.JPNCompiler.Parser;
 using Libnako.NakoAPI;
 using NakoPlugin;
 
-namespace Libnako.JCompiler
+namespace Libnako.JPNCompiler
 {
     public class NakoCompiler
     {

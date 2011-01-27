@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Libnako.JCompiler.Function;
-using Libnako.JCompiler;
+using Libnako.JPNCompiler.Function;
+using Libnako.JPNCompiler;
 using NakoPlugin;
 
 namespace Libnako.NakoAPI

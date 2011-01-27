@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Libnako.JCompiler.Function
+namespace Libnako.JPNCompiler.Function
 {
     public enum VarByType { ByVal/*値渡し*/, ByRef/*参照渡し*/ };
 

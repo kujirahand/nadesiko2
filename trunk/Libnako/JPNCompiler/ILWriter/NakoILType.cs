@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Libnako.JCompiler.ILWriter
+namespace Libnako.JPNCompiler.ILWriter
 {
     /// <summary>
     /// なでしこ2の仮想バイトコード(IL)を定義したもの

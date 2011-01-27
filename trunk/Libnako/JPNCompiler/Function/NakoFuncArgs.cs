@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Libnako.JCompiler.Tokenizer;
+using Libnako.JPNCompiler.Tokenizer;
 
-namespace Libnako.JCompiler.Function
+namespace Libnako.JPNCompiler.Function
 {
     /// <summary>
     /// なでしこ関数の引数一覧を管理するクラス

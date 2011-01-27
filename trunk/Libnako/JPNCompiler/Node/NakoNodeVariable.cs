@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Libnako.JCompiler.Parser;
-using Libnako.JCompiler.Function;
+using Libnako.JPNCompiler.Parser;
+using Libnako.JPNCompiler.Function;
 using NakoPlugin;
 
-namespace Libnako.JCompiler.Node
+namespace Libnako.JPNCompiler.Node
 {
     public class NakoNodeVariable : NakoNode
     {

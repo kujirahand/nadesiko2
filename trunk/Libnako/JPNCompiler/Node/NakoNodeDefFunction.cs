@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Libnako.JCompiler.Function;
-using Libnako.JCompiler.Parser;
-using Libnako.JCompiler.ILWriter;
+using Libnako.JPNCompiler.Function;
+using Libnako.JPNCompiler.Parser;
+using Libnako.JPNCompiler.ILWriter;
 
-namespace Libnako.JCompiler.Node
+namespace Libnako.JPNCompiler.Node
 {
     public class NakoNodeDefFunction : NakoNode
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Libnako.JCompiler.Parser;
+using Libnako.JPNCompiler.Parser;
 
-namespace Libnako.JCompiler.Node
+namespace Libnako.JPNCompiler.Node
 {
     /// <summary>
     /// 計算を表わすノード

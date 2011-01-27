@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using System.Text;
 
-namespace Libnako.JCompiler.ILWriter
+namespace Libnako.JPNCompiler.ILWriter
 {
     /// <summary>
     /// なでしこの仮想バイトコード一覧を管理するクラス
