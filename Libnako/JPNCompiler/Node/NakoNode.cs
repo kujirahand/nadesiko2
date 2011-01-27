@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Libnako.JCompiler.Tokenizer;
+using Libnako.JPNCompiler.Tokenizer;
 
-namespace Libnako.JCompiler.Node
+namespace Libnako.JPNCompiler.Node
 {
     /// <summary>
     /// なでしこの構文ノードを表わすクラス

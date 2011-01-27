@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Libnako.JCompiler.Tokenizer
+namespace Libnako.JPNCompiler.Tokenizer
 {
     public enum NakoTokenType
     {

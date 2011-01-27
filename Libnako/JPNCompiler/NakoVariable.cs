@@ -4,7 +4,7 @@ using System.Text;
 
 using NakoPlugin;
 
-namespace Libnako.JCompiler
+namespace Libnako.JPNCompiler
 {
     /// <summary>
     /// なでしこの変数を表わすクラス

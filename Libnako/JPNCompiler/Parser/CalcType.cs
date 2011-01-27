@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Libnako.JCompiler.Parser
+namespace Libnako.JPNCompiler.Parser
 {
     public enum CalcType
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using NakoPlugin;
 
-namespace Libnako.JCompiler.Function
+namespace Libnako.JPNCompiler.Function
 {
     /// <summary>
     /// なでしこ関数を定義したもの

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Libnako.JCompiler.Node
+namespace Libnako.JPNCompiler.Node
 {
     // Define Node Type
     public enum NakoNodeType

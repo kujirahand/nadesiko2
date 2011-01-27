@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-using Libnako.JCompiler;
+using Libnako.JPNCompiler;
 using Libnako.Interpreter;
-using Libnako.JCompiler.ILWriter;
-using Libnako.JCompiler.Tokenizer;
+using Libnako.JPNCompiler.ILWriter;
+using Libnako.JPNCompiler.Tokenizer;
 
 namespace DemoCNako2
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Libnako.JCompiler.ILWriter
+namespace Libnako.JPNCompiler.ILWriter
 {
     /// <summary>
     /// なでしこの仮想バイトコード(IL)を表わすクラス

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Libnako.JCompiler.Node;
-using Libnako.JCompiler.Tokenizer;
+using Libnako.JPNCompiler.Node;
+using Libnako.JPNCompiler.Tokenizer;
 
 
-namespace Libnako.JCompiler.Parser
+namespace Libnako.JPNCompiler.Parser
 {
     /// <summary>
     /// トークンを読み込んで構文木に変換するクラス NakoParser のための下処理用クラス

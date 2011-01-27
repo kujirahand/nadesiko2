@@ -5,7 +5,7 @@ using System.Text;
 using Libnako.Interpreter;
 using NakoPlugin;
 
-namespace Libnako.JCompiler.Function
+namespace Libnako.JPNCompiler.Function
 {
     /// <summary>
     /// なでしこのシステム関数呼び出しの引数となる情報を定義したもの

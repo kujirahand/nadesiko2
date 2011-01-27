@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Libnako.JCompiler;
+using Libnako.JPNCompiler;
 using NUnit.Framework;
-using Libnako.JCompiler.Tokenizer;
+using Libnako.JPNCompiler.Tokenizer;
 
 namespace TestNako
 {

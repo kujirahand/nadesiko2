@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using Libnako.Interpreter;
-using Libnako.JCompiler.Function;
-using Libnako.JCompiler;
-using Libnako.JCompiler.Tokenizer;
-using Libnako.JCompiler.Parser;
+using Libnako.JPNCompiler.Function;
+using Libnako.JPNCompiler;
+using Libnako.JPNCompiler.Tokenizer;
+using Libnako.JPNCompiler.Parser;
 using NakoPlugin;
 
 namespace Libnako.NakoAPI

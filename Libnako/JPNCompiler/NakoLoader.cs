@@ -5,7 +5,7 @@ using System.IO;
 using Libnako.NakoAPI.WrapLib;
 
 
-namespace Libnako.JCompiler
+namespace Libnako.JPNCompiler
 {
     public class NakoLoader
     {

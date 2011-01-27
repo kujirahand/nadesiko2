@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Libnako.JCompiler.Node;
-using Libnako.JCompiler.Tokenizer;
-using Libnako.JCompiler.Function;
+using Libnako.JPNCompiler.Node;
+using Libnako.JPNCompiler.Tokenizer;
+using Libnako.JPNCompiler.Function;
 using Libnako.NakoAPI;
 using NakoPlugin;
 
-namespace Libnako.JCompiler.Parser
+namespace Libnako.JPNCompiler.Parser
 {
     /// <summary>
     /// トークンを読み込んで構文木に変換するクラス

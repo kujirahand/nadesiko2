@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using NakoPlugin;
 
-namespace Libnako.JCompiler
+namespace Libnako.JPNCompiler
 {
     /// <summary>
     /// 変数のスコープを表わす型

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Libnako.JCompiler.Function;
+using Libnako.JPNCompiler.Function;
 
 
-namespace Libnako.JCompiler.Node
+namespace Libnako.JPNCompiler.Node
 {
     /// <summary>
     /// なでしこの関数呼び出しを行うノード

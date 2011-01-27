@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using System.Reflection.Emit;
-using Libnako.JCompiler.Node;
-using Libnako.JCompiler.Parser;
-using Libnako.JCompiler.Function;
+using Libnako.JPNCompiler.Node;
+using Libnako.JPNCompiler.Parser;
+using Libnako.JPNCompiler.Function;
 using Libnako.NakoAPI;
 
-namespace Libnako.JCompiler.ILWriter
+namespace Libnako.JPNCompiler.ILWriter
 {
     /// <summary>
     /// 構文ノードから、なでしこ仮想バイトコードを書き出すクラス

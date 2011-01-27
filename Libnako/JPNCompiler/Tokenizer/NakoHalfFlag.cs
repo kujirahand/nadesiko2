@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Libnako.JCompiler.Tokenizer
+namespace Libnako.JPNCompiler.Tokenizer
 {
     /// <summary>
     /// 全角文字を半角文字に変換するクラス

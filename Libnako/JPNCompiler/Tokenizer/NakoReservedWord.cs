@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Libnako.JCompiler.Tokenizer
+namespace Libnako.JPNCompiler.Tokenizer
 {
     /// <summary>
     /// なでしこ単語管理クラス

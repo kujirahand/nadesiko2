@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
-using Libnako.JCompiler;
+using Libnako.JPNCompiler;
 using Libnako.Interpreter;
 
 namespace TestNako
