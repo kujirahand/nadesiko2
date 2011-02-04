@@ -53,5 +53,13 @@ namespace TestNako
             runner.Run(com.Codes);
             Assert.AreEqual("10", runner.PrintLog);
         }
+        [Test][STAThreadAttribute]
+        public void TestEnumWindows()
+        {
+            com.DirectSource = 
+                "窓列挙して表示。\n";
+            runner.Run(com.Codes);
+            Assert.AreNotEqual("", runner.PrintLog);
+        }
     }
 }

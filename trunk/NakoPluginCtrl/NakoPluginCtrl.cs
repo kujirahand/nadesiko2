@@ -6,7 +6,6 @@ using NakoPlugin;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
 
-
 namespace NakoPluginCtrl
 {
     public class NakoPluginCtrl : INakoPlugin
@@ -26,6 +25,8 @@ namespace NakoPluginCtrl
             bank.AddFunc("コピー", "Sを|Sの", NakoVarType.Void, _copyToClipboard, "文字列Sをクリップボードにコピーする", "こぴー");
             bank.AddFunc("クリップボード", "", NakoVarType.Void, _getFromClipboard, "クリップボードの文字列を取得する", "くりっぷぼーど");
             bank.AddFunc("キー送信", "TITLEにKEYSを", NakoVarType.Void, _sendKeys, "ウィンドウのタイトルTITLEに文字列KEYSを送信する", "きーそうしん");
+            bank.AddFunc("窓列挙", "", NakoVarType.String, _enumWindows, "ウィンドウのタイトルを列挙する", "まどれっきょ");
+            bank.AddFunc("窓正規表現検索", "", NakoVarType.Int, _findWindowsRegExp, "ウィンドウのタイトルを正規表現で検索する", "まどせいきひょうげんけんさく");
         }
         // プラグインの初期化処理
         public void PluginInit(INakoInterpreter runner)
@@ -53,38 +54,23 @@ namespace NakoPluginCtrl
         {
             String title = info.StackPopAsString();
             String keys  = info.StackPopAsString();
-
-            ActivateWindow(title);
+            EnumWindows.ActivateWindow(title);
             SendKeys.Send(keys);
             return null;
         }
-
-        // TODO
-        // http://isann.blog2.fc2.com/blog-entry-70.html
-        //
-        [System.Runtime.InteropServices.DllImport(
-            "user32.dll",
-            CharSet = System.Runtime.InteropServices.CharSet.Auto)]
-        static extern IntPtr FindWindow(
-            string lpClassName,
-            string lpWindowName);
-
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        static extern bool SetForegroundWindow(IntPtr hWnd);
-
-        /// <summary>
-        /// 指定したウィンドウをアクティブにする
-        /// </summary>
-        /// <param name="winTitle">
-        /// アクティブにするウィンドウのタイトル</param>
-        public static void ActivateWindow(string winTitle)
+        
+        public Object _enumWindows(INakoFuncCallInfo info)
         {
-            IntPtr hWnd = FindWindow(null, winTitle);
-            if (hWnd != IntPtr.Zero)
-            {
-                SetForegroundWindow(hWnd);
-            }
+            String s = EnumWindows.GetTitle();
+            return s;
         }
         
+        public Object _findWindowsRegExp(INakoFuncCallInfo info)
+        {
+            String pattern = info.StackPopAsString();
+            IntPtr hWnd = EnumWindows.FindWindowRE(pattern);
+            int h = hWnd.ToInt32();
+            return h;
+        }
     }
 }
