@@ -21,7 +21,7 @@ namespace DemoCNako2
             // Compile
             NakoCompiler compiler = new NakoCompiler();
             compiler.DirectSource =
-                "「食べますか？」と三択して表示。" +
+                "A=窓列挙。Aを表示。" +
                 "";
             cout = "----------";
             cout = "* TOKENS:";
