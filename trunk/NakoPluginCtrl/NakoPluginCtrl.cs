@@ -25,7 +25,7 @@ namespace NakoPluginCtrl
         {
             bank.AddFunc("コピー", "Sを|Sの", NakoVarType.Void, _copyToClipboard, "文字列Sをクリップボードにコピーする", "こぴー");
             bank.AddFunc("クリップボード", "", NakoVarType.Void, _getFromClipboard, "クリップボードの文字列を取得する", "くりっぷぼーど");
-            bank.AddFunc("キー送信", "KEYSを", NakoVarType.Void, _sendKeys, "ウィンドウのタイトルTITLEに文字列KEYSを送信する", "きーそうしん");
+            bank.AddFunc("キー送信", "TITLEにKEYSを", NakoVarType.Void, _sendKeys, "ウィンドウのタイトルTITLEに文字列KEYSを送信する", "きーそうしん");
         }
         // プラグインの初期化処理
         public void PluginInit(INakoInterpreter runner)
@@ -51,9 +51,39 @@ namespace NakoPluginCtrl
 
         public Object _sendKeys(INakoFuncCallInfo info)
         {
+            String title = info.StackPopAsString();
             String keys  = info.StackPopAsString();
+
+            ActivateWindow(title);
             SendKeys.Send(keys);
             return null;
+        }
+
+        // TODO
+        // http://isann.blog2.fc2.com/blog-entry-70.html
+        //
+        [System.Runtime.InteropServices.DllImport(
+            "user32.dll",
+            CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        static extern IntPtr FindWindow(
+            string lpClassName,
+            string lpWindowName);
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        /// <summary>
+        /// 指定したウィンドウをアクティブにする
+        /// </summary>
+        /// <param name="winTitle">
+        /// アクティブにするウィンドウのタイトル</param>
+        public static void ActivateWindow(string winTitle)
+        {
+            IntPtr hWnd = FindWindow(null, winTitle);
+            if (hWnd != IntPtr.Zero)
+            {
+                SetForegroundWindow(hWnd);
+            }
         }
         
     }
