@@ -6,6 +6,7 @@ using Libnako.JPNCompiler;
 using Libnako.Interpreter;
 using Libnako.JPNCompiler.ILWriter;
 using Libnako.JPNCompiler.Tokenizer;
+using Libnako.JPNCompiler.Parser;
 
 namespace cnako2
 {
@@ -142,7 +143,20 @@ namespace cnako2
         {
             NakoLoader loader = NakoLoader.Instance;
             loader.LoaderInfo = GetLoaderInfo();
-            loader.LoadFromFile(sourcefile);
+            try
+            {
+                loader.LoadFromFile(sourcefile);
+            }
+            catch (NakoParserException e)
+            {
+                cout = "[ParseError]" + e.Message;
+                return;
+            }
+            catch (Exception e)
+            {
+                cout = "[ERROR] " + e.Message + "";
+                return;
+            }
             NakoCompiler compiler = loader.cur;
             if (DescriptMode)
             {
