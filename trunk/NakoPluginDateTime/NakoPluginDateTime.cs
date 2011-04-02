@@ -29,6 +29,7 @@ namespace NakoPluginDateTime
             bank.AddFunc("今日", "", NakoVarType.String, _today, "今日の日付を取得して返す", "きょう");
             bank.AddFunc("今", "", NakoVarType.String, _now, "今の時間を取得して返す", "いま");
             bank.AddFunc("システム時間", "", NakoVarType.Int, _systime, "(擬似的な)システム時間をミリ秒単位で取得して返す", "しすてむじかん");
+            bank.AddFunc("時間差", "ATIMEとBTIMEの", NakoVarType.Int, _diffhours, "時間AとBの時間の差を求めて返す", "じかんさ");
         }
         
         // プラグインの初期化処理
@@ -79,6 +80,15 @@ namespace NakoPluginDateTime
             return stopwatch_systime.ElapsedMilliseconds;
         }
         
+        public Object _diffhours(INakoFuncCallInfo info)
+        {
+         	String atime = info.StackPopAsString();
+         	String btime = info.StackPopAsString();
+         	DateTime adatetime = DateTime.Parse(atime);
+         	DateTime bdatetime = DateTime.Parse(btime);
+         	return adatetime.Subtract(bdatetime).TotalHours;
+           
+        }
         
     }
 }
