@@ -20,6 +20,8 @@ namespace Libnako.JPNCompiler.Tokenizer
             dic.AddWord("間", NakoTokenType.WHILE);
             dic.AddWord("回", NakoTokenType.REPEAT_TIMES);
             dic.AddWord("条件分岐", NakoTokenType.SWITCH);
+            dic.AddWord("抜ける", NakoTokenType.BREAK);
+            dic.AddWord("続ける", NakoTokenType.CONTINUE);
             // デバッグ用の特殊構文
             dic.AddWord("PRINT", NakoTokenType.PRINT);
             // システムの優先予約語

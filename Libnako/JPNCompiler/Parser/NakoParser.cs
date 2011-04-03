@@ -109,6 +109,8 @@ namespace Libnako.JPNCompiler.Parser
         //>            | _def_variable
         //>            | _callfunc_stmt
         //>            | _print
+        //>            | CONTINUE
+        //>            | BREAK
         //>            ;
         private Boolean _statement()
         {
@@ -123,6 +125,16 @@ namespace Libnako.JPNCompiler.Parser
             if (_def_variable()) return true;
             if (_callfunc_stmt()) return true;
             if (_print()) return true;
+            if (Accept(NakoTokenType.CONTINUE))
+            {
+                parentNode.AddChild(new NakoNodeContinue());
+                return true;
+            }
+            if (Accept(NakoTokenType.BREAK))
+            {
+                parentNode.AddChild(new NakoNodeBreak());
+                return true;
+            }
 
             // 突然の字下げも構文の１つと考える
             if (Accept(NakoTokenType.SCOPE_BEGIN))
