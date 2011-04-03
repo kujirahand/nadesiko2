@@ -20,6 +20,8 @@ namespace Libnako.JPNCompiler.Node
         FOR,
         FOREACH,
         REPEAT_TIMES,
+        BREAK,
+        CONTINUE,
 
         // Const
         INT,

@@ -73,9 +73,11 @@
     <Compile Include="JPNCompiler\NakoVariable.cs" />
     <Compile Include="JPNCompiler\NakoVariableManager.cs" />
     <Compile Include="JPNCompiler\Node\NakoNode.cs" />
+    <Compile Include="JPNCompiler\Node\NakoNodeBreak.cs" />
     <Compile Include="JPNCompiler\Node\NakoNodeCalc.cs" />
     <Compile Include="JPNCompiler\Node\NakoNodeCallFunction.cs" />
     <Compile Include="JPNCompiler\Node\NakoNodeConst.cs" />
+    <Compile Include="JPNCompiler\Node\NakoNodeContinue.cs" />
     <Compile Include="JPNCompiler\Node\NakoNodeDefFunction.cs" />
     <Compile Include="JPNCompiler\Node\NakoNodeFor.cs" />
     <Compile Include="JPNCompiler\Node\NakoNodeIf.cs" />

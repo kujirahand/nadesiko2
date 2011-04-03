@@ -26,6 +26,8 @@ namespace Libnako.JPNCompiler.Tokenizer
         FOR,
         FOREACH,
         REPEAT_TIMES,
+        BREAK,
+        CONTINUE,
         //
         THEN,
         ELSE,
