@@ -9,6 +9,7 @@ using Libnako.NakoAPI;
 using Libnako.JPNCompiler.ILWriter;
 
 using NakoPluginString;
+using NakoPluginSample;
 
 namespace TestNako
 {
@@ -23,7 +24,8 @@ namespace TestNako
             NakoCompilerLoaderInfo info = new NakoCompilerLoaderInfo();
             info.PreloadModules = new NakoPlugin.INakoPlugin[] {
                 new NakoBaseSystem(),
-                new NakoPluginString.NakoPluginString()
+                new NakoPluginString.NakoPluginString(),
+                new NakoPluginSample.NakoPluginSample()
             };
             com = new NakoCompiler(info);
         }
@@ -80,6 +82,108 @@ namespace TestNako
                 "「　　なでしこ　　」をトリムを表示。";
             runner.Run(com.Codes);
             Assert.AreEqual(runner.PrintLog, "なでしこ");
+        }
+
+
+        [Test]
+        public void TestRight()
+        {
+            com.DirectSource = 
+                "「なでしこ」2文字右部分を表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual(runner.PrintLog, "しこ");
+        }
+        [Test]
+        public void TestCut()
+        {
+//            com.DirectSource = 
+//                "「なでしこ」から「し」まで切り取って表示。";
+//            runner.Run(com.Codes);
+//            Assert.AreEqual("なで", runner.PrintLog);
+            com.DirectSource = 
+                "S=「なでしこ」\n" +
+                "Sから「し」まで切り取る\n" +
+                "Sを表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual("こ", runner.PrintLog);
+        }
+        [Test]
+        public void TestExtract()
+        {
+            com.DirectSource = 
+                "「なでしこ」の1から2文字抜き出して表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual(runner.PrintLog, "なで");
+        }
+        [Test]
+        public void TestEm()
+        {
+            com.DirectSource = 
+                "「なでしこ」の全角か判定を表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual(runner.PrintLog, "1");
+        }
+        [Test]
+        public void TestRemove()
+        {
+            com.DirectSource = 
+                "S=「なでしこ」\n" +
+                "Sの2から1文字削除\n" +
+                "Sを表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual("なしこ",runner.PrintLog );
+        }
+        [Test]
+        public void TestInsert()
+        {
+            com.DirectSource = 
+                "「なしこ」の2に「で」を文字挿入して表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual("なでしこ", runner.PrintLog);
+        }
+        [Test]
+        public void TestDegrade()
+        {
+            com.DirectSource = 
+                "S=「なでしこ」を文字列分解\n" +
+                "S[0]を表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual("な", runner.PrintLog);
+        }
+        [Test]
+        public void TestExplode()
+        {
+            com.DirectSource = 
+                "S=「なでしこ」を「し」で区切る\n" +
+                "S[0]を表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual("なで", runner.PrintLog);
+        }
+        [Test]
+        public void TestNum()
+        {
+            com.DirectSource = 
+                "「0なでしこ」が数字か判定を表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual("1",runner.PrintLog);
+        }
+        [Test]
+        public void TestAppend()
+        {
+            com.DirectSource = 
+                "「なでし」に「こ」を追加して表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual("なでしこ",runner.PrintLog);
+        }
+        [Test]
+        public void TestR()
+        {
+            com.DirectSource = 
+                "S=「あ」\n" +
+                "Sに「い」を接続!\n" +
+                "Sを表示";
+            runner.Run(com.Codes);
+            Assert.AreEqual("あい",runner.PrintLog);
         }
     }
 }
