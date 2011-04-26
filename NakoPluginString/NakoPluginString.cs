@@ -31,8 +31,8 @@ namespace NakoPluginString
         //--- 関数の定義 ---
         public void DefineFunction(INakoPluginBank bank)
         {
-            //+日付時間処理
-            //-日付時間
+            //+文字列処理
+            //-文字列処理
             bank.AddFunc("文字数", "Sの", NakoVarType.Int, _length, "文字列の文字数を返す", "もじすう");
             bank.AddFunc("文字列検索", "SのNEEDLEを", NakoVarType.Int, _search, "文字列を検索して最初に現れた場所を返す。無ければ-1", "もじれつけんさく");
             bank.AddFunc("置換", "SのSEARCHをREPLACEに", NakoVarType.String, _replace, "文字列を全て置換して返す", "ちかん");
