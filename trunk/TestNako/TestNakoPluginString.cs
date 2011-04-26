@@ -185,5 +185,34 @@ namespace TestNako
             runner.Run(com.Codes);
             Assert.AreEqual("あい",runner.PrintLog);
         }
+        [Test]
+        public void TestAlnumToEn()
+        {
+            com.DirectSource = 
+                "S=「アイウエオ０１２３４５６７８９ａｂｃＡＢＣ」\n" +
+                "Sを英数半角変換して表示";
+            runner.Run(com.Codes);
+            Assert.AreEqual("アイウエオ0123456789abcABC",runner.PrintLog);
+        }
+        [Test]
+        public void TestToEn()
+        {
+            com.DirectSource = 
+                "S=「アイウエオ０１２３４５６７８９ａｂｃＡＢＣ」\n" +
+                "S=Sを半角変換して表示";
+            runner.Run(com.Codes);
+            Assert.AreEqual("ｱｲｳｴｵ0123456789abcABC",runner.PrintLog);
+        }
+        [Test]
+        public void TestZerofill()
+        {
+            com.DirectSource = 
+                "S=「10」\n" +
+                "S=Sを4でゼロ埋め\n" +
+                "Sを表示";
+            runner.Run(com.Codes);
+            Assert.AreEqual("0010",runner.PrintLog);
+            
+        }
     }
 }
