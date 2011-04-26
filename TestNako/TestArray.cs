@@ -102,5 +102,22 @@ namespace TestNako
             ni.Run(nc.Codes);
             Assert.AreEqual("2222", ni.PrintLog);
         }
+
+//        [Test]
+//        public void Test_array4()
+//        {
+//            NakoCompiler nc = new NakoCompiler();
+//            NakoInterpreter ni = new NakoInterpreter();
+//            nc.DirectSource =
+//                "A=「1\n" +
+//                "10\n" +
+//                "100\n" +
+//                "566」\n" +
+//                "PRINT A[3]\n" +
+//                "";
+//            ni.Run(nc.Codes);
+//            Assert.AreEqual("566", ni.PrintLog);
+//        }
+
     }
 }
