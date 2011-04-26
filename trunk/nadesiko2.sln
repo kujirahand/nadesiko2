@@ -23,6 +23,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakoPluginFile", "NakoPlugi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakoPluginDateTime", "NakoPluginDateTime\NakoPluginDateTime.csproj", "{CD0D883A-284E-4DDE-859A-A303952EC2BC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakoPluginString", "NakoPluginString\NakoPluginString.csproj", "{78344F49-D9C5-43F8-8E2B-1C7F9D0A4473}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakoPluginTag", "NakoPluginTag\NakoPluginTag.csproj", "{7ADCC16D-4463-4238-A947-CB5CBF04A409}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -113,6 +117,26 @@ Global
 		{CD0D883A-284E-4DDE-859A-A303952EC2BC}.Release|Mixed Platforms.Build.0 = Release|x86
 		{CD0D883A-284E-4DDE-859A-A303952EC2BC}.Release|x86.ActiveCfg = Release|x86
 		{CD0D883A-284E-4DDE-859A-A303952EC2BC}.Release|x86.Build.0 = Release|x86
+		{78344F49-D9C5-43F8-8E2B-1C7F9D0A4473}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{78344F49-D9C5-43F8-8E2B-1C7F9D0A4473}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{78344F49-D9C5-43F8-8E2B-1C7F9D0A4473}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{78344F49-D9C5-43F8-8E2B-1C7F9D0A4473}.Debug|x86.ActiveCfg = Debug|x86
+		{78344F49-D9C5-43F8-8E2B-1C7F9D0A4473}.Debug|x86.Build.0 = Debug|x86
+		{78344F49-D9C5-43F8-8E2B-1C7F9D0A4473}.Release|Any CPU.ActiveCfg = Release|x86
+		{78344F49-D9C5-43F8-8E2B-1C7F9D0A4473}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{78344F49-D9C5-43F8-8E2B-1C7F9D0A4473}.Release|Mixed Platforms.Build.0 = Release|x86
+		{78344F49-D9C5-43F8-8E2B-1C7F9D0A4473}.Release|x86.ActiveCfg = Release|x86
+		{78344F49-D9C5-43F8-8E2B-1C7F9D0A4473}.Release|x86.Build.0 = Release|x86
+		{7ADCC16D-4463-4238-A947-CB5CBF04A409}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{7ADCC16D-4463-4238-A947-CB5CBF04A409}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{7ADCC16D-4463-4238-A947-CB5CBF04A409}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{7ADCC16D-4463-4238-A947-CB5CBF04A409}.Debug|x86.ActiveCfg = Debug|x86
+		{7ADCC16D-4463-4238-A947-CB5CBF04A409}.Debug|x86.Build.0 = Debug|x86
+		{7ADCC16D-4463-4238-A947-CB5CBF04A409}.Release|Any CPU.ActiveCfg = Release|x86
+		{7ADCC16D-4463-4238-A947-CB5CBF04A409}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{7ADCC16D-4463-4238-A947-CB5CBF04A409}.Release|Mixed Platforms.Build.0 = Release|x86
+		{7ADCC16D-4463-4238-A947-CB5CBF04A409}.Release|x86.ActiveCfg = Release|x86
+		{7ADCC16D-4463-4238-A947-CB5CBF04A409}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
