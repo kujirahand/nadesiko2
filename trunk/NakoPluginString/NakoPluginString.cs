@@ -52,9 +52,9 @@ namespace NakoPluginString
             bank.AddFunc("数字か判定", "Sが|Sの|Sを", NakoVarType.Int, _num, "文字列Sの一文字目が数字か判定して返す", "すうじかはんてい");
             bank.AddFunc("追加", "AにBを|Aへ", NakoVarType.String, _append, "変数AにBの内容を追加する", "ついか");
 
-            bank.AddFunc("英数半角変換", "Sを", NakoVarType.String, _alnumToEn, "文字列の文字数を返す", "えいすうはんかくへんかん");
-            bank.AddFunc("ゼロ埋め", "SをAで", NakoVarType.String, _zeroFill, "文字列の文字数を返す", "ぜろうめ");
-            bank.AddFunc("半角変換", "Sを", NakoVarType.String, _toEn, "文字列を全て置換して返す", "はんかくへんかん");
+            bank.AddFunc("英数半角変換", "Sを", NakoVarType.String, _alnumToEn, "文字列Sを英数文字だけを半角に変換して返す", "えいすうはんかくへんかん");
+            bank.AddFunc("ゼロ埋め", "SをAで", NakoVarType.String, _zeroFill, "データSをA桁のゼロで埋めて出力する", "ぜろうめ");
+            bank.AddFunc("半角変換", "Sを", NakoVarType.String, _toEn, "文字列Sを半角に変換して返す", "はんかくへんかん");
         }
         
         // プラグインの初期化処理
