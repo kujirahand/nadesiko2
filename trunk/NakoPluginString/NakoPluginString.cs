@@ -9,9 +9,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Threading;
+using System.Text.RegularExpressions;
 using Libnako.JPNCompiler;
 using NakoPlugin;
+using Microsoft.VisualBasic;
 
 namespace NakoPluginString
 {
@@ -50,6 +51,10 @@ namespace NakoPluginString
             bank.AddFunc("区切る", "SをAで", NakoVarType.Array, _explode, "文字列Sを区切り文字Aで区切って配列として返す。", "くぎる");
             bank.AddFunc("数字か判定", "Sが|Sの|Sを", NakoVarType.Int, _num, "文字列Sの一文字目が数字か判定して返す", "すうじかはんてい");
             bank.AddFunc("追加", "AにBを|Aへ", NakoVarType.String, _append, "変数AにBの内容を追加する", "ついか");
+
+            bank.AddFunc("英数半角変換", "Sを", NakoVarType.String, _alnumToEn, "文字列の文字数を返す", "えいすうはんかくへんかん");
+            bank.AddFunc("ゼロ埋め", "SをAで", NakoVarType.String, _zeroFill, "文字列の文字数を返す", "ぜろうめ");
+            bank.AddFunc("半角変換", "Sを", NakoVarType.String, _toEn, "文字列を全て置換して返す", "はんかくへんかん");
         }
         
         // プラグインの初期化処理
@@ -194,6 +199,21 @@ namespace NakoPluginString
             StringBuilder s = new StringBuilder(info.StackPopAsString());
             String a = info.StackPopAsString();
             return s.Append(a).ToString();
+        }
+        public Object _alnumToEn(INakoFuncCallInfo info)
+        {
+        	String s = info.StackPopAsString();
+        	return Regex.Replace(s,@"[０-９Ａ-Ｚａ-ｚ：－　]+",delegate(Match m){ return Strings.StrConv(m.Value, VbStrConv.Narrow, 0); });
+        }
+        public Object _zeroFill(INakoFuncCallInfo info){
+        	long s = info.StackPopAsInt();
+        	String l = info.StackPopAsInt().ToString();
+        	return　String.Format(@"{0:D"+l+"}",s);
+        }
+        
+        public Object _toEn(INakoFuncCallInfo info){
+        	String s = info.StackPopAsString();
+            return Strings.StrConv(s, VbStrConv.Narrow, 0);
         }
         private int NadesikoPositionToCSPosition(int nadesiko_pos){
             return nadesiko_pos - 1;
