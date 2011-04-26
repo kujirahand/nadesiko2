@@ -1,12 +1,4 @@
-﻿/*
- * Created by SharpDevelop.
- * User: shigepon
- * Date: 2011/04/04
- * Time: 9:42
- * 
- * To change this template use Tools | Options | Coding | Edit Standard Headers.
- */
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
@@ -16,7 +8,7 @@ using NakoPlugin;
 namespace NakoPluginSample
 {
     /// <summary>
-    /// Description of MyClass.
+    /// サンプルプラグイン
     /// </summary>
     public class NakoPluginSample : INakoPlugin
     {
