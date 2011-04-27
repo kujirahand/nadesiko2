@@ -21,7 +21,7 @@ namespace DemoCNako2
             // Compile
             NakoCompiler compiler = new NakoCompiler();
             compiler.DirectSource =
-                "A=窓列挙。Aを表示。" +
+                "HOGE=「aaa」。\n「bbb」へ変数HOGE書換。\nHOGEを表示。" +
                 "";
             cout = "----------";
             cout = "* TOKENS:";
@@ -37,7 +37,7 @@ namespace DemoCNako2
             // Run
             cout = "----------";
             cout = "* RUN";
-            NakoInterpreter runner = new NakoInterpreter(compiler.Codes);
+            NakoInterpreter runner = new NakoInterpreter(compiler.Codes, compiler.GlobalVar);
             runner.debugMode = true;
             runner.Run();
             Console.WriteLine("LOG=" + runner.PrintLog);
