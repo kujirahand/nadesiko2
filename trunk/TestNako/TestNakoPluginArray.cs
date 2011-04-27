@@ -104,7 +104,7 @@ namespace TestNako
 //            runner.Run(com.Codes);
 //            Assert.AreEqual("なでしこ", runner.PrintLog);
 //        }
-         [Test]
+        [Test]
         public void TestAppend()
         {
             com.DirectSource = 
@@ -117,5 +117,19 @@ namespace TestNako
             runner.Run(com.Codes);
             Assert.AreEqual("む",runner.PrintLog);
         }
-    }
+         [Test]
+        public void TestHashKeys()
+        {
+            com.DirectSource = 
+                "A[`a`]=「な」\n" +
+                "A[`b`]=「で」\n" +
+                "A[`c`]=「し」\n" +
+                "A[`d`]=「こ」\n" +
+                //"AD = Aのハッシュキー列挙\n" +
+                //"AD[0]を表示。";
+                "A[`d`]を表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual("こ",runner.PrintLog);
+        }
+   }
 }
