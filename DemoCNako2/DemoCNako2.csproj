@@ -81,6 +81,10 @@
       <Project>{29BCC59A-E35E-4096-B417-16335E41CF93}</Project>
       <Name>NakoPluginFile</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NakoPluginSample\NakoPluginSample.csproj">
+      <Project>{BFB7346D-65BE-49F9-9CDB-D3ABF1989C84}</Project>
+      <Name>NakoPluginSample</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
