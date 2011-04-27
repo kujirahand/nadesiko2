@@ -8,7 +8,7 @@ using Libnako.NakoAPI;
 
 using Libnako.JPNCompiler.ILWriter;
 
-//using NakoPluginHttp;
+using NakoPluginHttp;
 
 namespace TestNako
 {

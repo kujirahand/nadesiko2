@@ -108,6 +108,10 @@
       <Project>{29BCC59A-E35E-4096-B417-16335E41CF93}</Project>
       <Name>NakoPluginFile</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NakoPluginHttp\NakoPluginHttp.csproj">
+      <Project>{E6657194-A701-4796-B8FE-8DD7FCE17FF3}</Project>
+      <Name>NakoPluginHttp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NakoPluginRegex\NakoPluginRegex.csproj">
       <Project>{A184B322-315A-415A-81DC-6F6B8AB68356}</Project>
       <Name>NakoPluginRegex</Name>
