@@ -8,7 +8,7 @@ using Libnako.NakoAPI;
 
 using Libnako.JPNCompiler.ILWriter;
 
-using NakoPluginHttp;
+//using NakoPluginHttp;
 
 namespace TestNako
 {
@@ -22,8 +22,8 @@ namespace TestNako
         {
             NakoCompilerLoaderInfo info = new NakoCompilerLoaderInfo();
             info.PreloadModules = new NakoPlugin.INakoPlugin[] {
-                new NakoBaseSystem(),
-                new NakoPluginHttp.NakoPluginHttp()
+                new NakoBaseSystem()
+                //new NakoPluginHttp.NakoPluginHttp()
             };
             com = new NakoCompiler(info);
         }
