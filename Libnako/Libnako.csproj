@@ -58,15 +58,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interpreter\ILCode\NakoILCode.cs" />
+    <Compile Include="Interpreter\ILCode\NakoILCodeList.cs" />
+    <Compile Include="Interpreter\ILCode\NakoILType.cs" />
     <Compile Include="Interpreter\NakoInterpreter.cs" />
     <Compile Include="Interpreter\NakoValueConveter.cs" />
     <Compile Include="JPNCompiler\Function\NakoFunc.cs" />
     <Compile Include="JPNCompiler\Function\NakoFuncArg.cs" />
     <Compile Include="JPNCompiler\Function\NakoFuncArgs.cs" />
     <Compile Include="JPNCompiler\Function\NakoFuncCallInfo.cs" />
-    <Compile Include="JPNCompiler\ILWriter\NakoILCode.cs" />
-    <Compile Include="JPNCompiler\ILWriter\NakoILCodeList.cs" />
-    <Compile Include="JPNCompiler\ILWriter\NakoILType.cs" />
     <Compile Include="JPNCompiler\ILWriter\NakoILWriter.cs" />
     <Compile Include="JPNCompiler\NakoCompiler.cs" />
     <Compile Include="JPNCompiler\NakoLoader.cs" />
@@ -114,6 +114,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="JPNCompiler\Parser\ParserSyntaxMemo_Creator.nako" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Interpreter\ILCode\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

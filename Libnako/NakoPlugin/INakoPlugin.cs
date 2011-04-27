@@ -52,7 +52,7 @@ namespace NakoPlugin
     public enum NakoVarType
     {
         Void,
-        Object,
+        Object,     // = 任意のオブジェクト
         Int,        // = Int64
         Double,     // = Double
         String,     // = String
