@@ -43,6 +43,12 @@ namespace TestNako
                 "TAG[1]を表示。";
             runner.Run(com.Codes);
             Assert.AreEqual("で",runner.PrintLog);
+            com.DirectSource = 
+                "S=「<な>な</な><で>で</で><し>し</し><こ>こ</こ>」\n" +
+                "TAG=Sから「で」のタグ切り出し\n" +
+                "TAG[0]を表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual("で",runner.PrintLog);
         }
 
         [Test]
@@ -60,6 +66,22 @@ namespace TestNako
                 "TAGを表示。";
             runner.Run(com.Codes);
             Assert.AreEqual("なでしこ",runner.PrintLog);
+            com.DirectSource = 
+                "S=「<な>な</な><で>で</で><し>し</し><こ>こ</こ>」\n" +
+                "TAG=Sからタグ削除\n" +
+                "TAGを表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual("なでしこ",runner.PrintLog);
+        }
+        [Test]
+        public void TestAttr()
+        {
+            com.DirectSource = 
+                "S=「<html><body><b class='na'>な</b><b class='de'>で</b><h1 class='si'>し</h1><h2 class='ko'>こ</h2></body></html>」\n" +
+                "TAG=Sの「h1」から「class」をタグ属性取得\n" +
+                "TAG[0]を表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual("si",runner.PrintLog);
         }
     }
 }
