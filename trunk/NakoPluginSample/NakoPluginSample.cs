@@ -25,6 +25,7 @@ namespace NakoPluginSample
         public void DefineFunction(INakoPluginBank bank)
         {
             bank.AddFunc("接続!", "{参照渡し}AにBを|Aと", NakoVarType.Object, _sample_addEx,"変数Aと値Bをつなげて返す(変数A自身を書き換える)", "せつぞく!");
+            bank.AddFunc("変数HOGE書換", "Sに|Sへ", NakoVarType.Void, _sample_changeHoge,"変数HOGEの内容をSに書き換える", "へんすうHOGEかきかえ");
         }
         
         // プラグインの初期化処理
@@ -56,6 +57,12 @@ namespace NakoPluginSample
             // 結果をセット
             ((NakoVariable)ar).Body = c;
             return (c);
+        }
+        
+        public Object _sample_changeHoge(INakoFuncCallInfo info){
+        	Object tmp = info.StackPop();
+        	info.SetVariableValue("HOGE", tmp);
+        	return null;
         }
     }
 }
