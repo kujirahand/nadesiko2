@@ -28,30 +28,29 @@ namespace TestNako
             com = new NakoCompiler(info);
         }
 
-        [Test]
-        public void TestOpenClose()
-        {
-            com.DirectSource = 
-                "HANDLE=「Driver=PostgreSQL Unicode;Server=localhost;Database=test;UID=postgres;PWD=bommer;Port=5432;」でADO開く\n" +
-                "HANDLEをDB閉じる";
-            runner.Run(com.Codes);
+//        [Test]
+//        public void TestOpenClose()
+//        {
+//            com.DirectSource = 
+//                "HANDLE=「Driver=PostgreSQL Unicode;Server=localhost;Database=test;UID=postgres;PWD=;Port=5432;」でADO開く\n" +
+//                "HANDLEをDB閉じる";
+//            runner.Run(com.Codes);
+//        }
+//
+//        [Test]
+//        public void TestFind()
+//        {
+//            com.DirectSource = 
+//                "HANDLE=「Driver=PostgreSQL Unicode;Server=localhost;Database=test;UID=postgres;PWD=;Port=5432;」でADO開く\n" +
+//                "HANDLEに「select * from test_table;」をSQL実行\n"+
+//                "HANDLEのDBデータ有りの間\n"+
+//                "\tF=HANDLEへ「hoge」のDBフィールド取得\n"+
+//                "\tFを表示\n"+
+//                "\tHANDLEのDB次移動\n"+
+//                "HANDLEをDB閉じる";
+//            runner.Run(com.Codes);
 //            Assert.AreEqual("なでしこ", runner.PrintLog );
-        }
-
-        [Test]
-        public void TestFind()
-        {
-            com.DirectSource = 
-                "HANDLE=「Driver=PostgreSQL Unicode;Server=localhost;Database=test;UID=postgres;PWD=bommer;Port=5432;」でADO開く\n" +
-                "HANDLEに「select * from test_table;」をSQL実行\n"+
-                "HANDLEのDBデータ有りの間\n"+
-                "\tF=HANDLEへ「hoge」のDBフィールド取得\n"+
-                "\tFを表示\n"+
-                "\tHANDLEのDB次移動\n"+
-                "HANDLEをDB閉じる";
-            runner.Run(com.Codes);
-            Assert.AreEqual("なでしこ", runner.PrintLog );
-        }
+//        }
 
      }
 }
