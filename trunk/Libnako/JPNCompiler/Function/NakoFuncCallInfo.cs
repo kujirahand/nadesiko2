@@ -74,6 +74,10 @@ namespace Libnako.JPNCompiler.Function
         public void SetVariableValue(string varname, Object value)
         {
         	int index = _runner.globalVar.GetIndex(varname);
+            if (index < 0)
+            {
+                index = _runner.globalVar.CreateVar(varname);
+            }
         	_runner.globalVar.SetValue(index, value);
         }
     }
