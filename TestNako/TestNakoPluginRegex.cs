@@ -37,8 +37,7 @@ namespace TestNako
             Assert.AreEqual( "なでしこ", runner.PrintLog);
             com.DirectSource = 
                 "「なでしこ」の「^(.*?)こ$」を正規表現マッチ。\n" +
-                "M=抽出文字列\n" +
-                "M[1]を表示";
+                "抽出文字列[1]を表示";
             runner.Run(com.Codes);
             Assert.AreEqual( "なでし", runner.PrintLog);
         }
