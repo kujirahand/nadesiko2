@@ -33,7 +33,6 @@ namespace NakoPluginRegex
         {
             bank.AddFunc("正規表現マッチ", "SをPATTERNで", NakoVarType.String, _match, ".Netの正規表現。文字列AをパターンBで最初にマッチした結果を返す。", "せいきひょうげんまっち");
             bank.AddFunc("正規表現全てマッチ", "SをPATTERNで", NakoVarType.String, _matchAll, ".Netの正規表現。文字列AをパターンBでマッチした結果を全て返す。", "せいきひょうげんすべてまっち");
-            bank.AddFunc("抽出文字列", "", NakoVarType.String, _group, "文字列の文字数を返す", "ちゅうしゅつもじれつ");
             bank.AddFunc("正規表現置換", "SのPATTERNをREPLACEに", NakoVarType.String, _replace, ".Netの正規表現。文字列SのパターンAをBで置換して結果を返す。", "せいきひょうげんちかん");
         }
         
@@ -52,14 +51,14 @@ namespace NakoPluginRegex
         	String s = info.StackPopAsString();
         	String pattern = info.StackPopAsString();
         	m = Regex.Match(s,pattern);
-//        	NakoVarArray groups = new NakoVarArray();
-//        	NakoVariable ret = new NakoVariable();
+        	NakoVarArray groups = new NakoVarArray();
+        	NakoVariable ret = new NakoVariable();
         	if(m.Success){
-//        	    for(int i = 0;i < m.Groups.Count;i++){
-//        	        groups.SetValue(i,m.Groups[i].Value);
-//        	    }
-//        	    ret.Type = NakoVarType.Array;
-//        	    ret.Body = groups;
+        	    for(int i = 0;i < m.Groups.Count;i++){
+        	        groups.SetValue(i,m.Groups[i].Value);
+        	    }
+        	    ret.SetBodyAutoType(groups);
+        	    info.SetVariable("抽出文字列",ret);
         	    return m.Value;
         	}
             return null;
@@ -86,16 +85,16 @@ namespace NakoPluginRegex
      	    return res;
         }
         private Match m;
-        public Object _group(INakoFuncCallInfo info){
-        	NakoVarArray groups = new NakoVarArray();
-        	if(m is Match && m.Success){
-        	    for(int i = 0;i < m.Groups.Count;i++){
-        	        groups.SetValue(i,m.Groups[i].Value);
-        	    }
-        	    return groups;
-        	}
-        	return null;
-        }
+//        public Object _group(INakoFuncCallInfo info){
+//        	NakoVarArray groups = new NakoVarArray();
+//        	if(m is Match && m.Success){
+//        	    for(int i = 0;i < m.Groups.Count;i++){
+//        	        groups.SetValue(i,m.Groups[i].Value);
+//        	    }
+//        	    return groups;
+//        	}
+//        	return null;
+//        }
         
         public Object _replace(INakoFuncCallInfo info)
         {
