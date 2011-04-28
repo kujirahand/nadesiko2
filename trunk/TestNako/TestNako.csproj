@@ -72,7 +72,6 @@
     <Compile Include="TestNakoPluginArray.cs" />
     <Compile Include="TestNakoPluginCtrl.cs" />
     <Compile Include="TestNakoPluginDateTime.cs" />
-    <Compile Include="TestNakoPluginADO.cs" />
     <Compile Include="TestNakoPluginHttp.cs" />
     <Compile Include="TestNakoPluginRegex.cs" />
     <Compile Include="TestNakoPluginSample.cs" />
@@ -88,10 +87,6 @@
     <ProjectReference Include="..\Libnako\Libnako.csproj">
       <Project>{F9297385-ACE0-43AD-AD66-819C5A60FE80}</Project>
       <Name>Libnako</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NakoPluginADO\NakoPluginADO.csproj">
-      <Project>{4BB5810E-D382-4DEA-BFE7-0CBEC5A34667}</Project>
-      <Name>NakoPluginADO</Name>
     </ProjectReference>
     <ProjectReference Include="..\NakoPluginArray\NakoPluginArray.csproj">
       <Project>{8530AD9C-2B33-40FA-9137-3A316F7DB485}</Project>
