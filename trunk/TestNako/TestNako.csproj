@@ -75,6 +75,7 @@
     <Compile Include="TestNakoPluginADO.cs" />
     <Compile Include="TestNakoPluginHttp.cs" />
     <Compile Include="TestNakoPluginRegex.cs" />
+    <Compile Include="TestNakoPluginSample.cs" />
     <Compile Include="TestNakoPluginString.cs" />
     <Compile Include="TestNakoPluginTag.cs" />
     <Compile Include="TestNakoTokenizer.cs" />
