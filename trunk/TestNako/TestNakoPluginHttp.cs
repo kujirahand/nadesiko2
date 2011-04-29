@@ -22,8 +22,8 @@ namespace TestNako
         {
             NakoCompilerLoaderInfo info = new NakoCompilerLoaderInfo();
             info.PreloadModules = new NakoPlugin.INakoPlugin[] {
-                new NakoBaseSystem()
-                //new NakoPluginHttp.NakoPluginHttp()
+                new NakoBaseSystem(),
+                new NakoPluginHttp.NakoPluginHttp()
             };
             com = new NakoCompiler(info);
         }
@@ -35,6 +35,14 @@ namespace TestNako
                 "「%e3%81%aa%e3%81%a7%e3%81%97%e3%81%93」をURLデコードして表示。";
             runner.Run(com.Codes);
             Assert.AreEqual("なでしこ", runner.PrintLog );
+        }
+        [Test]
+        public void TestUrlEncode()
+        {
+            com.DirectSource = 
+                "「なでしこ」をURLエンコードして小文字変換して表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual("%e3%81%aa%e3%81%a7%e3%81%97%e3%81%93", runner.PrintLog );
         }
 
      }

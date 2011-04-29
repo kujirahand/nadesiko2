@@ -68,13 +68,15 @@ namespace Libnako.Interpreter
         private int _interpreter_id;
         private static int _interpreter_id_count = 0;
 
-        public NakoInterpreter(NakoILCodeList list, NakoVariableManager globalVar)
+        public NakoInterpreter(NakoILCodeList list)
         {
             this.UseConsoleOut = false;
             this.debugMode = false;
-            this.globalVar = globalVar;
-            this.list = list;
             Reset();
+            this.list = list;
+            if (list.globalVar != null) {
+            	this.globalVar = list.globalVar;
+            }
         }
         public NakoInterpreter()
         {
@@ -93,9 +95,7 @@ namespace Libnako.Interpreter
             _interpreter_id_count++;
             // スタックや変数などを生成
             calcStack = new Stack<Object>();
-            if (globalVar == null) {
-	            globalVar = new NakoVariableManager(NakoVariableScope.Global);
-            }
+			globalVar = new NakoVariableManager(NakoVariableScope.Global);
             localVar = new NakoVariableManager(NakoVariableScope.Local);
             callStack = new Stack<NakoCallStack>();
             PrintLog = "";
@@ -136,6 +136,9 @@ namespace Libnako.Interpreter
             {
                 Reset();
                 this.list = list;
+                if (list.globalVar != null) {
+                	this.globalVar = list.globalVar;
+                }
             }
             runpos = 0;
             bool result = _run();

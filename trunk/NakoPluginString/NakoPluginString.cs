@@ -55,6 +55,8 @@ namespace NakoPluginString
             bank.AddFunc("英数半角変換", "Sを", NakoVarType.String, _alnumToEn, "文字列Sを英数文字だけを半角に変換して返す", "えいすうはんかくへんかん");
             bank.AddFunc("ゼロ埋め", "SをAで", NakoVarType.String, _zeroFill, "データSをA桁のゼロで埋めて出力する", "ぜろうめ");
             bank.AddFunc("半角変換", "Sを", NakoVarType.String, _toEn, "文字列Sを半角に変換して返す", "はんかくへんかん");
+            bank.AddFunc("小文字変換", "Sを", NakoVarType.String, _lowercase, "文字列Sを小文字変換して返す", "こもじへんかん");
+            bank.AddFunc("大文字変換", "Sを", NakoVarType.String, _uppercase, "文字列Sを大文字変換して返す", "へんかん");
         }
         
         // プラグインの初期化処理
@@ -217,6 +219,17 @@ namespace NakoPluginString
         }
         private int NadesikoPositionToCSPosition(int nadesiko_pos){
             return nadesiko_pos - 1;
+        }
+        
+        public Object _lowercase(INakoFuncCallInfo info)
+        {
+        	String s = info.StackPopAsString();
+        	return s.ToLower();
+        }
+        public Object _uppercase(INakoFuncCallInfo info)
+        {
+        	String s = info.StackPopAsString();
+        	return s.ToUpper();
         }
     }
 }

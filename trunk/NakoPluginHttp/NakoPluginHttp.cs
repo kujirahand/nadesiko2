@@ -31,7 +31,8 @@ namespace NakoPluginHttp
         //--- 関数の定義 ---
         public void DefineFunction(INakoPluginBank bank)
         {
-            bank.AddFunc("URLデコード", "Sを", NakoVarType.String, _urlDecode, "SをURLデコードして返す", "ゆーあーるえるでこーど");
+            bank.AddFunc("URLデコード", "Sを", NakoVarType.String, _urlDecode, "SをURLデコードして返す", "URLでこーど");
+            bank.AddFunc("URLエンコード", "Sを", NakoVarType.String, _urlEncode, "SをURLエンコードして返す", "URLえんこーど");
         }
         
         // プラグインの初期化処理
@@ -47,6 +48,11 @@ namespace NakoPluginHttp
         {
         	String s = info.StackPopAsString();
         	return Uri.UnescapeDataString(s);
+        }
+        public Object _urlEncode(INakoFuncCallInfo info)
+        {
+        	String s = info.StackPopAsString();
+        	return Uri.EscapeDataString(s);
         }
         
     }
