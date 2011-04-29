@@ -484,6 +484,14 @@ namespace Libnako.Interpreter
                     var2.Body = new NakoVarArray();
                     var2.Type = NakoVarType.Array;
                 }
+                if (!(var2.Body is NakoVarArray))
+                {
+                    String s = "";
+                    if (var2.Body != null) s = var2.Body.ToString();
+                    var2.Body = new NakoVarArray();
+                    ((NakoVarArray)var2.Body).SetValuesFromString(s);
+                    
+                }
                 // NakoArray なら 要素にセット
                 if (var2.Body is NakoVarArray)
                 {

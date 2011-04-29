@@ -9,6 +9,7 @@ using Libnako.NakoAPI;
 using Libnako.JPNCompiler.ILWriter;
 
 using NakoPluginArray;
+using NakoPluginString;
 using NakoPluginSample;
 
 namespace TestNako
@@ -25,6 +26,7 @@ namespace TestNako
             info.PreloadModules = new NakoPlugin.INakoPlugin[] {
                 new NakoBaseSystem(),
                 new NakoPluginArray.NakoPluginArray(),
+                new NakoPluginString.NakoPluginString(),
                 new NakoPluginSample.NakoPluginSample()
             };
             com = new NakoCompiler(info);
@@ -34,6 +36,7 @@ namespace TestNako
         public void TestLength()
         {
             com.DirectSource = 
+            	"A=「」;" + 
                 "A[0]=「な」\n" +
                 "A[1]=「で」\n" +
                 "A[2]=「し」\n" +
@@ -42,11 +45,22 @@ namespace TestNako
             runner.Run(com.Codes);
             Assert.AreEqual("4",runner.PrintLog);
         }
+        
+        [Test]
+        public void TestLength2()
+        {
+            com.DirectSource = 
+                "「a,b,c」を「,」で区切る。\n" +
+                "それの配列要素数を表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual("3",runner.PrintLog);
+        }
 
         [Test]
         public void TestSearch()
         {
-            com.DirectSource = 
+            com.DirectSource =
+                "A=「」;\n" +
                 "A[0]=「な」\n" +
                 "A[1]=「で」\n" +
                 "A[2]=「し」\n" +
@@ -59,7 +73,8 @@ namespace TestNako
         [Test]
         public void TestReverse()
         {
-            com.DirectSource = 
+            com.DirectSource =
+                "A=「」;\n" +
                 "A[0]=「な」\n" +
                 "A[1]=「で」\n" +
                 "A[2]=「し」\n" +
@@ -73,12 +88,13 @@ namespace TestNako
         [Test]
         public void TestConcat()
         {
-            com.DirectSource = 
+            com.DirectSource =
+                "A=「」;\n" +
                 "A[0]=「な」\n" +
                 "A[1]=「で」\n" +
                 "A[2]=「し」\n" +
                 "A[3]=「こ」\n" +
-                "Aを「ん」配列結合して表示。";
+                "Aを「ん」で配列結合して表示。";
             runner.Run(com.Codes);
             Assert.AreEqual("なんでんしんこ", runner.PrintLog);
         }
@@ -86,7 +102,8 @@ namespace TestNako
         [Test]
         public void TestRemove()
         {
-            com.DirectSource = 
+            com.DirectSource =
+                "A=「」;\n" +
                 "A[0]=「な」\n" +
                 "A[1]=「で」\n" +
                 "A[2]=「し」\n" +
@@ -107,7 +124,8 @@ namespace TestNako
         [Test]
         public void TestAppend()
         {
-            com.DirectSource = 
+            com.DirectSource =
+                "A=「」;\n" +
                 "A[0]=「な」\n" +
                 "A[1]=「で」\n" +
                 "A[2]=「し」\n" +
@@ -120,16 +138,10 @@ namespace TestNako
          [Test]
         public void TestHashKeys()
         {
-            com.DirectSource = 
-                "A[`a`]=「な」\n" +
-                "A[`b`]=「で」\n" +
-                "A[`c`]=「し」\n" +
-                "A[`d`]=「こ」\n" +
-                //"AD = Aのハッシュキー列挙\n" +
-                //"AD[0]を表示。";
-                "A[`d`]を表示。";
+            com.DirectSource =
+                "A=「」;A[`a`]=30;A[`b`]=31;Aの配列ハッシュキー列挙。それを「,」で配列結合して表示。";
             runner.Run(com.Codes);
-            Assert.AreEqual("こ",runner.PrintLog);
+            Assert.AreEqual("a,b",runner.PrintLog);
         }
    }
 }

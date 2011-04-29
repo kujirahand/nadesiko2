@@ -93,10 +93,17 @@ namespace Libnako.JPNCompiler.Node
             String r = "";
             foreach (NakoNode n in this)
             {
-                r += indent + n.ToTypeString() + "\n";
-                if (n.hasChildren())
+                if (n != null)
                 {
-                    r += n.Children.toTypeString(level + 1);
+                    r += indent + n.ToTypeString() + "\n";
+                    if (n.hasChildren())
+                    {
+                        r += n.Children.toTypeString(level + 1);
+                    }
+                }
+                else
+                {
+                    r += indent + "(null)" + "\n";
                 }
             }
             return r;

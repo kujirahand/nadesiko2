@@ -79,11 +79,14 @@ namespace NakoPlugin
         INakoVariable GetVarFromObj(Object key);
         Object GetValueFromObj(Object key);
         Object GetValueFromKey(string key);
+        void Clear();
+        String[] GetKeys();
         void SetVar(int index, INakoVariable value);
         void SetVarFromObj(Object key, INakoVariable value);
         void SetVarFromKey(string key, INakoVariable value);
         void SetValue(int index, Object value);
         void SetValueFromKey(String key, Object value);
+        void SetValuesFromString(String str);
     }
 
     /// <summary>
