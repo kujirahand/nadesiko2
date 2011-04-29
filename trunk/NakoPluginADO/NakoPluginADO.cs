@@ -64,7 +64,7 @@ namespace NakoPluginADO
         {
             Object c = info.StackPop();
             if(!(c is ADODB.Connection)){
-                throw new ArgumentException("connection not found");
+                throw new NakoPluginArgmentException("connection not found");
             }
             ADODB.Connection con = (ADODB.Connection)c;
             con.Close();
@@ -75,7 +75,7 @@ namespace NakoPluginADO
         {
             Object c = info.StackPop();
             if(!(c is ADODB.Connection)){
-                throw new ArgumentException("connection not found");
+                throw new NakoPluginArgmentException("connection not found");
             }
             String q = info.StackPopAsString();
             ADODB.Connection con = (ADODB.Connection)c;

@@ -55,7 +55,7 @@ namespace NakoPluginArray
             Object b = info.StackPop();
             if (!(ar is NakoVariable))
             {
-                throw new ApplicationException("『追加』の引数がvariableではありません");
+                throw new NakoPluginRuntimeException("『追加』の引数がvariableではありません");
             }
             NakoVariable arv = (NakoVariable)ar;
             if (arv.Body is NakoVarArray)
@@ -76,7 +76,7 @@ namespace NakoPluginArray
             Object ar = info.StackPop();
             if (!(ar is NakoVarArray))
             {
-                throw new ApplicationException("『要素数』の引数がarrayではありません");
+                throw new NakoPluginRuntimeException("『要素数』の引数がarrayではありません");
             }
             NakoVarArray arr = (NakoVarArray)ar;
             int index = 0;
@@ -91,7 +91,7 @@ namespace NakoPluginArray
             long b = info.StackPopAsInt();
             if (!(ar is NakoVariable))
             {
-                throw new ApplicationException("『削除』の引数が変数ではありません");
+                throw new NakoPluginRuntimeException("『削除』の引数が変数ではありません");
             }
             Object a = ((NakoVariable)ar).Body;
             Object c = null;
@@ -118,7 +118,7 @@ namespace NakoPluginArray
             String s = info.StackPopAsString();
             if (!(ar is NakoVarArray))
             {
-                throw new ApplicationException("『結合』の引数が配列ではありません");
+                throw new NakoPluginRuntimeException("『結合』の引数が配列ではありません");
             }
             StringBuilder sb = new StringBuilder();
             NakoVarArray arr = (NakoVarArray)ar;
@@ -136,7 +136,7 @@ namespace NakoPluginArray
             Object ar = info.StackPop();
             if (!(ar is NakoVariable))
             {
-                throw new ApplicationException("『逆順』の引数が変数ではありません");
+                throw new NakoPluginRuntimeException("『逆順』の引数が変数ではありません");
             }
             Object a = ((NakoVariable)ar).Body;
             if (a is NakoVarArray)
@@ -165,7 +165,7 @@ namespace NakoPluginArray
             Object key = info.StackPop();
             if (!(ar is NakoVarArray))
             {
-                throw new ApplicationException("『検索』の引数が配列ではありません");
+                throw new NakoPluginRuntimeException("『検索』の引数が配列ではありません");
             }
             NakoVarArray arr = (NakoVarArray)ar;
             while(arr.GetValue(i)!=null){

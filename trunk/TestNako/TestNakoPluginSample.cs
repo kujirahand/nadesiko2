@@ -35,7 +35,6 @@ namespace TestNako
                 "「はげ」へ変数HOGE書換\n" +
                 "HOGEを表示";
             runner.Run(com.Codes);
-            runner.Run(com.Codes);
             Assert.AreEqual("はげ", runner.PrintLog );
         }
 
