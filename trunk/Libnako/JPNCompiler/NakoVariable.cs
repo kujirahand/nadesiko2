@@ -93,6 +93,23 @@ namespace Libnako.JPNCompiler
             }
         }
 
+        public String[] GetKeys()
+        {
+            String[] r = new String[list.Count];
+            int i = 0;
+            foreach (KeyValuePair<String,int> p in keys)
+            {
+                r[i++] = p.Key;
+            }
+            return r;
+        }
+
+        public void Clear()
+        {
+            list = new List<INakoVariable>();
+            keys = null;
+        }
+
         public INakoVariable GetVar(int index)
         {
             if (list.Count < 0) return null;
@@ -110,6 +127,7 @@ namespace Libnako.JPNCompiler
         public INakoVariable GetVarFromKey(string key)
         {
             if (keys == null) return null;
+            if (!keys.ContainsKey(key)) return null;
             int i = keys[key];
             return GetVar(i);
         }
@@ -193,6 +211,16 @@ namespace Libnako.JPNCompiler
             NakoVariable v = new NakoVariable();
             v.Body = value;
             this.SetVarFromKey(key, v);
+        }
+        public void SetValuesFromString(String str)
+        {
+            Clear();
+            String[] a = str.Split('\n');
+            int i = 0;
+            foreach (String n in a)
+            {
+                SetValue(i++, n);
+            }
         }
     }
 

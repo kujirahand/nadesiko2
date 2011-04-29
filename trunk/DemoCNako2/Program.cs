@@ -21,7 +21,7 @@ namespace DemoCNako2
             // Compile
             NakoCompiler compiler = new NakoCompiler();
             compiler.DirectSource =
-                "「a=30」をURLエンコードして表示。" +
+                "A=「」;A[`a`]=30;A[`b`]=31;Aの配列ハッシュキー列挙。それを「,」で配列結合して表示。" +
                 "";
             cout = "----------";
             cout = "* TOKENS:";
