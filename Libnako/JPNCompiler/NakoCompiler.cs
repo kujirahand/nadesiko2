@@ -95,6 +95,7 @@ namespace Libnako.JPNCompiler
             NakoILWriter w = new NakoILWriter();
             w.Write(this.topNode);
             codes = w.Result;
+            codes.globalVar = this.GlobalVar;
         }
 
         /// <summary>

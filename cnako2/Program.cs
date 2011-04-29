@@ -123,7 +123,7 @@ namespace cnako2
                 cout = compiler.Codes.ToAddressString();
                 cout = "----------";
                 cout = "* RUN";
-                NakoInterpreter runner = new NakoInterpreter(compiler.Codes, compiler.GlobalVar);
+                NakoInterpreter runner = new NakoInterpreter(compiler.Codes);
                 runner.debugMode = DebugMode;
                 runner.Run();
                 Console.WriteLine("LOG=" + runner.PrintLog);
@@ -132,7 +132,7 @@ namespace cnako2
             }
             else
             {
-                NakoInterpreter runner = new NakoInterpreter(compiler.Codes, compiler.GlobalVar);
+                NakoInterpreter runner = new NakoInterpreter(compiler.Codes);
                 runner.debugMode = DebugMode;
                 runner.Run();
                 Console.WriteLine(runner.PrintLog);
@@ -171,7 +171,7 @@ namespace cnako2
                 cout = compiler.Codes.ToAddressString();
                 cout = "----------";
                 cout = "* RUN";
-                NakoInterpreter runner = new NakoInterpreter(compiler.Codes, compiler.GlobalVar);
+                NakoInterpreter runner = new NakoInterpreter(compiler.Codes);
                 runner.debugMode = DebugMode;
                 runner.Run();
                 Console.WriteLine("LOG=" + runner.PrintLog);
@@ -180,7 +180,7 @@ namespace cnako2
             }
             else
             {
-                NakoInterpreter runner = new NakoInterpreter(compiler.Codes, compiler.GlobalVar);
+                NakoInterpreter runner = new NakoInterpreter(compiler.Codes);
                 runner.debugMode = DebugMode;
                 runner.Run();
                 Console.WriteLine(runner.PrintLog);

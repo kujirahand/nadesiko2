@@ -11,6 +11,7 @@ namespace Libnako.JPNCompiler.ILWriter
     public class NakoILCodeList : IList<NakoILCode>
     {
 		private List<NakoILCode> _list = new List<NakoILCode>();
+		public NakoVariableManager globalVar = null;
 
 		public Boolean CheckTypes(NakoILType[] types)
         {
