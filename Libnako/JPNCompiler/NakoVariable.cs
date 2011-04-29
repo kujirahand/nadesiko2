@@ -24,7 +24,14 @@ namespace Libnako.JPNCompiler
         /// <summary>
         /// 変数の管理番号
         /// </summary>
-        public int varNo = -1;
+        public int varNo { get; set; }
+
+        public NakoVariable()
+        {
+            Type = NakoVarType.Void;
+            Body = null;
+            varNo = -1;
+        }
 
         public void SetBodyAutoType(Object value)
         {
@@ -66,18 +73,27 @@ namespace Libnako.JPNCompiler
     /// </summary>
     public class NakoVarArray : INakoVariable, INakoVarArray
     {
-        protected List<NakoVariable> list = new List<NakoVariable>();
+        protected List<INakoVariable> list = new List<INakoVariable>();
         protected Dictionary<string, int> keys = null;
 
         public NakoVarType Type { get; set; }
         public Object Body { get; set; }
+        public int varNo { get; set; }
 
         public NakoVarArray()
         {
             this.Type = NakoVarType.Array;
         }
 
-        public NakoVariable GetVar(int index)
+        public int Count
+        {
+            get
+            {
+                return list.Count;
+            }
+        }
+
+        public INakoVariable GetVar(int index)
         {
             if (list.Count < 0) return null;
             if (list.Count <= index) return null;
@@ -86,19 +102,19 @@ namespace Libnako.JPNCompiler
 
         public Object GetValue(int index)
         {
-            NakoVariable v = GetVar(index);
+            INakoVariable v = GetVar(index);
             if (v == null) return null;
             return v.Body;
         }
 
-        public NakoVariable GetVarFromKey(string key)
+        public INakoVariable GetVarFromKey(string key)
         {
             if (keys == null) return null;
             int i = keys[key];
             return GetVar(i);
         }
 
-        public NakoVariable GetVarFromObj(Object key)
+        public INakoVariable GetVarFromObj(Object key)
         {
             if (key is string)
             {
@@ -113,7 +129,7 @@ namespace Libnako.JPNCompiler
 
         public Object GetValueFromObj(Object key)
         {
-            NakoVariable v = GetVarFromObj(key);
+            INakoVariable v = GetVarFromObj(key);
             if (v != null)
             {
                 return v.Body;
@@ -128,13 +144,13 @@ namespace Libnako.JPNCompiler
             return GetValue(i);
         }
 
-        public void SetVar(int index, NakoVariable value)
+        public void SetVar(int index, INakoVariable value)
         {
             while (index >= list.Count) { list.Add(null); }
             list[index] = value;
         }
 
-        public void SetVarFromObj(Object key, NakoVariable value)
+        public void SetVarFromObj(Object key, INakoVariable value)
         {
             if (key is string)
             {
@@ -147,7 +163,7 @@ namespace Libnako.JPNCompiler
             }
         }
 
-        public void SetVarFromKey(string key, NakoVariable value)
+        public void SetVarFromKey(string key, INakoVariable value)
         {
             if (keys == null)
             {

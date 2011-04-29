@@ -454,7 +454,7 @@ namespace Libnako.Interpreter
             if (((NakoVariable)var).Body is NakoVarArray)
             {
                 var_ary = (NakoVarArray)((NakoVariable)var).Body;
-                NakoVariable elem = var_ary.GetVarFromObj(idx);
+                INakoVariable elem = var_ary.GetVarFromObj(idx);
                 if (elem == null)
                 {
                     elem = new NakoVariable();
@@ -485,7 +485,7 @@ namespace Libnako.Interpreter
                 if (var2.Body is NakoVarArray)
                 {
                     NakoVarArray var3 = (NakoVarArray)(var2.Body);
-                    NakoVariable elem = var3.GetVarFromObj(index);
+                    INakoVariable elem = var3.GetVarFromObj(index);
                     if (elem == null)
                     {
                         elem = new NakoVariable();

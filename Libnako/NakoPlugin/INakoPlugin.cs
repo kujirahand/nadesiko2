@@ -68,11 +68,22 @@ namespace NakoPlugin
     {
         NakoVarType Type { get; set; }
         Object Body { get; set; }
+        int varNo { get; set; }
     }
 
     public interface INakoVarArray
     {
-
+        int Count { get; }
+        INakoVariable GetVar(int index);
+        Object GetValue(int index);
+        INakoVariable GetVarFromObj(Object key);
+        Object GetValueFromObj(Object key);
+        Object GetValueFromKey(string key);
+        void SetVar(int index, INakoVariable value);
+        void SetVarFromObj(Object key, INakoVariable value);
+        void SetVarFromKey(string key, INakoVariable value);
+        void SetValue(int index, Object value);
+        void SetValueFromKey(String key, Object value);
     }
 
     /// <summary>
@@ -136,6 +147,16 @@ namespace NakoPlugin
         {
         }
     }
-
+    
+    /// <summary>
+    /// プラグイン内の関数の引数指定が問題のエラー
+    /// </summary>
+    public class NakoPluginArgmentException : ArgumentException
+    {
+        public NakoPluginArgmentException(string message)
+            : base(message)
+        {
+        }
+    }
 }
 
