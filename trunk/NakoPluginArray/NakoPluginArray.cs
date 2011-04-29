@@ -33,13 +33,12 @@ namespace NakoPluginArray
         //--- 関数の定義 ---
         public void DefineFunction(INakoPluginBank bank)
         {
-            //TODO:メソッドの戻り値の指定が正しいか調べる
-            bank.AddFunc("配列追加", "{参照渡し}AにSを", NakoVarType.Object, _append,"配列Aに要素Sを追加する。Aの内容を書き換える。", "はいれつついか");
+            bank.AddFunc("配列追加", "{参照渡し}AにSを", NakoVarType.Int, _append,"配列Aに要素Sを追加する。Aの内容を書き換える。", "はいれつついか");
             bank.AddFunc("配列要素数", "Aの", NakoVarType.Int, _count,"配列Aの要素数を返す。", "はいれつようそすう");
-            bank.AddFunc("配列削除", "{参照渡し}AのIを", NakoVarType.Object, _remove,"配列AのI番目（０起点）の要素を削除する。Aの内容を書き換える。", "はいれつさくじょ");
+            bank.AddFunc("配列削除", "{参照渡し}AのIを", NakoVarType.Object, _remove,"配列AのI番目（０起点）の要素を削除する。Aの内容を書き換える。削除した要素を返す。", "はいれつさくじょ");
             bank.AddFunc("配列結合", "AをSで", NakoVarType.String, _concat,"配列Aを文字列Sでつなげて文字列として返す。", "はいれつついか");
-            bank.AddFunc("配列逆順", "{参照渡し}Aを", NakoVarType.Object, _reverse,"配列Aの並びを逆順にする。Aの内容を書き換える。", "はいれつぎゃくじゅん");
-            bank.AddFunc("配列検索", "Aの{整数=0}IからKEYを|Aで", NakoVarType.Object, _search,"配列Aの要素I番からKEYを検索してそのインデックス番号を返す。見つからなければ-1を返す。", "はいれつけんさく");//TODO:見つからない時はException?
+            bank.AddFunc("配列逆順", "{参照渡し}Aを", NakoVarType.Void, _reverse,"配列Aの並びを逆順にする。Aの内容を書き換える。", "はいれつぎゃくじゅん");
+            bank.AddFunc("配列検索", "Aの{整数=0}IからKEYを|Aで", NakoVarType.Int, _search,"配列Aの要素I番からKEYを検索してそのインデックス番号を返す。見つからなければ-1を返す。", "はいれつけんさく");//TODO:見つからない時はException?
             bank.AddFunc("配列ハッシュキー列挙", "Aの", NakoVarType.Array, _enumKeys, "配列Aのキー一覧を配列で返す。", "はいれつはっしゅきーれっきょ");
         }
         
@@ -179,7 +178,7 @@ namespace NakoPluginArray
                 ((NakoVariable)ar).Body = rev;
             }
             // 結果をセット
-            return 1;
+            return null;
         }
         public Object _search(INakoFuncCallInfo info){
             Object ar = info.StackPop();
