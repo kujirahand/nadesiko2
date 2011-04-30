@@ -89,6 +89,10 @@
       <Project>{E6657194-A701-4796-B8FE-8DD7FCE17FF3}</Project>
       <Name>NakoPluginHttp</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NakoPluginOfficeExcel\NakoPluginOfficeExcel.csproj">
+      <Project>{215F5C9A-8B33-4A02-83BC-CC2C3FE66D01}</Project>
+      <Name>NakoPluginOfficeExcel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NakoPluginSample\NakoPluginSample.csproj">
       <Project>{BFB7346D-65BE-49F9-9CDB-D3ABF1989C84}</Project>
       <Name>NakoPluginSample</Name>
