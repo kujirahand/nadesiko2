@@ -38,19 +38,21 @@ namespace NakoPluginConsole
         public void PluginFin(INakoInterpreter runner)
         {
         }
+        // --- カスタムフィールド
+        public bool UsePrintLog = false; // 表示・継続表示の出力を PrintLog (info.WriteLog())に渡すかどうかのフラグ
         
         // Define Method
         public Object _coutLine(INakoFuncCallInfo info)
         {
             string s = info.StackPopAsString();
-            System.Console.WriteLine(s);
+            if (UsePrintLog) { info.WriteLog(s); } else { System.Console.WriteLine(s); }
             return null;
         }
         
         public Object _cout(INakoFuncCallInfo info)
         {
         	string s = info.StackPopAsString();
-        	System.Console.Write(s);
+            if (UsePrintLog) { info.WriteLog(s); } else { System.Console.Write(s); }
             return null;
         }
         
