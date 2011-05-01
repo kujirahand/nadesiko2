@@ -43,6 +43,19 @@
   <ItemGroup>
     <Compile Include="CNako2Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestArray.cs" />
+    <Compile Include="TestBaseSystem.cs" />
+    <Compile Include="TestCNako.cs" />
+    <Compile Include="TestNakoCalc.cs" />
+    <Compile Include="TestNakoILWriter.cs" />
+    <Compile Include="TestNakoInterpreter.cs" />
+    <Compile Include="TestNakoNodeIF.cs" />
+    <Compile Include="TestNakoParser.cs" />
+    <Compile Include="TestNakoTokenizer.cs" />
+    <Compile Include="TestNodeCallFunction.cs" />
+    <Compile Include="TestNodeFor.cs" />
+    <Compile Include="TestNodeWhile.cs" />
+    <Compile Include="TestTokenString.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\cnako2\CNako2.csproj">
@@ -52,6 +65,10 @@
     <ProjectReference Include="..\Libnako\Libnako.csproj">
       <Project>{F9297385-ACE0-43AD-AD66-819C5A60FE80}</Project>
       <Name>Libnako</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NakoPlugin\NakoPlugin.csproj">
+      <Project>{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}</Project>
+      <Name>NakoPlugin</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
