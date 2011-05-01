@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakoPluginOfficeExcel", "NakoPluginOfficeExcel\NakoPluginOfficeExcel.csproj", "{215F5C9A-8B33-4A02-83BC-CC2C3FE66D01}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakoPlugin", "NakoPlugin\NakoPlugin.csproj", "{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakoPluginOfficeTest", "NakoPluginOfficeTest\NakoPluginOfficeTest.csproj", "{28DD3CDD-2B95-4A10-A8DE-E888BB96E19A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +17,14 @@ Global
 		{215F5C9A-8B33-4A02-83BC-CC2C3FE66D01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{215F5C9A-8B33-4A02-83BC-CC2C3FE66D01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{215F5C9A-8B33-4A02-83BC-CC2C3FE66D01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28DD3CDD-2B95-4A10-A8DE-E888BB96E19A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28DD3CDD-2B95-4A10-A8DE-E888BB96E19A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28DD3CDD-2B95-4A10-A8DE-E888BB96E19A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28DD3CDD-2B95-4A10-A8DE-E888BB96E19A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
