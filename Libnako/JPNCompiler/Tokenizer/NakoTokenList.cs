@@ -46,6 +46,14 @@ namespace Libnako.JPNCompiler.Tokenizer
             }
         }
 
+        public void RemoveCurrentToken()
+        {
+            if (_list.Count > 0)
+            {
+                _list.RemoveAt(cur);
+            }
+        }
+
         public void InsertAfterCurrentToken(NakoToken t)
         {
             this.Insert(cur + 1, t);

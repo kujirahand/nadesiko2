@@ -45,7 +45,7 @@ namespace NakoPluginConsole
         public Object _coutLine(INakoFuncCallInfo info)
         {
             string s = info.StackPopAsString();
-            if (UsePrintLog) { info.WriteLog(s); } else { System.Console.WriteLine(s); }
+            if (UsePrintLog) { info.WriteLog(s+"\r\n"); } else { System.Console.WriteLine(s); }
             return null;
         }
         

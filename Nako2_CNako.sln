@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Libnako", "Libnako\Libnako.csproj", "{F9297385-ACE0-43AD-AD66-819C5A60FE80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cnako2", "cnako2\cnako2.csproj", "{6A22E146-C2AC-473B-9F3C-0D88DE3FDF3E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CNako2", "cnako2\CNako2.csproj", "{6A22E146-C2AC-473B-9F3C-0D88DE3FDF3E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CNako2Test", "CNako2Test\CNako2Test.csproj", "{4290DB51-1042-4594-950D-CFCD56F5D466}"
 EndProject

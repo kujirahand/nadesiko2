@@ -80,6 +80,12 @@ namespace Libnako.JPNCompiler.Tokenizer
                     tokens.CurrentToken.josi = "";
                     tokens.InsertAfterCurrentToken(new NakoToken(NakoTokenType.EQ));
                 }
+                // コメントならばトークンから取り除く
+                if (tokens.CurrentTokenType == NakoTokenType.COMMENT)
+                {
+                    tokens.RemoveCurrentToken();
+                    continue;
+                }
                 tokens.MoveNext();
             }
         }
@@ -356,6 +362,11 @@ namespace Libnako.JPNCompiler.Tokenizer
                     cur++;
                     return token;
                 case '/':
+                    // コメントかチェック
+                    nc = NextChar;
+                    if (nc == '*') return GetRangeComment(token);
+                    if (nc == '/') return GetLineComment(token);
+                    // 割り算かな？
                     token.type = NakoTokenType.DIV;
                     cur++;
                     return token;
@@ -398,6 +409,8 @@ namespace Libnako.JPNCompiler.Tokenizer
                     token.type = NakoTokenType.YEN;
                     cur++;
                     return token;
+                case '#':
+                    return GetLineComment(token);
                 default:
                     NakoToken tt = GetToken_NotFlag();
                     if (tt == null)
@@ -416,6 +429,58 @@ namespace Libnako.JPNCompiler.Tokenizer
                     }
                     return tt;
             }
+        }
+
+        public NakoToken GetLineComment(NakoToken tok)
+        {
+            tok.type = NakoTokenType.COMMENT;
+            
+            char first_char = CurrentChar;
+            cur++;
+
+            // 行末までスキップ
+            string comment = "";
+            while (!IsEOF())
+            {
+                char ch = CurrentCharRaw;
+                if (ch == '\r' || ch == '\n') break;
+                comment += ch;
+                cur++;
+            }
+            tok.value = comment; // コメントの文字列をセット
+            return tok;
+        }
+
+        public NakoToken GetRangeComment(NakoToken tok)
+        {
+            tok.type = NakoTokenType.COMMENT;
+
+            char ch1 = CurrentChar; // = '/'
+            char ch2 = NextChar;    // = '*'
+            cur += 2;
+            
+            // コメントの最後までを取得
+            string comment = "";
+            while (!IsEOF())
+            {
+                char ch = CurrentChar;
+                if (ch == '\n')
+                {
+                    lineno++; // 行番号がずれてしまうので重要
+                }
+                if (ch == ch2)
+                {
+                    if (NextChar == ch1)
+                    {
+                        cur += 2;
+                        break;
+                    }
+                }
+                comment += ch;
+                cur++;
+            }
+            tok.value = comment; // コメントの文字列をセット
+            return tok;
         }
 
         public NakoToken GetToken_String()

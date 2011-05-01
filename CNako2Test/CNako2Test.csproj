@@ -45,14 +45,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\cnako2\cnako2.csproj">
+    <ProjectReference Include="..\cnako2\CNako2.csproj">
       <Project>{6A22E146-C2AC-473B-9F3C-0D88DE3FDF3E}</Project>
-      <Name>cnako2</Name>
+      <Name>CNako2</Name>
     </ProjectReference>
     <ProjectReference Include="..\Libnako\Libnako.csproj">
       <Project>{F9297385-ACE0-43AD-AD66-819C5A60FE80}</Project>
       <Name>Libnako</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="CNako2Test.nunit" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
