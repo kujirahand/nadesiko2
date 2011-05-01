@@ -80,5 +80,12 @@ namespace Libnako.JPNCompiler.Function
             }
         	_runner.globalVar.SetValue(index, value);
         }
+        // --- 値を作成する
+        public INakoVarArray CreateArray()
+        {
+            INakoVarArray v = new NakoVarArray();
+            return v;
+        }
+
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using Libnako.NakoAPI.WrapLib;
+using NakoPlugin;
 
 
 namespace Libnako.JPNCompiler

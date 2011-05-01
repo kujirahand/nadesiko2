@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Xml;
-using Libnako.JPNCompiler;
 using NakoPlugin;
 using System.IO;
 
@@ -59,7 +58,7 @@ namespace NakoPluginTag
         	HtmlDocument doc = new HtmlDocument();
         	doc.LoadHtml(s);
         	HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes(String.Format(@"//{0}",a));
-        	NakoVarArray res = new NakoVarArray();
+        	INakoVarArray res = info.CreateArray();
         	if(nodes!=null){
             	for(int i=0;i<nodes.Count;i++){
             	    HtmlNode node = nodes[i];
@@ -75,7 +74,7 @@ namespace NakoPluginTag
         	HtmlDocument doc = new HtmlDocument();
         	doc.LoadHtml(s);
         	HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes(String.Format(@"//{0}",a));
-        	NakoVarArray res = new NakoVarArray();
+        	INakoVarArray res = info.CreateArray();
         	if(nodes!=null){
             	for(int i=0;i<nodes.Count;i++){
             	    HtmlNode node = nodes[i];
@@ -92,7 +91,7 @@ namespace NakoPluginTag
         	HtmlDocument doc = new HtmlDocument();
         	doc.LoadHtml(s);
         	HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes(String.Format(@"//{0}",a));
-        	NakoVarArray res = new NakoVarArray();
+        	INakoVarArray res = info.CreateArray();
         	if(nodes!=null){
             	for(int i=0;i<nodes.Count;i++){
             	    HtmlNode node = nodes[i];
@@ -108,7 +107,7 @@ namespace NakoPluginTag
         	HtmlDocument doc = new HtmlDocument();
         	doc.LoadHtml(s);
         	HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes(String.Format(@"//{0}",a));
-        	NakoVarArray res = new NakoVarArray();
+        	INakoVarArray res = info.CreateArray();
         	if(nodes!=null){
             	foreach(HtmlNode node in nodes){
         	        foreach(HtmlAttribute attr in node.Attributes){
@@ -124,7 +123,7 @@ namespace NakoPluginTag
         	HtmlDocument doc = new HtmlDocument();
         	doc.LoadHtml(s);
         	HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes(@"//a");
-        	NakoVarArray res = new NakoVarArray();
+        	INakoVarArray res = info.CreateArray();
         	if(nodes!=null){
             	for(int i=0;i<nodes.Count;i++){
             	    HtmlNode node = nodes[i];

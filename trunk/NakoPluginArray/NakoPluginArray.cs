@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading;
-using Libnako.JPNCompiler;
 using NakoPlugin;
 
 namespace NakoPluginArray
@@ -53,13 +52,13 @@ namespace NakoPluginArray
         public Object _enumKeys(INakoFuncCallInfo info)
         {
             Object ar = info.StackPop();
-            NakoVarArray arv = (NakoVarArray)ar;
+            INakoVarArray arv = (INakoVarArray)ar;
             if (arv.Type != NakoVarType.Array)
             {
                 throw new NakoPluginArgmentException("『ハッシュキー列挙』の引数が配列ではありません。");
             }
             String[] keys = arv.GetKeys();
-            NakoVarArray res = new NakoVarArray();
+            INakoVarArray res = info.CreateArray();
             int i = 0;
             foreach (String key in keys)
             {
@@ -71,14 +70,14 @@ namespace NakoPluginArray
 
             Object ar = info.StackPop();
             Object b = info.StackPop();
-            if (!(ar is NakoVariable))
+            if (!(ar is INakoVariable))
             {
                 throw new NakoPluginRuntimeException("『追加』の引数がvariableではありません");
             }
-            NakoVariable arv = (NakoVariable)ar;
-            if (arv.Body is NakoVarArray)
+            INakoVariable arv = (INakoVariable)ar;
+            if (arv.Body is INakoVarArray)
             {
-                NakoVarArray arr = (NakoVarArray)arv.Body;
+                INakoVarArray arr = (INakoVarArray)arv.Body;
                 int index = 0;
                 while(arr.GetValue(index)!=null){
                     index++;
@@ -92,11 +91,11 @@ namespace NakoPluginArray
         }
         public Object _count(INakoFuncCallInfo info){
             Object ar = info.StackPop();
-            if (!(ar is NakoVarArray))
+            if (!(ar is INakoVarArray))
             {
                 throw new NakoPluginRuntimeException("『要素数』の引数がarrayではありません");
             }
-            NakoVarArray arr = (NakoVarArray)ar;
+            INakoVarArray arr = (INakoVarArray)ar;
             int index = 0;
             while(arr.GetValue(index)!=null){
                 index++;
@@ -107,15 +106,15 @@ namespace NakoPluginArray
 
             Object ar = info.StackPop();
             long b = info.StackPopAsInt();
-            if (!(ar is NakoVariable))
+            if (!(ar is INakoVariable))
             {
                 throw new NakoPluginRuntimeException("『削除』の引数が変数ではありません");
             }
-            Object a = ((NakoVariable)ar).Body;
+            Object a = ((INakoVariable)ar).Body;
             Object c = null;
-            if (a is NakoVarArray)
+            if (a is INakoVarArray)
             {
-                NakoVarArray arr = (NakoVarArray)a;
+                INakoVarArray arr = (INakoVarArray)a;
                 int index = 0;
                 while(arr.GetValue(index)!=null){
                     if(index==b){
@@ -126,7 +125,7 @@ namespace NakoPluginArray
                     index++;
                 }
                 arr.SetValue(index-1,null);
-                ((NakoVariable)ar).Body = arr;
+                ((INakoVariable)ar).Body = arr;
             }
             // 結果をセット
             return c;
@@ -134,12 +133,12 @@ namespace NakoPluginArray
         public Object _concat(INakoFuncCallInfo info){
             Object ar = info.StackPop();
             String s = info.StackPopAsString();
-            if (!(ar is NakoVarArray))
+            if (!(ar is INakoVarArray))
             {
                 throw new NakoPluginRuntimeException("『結合』の引数が配列ではありません");
             }
             StringBuilder sb = new StringBuilder();
-            NakoVarArray arr = (NakoVarArray)ar;
+            INakoVarArray arr = (INakoVarArray)ar;
             int index = 0;
             while(arr.GetValue(index)!=null){
                 if(index > 0) sb.Append(s);
@@ -155,15 +154,15 @@ namespace NakoPluginArray
         public Object _reverse(INakoFuncCallInfo info){
 
             Object ar = info.StackPop();
-            if (!(ar is NakoVariable))
+            if (!(ar is INakoVariable))
             {
                 throw new NakoPluginRuntimeException("『逆順』の引数が変数ではありません");
             }
-            Object a = ((NakoVariable)ar).Body;
-            if (a is NakoVarArray)
+            Object a = ((INakoVariable)ar).Body;
+            if (a is INakoVarArray)
             {
-                NakoVarArray arr = (NakoVarArray)a;
-                NakoVarArray rev = new NakoVarArray();
+                INakoVarArray arr = (INakoVarArray)a;
+                INakoVarArray rev = info.CreateArray();
                 int index = 0;
                 Stack _s = new Stack();
                 while(arr.GetValue(index)!=null){
@@ -175,7 +174,7 @@ namespace NakoPluginArray
                     rev.SetValue(index,_s.Pop());
                     index++;
                 }
-                ((NakoVariable)ar).Body = rev;
+                ((INakoVariable)ar).Body = rev;
             }
             // 結果をセット
             return null;
@@ -184,11 +183,11 @@ namespace NakoPluginArray
             Object ar = info.StackPop();
             int i = (int)info.StackPopAsInt();
             Object key = info.StackPop();
-            if (!(ar is NakoVarArray))
+            if (!(ar is INakoVarArray))
             {
                 throw new NakoPluginRuntimeException("『検索』の引数が配列ではありません");
             }
-            NakoVarArray arr = (NakoVarArray)ar;
+            INakoVarArray arr = (INakoVarArray)ar;
             while(arr.GetValue(i)!=null){
                Object var = arr.GetValue(i);
                if(var.ToString()==key.ToString()){

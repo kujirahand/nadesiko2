@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
-using Libnako.JPNCompiler;
 using NakoPlugin;
 using Microsoft.VisualBasic;
 
@@ -117,16 +116,16 @@ namespace NakoPluginString
             Object sr = info.StackPop();
             String a = info.StackPopAsString();
             string[] delim = {a};
-            if(!(sr is NakoVariable)){
+            if(!(sr is INakoVariable)){
                 throw new ApplicationException("『切り取る』に変数が設定されていません");
             }
-            Object s = ((NakoVariable)sr).Body;
+            Object s = ((INakoVariable)sr).Body;
             Object ret;
             if(s is String){
                 string[] split_s = ((String)s).Split(delim,2,StringSplitOptions.None);
                 if(split_s.Length==2){
                    ret = split_s[1];
-                   ((NakoVariable)sr).Body = ret;
+                   ((INakoVariable)sr).Body = ret;
                     return split_s[0];
                 }
             }
@@ -152,14 +151,14 @@ namespace NakoPluginString
             Object sr = info.StackPop();
             int a = NadesikoPositionToCSPosition((int)info.StackPopAsInt());
             int b = (int)info.StackPopAsInt();
-            Object s = ((NakoVariable)sr).Body;
+            Object s = ((INakoVariable)sr).Body;
             Object ret;
             if(s is String){
                 ret = ((String)s).Remove(a,b);
             }else{
                 ret = null;
             }
-            ((NakoVariable)sr).Body = ret;
+            ((INakoVariable)sr).Body = ret;
             return null;
         }
         public Object _insert(INakoFuncCallInfo info){
@@ -171,7 +170,7 @@ namespace NakoPluginString
         public Object _degrade(INakoFuncCallInfo info){
             String s = info.StackPopAsString();
             char[] splitted = s.ToCharArray();
-             NakoVarArray arr = new NakoVarArray();
+             INakoVarArray arr = info.CreateArray();
             for(int i=0;i<splitted.Length;i++){
                 arr.SetValue(i,splitted[i]);
             }
@@ -181,7 +180,7 @@ namespace NakoPluginString
             String s = info.StackPopAsString();
             String a = info.StackPopAsString();
             string[] splitted = s.Split(new string[]{a},StringSplitOptions.None);
-            NakoVarArray arr = new NakoVarArray();
+            INakoVarArray arr = info.CreateArray();
             for(int i=0;i<splitted.Length;i++){
                 arr.SetValue(i,splitted[i]);
             }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading;
-using Libnako.JPNCompiler;
 using NakoPlugin;
 
 namespace NakoPluginSample
@@ -40,11 +39,11 @@ namespace NakoPluginSample
 
             Object ar = info.StackPop();
             Object b = info.StackPop();
-            if (!(ar is NakoVariable))
+            if (!(ar is INakoVariable))
             {
                 throw new ApplicationException("『接続!』の引数が変数ではありません");
             }
-            Object a = ((NakoVariable)ar).Body;
+            Object a = ((INakoVariable)ar).Body;
             Object c;
             if (a is String && b is String)
             {
@@ -55,7 +54,7 @@ namespace NakoPluginSample
                 c = null;
             }
             // 結果をセット
-            ((NakoVariable)ar).Body = c;
+            ((INakoVariable)ar).Body = c;
             return (c);
         }
         
