@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{647FD6CA-22B4-44FB-928D-6A283495C402}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NakoPluginTest</RootNamespace>
+    <AssemblyName>NakoPluginTest</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Libnako">
+      <HintPath>..\Libnako\bin\Debug\Libnako.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.5.9.10348, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestNakoPluginArray.cs" />
+    <Compile Include="TestNakoPluginCtrl.cs" />
+    <Compile Include="TestNakoPluginDateTime.cs" />
+    <Compile Include="TestNakoPluginHttp.cs" />
+    <Compile Include="TestNakoPluginRegex.cs" />
+    <Compile Include="TestNakoPluginSample.cs" />
+    <Compile Include="TestNakoPluginString.cs" />
+    <Compile Include="TestNakoPluginTag.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NakoPluginADO\NakoPluginADO.csproj">
+      <Project>{4BB5810E-D382-4DEA-BFE7-0CBEC5A34667}</Project>
+      <Name>NakoPluginADO</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NakoPluginArray\NakoPluginArray.csproj">
+      <Project>{8530AD9C-2B33-40FA-9137-3A316F7DB485}</Project>
+      <Name>NakoPluginArray</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NakoPluginCtrl\NakoPluginCtrl.csproj">
+      <Project>{B991E428-E0FE-4957-90F7-CD88C4937573}</Project>
+      <Name>NakoPluginCtrl</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NakoPluginDateTime\NakoPluginDateTime.csproj">
+      <Project>{CD0D883A-284E-4DDE-859A-A303952EC2BC}</Project>
+      <Name>NakoPluginDateTime</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NakoPluginHttp\NakoPluginHttp.csproj">
+      <Project>{E6657194-A701-4796-B8FE-8DD7FCE17FF3}</Project>
+      <Name>NakoPluginHttp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NakoPluginRegex\NakoPluginRegex.csproj">
+      <Project>{A184B322-315A-415A-81DC-6F6B8AB68356}</Project>
+      <Name>NakoPluginRegex</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NakoPluginSample\NakoPluginSample.csproj">
+      <Project>{BFB7346D-65BE-49F9-9CDB-D3ABF1989C84}</Project>
+      <Name>NakoPluginSample</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NakoPluginString\NakoPluginString.csproj">
+      <Project>{78344F49-D9C5-43F8-8E2B-1C7F9D0A4473}</Project>
+      <Name>NakoPluginString</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NakoPluginTag\NakoPluginTag.csproj">
+      <Project>{7ADCC16D-4463-4238-A947-CB5CBF04A409}</Project>
+      <Name>NakoPluginTag</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NakoPlugin\NakoPlugin.csproj">
+      <Project>{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}</Project>
+      <Name>NakoPlugin</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
