@@ -34,6 +34,7 @@ namespace NakoPluginFile
             bank.AddFunc("隠し起動待機", "CMDを", NakoVarType.Void, _execCommandHiddenWait, "コマンドCMDを隠しモード出起動して待機する", "かくしきどうたいき");
             //-存在
             bank.AddFunc("存在?", "FILEが|FILEの", NakoVarType.Int, _exists, "ファイルFILEが存在するかどうか調べて結果(1:はい,0:いいえ)を返す", "そんざい");
+            bank.AddFunc("フォルダ存在?", "DIRが|DIRの", NakoVarType.Int, _existsDir, "フォルダDIRが存在するかどうか調べて結果(1:はい,0:いいえ)を返す", "ふぉるだそんざい");
             //+特殊フォルダ
             //-なでしこパス
             bank.AddFunc("母艦パス", "", NakoVarType.String, _getBokanDir, "プログラムの起動したディレクトリを取得して返す", "ぼかんぱす");
@@ -55,6 +56,10 @@ namespace NakoPluginFile
             bank.AddFunc("ファイル移動", "F1からF2へ|F1をF2に", NakoVarType.Void, _moveFile, "", "ふぁいるいどう");
             bank.AddFunc("ファイル削除", "Fを|Fの", NakoVarType.Void, _removeFile, "", "ふぁいるさくじょ");
             bank.AddFunc("フォルダ作成", "Fへ|Fに|Fの", NakoVarType.Void, _makeDir, "", "ふぉるださくせい");
+            bank.AddFunc("フォルダ削除", "PATHの", NakoVarType.Void, _removeDir, "", "ふぉるださくじょ");
+            //-ファイル列挙
+            bank.AddFunc("ファイル列挙", "PATHの", NakoVarType.Array, _enumFiles, "PATHにあるファイルを列挙する", "ふぁいるれっきょ");
+            bank.AddFunc("フォルダ列挙", "PATHの", NakoVarType.Array, _enumDirs, "PATHにあるフォルダを列挙する", "ふぉるだれっきょ");
         }
         // プラグインの初期化処理
         public void PluginInit(INakoInterpreter runner)
@@ -75,6 +80,7 @@ namespace NakoPluginFile
                 throw new NakoPluginRuntimeException("ファイル『" + fileName + "』は存在しません。");
             }
             // Load
+            //String src = File.ReadAllText(fileName);
             String src = StrUnit.LoadFromFileAutoEnc(fileName);
             return src;
         }
@@ -83,7 +89,10 @@ namespace NakoPluginFile
         {
             String s = info.StackPopAsString();
             String fileName = info.StackPopAsString();
-            System.IO.File.WriteAllText(fileName, s, Encoding.UTF8);
+
+            System.Text.Encoding enc = new System.Text.UTF8Encoding(false);
+            System.IO.File.WriteAllText(fileName, s, enc);
+            
             return null;
         }
         
@@ -127,6 +136,13 @@ namespace NakoPluginFile
         {
             string path = info.StackPopAsString();
             bool result = System.IO.File.Exists(path);
+            return (Int64)(result ? 1 : 0);
+        }
+
+        public Object _existsDir(INakoFuncCallInfo info)
+        {
+            string path = info.StackPopAsString();
+            bool result = System.IO.Directory.Exists(path);
             return (Int64)(result ? 1 : 0);
         }
         
@@ -224,11 +240,43 @@ namespace NakoPluginFile
         	File.Delete(f);
         	return null;
         }
+        public Object _removeDir(INakoFuncCallInfo info)
+        {
+        	string f = info.StackPopAsString();
+        	Directory.Delete(f);
+        	return null;
+        }
         public Object _makeDir(INakoFuncCallInfo info)
         {
         	string f = info.StackPopAsString();
         	Directory.CreateDirectory(f);
         	return null;
         }
+
+        public Object _enumFiles(INakoFuncCallInfo info)
+        {
+            string path = info.StackPopAsString();
+            string[] files = Directory.GetFiles(path);
+            INakoVarArray res = info.CreateArray();
+            for (int i = 0; i < files.Length; i++)
+            {
+                string f = Path.GetFileName(files[i]);
+                res.SetValue(i, f);
+            }
+            return res;
+        }
+
+        public Object _enumDirs(INakoFuncCallInfo info)
+        {
+            string path = info.StackPopAsString();
+            string[] files = Directory.GetDirectories(path);
+            INakoVarArray res = info.CreateArray();
+            for (int i = 0; i < files.Length; i++)
+            {
+                res.SetValue(i, files[i]);
+            }
+            return res;
+        }
+        
     }
 }
