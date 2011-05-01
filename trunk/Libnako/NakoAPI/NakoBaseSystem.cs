@@ -45,6 +45,7 @@ namespace Libnako.NakoAPI
             
             //+コンソールデバッグ用
             bank.AddFunc("表示", "Sと|Sを", NakoVarType.Void, _show, "メッセージSを表示する", "ひょうじ");
+            bank.AddFunc("継続表示", "Sと|Sを", NakoVarType.Void, _show, "メッセージSを表示する", "けいぞくひょうじ");
             //+計算
             //-四則演算
             bank.AddFunc("足す", "AにBを|Aと", NakoVarType.Object, _add, "値Aと値Bを足して返す", "たす");
