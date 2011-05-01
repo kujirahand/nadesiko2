@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Libnako", "Libnako\Libnako.csproj", "{F9297385-ACE0-43AD-AD66-819C5A60FE80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CNako2", "cnako2\CNako2.csproj", "{6A22E146-C2AC-473B-9F3C-0D88DE3FDF3E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cnako2", "cnako2\cnako2.csproj", "{6A22E146-C2AC-473B-9F3C-0D88DE3FDF3E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CNako2Test", "CNako2Test\CNako2Test.csproj", "{4290DB51-1042-4594-950D-CFCD56F5D466}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakoPlugin", "NakoPlugin\NakoPlugin.csproj", "{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -38,6 +40,12 @@ Global
 		{4290DB51-1042-4594-950D-CFCD56F5D466}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4290DB51-1042-4594-950D-CFCD56F5D466}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4290DB51-1042-4594-950D-CFCD56F5D466}.Release|x86.ActiveCfg = Release|Any CPU
+		{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
