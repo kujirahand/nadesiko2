@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using System.Text;
 
 using Libnako.JPNCompiler.Function;
 using Libnako.JPNCompiler;
 using Libnako.Interpreter;
-using Libnako.NakoAPI.WrapLib;
+
 using NakoPlugin;
 
 namespace Libnako.NakoAPI

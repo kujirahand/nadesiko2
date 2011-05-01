@@ -1,6 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
+# SharpDevelop 4.0.0.7070
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakoPluginADO", "NakoPluginADO\NakoPluginADO.csproj", "{4BB5810E-D382-4DEA-BFE7-0CBEC5A34667}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakoPluginArray", "NakoPluginArray\NakoPluginArray.csproj", "{8530AD9C-2B33-40FA-9137-3A316F7DB485}"
@@ -22,8 +23,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakoPluginString", "NakoPluginString\NakoPluginString.csproj", "{78344F49-D9C5-43F8-8E2B-1C7F9D0A4473}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakoPluginTag", "NakoPluginTag\NakoPluginTag.csproj", "{7ADCC16D-4463-4238-A947-CB5CBF04A409}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakoPluginTest", "NakoPluginTest\NakoPluginTest.csproj", "{6A26AF1C-6734-4B03-BD92-F5D0FB0F9C0F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakoPlugin", "NakoPlugin\NakoPlugin.csproj", "{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}"
 EndProject
@@ -155,16 +154,6 @@ Global
 		{7ADCC16D-4463-4238-A947-CB5CBF04A409}.Release|Mixed Platforms.Build.0 = Release|x86
 		{7ADCC16D-4463-4238-A947-CB5CBF04A409}.Release|x86.ActiveCfg = Release|x86
 		{7ADCC16D-4463-4238-A947-CB5CBF04A409}.Release|x86.Build.0 = Release|x86
-		{6A26AF1C-6734-4B03-BD92-F5D0FB0F9C0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6A26AF1C-6734-4B03-BD92-F5D0FB0F9C0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6A26AF1C-6734-4B03-BD92-F5D0FB0F9C0F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{6A26AF1C-6734-4B03-BD92-F5D0FB0F9C0F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{6A26AF1C-6734-4B03-BD92-F5D0FB0F9C0F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{6A26AF1C-6734-4B03-BD92-F5D0FB0F9C0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6A26AF1C-6734-4B03-BD92-F5D0FB0F9C0F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6A26AF1C-6734-4B03-BD92-F5D0FB0F9C0F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{6A26AF1C-6734-4B03-BD92-F5D0FB0F9C0F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{6A26AF1C-6734-4B03-BD92-F5D0FB0F9C0F}.Release|x86.ActiveCfg = Release|Any CPU
 		{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU

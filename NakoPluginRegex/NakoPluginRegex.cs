@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
-using Libnako.JPNCompiler;
 using NakoPlugin;
 
 namespace NakoPluginRegex
@@ -51,14 +50,12 @@ namespace NakoPluginRegex
         	String s = info.StackPopAsString();
         	String pattern = info.StackPopAsString();
         	m = Regex.Match(s,pattern);
-        	NakoVarArray groups = new NakoVarArray();
-        	NakoVariable ret = new NakoVariable();
+        	INakoVarArray groups = info.CreateArray();
         	if(m.Success){
         	    for(int i = 0;i < m.Groups.Count;i++){
         	        groups.SetValue(i,m.Groups[i].Value);
         	    }
-        	    ret.SetBodyAutoType(groups);
-        	    info.SetVariable("抽出文字列",ret);
+                info.SetVariableValue("抽出文字列", groups);
         	    return m.Value;
         	}
             return null;
@@ -68,7 +65,7 @@ namespace NakoPluginRegex
         	String s = info.StackPopAsString();
         	String pattern = info.StackPopAsString();
         	m = Regex.Match(s,pattern);
-        	NakoVarArray res = new NakoVarArray();
+        	INakoVarArray res = info.CreateArray();
         	int index = 0;
 //        	NakoVarArray groups = new NakoVarArray();
 //        	NakoVariable ret = new NakoVariable();

@@ -73,6 +73,7 @@ namespace NakoPlugin
 
     public interface INakoVarArray
     {
+        NakoVarType Type { get; set; }
         int Count { get; }
         INakoVariable GetVar(int index);
         Object GetValue(int index);
@@ -94,15 +95,21 @@ namespace NakoPlugin
     /// </summary>
     public interface INakoFuncCallInfo
     {
+        // --- 関数の引数を取得するメソッド
         Object StackPop();
         string StackPopAsString();
         Int64 StackPopAsInt();
         double StackPopAsDouble();
-        void WriteLog(string s);
+        // --- システム変数へのアクセス
         INakoVariable GetVariable(string varname);
         void SetVariable(string varname, INakoVariable value);
         Object GetVariableValue(string varname);
         void SetVariableValue(string varname, Object value);
+        // --- ユーティリティ
+        // ログに値を書き込む
+        void WriteLog(string s);
+        // --- 値を作成する
+        INakoVarArray CreateArray();
     }
 
     /// <summary>

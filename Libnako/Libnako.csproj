@@ -107,8 +107,6 @@
     <Compile Include="NakoAPI\NakoAPIFuncBank.cs" />
     <Compile Include="NakoAPI\NakoBaseSystem.cs" />
     <Compile Include="NakoAPI\NakoPluginLoader.cs" />
-    <Compile Include="NakoAPI\WrapLib\NWEnviroment.cs" />
-    <Compile Include="NakoAPI\WrapLib\StrUnit.cs" />
     <Compile Include="NakoInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
