@@ -1,51 +1,53 @@
-������������������������������������������������������������������������������
-��               �Ȃł����Q�̊J�����̍\�z���@�ɂ���
-������������������������������������������������������������������������������
+■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+■               なでしこ２の開発環境の構築方法について
+■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
 
-�Ȃł����Q�̊J�����A�I�[�v���\�[�X��SharpDevelop�ɂ��邱�Ƃɂ��܂����B
-�I�[�v���\�[�X�̊J��������̂łł��邾���I�[�v���ȕ����ǂ����낤�Ƃ������f�ł��B
+なでしこ２の開発を、オープンソースのSharpDevelop(以下SD)にすることにしました。
+オープンソースの開発をするのでできるだけオープンな方が良いだろうという判断です。
 
-�J�����̃_�E�����[�h�͈ȉ��F
+※ただし、SDでは、Visual Studio(VS)のプロジェクトも読み込めるため、
+開発自体は何で行っても大した差は出ないと思います。
+
+SD(開発環境)のダウンロードは以下：
 
 - SharpDevelop
 - http://sharpdevelop.codeplex.com/releases
 
-���|�W�g���͈ȉ��F
+リポジトリは以下：
 
-- �Ȃł���2 (GoogleCode)
+- なでしこ2 (GoogleCode)
 -- http://code.google.com/p/nadesiko2/
 
-- �\�[�X��������Ȃ�A�ȉ��̂t�q�k�Ō����܂��I
+- ソースだけ見るなら、以下のURLで見られます！
 - http://code.google.com/p/nadesiko2/source/browse/
 
-�ȉ��̎菇�ɉ����č�Ƃ���ƁA
-�o�[�W�����Ǘ��c�[���ŁA�Ȃł����̃\�[�X��ҏW�ł��܂��B
+以下の手順に沿って作業すると、
+バージョン管理ツールで、なでしこのソースを編集できます。
 
-�Ȃł����Q�J�����̃Z�b�g�A�b�v���@�́A���̒ʂ�B
+なでしこ２開発環境のセットアップ方法は、次の通り。
 
-- (1) SharpDevelop���C���X�g�[��
+- (1) SharpDevelopをインストール
 -- http://sharpdevelop.codeplex.com/releases
-- (2) NUnit 2.5.7�ȍ~���C���X�g�[�� (SharpDevelop�Ɋ܂܂�Ă邩��?!�v�m�F)
+- (2) NUnit 2.5.9をインストール
 -- http://www.nunit.org/index.php?p=download
-- (3) TortoiseSVN ���C���X�g�[�� (SharpDevelop�Ɋ܂܂�Ă邩��?!�v�m�F)
+- (3) TortoiseSVN をインストール
 -- http://sourceforge.jp/projects/tortoisesvn/
-- (4) SVN�ŁA�ȉ��̃��|�W�g�����`�F�b�N�A�E�g����
+- (4) SVNで、以下のリポジトリをチェックアウトする
 -- https://nadesiko2.googlecode.com/svn/trunk/
 
-�v���W�F�N�g�̃Z�b�g�A�b�v���@
+プロジェクトのセットアップ方法
 
-- (5) SharpDevelop �Ŏ擾�����A�[�J�C�u�� Nako2ForSharpDevelop.sln ���J��
-- (6) ���s�{�^�����N���b�N
+- (5) SharpDevelop でソリューション *.sln を開く
+- (6) 実行ボタンをクリック
 
+～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
+あるいは・・・
 
-
-�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`
-���邢�́E�E�E
-
-��Visual Studio 2010 Express ���{���
+●Visual Studio 2010 Express 日本語版
 http://www.microsoft.com/japan/msdn/vstudio/express/
 
-TestNako �v���W�F�N�g�̎Q�Ɛݒ�� nunit.framework �Ɂ��Ōx���}�[�N�����Ă���Ȃ�A��x�A������폜���āA���߂� NUnit ��ǉ��������܂��B
-�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`�`
+TestNako プロジェクトの参照設定で nunit.framework に▲で警告マークがついているなら、
+一度、これを削除して、改めて NUnit を追加し直します。
+～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
 
 
