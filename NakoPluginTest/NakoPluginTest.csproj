@@ -53,6 +53,7 @@
     <Compile Include="TestNakoPluginSample.cs" />
     <Compile Include="TestNakoPluginString.cs" />
     <Compile Include="TestNakoPluginTag.cs" />
+    <Compile Include="TestNakoPluginFile.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NakoPluginADO\NakoPluginADO.csproj">
@@ -70,6 +71,10 @@
     <ProjectReference Include="..\NakoPluginDateTime\NakoPluginDateTime.csproj">
       <Project>{CD0D883A-284E-4DDE-859A-A303952EC2BC}</Project>
       <Name>NakoPluginDateTime</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NakoPluginFile\NakoPluginFile.csproj">
+      <Project>{29BCC59A-E35E-4096-B417-16335E41CF93}</Project>
+      <Name>NakoPluginFile</Name>
     </ProjectReference>
     <ProjectReference Include="..\NakoPluginHttp\NakoPluginHttp.csproj">
       <Project>{E6657194-A701-4796-B8FE-8DD7FCE17FF3}</Project>
