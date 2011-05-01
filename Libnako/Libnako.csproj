@@ -110,13 +110,17 @@
     <Compile Include="NakoAPI\WrapLib\NWEnviroment.cs" />
     <Compile Include="NakoAPI\WrapLib\StrUnit.cs" />
     <Compile Include="NakoInfo.cs" />
-    <Compile Include="NakoPlugin\INakoPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="JPNCompiler\Parser\ParserSyntaxMemo_Creator.nako" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\NakoPlugin\NakoPlugin.csproj">
+      <Project>{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}</Project>
+      <Name>NakoPlugin</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
