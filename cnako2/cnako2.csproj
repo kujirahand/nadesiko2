@@ -78,6 +78,10 @@
       <Project>{F9297385-ACE0-43AD-AD66-819C5A60FE80}</Project>
       <Name>Libnako</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NakoPlugin\NakoPlugin.csproj">
+      <Project>{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}</Project>
+      <Name>NakoPlugin</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
