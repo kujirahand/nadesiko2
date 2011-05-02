@@ -61,36 +61,6 @@ namespace NakoPlugin
         UserFunc,
         SystemFunc
     }
-    /// <summary>
-    /// なでしこの変数を表わすインターフェイス
-    /// </summary>
-    public interface INakoVariable
-    {
-        NakoVarType Type { get; }
-        Object Body { get; }
-        int varNo { get; set; }
-        string key { get; set; }
-        void SetBody(Object value, NakoVarType type);
-        void SetBodyAutoType(Object value);
-    }
-
-    public interface INakoVarArray : INakoVariable
-    {
-        int Count { get; }
-        INakoVariable GetVar(int index);
-        Object GetValue(int index);
-        INakoVariable GetVarFromObj(Object key);
-        Object GetValueFromObj(Object key);
-        Object GetValueFromKey(string key);
-        void Clear();
-        String[] GetKeys();
-        void SetVar(int index, INakoVariable value);
-        void SetVarFromObj(Object key, INakoVariable value);
-        void SetVarFromKey(string key, INakoVariable value);
-        void SetValue(int index, Object value);
-        void SetValueFromKey(String key, Object value);
-        void SetValuesFromString(String str);
-    }
 
     /// <summary>
     /// プラグイン関数呼び出しに使うインターフェイス
@@ -104,15 +74,15 @@ namespace NakoPlugin
         Int64 StackPopAsInt();
         double StackPopAsDouble();
         // --- システム変数へのアクセス
-        INakoVariable GetVariable(string varname);
-        void SetVariable(string varname, INakoVariable value);
+        NakoVariable GetVariable(string varname);
+        void SetVariable(string varname, NakoVariable value);
         Object GetVariableValue(string varname);
         void SetVariableValue(string varname, Object value);
         // --- ユーティリティ
         // ログに値を書き込む
         void WriteLog(string s);
         // --- 値を作成する
-        INakoVarArray CreateArray();
+        NakoVarArray CreateArray();
     }
 
     /// <summary>

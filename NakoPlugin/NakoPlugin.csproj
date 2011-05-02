@@ -40,6 +40,8 @@
   <ItemGroup>
     <Compile Include="INakoPlugin.cs" />
     <Compile Include="NakoValueConveter.cs" />
+    <Compile Include="NakoVarArray.cs" />
+    <Compile Include="NakoVariable.cs" />
     <Compile Include="NWEnviroment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StrUnit.cs" />

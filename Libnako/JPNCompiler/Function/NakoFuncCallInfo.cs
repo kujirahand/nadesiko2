@@ -37,7 +37,7 @@ namespace Libnako.JPNCompiler.Function
         public string StackPopAsString()
         {
             Object s = _runner.StackPop();
-            if (s is INakoVariable)
+            if (s is NakoVariable)
             {
                 return s.ToString();
             }
@@ -65,11 +65,11 @@ namespace Libnako.JPNCompiler.Function
             _runner.StackPush(v);
         }
         */
-       public INakoVariable GetVariable(string varname)
+       public NakoVariable GetVariable(string varname)
        {
        		return _runner.globalVar.GetVar(varname);
        }
-       public void SetVariable(string varname, INakoVariable value)
+       public void SetVariable(string varname, NakoVariable value)
        {
        		_runner.globalVar.SetVar(varname, (NakoVariable)value);
        }
@@ -88,9 +88,9 @@ namespace Libnako.JPNCompiler.Function
         	_runner.globalVar.SetValue(index, value);
         }
         // --- 値を作成する
-        public INakoVarArray CreateArray()
+        public NakoVarArray CreateArray()
         {
-            INakoVarArray v = new NakoVarArray();
+            NakoVarArray v = new NakoVarArray();
             return v;
         }
 
