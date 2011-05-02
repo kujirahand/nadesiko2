@@ -42,8 +42,7 @@ namespace Libnako.JPNCompiler
             {
                 // 変数「それ」を登録
                 NakoVariable sore = new NakoVariable();
-                sore.Type = NakoVarType.Int;
-                sore.Body = 0;
+                sore.SetBody(0, NakoVarType.Int);
                 list.Add(sore);
                 names["それ"] = 0;
             }
@@ -129,7 +128,7 @@ namespace Libnako.JPNCompiler
                 v = new NakoVariable();
                 SetVar(index, v);
             }
-            v.Body = value;
+            v.SetBodyAutoType(value);
         }
 
         public Object GetValue(int index)

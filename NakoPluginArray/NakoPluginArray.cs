@@ -83,7 +83,7 @@ namespace NakoPluginArray
                     index++;
                 }
                 arr.SetValue(index,b);
-                arv.Body = arr;
+                arv.SetBodyAutoType(arr);
                 ar = arv;
             }
             // 結果をセット
@@ -125,7 +125,7 @@ namespace NakoPluginArray
                     index++;
                 }
                 arr.SetValue(index-1,null);
-                ((INakoVariable)ar).Body = arr;
+                ((INakoVariable)ar).SetBodyAutoType(arr);
             }
             // 結果をセット
             return c;
@@ -174,7 +174,7 @@ namespace NakoPluginArray
                     rev.SetValue(index,_s.Pop());
                     index++;
                 }
-                ((INakoVariable)ar).Body = rev;
+                ((INakoVariable)ar).SetBodyAutoType(rev);
             }
             // 結果をセット
             return null;

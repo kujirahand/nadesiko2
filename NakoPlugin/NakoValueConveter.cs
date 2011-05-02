@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using System.Text;
 
-namespace Libnako.Interpreter
+namespace NakoPlugin
 {
     /// <summary>
     /// Objectの値を変換するコンバーター

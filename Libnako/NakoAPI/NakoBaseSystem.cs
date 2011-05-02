@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 
-using Libnako.JPNCompiler.Function;
-using Libnako.JPNCompiler;
-using Libnako.Interpreter;
-
 using NakoPlugin;
 
 namespace Libnako.NakoAPI
@@ -38,6 +34,8 @@ namespace Libnako.NakoAPI
             bank.AddVar("いいえ", 0, "0", "いいえ");
             bank.AddVar("OK", 1, "1", "OK");
             bank.AddVar("NG", 0, "0", "NG");
+            bank.AddVar("オン", 1, "1", "おん");
+            bank.AddVar("オフ", 0, "0", "おふ");
             bank.AddVar("真", 1, "1", "しん");
             bank.AddVar("偽", 0, "0", "ぎ");
             bank.AddVar("改行", "\r\n", "改行", "かいぎょう");
@@ -54,12 +52,12 @@ namespace Libnako.NakoAPI
             bank.AddFunc("引く!", "{参照渡し}AからBを", NakoVarType.Object, _subEx, "変数Aから値Bを引いて返す(変数A自身を書き換える)", "ひく!");
             bank.AddFunc("掛ける", "AにBを", NakoVarType.Object, _mul, "値Aと値Bを掛けて返す", "かける");
             bank.AddFunc("掛ける!", "{参照渡し}AにBを", NakoVarType.Object, _mulEx, "変数Aと値Bを掛けて返す(変数A自身を書き換える)", "かける!");
+            bank.AddFunc("割る", "AをBで", NakoVarType.Object, _div, "値Aを値Bで割って返す", "わる");
+            bank.AddFunc("割る!", "{参照渡し}AをBで", NakoVarType.Object, _divEx, "変数Aを値Bで割って返す(変数A自身を書き換える)", "わる");
             //-計算関数
             bank.AddFunc("乱数", "Nの", NakoVarType.Int, _random, "0から(N-1)までの範囲の乱数を返す", "らんすう");
             bank.AddFunc("絶対値", "Vの", NakoVarType.Int, _abs, "値Vの絶対値を返す", "ぜったいち");
             bank.AddFunc("ABS", "V", NakoVarType.Int, _abs, "値Vの絶対値を返す", "ABS");
-            //+文字列操作
-            bank.AddFunc("何文字目", "SでSSが|Sの", NakoVarType.String, _strpos, "文字列Sで文字列SSが何文字目にあるか調べて返す", "なんもじめ");
             //+サウンド
             bank.AddFunc("BEEP", "", NakoVarType.Void, _beep, "BEEP音を鳴らす", "BEEP");
         }
@@ -108,9 +106,7 @@ namespace Libnako.NakoAPI
 
         public Object _show(INakoFuncCallInfo info)
         {
-            Object s = info.StackPop();
-            String msg = "";
-            if (s != null) { msg = s.ToString(); }
+            String msg = info.StackPopAsString();
             info.WriteLog(msg);
             return null;
         }
@@ -135,11 +131,11 @@ namespace Libnako.NakoAPI
         {
             Object ar = info.StackPop();
             Object b = info.StackPop();
-            if (!(ar is NakoVariable))
+            if (!(ar is INakoVariable))
             {
                 throw new ApplicationException("『足す!』の引数が変数ではありません");
             }
-            Object a = ((NakoVariable)ar).Body;
+            Object a = ((INakoVariable)ar).Body;
             Object c;
             if (a is Int64 && b is Int64)
             {
@@ -152,7 +148,7 @@ namespace Libnako.NakoAPI
                 c = da + db;
             }
             // 結果をセット
-            ((NakoVariable)ar).Body = c;
+            ((INakoVariable)ar).SetBodyAutoType(c);
             return (c);
         }
 
@@ -176,11 +172,11 @@ namespace Libnako.NakoAPI
         {
             Object ar = info.StackPop();
             Object b = info.StackPop();
-            if (!(ar is NakoVariable))
+            if (!(ar is INakoVariable))
             {
                 throw new ApplicationException("『引く!』の引数が変数ではありません");
             }
-            Object a = ((NakoVariable)ar).Body;
+            Object a = ((INakoVariable)ar).Body;
             Object c;
             if (a is Int64 && b is Int64)
             {
@@ -193,7 +189,7 @@ namespace Libnako.NakoAPI
                 c = da - db;
             }
             // 結果をセット
-            ((NakoVariable)ar).Body = c;
+            ((INakoVariable)ar).SetBodyAutoType(c);
             return (c);
         }
 
@@ -217,11 +213,11 @@ namespace Libnako.NakoAPI
         {
             Object ar = info.StackPop();
             Object b = info.StackPop();
-            if (!(ar is NakoVariable))
+            if (!(ar is INakoVariable))
             {
                 throw new ApplicationException("『掛ける!』の引数が変数ではありません");
             }
-            Object a = ((NakoVariable)ar).Body;
+            Object a = ((INakoVariable)ar).Body;
             Object c;
             if (a is Int64 && b is Int64)
             {
@@ -234,18 +230,51 @@ namespace Libnako.NakoAPI
                 c = da * db;
             }
             // 結果をセット
-            ((NakoVariable)ar).Body = c;
+            ((INakoVariable)ar).SetBodyAutoType(c);
             return (c);
         }
-        
-        public Object _strpos(INakoFuncCallInfo info)
+
+        public Object _div(INakoFuncCallInfo info)
         {
-            String s = info.StackPopAsString();
-            String ss = info.StackPopAsString();
-            int i = s.IndexOf(ss);
-            return (i + 1); // 1からはじまるので
+            Object a = info.StackPop();
+            Object b = info.StackPop();
+            if (a is Int64 && b is Int64)
+            {
+                return ((Int64)a / (Int64)b);
+            }
+            else
+            {
+                Double da = NakoValueConveter.ToDouble(a);
+                Double db = NakoValueConveter.ToDouble(b);
+                return (da / db);
+            }
         }
-        
+
+        public Object _divEx(INakoFuncCallInfo info)
+        {
+            Object ar = info.StackPop();
+            Object b = info.StackPop();
+            if (!(ar is INakoVariable))
+            {
+                throw new ApplicationException("『掛ける!』の引数が変数ではありません");
+            }
+            Object a = ((INakoVariable)ar).Body;
+            Object c;
+            if (a is Int64 && b is Int64)
+            {
+                c = (Int64)a / (Int64)b;
+            }
+            else
+            {
+                Double da = NakoValueConveter.ToDouble(a);
+                Double db = NakoValueConveter.ToDouble(b);
+                c = da / db;
+            }
+            // 結果をセット
+            ((INakoVariable)ar).SetBodyAutoType(c);
+            return (c);
+        }
+
         private Random _randObj = null;
         public Object _random(INakoFuncCallInfo info)
         {

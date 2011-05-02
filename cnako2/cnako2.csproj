@@ -78,6 +78,14 @@
       <Project>{F9297385-ACE0-43AD-AD66-819C5A60FE80}</Project>
       <Name>Libnako</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NakoPluginArray\NakoPluginArray.csproj">
+      <Project>{8530AD9C-2B33-40FA-9137-3A316F7DB485}</Project>
+      <Name>NakoPluginArray</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NakoPluginString\NakoPluginString.csproj">
+      <Project>{78344F49-D9C5-43F8-8E2B-1C7F9D0A4473}</Project>
+      <Name>NakoPluginString</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NakoPlugin\NakoPlugin.csproj">
       <Project>{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}</Project>
       <Name>NakoPlugin</Name>

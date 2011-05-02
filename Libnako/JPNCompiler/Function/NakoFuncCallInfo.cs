@@ -37,7 +37,14 @@ namespace Libnako.JPNCompiler.Function
         public string StackPopAsString()
         {
             Object s = _runner.StackPop();
-            return Convert.ToString(s);
+            if (s is INakoVariable)
+            {
+                return s.ToString();
+            }
+            else
+            {
+                return Convert.ToString(s);
+            }
         }
         
         public Int64 StackPopAsInt()

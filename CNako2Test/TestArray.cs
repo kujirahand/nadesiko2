@@ -11,6 +11,16 @@ namespace NakoPluginTest
     [TestFixture]
     public class TestArray
     {
+        NakoCompiler com;
+        NakoInterpreter runner;
+
+        public TestArray()
+        {
+            com = new NakoCompiler();
+            runner = new NakoInterpreter();
+        }
+
+
         [Test]
         public void Test_array1()
         {
@@ -101,6 +111,16 @@ namespace NakoPluginTest
                 "";
             ni.Run(nc.Codes);
             Assert.AreEqual("2222", ni.PrintLog);
+        }
+
+        [Test]
+        public void Test_toString()
+        {
+            com.DirectSource = "Cとは変数。\n" +
+                "C￥0=`a`;C￥1=`b`;C￥2=`c`;\n" +
+                "Cを継続表示";
+            runner.Run(com.Codes);
+            Assert.AreEqual("a\r\nb\r\nc", runner.PrintLog);
         }
 
 //        [Test]

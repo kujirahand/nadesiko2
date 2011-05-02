@@ -54,7 +54,7 @@ namespace NakoPluginSample
                 c = null;
             }
             // 結果をセット
-            ((INakoVariable)ar).Body = c;
+            ((INakoVariable)ar).SetBodyAutoType(c);
             return (c);
         }
         

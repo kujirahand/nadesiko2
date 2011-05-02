@@ -83,8 +83,7 @@ namespace Libnako.NakoAPI
             for (int i = 0; i < FuncList.Count; i++)
             {
                 NakoVariable var = new NakoVariable();
-                var.Type = NakoVarType.SystemFunc;
-                var.Body = i;
+                var.SetBody(i, NakoVarType.SystemFunc);
                 NakoAPIFunc call = FuncList[i];
                 globalVar.SetVar(call.name, var);
             }
