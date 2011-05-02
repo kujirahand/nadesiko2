@@ -492,19 +492,16 @@ namespace Libnako.JPNCompiler.Tokenizer
             String eos = "」";
             Boolean is_extract = true;
 
-            // 文字列
+            // 終端文字列の判別
             // S = 「...」
-            if (c != nc)
+            switch (c)
             {
-                switch (c)
-                {
-                    case '「': eos = "」"; is_extract = true; break;
-                    case '『': eos = "』"; is_extract = false; break;
-                    case '"': eos = "\""; is_extract = true; break;
-                    case '`': eos = "`"; is_extract = false; break;
-                }
-                cur++;
+                case '「': eos = "」"; is_extract = true; break;
+                case '『': eos = "』"; is_extract = false; break;
+                case '"': eos = "\""; is_extract = true; break;
+                case '`': eos = "`"; is_extract = false; break;
             }
+            cur++;
             // ヒアドキュメント文字列
             // S = 「「 ... 」」
             // S = 「「「 ... 」」」

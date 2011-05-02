@@ -123,21 +123,48 @@ namespace NakoPluginTest
             Assert.AreEqual("a\r\nb\r\nc", runner.PrintLog);
         }
 
-//        [Test]
-//        public void Test_array4()
-//        {
-//            NakoCompiler nc = new NakoCompiler();
-//            NakoInterpreter ni = new NakoInterpreter();
-//            nc.DirectSource =
-//                "A=「1\n" +
-//                "10\n" +
-//                "100\n" +
-//                "566」\n" +
-//                "PRINT A[3]\n" +
-//                "";
-//            ni.Run(nc.Codes);
-//            Assert.AreEqual("566", ni.PrintLog);
-//        }
+        [Test]
+        public void Test_convArray()
+        {
+            com.DirectSource =
+                "A=`abc`;" +
+                "A[1]=`def`;" +
+                "Aを継続表示;" +
+                "" +
+                "";
+            runner.Run(com.Codes);
+            Assert.AreEqual("abc\r\ndef", runner.PrintLog);
+        }
+
+        [Test]
+        public void Test_convArray2()
+        {
+            com.DirectSource =
+                "A=「」;" +
+                "A[0]=`abc`;"+
+                "A[1]=`def`;" +
+                "Aを継続表示;" +
+                "" +
+                "";
+            runner.Run(com.Codes);
+            Assert.AreEqual("abc\r\ndef", runner.PrintLog);
+        }
+
+        [Test]
+        public void Test_array4()
+        {
+            NakoCompiler nc = new NakoCompiler();
+            NakoInterpreter ni = new NakoInterpreter();
+            nc.DirectSource =
+                "A=「1\r\n" +
+                "10\r\n" +
+                "100\r\n" +
+                "566」\n" +
+                "PRINT A[3]\n" +
+                "";
+            ni.Run(nc.Codes);
+            Assert.AreEqual("566", ni.PrintLog);
+        }
 
     }
 }

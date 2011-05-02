@@ -204,17 +204,7 @@ namespace Libnako.Interpreter
                 string s = "";
                 s += String.Format("{0,4:X4}:", i);
                 s += String.Format("{0,-14}", code.type.ToString());
-                if (code.value != null)
-                {
-                    if (code.value is Int64)
-                    {
-                        s += String.Format("({0,4:X4})", (Int64)code.value);
-                    }
-                    else
-                    {
-                        s += "(" + code.value.ToString() + ")";
-                    }
-                }
+                s += code.GetDescription();
                 Console.WriteLine(s);
             }
 
@@ -412,6 +402,21 @@ namespace Libnako.Interpreter
             StackPush(v);
         }
 
+        private string ld_elem_slice(string s, Object index)
+        {
+            if (!(index is Int64))
+            {
+                return null;
+            }
+            Int64 idx = (Int64)index;
+            string[] a = s.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+            if (a.Length > idx)
+            {
+                return a[(Int64)idx];
+            }
+            return null;
+        }
+
         private void ld_elem()
         {
             Object idx = StackPop();
@@ -423,11 +428,21 @@ namespace Libnako.Interpreter
             }
             else if (var is NakoVariable)
             {
+                // 変数は配列か?
                 if (((NakoVariable)var).Body is NakoVarArray)
                 {
                     NakoVarArray ary = (NakoVarArray)((NakoVariable)var).Body;
                     r = ary.GetValueFromObj(idx);
                 }
+                else
+                {
+                    r = ld_elem_slice(var.ToString(), idx);
+                }
+            }
+            else
+            {
+                string vs = var.ToString();
+                r = ld_elem_slice(vs, idx);
             }
             StackPush(r);
         }
