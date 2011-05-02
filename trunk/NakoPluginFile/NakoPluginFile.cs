@@ -257,7 +257,7 @@ namespace NakoPluginFile
         {
             string path = info.StackPopAsString();
             string[] files = Directory.GetFiles(path);
-            INakoVarArray res = info.CreateArray();
+            NakoVarArray res = info.CreateArray();
             for (int i = 0; i < files.Length; i++)
             {
                 string f = Path.GetFileName(files[i]);
@@ -270,7 +270,7 @@ namespace NakoPluginFile
         {
             string path = info.StackPopAsString();
             string[] files = Directory.GetDirectories(path);
-            INakoVarArray res = info.CreateArray();
+            NakoVarArray res = info.CreateArray();
             for (int i = 0; i < files.Length; i++)
             {
                 res.SetValue(i, files[i]);

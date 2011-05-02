@@ -50,7 +50,7 @@ namespace NakoPluginRegex
         	String s = info.StackPopAsString();
         	String pattern = info.StackPopAsString();
         	m = Regex.Match(s,pattern);
-        	INakoVarArray groups = info.CreateArray();
+        	NakoVarArray groups = info.CreateArray();
         	if(m.Success){
         	    for(int i = 0;i < m.Groups.Count;i++){
         	        groups.SetValue(i,m.Groups[i].Value);
@@ -65,7 +65,7 @@ namespace NakoPluginRegex
         	String s = info.StackPopAsString();
         	String pattern = info.StackPopAsString();
         	m = Regex.Match(s,pattern);
-        	INakoVarArray res = info.CreateArray();
+        	NakoVarArray res = info.CreateArray();
         	int index = 0;
 //        	NakoVarArray groups = new NakoVarArray();
 //        	NakoVariable ret = new NakoVariable();
