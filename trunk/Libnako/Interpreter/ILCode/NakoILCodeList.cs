@@ -41,6 +41,7 @@ namespace Libnako.JPNCompiler.ILWriter
             }
             return r;
         }
+
         public String ToAddressString()
         {
             String r = "";
@@ -52,31 +53,7 @@ namespace Libnako.JPNCompiler.ILWriter
                 r += String.Format("{0,0:X4}:", i);
                 // type
                 r += c.type.ToString();
-                //TODO
-                switch (c.type)
-                {
-                    case NakoILType.NOP:
-                        if (c.value is string) { r += ":" + c.value; }
-                        break;
-                    case NakoILType.LD_CONST_INT:
-                    case NakoILType.LD_CONST_REAL:
-                    case NakoILType.LD_CONST_STR:
-                    case NakoILType.LD_GLOBAL:
-                    case NakoILType.ST_GLOBAL:
-                    case NakoILType.LD_LOCAL:
-                    case NakoILType.ST_LOCAL:
-                    case NakoILType.LD_GLOBAL_REF:
-                    case NakoILType.LD_LOCAL_REF:
-                    case NakoILType.USRCALL:
-                    case NakoILType.SYSCALL:
-                        r += ":" + c.value;
-                        break;
-                    case NakoILType.JUMP:
-                    case NakoILType.BRANCH_FALSE:
-                    case NakoILType.BRANCH_TRUE:
-                        r += "->" + String.Format("{0,0:X4}", (Int64)c.value);
-                        break;
-                }
+                r += c.GetDescription();
                 r += "\n";
             }
             return r;
