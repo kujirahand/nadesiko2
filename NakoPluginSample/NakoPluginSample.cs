@@ -39,11 +39,11 @@ namespace NakoPluginSample
 
             Object ar = info.StackPop();
             Object b = info.StackPop();
-            if (!(ar is INakoVariable))
+            if (!(ar is NakoVariable))
             {
                 throw new ApplicationException("『接続!』の引数が変数ではありません");
             }
-            Object a = ((INakoVariable)ar).Body;
+            Object a = ((NakoVariable)ar).Body;
             Object c;
             if (a is String && b is String)
             {
@@ -54,7 +54,7 @@ namespace NakoPluginSample
                 c = null;
             }
             // 結果をセット
-            ((INakoVariable)ar).SetBodyAutoType(c);
+            ((NakoVariable)ar).SetBodyAutoType(c);
             return (c);
         }
         

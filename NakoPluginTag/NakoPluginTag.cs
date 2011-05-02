@@ -58,7 +58,7 @@ namespace NakoPluginTag
         	HtmlDocument doc = new HtmlDocument();
         	doc.LoadHtml(s);
         	HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes(String.Format(@"//{0}",a));
-        	INakoVarArray res = info.CreateArray();
+        	NakoVarArray res = info.CreateArray();
         	if(nodes!=null){
             	for(int i=0;i<nodes.Count;i++){
             	    HtmlNode node = nodes[i];
@@ -74,7 +74,7 @@ namespace NakoPluginTag
         	HtmlDocument doc = new HtmlDocument();
         	doc.LoadHtml(s);
         	HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes(String.Format(@"//{0}",a));
-        	INakoVarArray res = info.CreateArray();
+        	NakoVarArray res = info.CreateArray();
         	if(nodes!=null){
             	for(int i=0;i<nodes.Count;i++){
             	    HtmlNode node = nodes[i];
@@ -91,7 +91,7 @@ namespace NakoPluginTag
         	HtmlDocument doc = new HtmlDocument();
         	doc.LoadHtml(s);
         	HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes(String.Format(@"//{0}",a));
-        	INakoVarArray res = info.CreateArray();
+        	NakoVarArray res = info.CreateArray();
         	if(nodes!=null){
             	for(int i=0;i<nodes.Count;i++){
             	    HtmlNode node = nodes[i];
@@ -107,7 +107,7 @@ namespace NakoPluginTag
         	HtmlDocument doc = new HtmlDocument();
         	doc.LoadHtml(s);
         	HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes(String.Format(@"//{0}",a));
-        	INakoVarArray res = info.CreateArray();
+        	NakoVarArray res = info.CreateArray();
         	if(nodes!=null){
             	foreach(HtmlNode node in nodes){
         	        foreach(HtmlAttribute attr in node.Attributes){
@@ -123,7 +123,7 @@ namespace NakoPluginTag
         	HtmlDocument doc = new HtmlDocument();
         	doc.LoadHtml(s);
         	HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes(@"//a");
-        	INakoVarArray res = info.CreateArray();
+        	NakoVarArray res = info.CreateArray();
         	if(nodes!=null){
             	for(int i=0;i<nodes.Count;i++){
             	    HtmlNode node = nodes[i];
