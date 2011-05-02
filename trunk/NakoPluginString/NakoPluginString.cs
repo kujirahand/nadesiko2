@@ -118,16 +118,16 @@ namespace NakoPluginString
             Object sr = info.StackPop();
             String a = info.StackPopAsString();
             string[] delim = {a};
-            if(!(sr is INakoVariable)){
+            if(!(sr is NakoVariable)){
                 throw new ApplicationException("『切り取る』に変数が設定されていません");
             }
-            Object s = ((INakoVariable)sr).Body;
+            Object s = ((NakoVariable)sr).Body;
             Object ret;
             if(s is String){
                 string[] split_s = ((String)s).Split(delim,2,StringSplitOptions.None);
                 if(split_s.Length==2){
                    ret = split_s[1];
-                   ((INakoVariable)sr).SetBodyAutoType(ret);
+                   ((NakoVariable)sr).SetBodyAutoType(ret);
                     return split_s[0];
                 }
             }
@@ -153,14 +153,14 @@ namespace NakoPluginString
             Object sr = info.StackPop();
             int a = NadesikoPositionToCSPosition((int)info.StackPopAsInt());
             int b = (int)info.StackPopAsInt();
-            Object s = ((INakoVariable)sr).Body;
+            Object s = ((NakoVariable)sr).Body;
             Object ret;
             if(s is String){
                 ret = ((String)s).Remove(a,b);
             }else{
                 ret = null;
             }
-            ((INakoVariable)sr).SetBodyAutoType(ret);
+            ((NakoVariable)sr).SetBodyAutoType(ret);
             return null;
         }
         public Object _insert(INakoFuncCallInfo info){
@@ -172,7 +172,7 @@ namespace NakoPluginString
         public Object _degrade(INakoFuncCallInfo info){
             String s = info.StackPopAsString();
             char[] splitted = s.ToCharArray();
-             INakoVarArray arr = info.CreateArray();
+             NakoVarArray arr = info.CreateArray();
             for(int i=0;i<splitted.Length;i++){
                 arr.SetValue(i,splitted[i]);
             }
@@ -182,7 +182,7 @@ namespace NakoPluginString
             String s = info.StackPopAsString();
             String a = info.StackPopAsString();
             string[] splitted = s.Split(new string[]{a},StringSplitOptions.None);
-            INakoVarArray arr = info.CreateArray();
+            NakoVarArray arr = info.CreateArray();
             for(int i=0;i<splitted.Length;i++){
                 arr.SetValue(i,splitted[i]);
             }

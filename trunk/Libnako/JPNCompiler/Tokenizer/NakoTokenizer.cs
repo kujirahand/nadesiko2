@@ -498,8 +498,8 @@ namespace Libnako.JPNCompiler.Tokenizer
             {
                 case '「': eos = "」"; is_extract = true; break;
                 case '『': eos = "』"; is_extract = false; break;
-                case '"': eos = "\""; is_extract = true; break;
-                case '`': eos = "`"; is_extract = false; break;
+                case '"' : eos = "\""; is_extract = true; break;
+                case '`' : eos = "`" ; is_extract = false; break;
             }
             cur++;
             // ヒアドキュメント文字列
@@ -507,6 +507,7 @@ namespace Libnako.JPNCompiler.Tokenizer
             // S = 「「「 ... 」」」
             if (c == nc && (c == '「' || c == '『'))
             {
+                cur--;
                 eos = "";
                 while (!IsEOF())
                 {

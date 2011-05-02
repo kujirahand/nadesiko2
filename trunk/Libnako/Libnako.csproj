@@ -70,7 +70,6 @@
     <Compile Include="JPNCompiler\ILWriter\NakoILWriter.cs" />
     <Compile Include="JPNCompiler\NakoCompiler.cs" />
     <Compile Include="JPNCompiler\NakoLoader.cs" />
-    <Compile Include="JPNCompiler\NakoVariable.cs" />
     <Compile Include="JPNCompiler\NakoVariableManager.cs" />
     <Compile Include="JPNCompiler\Node\NakoNode.cs" />
     <Compile Include="JPNCompiler\Node\NakoNodeBreak.cs" />

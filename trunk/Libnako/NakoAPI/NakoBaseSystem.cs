@@ -131,11 +131,11 @@ namespace Libnako.NakoAPI
         {
             Object ar = info.StackPop();
             Object b = info.StackPop();
-            if (!(ar is INakoVariable))
+            if (!(ar is NakoVariable))
             {
                 throw new ApplicationException("『足す!』の引数が変数ではありません");
             }
-            Object a = ((INakoVariable)ar).Body;
+            Object a = ((NakoVariable)ar).Body;
             Object c;
             if (a is Int64 && b is Int64)
             {
@@ -148,7 +148,7 @@ namespace Libnako.NakoAPI
                 c = da + db;
             }
             // 結果をセット
-            ((INakoVariable)ar).SetBodyAutoType(c);
+            ((NakoVariable)ar).SetBodyAutoType(c);
             return (c);
         }
 
@@ -172,11 +172,11 @@ namespace Libnako.NakoAPI
         {
             Object ar = info.StackPop();
             Object b = info.StackPop();
-            if (!(ar is INakoVariable))
+            if (!(ar is NakoVariable))
             {
                 throw new ApplicationException("『引く!』の引数が変数ではありません");
             }
-            Object a = ((INakoVariable)ar).Body;
+            Object a = ((NakoVariable)ar).Body;
             Object c;
             if (a is Int64 && b is Int64)
             {
@@ -189,7 +189,7 @@ namespace Libnako.NakoAPI
                 c = da - db;
             }
             // 結果をセット
-            ((INakoVariable)ar).SetBodyAutoType(c);
+            ((NakoVariable)ar).SetBodyAutoType(c);
             return (c);
         }
 
@@ -213,11 +213,11 @@ namespace Libnako.NakoAPI
         {
             Object ar = info.StackPop();
             Object b = info.StackPop();
-            if (!(ar is INakoVariable))
+            if (!(ar is NakoVariable))
             {
                 throw new ApplicationException("『掛ける!』の引数が変数ではありません");
             }
-            Object a = ((INakoVariable)ar).Body;
+            Object a = ((NakoVariable)ar).Body;
             Object c;
             if (a is Int64 && b is Int64)
             {
@@ -230,7 +230,7 @@ namespace Libnako.NakoAPI
                 c = da * db;
             }
             // 結果をセット
-            ((INakoVariable)ar).SetBodyAutoType(c);
+            ((NakoVariable)ar).SetBodyAutoType(c);
             return (c);
         }
 
@@ -254,11 +254,11 @@ namespace Libnako.NakoAPI
         {
             Object ar = info.StackPop();
             Object b = info.StackPop();
-            if (!(ar is INakoVariable))
+            if (!(ar is NakoVariable))
             {
                 throw new ApplicationException("『掛ける!』の引数が変数ではありません");
             }
-            Object a = ((INakoVariable)ar).Body;
+            Object a = ((NakoVariable)ar).Body;
             Object c;
             if (a is Int64 && b is Int64)
             {
@@ -271,7 +271,7 @@ namespace Libnako.NakoAPI
                 c = da / db;
             }
             // 結果をセット
-            ((INakoVariable)ar).SetBodyAutoType(c);
+            ((NakoVariable)ar).SetBodyAutoType(c);
             return (c);
         }
 
