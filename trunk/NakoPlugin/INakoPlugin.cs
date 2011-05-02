@@ -66,14 +66,16 @@ namespace NakoPlugin
     /// </summary>
     public interface INakoVariable
     {
-        NakoVarType Type { get; set; }
-        Object Body { get; set; }
+        NakoVarType Type { get; }
+        Object Body { get; }
         int varNo { get; set; }
+        string key { get; set; }
+        void SetBody(Object value, NakoVarType type);
+        void SetBodyAutoType(Object value);
     }
 
-    public interface INakoVarArray
+    public interface INakoVarArray : INakoVariable
     {
-        NakoVarType Type { get; set; }
         int Count { get; }
         INakoVariable GetVar(int index);
         Object GetValue(int index);
@@ -93,6 +95,7 @@ namespace NakoPlugin
     /// <summary>
     /// プラグイン関数呼び出しに使うインターフェイス
     /// </summary>
+    /// <see cref="">本体</see>
     public interface INakoFuncCallInfo
     {
         // --- 関数の引数を取得するメソッド

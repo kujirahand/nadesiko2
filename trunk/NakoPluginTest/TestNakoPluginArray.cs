@@ -139,7 +139,7 @@ namespace NakoPluginTest
         public void TestHashKeys()
         {
             com.DirectSource =
-                "A=「」;A[`a`]=30;A[`b`]=31;Aの配列ハッシュキー列挙。それを「,」で配列結合して表示。";
+                "Aとは変数;A[`a`]=30;A[`b`]=31;Aの配列ハッシュキー列挙。それを「,」で配列結合して表示。";
             runner.Run(com.Codes);
             Assert.AreEqual("a,b",runner.PrintLog);
         }

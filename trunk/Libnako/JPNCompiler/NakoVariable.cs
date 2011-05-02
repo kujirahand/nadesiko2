@@ -14,23 +14,36 @@ namespace Libnako.JPNCompiler
 		/// <summary>
 		/// 変数のタイプ
 		/// </summary>
-        public NakoVarType Type { get; set; }
-		
+        public NakoVarType Type { get { return _type; } }
+        protected NakoVarType _type = NakoVarType.Void;
+
         /// <summary>
         /// 変数の値
         /// </summary>
-        public Object Body { get; set; }
+        public Object Body { 
+            get { return _body; } 
+        }
+        protected Object _body = null;
 
         /// <summary>
         /// 変数の管理番号
         /// </summary>
         public int varNo { get; set; }
 
+        /// <summary>
+        /// 配列などでキーとして利用される
+        /// </summary>
+        public string key { get; set; }
+
         public NakoVariable()
         {
-            Type = NakoVarType.Void;
-            Body = null;
             varNo = -1;
+        }
+
+        public void SetBody(Object value, NakoVarType type)
+        {
+            _body = value;
+            _type = type;
         }
 
         public void SetBodyAutoType(Object value)
@@ -38,32 +51,55 @@ namespace Libnako.JPNCompiler
             // detect type
             if (value is int)
             {
-                Type = NakoVarType.Int;
-                Body = Convert.ToInt64(value);
+                _type = NakoVarType.Int;
+                _body = Convert.ToInt64(value);
             }
             else if (value is Int64)
             {
-                Type = NakoVarType.Int;
-                Body = value;
+                _type = NakoVarType.Int;
+                _body = value;
             }
             else if (value is Double)
             {
-                Type = NakoVarType.Double;
-                Body = value;
+                _type = NakoVarType.Double;
+                _body = value;
             }
             else if (value is string)
             {
-                Type = NakoVarType.String;
-                Body = value;
+                _type = NakoVarType.String;
+                _body = value;
             }
             else if (value is NakoVarArray)
             {
-                Type = NakoVarType.Array;
-                Body = value;
+                _type = NakoVarType.Array;
+                _body = value;
             }
             else
             {
-                Body = value;
+                _type = NakoVarType.Object;
+                _body = value;
+            }
+        }
+
+        public override string ToString()
+        {
+            // detect type
+            switch (Type)
+            {
+                case NakoVarType.Array:
+                    return Body.ToString();
+                case NakoVarType.Int:
+                    return Body.ToString();
+                case NakoVarType.Double:
+                    return Body.ToString();
+                case NakoVarType.Object:
+                    return Body.ToString();
+                case NakoVarType.Void:
+                    return "";
+                case NakoVarType.String:
+                    return (string)Body;
+                default:
+                    return Body.ToString();
             }
         }
     }
@@ -71,18 +107,13 @@ namespace Libnako.JPNCompiler
     /// <summary>
     /// なでしこの配列型(配列とハッシュを扱える)
     /// </summary>
-    public class NakoVarArray : INakoVariable, INakoVarArray
+    public class NakoVarArray : NakoVariable, INakoVarArray
     {
         protected List<INakoVariable> list = new List<INakoVariable>();
-        protected Dictionary<string, int> keys = null;
-
-        public NakoVarType Type { get; set; }
-        public Object Body { get; set; }
-        public int varNo { get; set; }
 
         public NakoVarArray()
         {
-            this.Type = NakoVarType.Array;
+            this._type = NakoVarType.Array;
         }
 
         public int Count
@@ -96,10 +127,10 @@ namespace Libnako.JPNCompiler
         public String[] GetKeys()
         {
             String[] r = new String[list.Count];
-            int i = 0;
-            foreach (KeyValuePair<String,int> p in keys)
+            for (int i = 0; i < list.Count; i++)
             {
-                r[i++] = p.Key;
+                INakoVariable v = list[i];
+                r[i] = v.key;
             }
             return r;
         }
@@ -107,7 +138,6 @@ namespace Libnako.JPNCompiler
         public void Clear()
         {
             list = new List<INakoVariable>();
-            keys = null;
         }
 
         public INakoVariable GetVar(int index)
@@ -124,12 +154,22 @@ namespace Libnako.JPNCompiler
             return v.Body;
         }
 
+        public int GetIndexFromKey(string key)
+        {
+            // TODO: ここにキャッシュ検索を入れると早くなる!!
+            for (int i = 0; i < list.Count; i++)
+            {
+                INakoVariable v = list[i];
+                if (key == v.key) return i;
+            }
+            return -1;
+        }
+
         public INakoVariable GetVarFromKey(string key)
         {
-            if (keys == null) return null;
-            if (!keys.ContainsKey(key)) return null;
-            int i = keys[key];
-            return GetVar(i);
+            int index = GetIndexFromKey(key);
+            if (index < 0) return null;
+            return list[index];
         }
 
         public INakoVariable GetVarFromObj(Object key)
@@ -157,9 +197,9 @@ namespace Libnako.JPNCompiler
 
         public Object GetValueFromKey(string key)
         {
-            if (keys == null) return null;
-            int i = keys[key];
-            return GetValue(i);
+            INakoVariable v = GetVarFromKey(key);
+            if (v != null) return v.Body;
+            return null;
         }
 
         public void SetVar(int index, INakoVariable value)
@@ -181,46 +221,59 @@ namespace Libnako.JPNCompiler
             }
         }
 
-        public void SetVarFromKey(string key, INakoVariable value)
+        public void SetVarFromKey(string key, INakoVariable var)
         {
-            if (keys == null)
+            int i = GetIndexFromKey(key);
+            if (i >= 0)
             {
-                keys = new Dictionary<string, int>();
+                list.RemoveAt(i);
             }
-            if (!keys.ContainsKey(key))
-            {
-                list.Add(value);
-                keys[key] = list.Count - 1;
-            }
-            else
-            {
-                int index = keys[key];
-                list[index] = value;
-            }
+            var.key = key;
+            list.Add(var);
         }
 
         public void SetValue(int index, Object value)
         {
             NakoVariable v = new NakoVariable();
-            v.Body = value;
+            v.SetBodyAutoType(value);
             this.SetVar(index, v);
         }
 
         public void SetValueFromKey(String key, Object value)
         {
             NakoVariable v = new NakoVariable();
-            v.Body = value;
+            v.key = key;
+            v.SetBodyAutoType(value);
             this.SetVarFromKey(key, v);
         }
+
         public void SetValuesFromString(String str)
         {
             Clear();
-            String[] a = str.Split('\n');
+            string[] splitter = new string[]{"\r\n"};
+            String[] a = str.Split(splitter, StringSplitOptions.None);
             int i = 0;
             foreach (String n in a)
             {
                 SetValue(i++, n);
             }
+        }
+
+        public override string ToString()
+        {
+            string r = "";
+            INakoVariable v;
+            for (int i = 0; i < list.Count; i++)
+            {
+                if (i >= 1) r += "\r\n";
+                v = list[i];
+                if (v != null)
+                {
+                    r += v.ToString();
+                }
+            }
+            r += "";
+            return r;
         }
     }
 

@@ -450,8 +450,7 @@ namespace Libnako.Interpreter
 
             if (((NakoVariable)var).Body == null)
             {
-                ((NakoVariable)var).Body = new NakoVarArray();
-                ((NakoVariable)var).Type = NakoVarType.Array;
+                ((NakoVariable)var).SetBody(new NakoVarArray(), NakoVarType.Array);
             }
 
             if (((NakoVariable)var).Body is NakoVarArray)
@@ -481,14 +480,13 @@ namespace Libnako.Interpreter
                 // null なら NakoArray として生成
                 if (var2.Body == null)
                 {
-                    var2.Body = new NakoVarArray();
-                    var2.Type = NakoVarType.Array;
+                    var2.SetBody(new NakoVarArray(), NakoVarType.Array);
                 }
                 if (!(var2.Body is NakoVarArray))
                 {
                     String s = "";
                     if (var2.Body != null) s = var2.Body.ToString();
-                    var2.Body = new NakoVarArray();
+                    var2.SetBody(new NakoVarArray(), NakoVarType.Array);
                     ((NakoVarArray)var2.Body).SetValuesFromString(s);
                     
                 }
@@ -500,7 +498,7 @@ namespace Libnako.Interpreter
                     if (elem == null)
                     {
                         elem = new NakoVariable();
-                        elem.Body = value;
+                        elem.SetBodyAutoType(value);
                         if (index is Int64)
                         {
                             elem.varNo = Convert.ToInt32(index);
@@ -509,7 +507,7 @@ namespace Libnako.Interpreter
                     }
                     else
                     {
-                        elem.Body = value;
+                        elem.SetBodyAutoType(value);
                     }
                 }
             }

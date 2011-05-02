@@ -177,7 +177,7 @@ namespace Libnako.JPNCompiler.Parser
             NakoToken t = tok.CurrentToken;
             int varNo = localVar.CreateVar(t.getValueAsName());
             NakoVariable v = localVar.GetVar(varNo);
-            v.Type = st;
+            v.SetBody(null, st);
             tok.MoveNext(); // skip WORD
             tok.MoveNext(); // skip DIM_xxx
 
@@ -554,8 +554,7 @@ namespace Libnako.JPNCompiler.Parser
             PopFrame();
             // グローバル変数に登録
             NakoVariable v = new NakoVariable();
-            v.Type = NakoVarType.UserFunc;
-            v.Body = funcNode;
+            v.SetBody(funcNode, NakoVarType.UserFunc);
             globalVar.CreateVar(userFunc.name, v);
             // 関数の宣言は、ノードのトップ直下に追加する
             if (!this.topNode.hasChildren())

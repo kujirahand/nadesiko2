@@ -56,6 +56,8 @@ namespace NakoPluginString
             bank.AddFunc("半角変換", "Sを", NakoVarType.String, _toEn, "文字列Sを半角に変換して返す", "はんかくへんかん");
             bank.AddFunc("小文字変換", "Sを", NakoVarType.String, _lowercase, "文字列Sを小文字変換して返す", "こもじへんかん");
             bank.AddFunc("大文字変換", "Sを", NakoVarType.String, _uppercase, "文字列Sを大文字変換して返す", "へんかん");
+
+            bank.AddFunc("何文字目", "SでSSが|Sの", NakoVarType.String, _strpos, "文字列Sで文字列SSが何文字目にあるか調べて返す", "なんもじめ");
         }
         
         // プラグインの初期化処理
@@ -125,7 +127,7 @@ namespace NakoPluginString
                 string[] split_s = ((String)s).Split(delim,2,StringSplitOptions.None);
                 if(split_s.Length==2){
                    ret = split_s[1];
-                   ((INakoVariable)sr).Body = ret;
+                   ((INakoVariable)sr).SetBodyAutoType(ret);
                     return split_s[0];
                 }
             }
@@ -158,7 +160,7 @@ namespace NakoPluginString
             }else{
                 ret = null;
             }
-            ((INakoVariable)sr).Body = ret;
+            ((INakoVariable)sr).SetBodyAutoType(ret);
             return null;
         }
         public Object _insert(INakoFuncCallInfo info){
@@ -229,6 +231,13 @@ namespace NakoPluginString
         {
         	String s = info.StackPopAsString();
         	return s.ToUpper();
+        }
+        public Object _strpos(INakoFuncCallInfo info)
+        {
+            String s = info.StackPopAsString();
+            String ss = info.StackPopAsString();
+            int i = s.IndexOf(ss);
+            return (i + 1); // 1からはじまるので
         }
     }
 }

@@ -63,7 +63,6 @@
     <Compile Include="Interpreter\ILCode\NakoILCodeList.cs" />
     <Compile Include="Interpreter\ILCode\NakoILType.cs" />
     <Compile Include="Interpreter\NakoInterpreter.cs" />
-    <Compile Include="Interpreter\NakoValueConveter.cs" />
     <Compile Include="JPNCompiler\Function\NakoFunc.cs" />
     <Compile Include="JPNCompiler\Function\NakoFuncArg.cs" />
     <Compile Include="JPNCompiler\Function\NakoFuncArgs.cs" />

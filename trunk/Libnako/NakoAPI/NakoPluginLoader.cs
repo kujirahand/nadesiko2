@@ -49,13 +49,24 @@ namespace Libnako.NakoAPI
                 string name = System.IO.Path.GetFileName(dll);
                 name = name.ToLower();
                 if (name == "libnako.dll") continue;
+                if (name == "nakoplugin.dll") continue;
                 // アセンブリを読み込む
+                System.Reflection.Assembly asm;
                 try
                 {
-                    System.Reflection.Assembly asm =
-                        System.Reflection.Assembly.LoadFrom(dll);
+                    asm = System.Reflection.Assembly.LoadFrom(dll);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("プラグイン読込みエラー。:" + dll + ":[" + e.GetType().Name + "]" + e.Message);
+                }
+                // 読み込んだアセンブリに含まれるクラスを取得する
+                string curType = "*";
+                try
+                {
                     foreach (Type t in asm.GetTypes())
                     {
+                        curType = t.Name;
                         if (t.IsClass && t.IsPublic && !t.IsAbstract &&
                             t.GetInterface(INakoPluginsPath) != null)
                         {
@@ -66,11 +77,20 @@ namespace Libnako.NakoAPI
                         }
                     }
                 }
-                catch
+                catch (System.Reflection.ReflectionTypeLoadException e)
                 {
-                    throw new Exception("プラグイン読込みエラー。");
+                    string s = "";
+                    s += "{name:" + name + "}";
+                    foreach (Exception e2 in e.LoaderExceptions)
+                    {
+                        s += e2.Message + ":";
+                    }
+                    throw new Exception("プラグイン読込みエラー。クラスの取得に失敗。:" + dll + ":" + curType + ":[" + e.GetType().Name + "] " + s);
                 }
-
+                catch (Exception e)
+                {
+                    throw new Exception("プラグイン読込みエラー。クラスの取得に失敗。:" + dll + ":" + curType + ":[" + e.GetType().Name + "] " + e.Message);
+                }
             }
         }
         
