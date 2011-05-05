@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Text;
 
 using NakoPlugin;
-//using NakoExcel = Microsoft.Office.Interop.Excel;
-//using VBIDE = Microsoft.Vbe.Interop;
-//---
+/*
+using NakoExcel = Microsoft.Office.Interop.Excel;
+using VBIDE = Microsoft.Vbe.Interop;
+*/
+
 using System.Reflection;
-//
 using System.Windows.Forms; //動作チェック用のダイアログ表示に使用
 
 namespace NakoPluginOfficeExcel
@@ -28,11 +29,13 @@ namespace NakoPluginOfficeExcel
         //--- プラグインの終了処理 ---
         public void PluginFin(INakoInterpreter runner) { NakoExcelEnd(); }
         //--- 変数の定義 ---
-        //public NakoExcel._Application xlApp;    //Excelアプリケーション
-        //public NakoExcel.Workbooks xlBooks;
-        //public NakoExcel._Workbook xlBook;
-        //public NakoExcel.Sheets xlSheets;
-        //public NakoExcel._Worksheet xlSheet;
+        /*
+        public NakoExcel._Application xlApp;    //Excelアプリケーション
+        public NakoExcel.Workbooks xlBooks;
+        public NakoExcel._Workbook xlBook;
+        public NakoExcel.Sheets xlSheets;
+        public NakoExcel._Worksheet xlSheet;
+         */
 
         // 遅延バインディング
         ExcelLateWrapper oExcel = null;
@@ -44,9 +47,9 @@ namespace NakoPluginOfficeExcel
         //--- 関数の定義 ---
         public void DefineFunction(INakoPluginBank bank)
         {
-            //エクセル
+            //+エクセル
             #region アプリケーション関係
-            //+アプリケーション
+            //-アプリケーション
             bank.AddFunc("エクセル起動", "FLAGで|FLAGに|FLAGへ", NakoVarType.Void, _xlStart, "エクセルを起動する。FLAG=1:可視、FLAG=0:不可視で起動。", "えくせるきどう");
             bank.AddFunc("エクセル終了", "", NakoVarType.Void, _xlEnd, "エクセルを終了する。", "えくせるしゅうりょう");
             bank.AddFunc("エクセル起動状態", "", NakoVarType.Int, _xlStarted, "エクセルが起動しているか確認する。1:起動している。0:起動していない。", "えくせるきどうじょうたい");
@@ -69,7 +72,7 @@ namespace NakoPluginOfficeExcel
 
             #endregion
             #region ブック関係
-            //+ブック
+            //-ブック
             bank.AddFunc("エクセル新規ブック", "", NakoVarType.Void, _xlBookAdd, "エクセルに新規ブックを追加。", "えくせるぶっくついか");
             bank.AddFunc("エクセル開く", "FILEを|FILEで|FILEから", NakoVarType.Void, _xlBookOpen, "エクセルにFILE(ブックのパス)を開く。", "えくせるぶっくひらく");
             bank.AddFunc("エクセル保存", "FILEを|FILEで|FILEに|FILEへ", NakoVarType.Void, _xlBookSaveAs, "", "");
@@ -77,9 +80,15 @@ namespace NakoPluginOfficeExcel
             #endregion
 
             #region セル関連
+            //-セル
             bank.AddFunc("エクセルセル設定", "CELLへVを|CELLに", NakoVarType.Void, _xlSheetSet, "エクセルのセルCELLに値Vを設定する。", "えくせるせるせってい");
             bank.AddFunc("エクセルセル取得", "CELLの|CELLを", NakoVarType.String, _xlSheetGet, "エクセルのセルCELLの値を取得して返す。", "えくせるせるしゅとく");
+            #endregion
 
+            #region 選択範囲
+            //-選択範囲
+            bank.AddFunc("エクセル選択", "CELLを", NakoVarType.Void, _xlSelect, "エクセルのセルCELLを設定する。", "えくせるせるせんたく");
+            bank.AddFunc("エクセルコピー", "", NakoVarType.Void, _xlCopy, "エクセルをコピーする。。", "えくせるせるこぴー");
             #endregion
             /*--- todo ---
              * ブック一覧
@@ -396,6 +405,21 @@ namespace NakoPluginOfficeExcel
 
         #endregion
 
+
+        public Object _xlSelect(INakoFuncCallInfo info)
+        {
+            string cell = info.StackPopAsString();
+            if (oExcel == null) return null;
+            oExcel.Select(cell);
+            return null;
+        }
+
+        public Object _xlCopy(INakoFuncCallInfo info)
+        {
+            if (oExcel == null) return null;
+            oExcel.CopySelection();
+            return null;
+        }
 
         /*
          * --- エラー処理はexceptionを投げること ---
