@@ -6,6 +6,10 @@ using System.Reflection;
 
 namespace NakoPluginOfficeExcel
 {
+    /// <summary>
+    /// Excel遅延バインディングを使ったラッパー
+    /// </summary>
+    /// 実は一番なでしこ1のソースが参考になる) http://nadesiko.googlecode.com/svn/trunk/hi_unit/unit_office.pas
     public class ExcelLateWrapper
     {
         protected object oApp;
@@ -214,6 +218,19 @@ namespace NakoPluginOfficeExcel
             object range = oSheet.GetType().InvokeMember("Range", BindingFlags.GetProperty, null, oSheet, new object[] { cell, Missing.Value });
             if (range == null) throw new ApplicationException("Rangeの取得ができません。");
             return range;
+        }
+
+        public void Select(string cell)
+        {
+            object range = getRange(cell);
+            range.GetType().InvokeMember("Select", BindingFlags.InvokeMethod, null, range, null);
+            ReleaseObj(range);
+        }
+
+        public void CopySelection()
+        {
+            if (oSheet == null) return;
+            oSheet.GetType().InvokeMember("Copy", BindingFlags.InvokeMethod, null, oSheet, null);
         }
 
         public void SetCell(string cell, string v)
