@@ -183,9 +183,9 @@ namespace NakoPluginOfficeExcel
                 Type.Missing, 
                 Type.Missing, 
                 Type.Missing
-                // object Local = Type.Missing
+                //,Type.Missing
             };
-            oSheet.GetType().InvokeMember("SaveAs", BindingFlags.InvokeMethod, null, oSheet, param);
+            oBook.GetType().InvokeMember("SaveAs", BindingFlags.InvokeMethod, null, oBook, param);
         }
 
         public void Save()
