@@ -5,7 +5,9 @@ using System.Text;
 using NakoPlugin;
 using NakoExcel = Microsoft.Office.Interop.Excel;
 using VBIDE = Microsoft.Vbe.Interop;
-
+//---
+using System.Reflection;
+//
 using System.Windows.Forms; //動作チェック用のダイアログ表示に使用
 
 namespace NakoPluginOfficeExcel
@@ -26,11 +28,16 @@ namespace NakoPluginOfficeExcel
         //--- プラグインの終了処理 ---
         public void PluginFin(INakoInterpreter runner) { NakoExcelEnd(); }
         //--- 変数の定義 ---
-        NakoExcel._Application xlApp;    //Excelアプリケーション
-        NakoExcel.Workbooks xlBooks;
-        NakoExcel._Workbook xlBook;
-        NakoExcel.Sheets xlSheets;
-        NakoExcel._Worksheet xlSheet;
+        public NakoExcel._Application xlApp;    //Excelアプリケーション
+        public NakoExcel.Workbooks xlBooks;
+        public NakoExcel._Workbook xlBook;
+        public NakoExcel.Sheets xlSheets;
+        public NakoExcel._Worksheet xlSheet;
+
+        // 遅延バインディング
+        ExcelLateWrapper oExcel = null;
+
+
         //NakoExcel.Range xlRange;
         //VBIDE.VBComponents xlModules;
 
@@ -43,7 +50,7 @@ namespace NakoPluginOfficeExcel
             bank.AddFunc("エクセル起動", "FLAGで|FLAGに|FLAGへ", NakoVarType.Void, _xlStart, "エクセルを起動する。FLAG=1:可視、FLAG=0:不可視で起動。", "えくせるきどう");
             bank.AddFunc("エクセル終了", "", NakoVarType.Void, _xlEnd, "エクセルを終了する。", "えくせるしゅうりょう");
             bank.AddFunc("エクセル起動状態", "", NakoVarType.Int, _xlStarted, "エクセルが起動しているか確認する。1:起動している。0:起動していない。", "えくせるきどうじょうたい");
-            bank.AddFunc("エクセルバージョン", "", NakoVarType.String, _xlVer, "エクセルのバージョンを取得して返す。", "えくせるばーじょん");
+            bank.AddFunc("エクセルバージョン", "", NakoVarType.String, _xlVer, "エクセルのバージョンを取得して返す。(失敗したなら0を返す)", "えくせるばーじょん");
             bank.AddFunc("エクセル可視変更", "FLAGで|FLAGに|FLAGへ", NakoVarType.Void, _xlVisibleSet, "エクセルの可視を変更する。FLAG=1:可視、FLAG=0:不可視", "えくせるかしへんこう");
             bank.AddFunc("エクセル可視状態", "", NakoVarType.Int, _xlVisibleGet, "エクセルの可視を取得して返す。1:可視、0:不可視。", "えくせるかしじょうたい");
             bank.AddFunc("エクセル警告変更", "FLAGで|FLAGに|FLAGへ", NakoVarType.Void, _xlAlertSet, "エクセルの警告を変更する。FLAG=1:警告有り、FLAG=0:警告無視。", "えくせるけいこくへんこう");
@@ -68,6 +75,12 @@ namespace NakoPluginOfficeExcel
             bank.AddFunc("エクセルブック保存", "FILEを|FILEで|FILEに|FILEへ", NakoVarType.Void, _xlBookSaveAs, "", "");
 
             #endregion
+
+            #region セル関連
+            bank.AddFunc("エクセルセル設定", "CELLへVを|CELLに", NakoVarType.Void, _xlSheetSet, "エクセルのセルCELLに値Vを設定する。", "えくせるせるせってい");
+            bank.AddFunc("エクセルセル取得", "CELLの|CELLを", NakoVarType.String, _xlSheetGet, "エクセルのセルCELLの値を取得して返す。", "えくせるせるしゅとく");
+
+            #endregion
             /*--- todo ---
              * ブック一覧
              * 現在ブック
@@ -80,12 +93,14 @@ namespace NakoPluginOfficeExcel
         //エクセル起動
         public Object _xlStart(INakoFuncCallInfo info)
         {
-            if (xlApp == null)
+            long arg = info.StackPopAsInt();
+
+            if (oExcel == null)
             {
-                long arg = info.StackPopAsInt();
-                xlApp = new NakoExcel.Application { Visible = (arg != 0) }; //arg:0以外はtrue
-                xlBooks = xlApp.Workbooks;
+                oExcel = new ExcelLateWrapper();
             }
+            oExcel.Visible = (arg != 0);
+
             return null;
         }
         //エクセル終了
@@ -96,40 +111,41 @@ namespace NakoPluginOfficeExcel
         }
         void NakoExcelEnd()
         {
-            if (xlApp != null)
+            // 終了処理
+            if (oExcel != null)
             {
-                xlApp.DisplayAlerts = false;
-                xlApp.Quit();   //Excel終了
-                xlApp = null;
-                //GC.Collect();
+                oExcel.Close();
+                oExcel.Dispose();
             }
+            oExcel = null;
         }
+
         //エクセル起動状態
         public Object _xlStarted(INakoFuncCallInfo info)
         {
-            int i = (xlApp != null) ? 1 : 0;
+            int i = (oExcel != null) ? 1 : 0;
             return i;
         }
         //エクセルバージョン
         public Object _xlVer(INakoFuncCallInfo info)
         {
-            if (xlApp != null) return xlApp.Version;
-            return "-1";    //Excelが起動していない
+            if (oExcel != null) return oExcel.Version;
+            return "0";    //Excelが起動していない
         }
         //エクセル可視変更
         public Object _xlVisibleSet(INakoFuncCallInfo info)
         {
-            if (xlApp != null)
+            if (oExcel != null)
             {
                 long arg = info.StackPopAsInt();
-                xlApp.Visible = (arg != 0); //arg:0以外はtrue
+                oExcel.Visible = (arg != 0); //arg:0以外はtrue
             }
             return null;
         }
         //エクセル可視状態
         public Object _xlVisibleGet(INakoFuncCallInfo info)
         {
-            int i = (xlApp != null && xlApp.Visible == true) ? 1 : 0;
+            int i = (oExcel != null && oExcel.Visible == true) ? 1 : 0;
             return i;
         }
         //エクセル警告変更
@@ -145,127 +161,127 @@ namespace NakoPluginOfficeExcel
         //エクセル警告状態
         public Object _xlAlertGet(INakoFuncCallInfo info)
         {
-            int i = (xlApp != null && xlApp.DisplayAlerts == true) ? 1 : 0;
+            int i = (oExcel != null && oExcel.DisplayAlerts == true) ? 1 : 0;
             return i;
         }
         //エクセル窓変更
         public Object _xlWindowStateSet(INakoFuncCallInfo info)
         {
-            if (xlApp != null)
+            string arg = info.StackPopAsString();
+            if (oExcel != null)
             {
-                string arg = info.StackPopAsString();
-                NakoExcel.XlWindowState state = NakoExcel.XlWindowState.xlNormal;
+                XlWindowState state = XlWindowState.xlNormal;
                 switch (arg)
                 {
                     case "最大化":
-                        state = NakoExcel.XlWindowState.xlMaximized;
+                        state = XlWindowState.xlMaximized;
                         break;
                     case "最小化":
-                        state = NakoExcel.XlWindowState.xlMinimized;
+                        state = XlWindowState.xlMinimized;
                         break;
                     case "標準":
-                        state = NakoExcel.XlWindowState.xlNormal;
+                        state = XlWindowState.xlNormal;
                         break;
                     default:
-                        state = xlApp.WindowState;  //現在の状態
+                        state = oExcel.WindowState;  //現在の状態
                         //throw new NakoPluginRuntimeException("エクセル窓変更の引数に「最大化|最小化|標準」以外の文字列が指定されました。");
                         break;
                 }
-                xlApp.WindowState = state;
+                oExcel.WindowState = state;
             }
             return null;
         }
         //エクセル窓状態
         public Object _xlWindowStateGet(INakoFuncCallInfo info)
         {
-            if (xlApp != null)
+            if (oExcel != null)
             {
-                NakoExcel.XlWindowState state = xlApp.WindowState;
+                XlWindowState state = oExcel.WindowState;
                 switch (state)
                 {
-                    case NakoExcel.XlWindowState.xlMaximized:
+                    case XlWindowState.xlMaximized:
                         return "最大化";
-                    case NakoExcel.XlWindowState.xlMinimized:
+                    case XlWindowState.xlMinimized:
                         return "最小化";
-                    case NakoExcel.XlWindowState.xlNormal:
+                    case XlWindowState.xlNormal:
                         return "標準";
                 }
             }
-            return "-1";  //Excelが起動していない
+            return "";  //Excelが起動していない
         }
         //タイトル変更
         public Object _xlTitleSet(INakoFuncCallInfo info)
         {
-            if (xlApp != null && xlBooks != null)
+            if (oExcel != null)
             {
-                xlApp.ActiveWindow.Caption = info.StackPopAsString();
+                oExcel.Title = info.StackPopAsString();
             }
             return null;
         }
         //タイトル状態
         public Object _xlTitleGet(INakoFuncCallInfo info)
         {
-            if (xlApp != null && xlBooks != null)
+            if (oExcel != null)
             {
-                return xlApp.ActiveWindow.Caption;
+                return oExcel.Title;
             }
-            return "-1";    //Excelが起動していない or Bookがひとつもない
+            return "";    //Excelが起動していない or Bookがひとつもない
         }
         //ステータスバー変更
         public Object _xlStatusbarTextSet(INakoFuncCallInfo info)
         {
-            if (xlApp != null)
+            string arg = info.StackPopAsString();
+            if (oExcel != null)
             {
-                string arg = info.StackPopAsString();
-                xlApp.StatusBar = arg;
+                oExcel.StatusBar = arg;
             }
             return null;
         }
         //ステータスバー状態
         public Object _xlStatusbarTextGet(INakoFuncCallInfo info)
         {
-            if (xlApp != null) { return xlApp.StatusBar; }
+            if (oExcel != null) { return oExcel.StatusBar; }
             return "";
         }
         //ステータスバー標準
         public Object _xlStatusbarTextNormal(INakoFuncCallInfo info)
         {
-            if (xlApp != null)
+            if (oExcel != null)
             {
-                xlApp.StatusBar = false;
+                oExcel.StatusBar = null;
             }
             return null;
         }
         //ステータスバー可視変更
         public Object _xlStatusbarVisibleSet(INakoFuncCallInfo info)
         {
-            if (xlApp != null)
+            long arg = info.StackPopAsInt();
+            if (oExcel != null)
             {
-                long arg = info.StackPopAsInt();
-                xlApp.DisplayStatusBar = (arg != 0);    //arg:0以外はtrue
+                oExcel.DisplayStatusBar = (arg != 0);    //arg:0以外はtrue
             }
             return null;
         }
         //ステータスバー可視状態
         public Object _xlStatusbarVisibleGet(INakoFuncCallInfo info)
         {
-            int i = (xlApp != null && xlApp.DisplayStatusBar == true) ? 1 : 0;
+            int i = (oExcel != null && oExcel.DisplayStatusBar == true) ? 1 : 0;
             return i;
         }
         //枠線表示変更
         public Object _xlGridlineVisibleSet(INakoFuncCallInfo info)
         {
-            if (xlApp != null && xlBooks != null)
+            long arg = info.StackPopAsInt();
+            if (oExcel != null)
             {
-                long arg = info.StackPopAsInt();
-                xlApp.ActiveWindow.DisplayGridlines = (arg != 0);   //arg:0以外はtrue
+                oExcel.DisplayGridlines = (arg != 0);   //arg:0以外はtrue
             }
             return null;
         }
         //枠線表示状態
         public Object _xlGridlineVisibleGet(INakoFuncCallInfo info)
         {
-            int i = (xlApp != null && xlBooks != null && xlApp.ActiveWindow.DisplayGridlines == true) ? 1 : 0;
+            int i = (oExcel != null && oExcel.DisplayGridlines == true) ? 1 : 0;
             return i;
         }
         //マクロ実行
@@ -276,23 +292,22 @@ namespace NakoPluginOfficeExcel
         //ブック追加
         public Object _xlBookAdd(INakoFuncCallInfo info)
         {
-            if (xlApp != null)
+            if (oExcel != null)
             {
-                xlBooks.Add();
-                AfterBookOpen();
+                oExcel.BookAdd();
             }
             return null;
         }
         //ブック開く
         public Object _xlBookOpen(INakoFuncCallInfo info)
         {
-            if (xlApp != null)
+            string filename = info.StackPopAsString();
+            if (!System.IO.File.Exists(filename))
+            { throw new NakoPluginRuntimeException("ファイル『" + filename + "』は存在しません。"); }
+
+            if (oExcel != null)
             {
-                string filename = info.StackPopAsString();
-                if (!System.IO.File.Exists(filename))
-                { throw new NakoPluginRuntimeException("ファイル『" + filename + "』は存在しません。"); }
-                xlBooks.Open(filename);
-                AfterBookOpen();
+                oExcel.Open(filename);
             }
             return null;
         }
@@ -304,19 +319,20 @@ namespace NakoPluginOfficeExcel
             xlSheet = (NakoExcel._Worksheet)xlSheets[1];
             xlSheet.Activate();
         }
+
         //ブック保存
         public Object _xlBookSaveAs(INakoFuncCallInfo info)
         {
-            if (xlApp != null && xlBook != null)
+            string filename = info.StackPopAsString();
+            if (oExcel != null)
             {
-                bool flag = xlApp.DisplayAlerts;
-                string filename = info.StackPopAsString();
-                object format = NakoExcel.XlFileFormat.xlWorkbookNormal;
-                xlApp.DisplayAlerts = false;
+                bool flag = oExcel.DisplayAlerts;
+                XlFileFormat format = XlFileFormat.xlWorkbookNormal;
+                oExcel.DisplayAlerts = false;
                 if (filename == "")
                 {
-                    xlBook.Save();  //ファイル名指定なければ上書き保存
-                    xlApp.DisplayAlerts = flag;
+                    oExcel.Save();  //ファイル名指定なければ上書き保存
+                    oExcel.DisplayAlerts = flag;
                     return null;
                 }
                 string ext = System.IO.Path.GetExtension(filename);
@@ -330,23 +346,23 @@ namespace NakoPluginOfficeExcel
                         //次の2行のコメントを外すと、自動的にxlsm形式(マクロあり)で保存します。
                         //xlModules = xlBook.VBProject.VBComponents;
                         //if (xlModules != null) goto case ".xlsm";   //マクロを含んでいれば.xlsm
-                        format = NakoExcel.XlFileFormat.xlOpenXMLWorkbook;
+                        format = XlFileFormat.xlOpenXMLWorkbook;
                         break;
                     case ".xls":
-                        if (double.Parse(xlApp.Version) < 12.0) { format = NakoExcel.XlFileFormat.xlExcel9795; }
-                        else { format = NakoExcel.XlFileFormat.xlExcel8; }  //Excel2007以上の場合
+                        if (double.Parse(xlApp.Version) < 12.0) { format = XlFileFormat.xlExcel9795; }
+                        else { format = XlFileFormat.xlExcel8; }  //Excel2007以上の場合
                         break;
                     case ".xlsm":
                         if (double.Parse(xlApp.Version) < 12.0)
                         { throw new NakoPluginRuntimeException("Excel2007以上でなければ拡張子.xlsm形式で保存できません。"); }
-                        format = NakoExcel.XlFileFormat.xlOpenXMLWorkbookMacroEnabled;
+                        format = XlFileFormat.xlOpenXMLWorkbookMacroEnabled;
                         ext = ".xlsm";
                         break;
                     case ".csv":
-                        format = NakoExcel.XlFileFormat.xlCSV;
+                        format = XlFileFormat.xlCSV;
                         break;
                     case ".txt":
-                        format = NakoExcel.XlFileFormat.xlUnicodeText;
+                        format = XlFileFormat.xlUnicodeText;
                         break;
                     case ".pdf":
                         if (double.Parse(xlApp.Version) < 12.0)
@@ -356,9 +372,9 @@ namespace NakoPluginOfficeExcel
                         throw new NakoPluginRuntimeException("保存形式が無効です。");
                 }
                 filename = System.IO.Path.ChangeExtension(filename, ext);
-                if (ext == ".pdf") { xlSheet.ExportAsFixedFormat(NakoExcel.XlFixedFormatType.xlTypePDF, filename); }
-                else { xlBook.SaveAs(filename, format); }
-                xlApp.DisplayAlerts = flag;
+                if (ext == ".pdf") { oExcel.ExportAsFixedFormat(filename, XlFixedFormatType.xlTypePDF); }
+                else { oExcel.SaveAs(filename, format); }
+                oExcel.DisplayAlerts = flag;
             }
             return null;
         }
@@ -366,6 +382,28 @@ namespace NakoPluginOfficeExcel
         //ブックを閉じる時には、xlBooks[1]をアクティブにする
         //ブックが何もなければ、xlBookはnull
         #endregion
+
+        #region セル関係
+
+        // エクセルセル設定
+        public Object _xlSheetSet(INakoFuncCallInfo info)
+        {
+            string cell = info.StackPopAsString();
+            string v = info.StackPopAsString();
+            if (oExcel == null) return null;
+            oExcel.SetCell(cell, v);
+            return null;
+        }
+        // エクセルセル取得
+        public Object _xlSheetGet(INakoFuncCallInfo info)
+        {
+            string cell = info.StackPopAsString();
+            if (oExcel == null) return "";
+            return oExcel.GetCell(cell);
+        }
+
+        #endregion
+
 
         /*
          * --- エラー処理はexceptionを投げること ---

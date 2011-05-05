@@ -2,18 +2,21 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{215F5C9A-8B33-4A02-83BC-CC2C3FE66D01}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{067A7C1A-9066-4316-8FB7-8CD39BB77FFB}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NakoPluginOfficeExcel</RootNamespace>
-    <AssemblyName>NakoPluginOfficeExcel</AssemblyName>
+    <RootNamespace>NakoPluginOfficeTestApp</RootNamespace>
+    <AssemblyName>NakoPluginOfficeTestApp</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,7 +25,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -31,49 +35,46 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Libnako">
+      <HintPath>..\Libnako\bin\Debug\Libnako.dll</HintPath>
+    </Reference>
+    <Reference Include="NakoPluginArray">
+      <HintPath>..\NakoPluginArray\bin\Debug\NakoPluginArray.dll</HintPath>
+    </Reference>
+    <Reference Include="NakoPluginCtrl">
+      <HintPath>..\NakoPluginCtrl\bin\Debug\NakoPluginCtrl.dll</HintPath>
+    </Reference>
+    <Reference Include="NakoPluginDateTime">
+      <HintPath>..\NakoPluginDateTime\bin\Debug\NakoPluginDateTime.dll</HintPath>
+    </Reference>
+    <Reference Include="NakoPluginDialog">
+      <HintPath>..\NakoPluginDialog\bin\Debug\NakoPluginDialog.dll</HintPath>
+    </Reference>
+    <Reference Include="NakoPluginFile">
+      <HintPath>..\NakoPluginFile\bin\Debug\NakoPluginFile.dll</HintPath>
+    </Reference>
+    <Reference Include="NakoPluginString">
+      <HintPath>..\NakoPluginString\bin\Debug\NakoPluginString.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ExcelLateWrapper.cs" />
-    <Compile Include="NakoPluginOfficeExcel.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="Microsoft.Office.Core">
-      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>5</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="Microsoft.Office.Interop.Excel">
-      <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>7</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="VBIDE">
-      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
-      <VersionMajor>5</VersionMajor>
-      <VersionMinor>3</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
+    <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NakoPluginOfficeExcel\NakoPluginOfficeExcel.csproj">
+      <Project>{215F5C9A-8B33-4A02-83BC-CC2C3FE66D01}</Project>
+      <Name>NakoPluginOfficeExcel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NakoPlugin\NakoPlugin.csproj">
       <Project>{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}</Project>
       <Name>NakoPlugin</Name>
