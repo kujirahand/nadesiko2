@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 
 using NakoPlugin;
-using NakoExcel = Microsoft.Office.Interop.Excel;
-using VBIDE = Microsoft.Vbe.Interop;
+//using NakoExcel = Microsoft.Office.Interop.Excel;
+//using VBIDE = Microsoft.Vbe.Interop;
 //---
 using System.Reflection;
 //
@@ -28,11 +28,11 @@ namespace NakoPluginOfficeExcel
         //--- プラグインの終了処理 ---
         public void PluginFin(INakoInterpreter runner) { NakoExcelEnd(); }
         //--- 変数の定義 ---
-        public NakoExcel._Application xlApp;    //Excelアプリケーション
-        public NakoExcel.Workbooks xlBooks;
-        public NakoExcel._Workbook xlBook;
-        public NakoExcel.Sheets xlSheets;
-        public NakoExcel._Worksheet xlSheet;
+        //public NakoExcel._Application xlApp;    //Excelアプリケーション
+        //public NakoExcel.Workbooks xlBooks;
+        //public NakoExcel._Workbook xlBook;
+        //public NakoExcel.Sheets xlSheets;
+        //public NakoExcel._Worksheet xlSheet;
 
         // 遅延バインディング
         ExcelLateWrapper oExcel = null;
@@ -70,9 +70,9 @@ namespace NakoPluginOfficeExcel
             #endregion
             #region ブック関係
             //+ブック
-            bank.AddFunc("エクセルブック追加", "", NakoVarType.Void, _xlBookAdd, "エクセルに新規ブックを追加。", "えくせるぶっくついか");
-            bank.AddFunc("エクセルブック開く", "FILEを|FILEで|FILEから", NakoVarType.Void, _xlBookOpen, "エクセルにFILE(ブックのパス)を開く。", "えくせるぶっくひらく");
-            bank.AddFunc("エクセルブック保存", "FILEを|FILEで|FILEに|FILEへ", NakoVarType.Void, _xlBookSaveAs, "", "");
+            bank.AddFunc("エクセル新規ブック", "", NakoVarType.Void, _xlBookAdd, "エクセルに新規ブックを追加。", "えくせるぶっくついか");
+            bank.AddFunc("エクセル開く", "FILEを|FILEで|FILEから", NakoVarType.Void, _xlBookOpen, "エクセルにFILE(ブックのパス)を開く。", "えくせるぶっくひらく");
+            bank.AddFunc("エクセル保存", "FILEを|FILEで|FILEに|FILEへ", NakoVarType.Void, _xlBookSaveAs, "", "");
 
             #endregion
 
@@ -151,10 +151,10 @@ namespace NakoPluginOfficeExcel
         //エクセル警告変更
         public Object _xlAlertSet(INakoFuncCallInfo info)
         {
-            if (xlApp != null)
+            if (oExcel != null)
             {
                 long arg = info.StackPopAsInt();
-                xlApp.DisplayAlerts = (arg != 0);   //arg:0以外はtrue
+                oExcel.DisplayAlerts = (arg != 0);   //arg:0以外はtrue
             }
             return null;
         }
@@ -311,14 +311,6 @@ namespace NakoPluginOfficeExcel
             }
             return null;
         }
-        void AfterBookOpen()
-        {
-            xlBook = xlBooks[xlBooks.Count];
-            xlBook.Activate();
-            xlSheets = xlBook.Worksheets;
-            xlSheet = (NakoExcel._Worksheet)xlSheets[1];
-            xlSheet.Activate();
-        }
 
         //ブック保存
         public Object _xlBookSaveAs(INakoFuncCallInfo info)
@@ -340,7 +332,7 @@ namespace NakoPluginOfficeExcel
                 switch (ext)
                 {
                     case ".xlsx":
-                        if (double.Parse(xlApp.Version) < 12.0)
+                        if (double.Parse(oExcel.Version) < 12.0)
                         { throw new NakoPluginRuntimeException("Excel2007以上でなければ拡張子.xlsx形式で保存できません。"); }
                         //マクロを含んだBookをxlsx形式で保存すれば、マクロを削除して保存する仕様です。
                         //次の2行のコメントを外すと、自動的にxlsm形式(マクロあり)で保存します。
@@ -349,11 +341,11 @@ namespace NakoPluginOfficeExcel
                         format = XlFileFormat.xlOpenXMLWorkbook;
                         break;
                     case ".xls":
-                        if (double.Parse(xlApp.Version) < 12.0) { format = XlFileFormat.xlExcel9795; }
+                        if (double.Parse(oExcel.Version) < 12.0) { format = XlFileFormat.xlExcel9795; }
                         else { format = XlFileFormat.xlExcel8; }  //Excel2007以上の場合
                         break;
                     case ".xlsm":
-                        if (double.Parse(xlApp.Version) < 12.0)
+                        if (double.Parse(oExcel.Version) < 12.0)
                         { throw new NakoPluginRuntimeException("Excel2007以上でなければ拡張子.xlsm形式で保存できません。"); }
                         format = XlFileFormat.xlOpenXMLWorkbookMacroEnabled;
                         ext = ".xlsm";
@@ -365,7 +357,7 @@ namespace NakoPluginOfficeExcel
                         format = XlFileFormat.xlUnicodeText;
                         break;
                     case ".pdf":
-                        if (double.Parse(xlApp.Version) < 12.0)
+                        if (double.Parse(oExcel.Version) < 12.0)
                         { throw new NakoPluginRuntimeException("Excel2007以上でなければ拡張子.pdf形式で保存できません。"); }
                         break;
                     default:
