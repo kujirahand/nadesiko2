@@ -202,7 +202,9 @@ namespace Libnako.JPNCompiler
         {
             source = "";
             PreloadModules = new INakoPlugin[] {
-                new NakoBaseSystem()
+                new NakoBaseSystem(),
+                new NakoPluginArray(),
+                new NakoPluginString()
             };
         }
     }
