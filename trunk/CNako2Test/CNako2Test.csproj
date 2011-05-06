@@ -42,6 +42,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CNako2Test.cs" />
+    <Compile Include="NakoPluginArrayTest.cs" />
+    <Compile Include="NakoPluginStringTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestArray.cs" />
     <Compile Include="TestBaseSystem.cs" />
