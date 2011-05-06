@@ -75,6 +75,10 @@
       <Project>{215F5C9A-8B33-4A02-83BC-CC2C3FE66D01}</Project>
       <Name>NakoPluginOfficeExcel</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NakoPluginOfficePowerPoint\NakoPluginOfficePowerPoint.vbproj">
+      <Project>{2E310361-7FA4-40F4-A38B-4BC4956063A8}</Project>
+      <Name>NakoPluginOfficePowerPoint</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NakoPlugin\NakoPlugin.csproj">
       <Project>{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}</Project>
       <Name>NakoPlugin</Name>
