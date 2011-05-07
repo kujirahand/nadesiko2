@@ -9,19 +9,22 @@ namespace Libnako.NakoAPI
     /// <summary>
     /// なでしこにシステム関数を登録するクラス(実際の関数の挙動もここで定義)
     /// </summary>
-    public class NakoBaseSystem : INakoPlugin
+    public class NakoBaseSystem : NakoPluginTemplate, INakoPlugin
     {
-        //--- プラグインの宣言 ---
-        string _description = "システム関数を定義したプラグイン";
-        double _version = 1.0;
-        //--- プラグイン共通の部分 ---
-        public double TargetNakoVersion { get { return 2.0; } }
-        public bool Used { get; set; }
-        public string Name { get { return this.GetType().FullName; } }
-        public double PluginVersion { get { return _version; } }
-        public string Description { get { return _description; } }
-        //--- 関数の定義 ---
-        public void DefineFunction(INakoPluginBank bank)
+        /// <summary>
+        /// プラグインのバージョン番号
+        /// </summary>
+        new protected double _pluginVersion = 1.0;
+        /// <summary>
+        /// プラグインの説明
+        /// </summary>
+        new protected string _pluginDescript = "システム関数を定義したプラグイン";
+
+        /// <summary>
+        /// 関数の定義
+        /// </summary>
+        /// <param name="bank"></param>
+        new public void DefineFunction(INakoPluginBank bank)
         {
             //+システム
             //-バージョン情報
@@ -64,14 +67,6 @@ namespace Libnako.NakoAPI
             //+サウンド
             bank.AddFunc("BEEP", "", NakoVarType.Void, _beep, "BEEP音を鳴らす", "BEEP");
         }
-        // プラグインの初期化処理
-        public void PluginInit(INakoInterpreter runner)
-        {
-        }
-        // プラグインの終了処理
-        public void PluginFin(INakoInterpreter runner)
-        {
-        }
 
         /*
         public Object _say(NakoFuncCallInfo info)
@@ -85,22 +80,22 @@ namespace Libnako.NakoAPI
         }
          */
 
-        public Object _nakoVersion(INakoFuncCallInfo info)
+        private Object _nakoVersion(INakoFuncCallInfo info)
         {
             return NakoInfo.NakoVersion;
         }
 
-        public Object _osVersion(INakoFuncCallInfo info)
+        private Object _osVersion(INakoFuncCallInfo info)
         {
             return System.Environment.OSVersion.Version;
         }
 
-        public Object _os(INakoFuncCallInfo info)
+        private Object _os(INakoFuncCallInfo info)
         {
             return NWEnviroment.osVersionStr();
         }
 
-        public Object _getPlugins(INakoFuncCallInfo info)
+        private Object _getPlugins(INakoFuncCallInfo info)
         {
             NakoVarArray a = info.CreateArray();
             foreach (KeyValuePair<string, INakoPlugin> pair in NakoAPIFuncBank.Instance.PluginList)
@@ -112,21 +107,21 @@ namespace Libnako.NakoAPI
             return a;
         }
 
-        public Object _beep(INakoFuncCallInfo info)
+        private Object _beep(INakoFuncCallInfo info)
         {
         	// BEEP
         	System.Media.SystemSounds.Beep.Play();
             return null;
         }
 
-        public Object _show(INakoFuncCallInfo info)
+        private Object _show(INakoFuncCallInfo info)
         {
             String msg = info.StackPopAsString();
             info.WriteLog(msg);
             return null;
         }
 
-        public Object _add(INakoFuncCallInfo info)
+        private Object _add(INakoFuncCallInfo info)
         {
             Object a = info.StackPop();
             Object b = info.StackPop();
@@ -142,7 +137,7 @@ namespace Libnako.NakoAPI
             }
         }
 
-        public Object _addEx(INakoFuncCallInfo info)
+        private Object _addEx(INakoFuncCallInfo info)
         {
             Object ar = info.StackPop();
             Object b = info.StackPop();
@@ -167,7 +162,7 @@ namespace Libnako.NakoAPI
             return (c);
         }
 
-        public Object _sub(INakoFuncCallInfo info)
+        private Object _sub(INakoFuncCallInfo info)
         {
             Object a = info.StackPop();
             Object b = info.StackPop();
@@ -183,7 +178,7 @@ namespace Libnako.NakoAPI
             }
         }
 
-        public Object _subEx(INakoFuncCallInfo info)
+        private Object _subEx(INakoFuncCallInfo info)
         {
             Object ar = info.StackPop();
             Object b = info.StackPop();
@@ -208,7 +203,7 @@ namespace Libnako.NakoAPI
             return (c);
         }
 
-        public Object _mul(INakoFuncCallInfo info)
+        private Object _mul(INakoFuncCallInfo info)
         {
             Object a = info.StackPop();
             Object b = info.StackPop();
@@ -224,7 +219,7 @@ namespace Libnako.NakoAPI
             }
         }
 
-        public Object _mulEx(INakoFuncCallInfo info)
+        private Object _mulEx(INakoFuncCallInfo info)
         {
             Object ar = info.StackPop();
             Object b = info.StackPop();
@@ -249,7 +244,7 @@ namespace Libnako.NakoAPI
             return (c);
         }
 
-        public Object _div(INakoFuncCallInfo info)
+        private Object _div(INakoFuncCallInfo info)
         {
             Object a = info.StackPop();
             Object b = info.StackPop();
@@ -265,7 +260,7 @@ namespace Libnako.NakoAPI
             }
         }
 
-        public Object _divEx(INakoFuncCallInfo info)
+        private Object _divEx(INakoFuncCallInfo info)
         {
             Object ar = info.StackPop();
             Object b = info.StackPop();
@@ -291,7 +286,7 @@ namespace Libnako.NakoAPI
         }
 
         private Random _randObj = null;
-        public Object _random(INakoFuncCallInfo info)
+        private Object _random(INakoFuncCallInfo info)
         {
             Int64 range = info.StackPopAsInt();
             if (_randObj == null) {
@@ -300,8 +295,8 @@ namespace Libnako.NakoAPI
             int v = _randObj.Next((int)range);
             return (Int64)v;
         }
-        
-        public Object _abs(INakoFuncCallInfo info)
+
+        private Object _abs(INakoFuncCallInfo info)
         {
             double v = info.StackPopAsDouble();
             v = Math.Abs(v);

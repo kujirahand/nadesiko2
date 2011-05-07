@@ -10,6 +10,9 @@ namespace Libnako.JPNCompiler.Node
     /// </summary>
     public class NakoNodePop : NakoNode
     {
+        /// <summary>
+        /// constructor
+        /// </summary>
         public NakoNodePop()
         {
             type = NakoNodeType.POP;

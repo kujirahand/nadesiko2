@@ -15,6 +15,10 @@ namespace Libnako.JPNCompiler.Parser
     /// </summary>
     public class NakoParser : NakoParserBase
     {
+        /// <summary>
+        /// 構文解析器のコンストラクタ
+        /// </summary>
+        /// <param name="tokens"></param>
         public NakoParser(NakoTokenList tokens) : base(tokens)
         {
         }
@@ -808,6 +812,10 @@ namespace Libnako.JPNCompiler.Parser
         }
         
         private bool _canCallJFunction = true;
+        /// <summary>
+        /// 値を得る(関数形式)
+        /// </summary>
+        /// <returns></returns>
         protected Boolean _value_nojfunc()
         {
             bool tmp = _canCallJFunction;
@@ -821,6 +829,10 @@ namespace Libnako.JPNCompiler.Parser
         }
         
         //> _value : FUNCTION_NAME | _calc_fact ;
+        /// <summary>
+        /// 値を得る
+        /// </summary>
+        /// <returns></returns>
         protected override Boolean _value()
         {
             // TODO: _value は再帰が多くコストが高いのであり得る値だけチェックする

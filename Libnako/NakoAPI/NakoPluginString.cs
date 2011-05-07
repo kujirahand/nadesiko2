@@ -18,18 +18,23 @@ namespace Libnako.NakoAPI
     /// <summary>
     /// Description of MyClass.
     /// </summary>
-    public class NakoPluginString : INakoPlugin
+    public class NakoPluginString : NakoPluginTemplate, INakoPlugin
     {
-        string _description = "文字列処理を行うプラグイン";
-        double _version = 1.0;
-        //--- プラグイン共通の部分 ---
-        public double TargetNakoVersion { get { return 2.0; } }
-        public bool Used { get; set; }
-        public string Name { get { return this.GetType().FullName; } }
-        public double PluginVersion { get { return _version; } }
-        public string Description { get { return _description; } }
+        /// <summary>
+        /// プラグインのバージョン番号
+        /// </summary>
+        new protected double _pluginVersion = 1.0;
+        /// <summary>
+        /// プラグインの説明
+        /// </summary>
+        new protected string _pluginDescript = "文字列処理を行うプラグイン";
+
         //--- 関数の定義 ---
-        public void DefineFunction(INakoPluginBank bank)
+        /// <summary>
+        /// 関数の定義
+        /// </summary>
+        /// <param name="bank"></param>
+        new public void DefineFunction(INakoPluginBank bank)
         {
             //+文字列処理
             //-文字列処理
@@ -59,36 +64,47 @@ namespace Libnako.NakoAPI
 
             bank.AddFunc("何文字目", "SでSSが|Sの", NakoVarType.String, _strpos, "文字列Sで文字列SSが何文字目にあるか調べて返す", "なんもじめ");
         }
-        
-        // プラグインの初期化処理
-        public void PluginInit(INakoInterpreter runner)
-        {
-        }
-        // プラグインの終了処理
-        public void PluginFin(INakoInterpreter runner)
-        {
-        }
-        
+                
         // Define Method
-        public Object _length(INakoFuncCallInfo info)
+        /// <summary>
+        /// 文字列の長さを調べる
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        private Object _length(INakoFuncCallInfo info)
         {
         	String s = info.StackPopAsString();
             return s.Length;
         }
-        public Object _search(INakoFuncCallInfo info)
+        /// <summary>
+        /// 文字列検索
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        private Object _search(INakoFuncCallInfo info)
         {
         	String s = info.StackPopAsString();
         	String needle = info.StackPopAsString();
         	return s.IndexOf(needle) + 1;
         }
-        public Object _replace(INakoFuncCallInfo info)
+        /// <summary>
+        /// 置換
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        private Object _replace(INakoFuncCallInfo info)
         {
         	String s = info.StackPopAsString();
         	String search = info.StackPopAsString();
         	String replace = info.StackPopAsString();
         	return s.Replace(search,replace);
         }
-        public Object _replace_a(INakoFuncCallInfo info)
+        /// <summary>
+        /// 単置換
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        private Object _replace_a(INakoFuncCallInfo info)
         {
         	String s = info.StackPopAsString();
         	String search = info.StackPopAsString();
@@ -98,23 +114,43 @@ namespace Libnako.NakoAPI
         	String post = s.Substring(index+search.Length);
         	return pre + replace + post;
         }
-        public Object _left(INakoFuncCallInfo info)
+        /// <summary>
+        /// 左からN文字の部分文字列
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        private Object _left(INakoFuncCallInfo info)
         {
         	String s = info.StackPopAsString();
         	int len = (int)info.StackPopAsInt();
         	return s.Substring(0,len);
         }
-        public Object _trim(INakoFuncCallInfo info)
+        /// <summary>
+        /// トリム
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        private Object _trim(INakoFuncCallInfo info)
         {
         	String s = info.StackPopAsString();
         	return s.Trim();
         }
-        public Object _right(INakoFuncCallInfo info){
+        /// <summary>
+        /// 右から部分文字列を返す
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        private Object _right(INakoFuncCallInfo info){
         	String s = info.StackPopAsString();
         	int len = (int)info.StackPopAsInt();
         	return s.Substring(s.Length-len);
         }
-        public Object _cut(INakoFuncCallInfo info){
+        /// <summary>
+        /// 切り取る
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        private Object _cut(INakoFuncCallInfo info){
             Object sr = info.StackPop();
             String a = info.StackPopAsString();
             string[] delim = {a};
@@ -133,13 +169,18 @@ namespace Libnako.NakoAPI
             }
             return null;
         }
-        public Object _extract(INakoFuncCallInfo info){
+        /// <summary>
+        /// 文字抜き出す
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        private Object _extract(INakoFuncCallInfo info){
             String s = info.StackPopAsString();
             int a = NadesikoPositionToCSPosition((int)info.StackPopAsInt());
             int cnt = (int)info.StackPopAsInt();
             return s.Substring(a,cnt);
         }
-        public Object _Em(INakoFuncCallInfo info){
+        private Object _Em(INakoFuncCallInfo info){
             String s = info.StackPopAsString();
             char c1 = s[0];
             int num = Encoding.GetEncoding("Shift_JIS").GetByteCount(c1.ToString());
@@ -149,7 +190,7 @@ namespace Libnako.NakoAPI
                 return 0;
             }
         }
-        public Object _remove(INakoFuncCallInfo info){
+        private Object _remove(INakoFuncCallInfo info){
             Object sr = info.StackPop();
             int a = NadesikoPositionToCSPosition((int)info.StackPopAsInt());
             int b = (int)info.StackPopAsInt();
@@ -163,13 +204,13 @@ namespace Libnako.NakoAPI
             ((NakoVariable)sr).SetBodyAutoType(ret);
             return null;
         }
-        public Object _insert(INakoFuncCallInfo info){
+        private Object _insert(INakoFuncCallInfo info){
             StringBuilder s = new StringBuilder(info.StackPopAsString());
             int cnt = NadesikoPositionToCSPosition((int)info.StackPopAsInt());
             String a = info.StackPopAsString();
             return s.Insert(cnt,a).ToString();
         }
-        public Object _degrade(INakoFuncCallInfo info){
+        private Object _degrade(INakoFuncCallInfo info){
             String s = info.StackPopAsString();
             char[] splitted = s.ToCharArray();
              NakoVarArray arr = info.CreateArray();
@@ -178,7 +219,7 @@ namespace Libnako.NakoAPI
             }
             return arr;
        }
-        public Object _explode(INakoFuncCallInfo info){
+        private Object _explode(INakoFuncCallInfo info){
             String s = info.StackPopAsString();
             String a = info.StackPopAsString();
             string[] splitted = s.Split(new string[]{a},StringSplitOptions.None);
@@ -188,7 +229,7 @@ namespace Libnako.NakoAPI
             }
             return arr;
         }
-        public Object _num(INakoFuncCallInfo info){
+        private Object _num(INakoFuncCallInfo info){
             String s = info.StackPopAsString();
             char c1 = s[0];
             int num;
@@ -198,23 +239,33 @@ namespace Libnako.NakoAPI
                 return 0;
             }
         }
-        public Object _append(INakoFuncCallInfo info){
+        /// <summary>
+        /// 文字列に追加する
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        private Object _append(INakoFuncCallInfo info){
             StringBuilder s = new StringBuilder(info.StackPopAsString());
             String a = info.StackPopAsString();
             return s.Append(a).ToString();
         }
-        public Object _alnumToEn(INakoFuncCallInfo info)
+        private Object _alnumToEn(INakoFuncCallInfo info)
         {
         	String s = info.StackPopAsString();
         	return Regex.Replace(s,@"[０-９Ａ-Ｚａ-ｚ：－　]+",delegate(Match m){ return Strings.StrConv(m.Value, VbStrConv.Narrow, 0); });
         }
-        public Object _zeroFill(INakoFuncCallInfo info){
+        /// <summary>
+        /// ゼロ埋め
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
+        private Object _zeroFill(INakoFuncCallInfo info){
         	long s = info.StackPopAsInt();
         	String l = info.StackPopAsInt().ToString();
         	return　String.Format(@"{0:D"+l+"}",s);
         }
         
-        public Object _toEn(INakoFuncCallInfo info){
+        private Object _toEn(INakoFuncCallInfo info){
         	String s = info.StackPopAsString();
             return Strings.StrConv(s, VbStrConv.Narrow, 0);
         }
@@ -222,17 +273,17 @@ namespace Libnako.NakoAPI
             return nadesiko_pos - 1;
         }
         
-        public Object _lowercase(INakoFuncCallInfo info)
+        private Object _lowercase(INakoFuncCallInfo info)
         {
         	String s = info.StackPopAsString();
         	return s.ToLower();
         }
-        public Object _uppercase(INakoFuncCallInfo info)
+        private Object _uppercase(INakoFuncCallInfo info)
         {
         	String s = info.StackPopAsString();
         	return s.ToUpper();
         }
-        public Object _strpos(INakoFuncCallInfo info)
+        private Object _strpos(INakoFuncCallInfo info)
         {
             String s = info.StackPopAsString();
             String ss = info.StackPopAsString();

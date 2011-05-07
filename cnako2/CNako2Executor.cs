@@ -13,18 +13,47 @@ using NakoPlugin;
 
 namespace cnako2
 {
+    /// <summary>
+    /// cnakoでコマンドラインを解析して実行まで行うクラス
+    /// </summary>
     public class CNako2Executor
     {
-        
+        /// <summary>
+        /// （デバッグ用）中間コード生成までの解説を表示するか
+        /// </summary>
         public bool DescriptMode = false;
+        /// <summary>
+        /// （デバッグ用）実行時に経過を表示するか
+        /// </summary>
         public bool DebugMode = false;
+        /// <summary>
+        /// プログラム終了後、Enterが押されるのを待つかどうか
+        /// </summary>
         public bool WaitMode = false;
+        /// <summary>
+        /// cnakoの実行モード
+        /// </summary>
         public NakoConsoleMode runMode = NakoConsoleMode.RunFile;
+        /// <summary>
+        /// 実行するソースコード
+        /// </summary>
         public string source = null;
+        /// <summary>
+        /// ログ出力を使うかどうか
+        /// </summary>
         public bool UseLog = false;
+        /// <summary>
+        /// プログラムの実行後に出力されたログが設定される
+        /// </summary>
         public string PrintLog = null;
+        /// <summary>
+        /// コマンドライン引数を覚えておく
+        /// </summary>
         private string[] args = null;
 
+        /// <summary>
+        /// cnakoのヘルプを表示する
+        /// </summary>
         public void ShowHelp()
         {
             _w("# [CNAKO2]");
@@ -35,6 +64,11 @@ namespace cnako2
             _w("# >cnako2 -e (one liner code)");
         }
 
+        /// <summary>
+        /// コマンドライン引数を解析し、オプションを設定する
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
         public bool setOptions(string[] args)
         {
             // オプションなしなら失敗
@@ -57,6 +91,7 @@ namespace cnako2
                 if (arg == "-desc" || arg == "-descript")
                 {
                     DescriptMode = true;
+                    UseLog = true;
                     i++;
                     continue;
                 }
@@ -87,6 +122,9 @@ namespace cnako2
             return true;
         }
 
+        /// <summary>
+        /// プログラムを実行する
+        /// </summary>
         public void Run()
         {
             switch (runMode)
@@ -231,9 +269,18 @@ namespace cnako2
         }
     }
 
+    /// <summary>
+    /// なでしこコンソールの実行モード
+    /// </summary>
     public enum NakoConsoleMode
     {
+        /// <summary>
+        /// コマンドラインからの一行プログラム
+        /// </summary>
         OneLiner,
+        /// <summary>
+        /// ファイルを読み込んで実行する場合
+        /// </summary>
         RunFile
     }
 }

@@ -4,9 +4,15 @@ using System.Text;
 
 namespace Libnako.JPNCompiler.Tokenizer
 {
+    /// <summary>
+    /// トークンの一覧を保持するリスト
+    /// </summary>
     public class NakoTokenList : IList<NakoToken>
     {
         private List<NakoToken> _list = new List<NakoToken>();
+        /// <summary>
+        /// 現在解析しているトークンの位置を返す
+        /// </summary>
         protected int cur = 0;
         private Stack<int> curStack = new Stack<int>();
 
@@ -37,6 +43,9 @@ namespace Libnako.JPNCompiler.Tokenizer
             return curStack.Pop();
         }
 
+        /// <summary>
+        /// 現在調査中のトークン
+        /// </summary>
         public NakoToken CurrentToken
         {
             get
@@ -46,6 +55,9 @@ namespace Libnako.JPNCompiler.Tokenizer
             }
         }
 
+        /// <summary>
+        /// 現在のトークンを削除
+        /// </summary>
         public void RemoveCurrentToken()
         {
             if (_list.Count > 0)
@@ -54,16 +66,28 @@ namespace Libnako.JPNCompiler.Tokenizer
             }
         }
 
+        /// <summary>
+        /// 引数tのトークンを可憐とトークンの後ろに挿入する
+        /// </summary>
+        /// <param name="t"></param>
         public void InsertAfterCurrentToken(NakoToken t)
         {
             this.Insert(cur + 1, t);
         }
 
+        /// <summary>
+        /// 現在のトークンが、指定したトークンタイプtと合致するか
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
         public Boolean Accept(NakoTokenType t)
         {
             return (t == CurrentTokenType);
         }
 
+        /// <summary>
+        /// 次のトークンを返す
+        /// </summary>
         public NakoToken NextToken
         {
             get
@@ -73,6 +97,9 @@ namespace Libnako.JPNCompiler.Tokenizer
             }
         }
 
+        /// <summary>
+        /// 現在のトークンタイプを返す
+        /// </summary>
         public NakoTokenType CurrentTokenType
         {
             get {
@@ -82,6 +109,9 @@ namespace Libnako.JPNCompiler.Tokenizer
             }
         }
 
+        /// <summary>
+        /// 次のトークンのタイプを返す
+        /// </summary>
         public NakoTokenType NextTokenType
         {
             get
@@ -91,22 +121,36 @@ namespace Libnako.JPNCompiler.Tokenizer
                 return t.type;
             }
         }
-
+        /// <summary>
+        /// トップへ移動
+        /// </summary>
         public void MoveTop()
         {
             cur = 0;
         }
 
+        /// <summary>
+        /// 次のトークンに移動
+        /// </summary>
         public void MoveNext()
         {
             cur++;
         }
 
+        /// <summary>
+        /// 終端か?
+        /// </summary>
+        /// <returns></returns>
         public Boolean IsEOF()
         {
             return (cur >= this.Count);
         }
 
+        /// <summary>
+        /// トークンを探す
+        /// </summary>
+        /// <param name="keytype"></param>
+        /// <returns></returns>
         public Boolean SearchToken(NakoTokenType keytype)
         {
             return SearchToken(keytype, false);
@@ -161,7 +205,10 @@ namespace Libnako.JPNCompiler.Tokenizer
             return false;
         }
 
-
+        /// <summary>
+        /// トークンのタイプを表す文字列を返す
+        /// </summary>
+        /// <returns></returns>
         public String toTypeString()
         {
             String s = "";
@@ -226,21 +273,40 @@ namespace Libnako.JPNCompiler.Tokenizer
 
 		#region IList<NakoToken> メンバー
 
+        /// <summary>
+        /// 検索
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
 		public int IndexOf(NakoToken item)
 		{
 			return _list.IndexOf(item);
 		}
-
+        
+        /// <summary>
+        /// 挿入
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="item"></param>
 		public void Insert(int index, NakoToken item)
 		{
 			_list.Insert(index, item);
 		}
 
+        /// <summary>
+        /// 削除
+        /// </summary>
+        /// <param name="index"></param>
 		public void RemoveAt(int index)
 		{
 			_list.RemoveAt(index);
 		}
 
+        /// <summary>
+        /// 要素を返す
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
 		public NakoToken this[int index]
 		{
 			get
@@ -257,36 +323,61 @@ namespace Libnako.JPNCompiler.Tokenizer
 
 		#region ICollection<NakoToken> メンバー
 
+        /// <summary>
+        /// 追加
+        /// </summary>
+        /// <param name="item"></param>
 		public void Add(NakoToken item)
 		{
 			_list.Add(item);
 		}
-
+        /// <summary>
+        /// 削除
+        /// </summary>
 		public void Clear()
 		{
 			_list.Clear();
 		}
 
+        /// <summary>
+        /// 要素にitemを含んでいるか
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
 		public bool Contains(NakoToken item)
 		{
 			return _list.Contains(item);
 		}
-
+        /// <summary>
+        /// コピーする
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="arrayIndex"></param>
 		public void CopyTo(NakoToken[] array, int arrayIndex)
 		{
 			_list.CopyTo(array, arrayIndex);
 		}
-
+        /// <summary>
+        /// 要素の数
+        /// </summary>
 		public int Count
 		{
 			get { return _list.Count; }
 		}
 
+        /// <summary>
+        /// 読み取り専用か
+        /// </summary>
 		bool ICollection<NakoToken>.IsReadOnly
 		{
 			get { throw new NotImplementedException(); }
 		}
 
+        /// <summary>
+        /// Remove
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
 		public bool Remove(NakoToken item)
 		{
 			return _list.Remove(item);
@@ -295,7 +386,11 @@ namespace Libnako.JPNCompiler.Tokenizer
 		#endregion
 
 		#region IEnumerable<NakoToken> メンバー
-
+        
+        /// <summary>
+        /// 列挙型を返す
+        /// </summary>
+        /// <returns></returns>
 		public IEnumerator<NakoToken> GetEnumerator()
 		{
 			return _list.GetEnumerator();

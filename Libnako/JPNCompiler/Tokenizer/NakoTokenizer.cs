@@ -5,17 +5,23 @@ using System.Text;
 namespace Libnako.JPNCompiler.Tokenizer
 {
     /// <summary>
-    /// トークン解析機
+    /// トークン解析器クラス
     /// </summary>
     public class NakoTokenizer : NakoTokenizerBase
     {
-
+        /// <summary>
+        /// トークン解析器のコンストラクタ
+        /// </summary>
+        /// <param name="source"></param>
         public NakoTokenizer(string source)
         {
             Init();
             this.source = source; 
         }
 
+        /// <summary>
+        /// トークン解析を行う
+        /// </summary>
         public void Tokenize()
         {
             // 1回目の解析 --- トークンをひたすら区切る
@@ -58,6 +64,9 @@ namespace Libnako.JPNCompiler.Tokenizer
             }
         }
 
+        /// <summary>
+        /// 予約後のチェックや代入文への変換作業などを行う
+        /// </summary>
         protected void TokenizeCheckWord()
         {
             // 予約語句のチェックなど
@@ -90,6 +99,9 @@ namespace Libnako.JPNCompiler.Tokenizer
             }
         }
         
+        /// <summary>
+        /// 関数の定義
+        /// </summary>
         protected void TokenizeAnalize_DefFunction()
         {
             NakoToken firstToken = tokens.CurrentToken;
@@ -211,6 +223,10 @@ namespace Libnako.JPNCompiler.Tokenizer
             indentCount = newIndent;
         }
 
+        /// <summary>
+        /// トークンを１つ取得する
+        /// </summary>
+        /// <returns></returns>
         public NakoToken GetToken()
         {
             // カーソルが最後まで行ったか?
@@ -434,7 +450,11 @@ namespace Libnako.JPNCompiler.Tokenizer
                     return tt;
             }
         }
-
+        /// <summary>
+        /// 一行コメントを得る
+        /// </summary>
+        /// <param name="tok"></param>
+        /// <returns></returns>
         public NakoToken GetLineComment(NakoToken tok)
         {
             tok.type = NakoTokenType.COMMENT;
@@ -455,6 +475,11 @@ namespace Libnako.JPNCompiler.Tokenizer
             return tok;
         }
 
+        /// <summary>
+        /// 範囲コメントを得る
+        /// </summary>
+        /// <param name="tok"></param>
+        /// <returns></returns>
         public NakoToken GetRangeComment(NakoToken tok)
         {
             tok.type = NakoTokenType.COMMENT;
@@ -487,6 +512,10 @@ namespace Libnako.JPNCompiler.Tokenizer
             return tok;
         }
 
+        /// <summary>
+        /// 文字列の取得
+        /// </summary>
+        /// <returns></returns>
         public NakoToken GetToken_String()
         {
             if (IsEOF()) return null;
@@ -559,21 +588,37 @@ namespace Libnako.JPNCompiler.Tokenizer
             return token;
         }
 
+        /// <summary>
+        /// アルファベットか
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
         public static Boolean IsAlpha(Char c)
         {
             return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z');
         }
-
+        /// <summary>
+        /// 数字か
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
         public static Boolean IsNumber(Char c)
         {
             return ('0' <= c && c <= '9');
         }
-
+        /// <summary>
+        /// ひらがなか
+        /// </summary>
+        /// <param name="c"></param>
+        /// <returns></returns>
         public static Boolean IsHira(Char c)
         {
             return ('ぁ' <= c && c <= 'ん');
         }
-
+        /// <summary>
+        /// 記号以外か
+        /// </summary>
+        /// <returns></returns>
         private NakoToken GetToken_NotFlag()
         {
             Char c = CurrentChar;
@@ -590,6 +635,10 @@ namespace Libnako.JPNCompiler.Tokenizer
             return null;
         }
 
+        /// <summary>
+        /// WORDトークンの取得
+        /// </summary>
+        /// <returns></returns>
         public NakoToken GetToken_Word()
         {
             NakoToken token = new NakoToken(NakoTokenType.WORD, lineno, level);
@@ -647,7 +696,10 @@ namespace Libnako.JPNCompiler.Tokenizer
             }
             return false;
         }
-
+        /// <summary>
+        /// 数字の取得
+        /// </summary>
+        /// <returns></returns>
         public NakoToken GetToken_Number()
         {
             NakoToken token = new NakoToken(NakoTokenType.INT, lineno, level);
@@ -677,6 +729,10 @@ namespace Libnako.JPNCompiler.Tokenizer
             return token;
         }
 
+        /// <summary>
+        /// インデントを数える
+        /// </summary>
+        /// <returns></returns>
         public int CountIndent()
         {
             int indent = 0;

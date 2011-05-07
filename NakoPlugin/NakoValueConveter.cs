@@ -10,18 +10,35 @@ namespace NakoPlugin
     /// </summary>
     public class NakoValueConveter
     {
+        /// <summary>
+        /// 内部で使う値
+        /// </summary>
         protected Object value = null;
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="v"></param>
         public NakoValueConveter(Object v)
         {
             this.value = v;
         }
 
+        /// <summary>
+        /// 整数に変換
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static int ToInt(Object value)
         {
             return Convert.ToInt32(value);
         }
 
+        /// <summary>
+        /// LONG型に変換
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static Int64 ToLong(Object value)
         {
             if (value is Int64)
@@ -44,6 +61,11 @@ namespace NakoPlugin
             return 0;
         }
 
+        /// <summary>
+        /// 浮動小数点数に変換
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static Double ToDouble(Object value)
         {
             Type t = value.GetType();
@@ -69,11 +91,19 @@ namespace NakoPlugin
             return 0;
         }
 
+        /// <summary>
+        /// 文字列に変換
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static String ToString(Object value)
         {
             return value.ToString();
         }
 
+        /// <summary>
+        /// 値
+        /// </summary>
         public Object Value
         {
             get { return value; }

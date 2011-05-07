@@ -16,6 +16,10 @@ namespace Libnako.NakoAPI
         // プラグインインターフェイスのフルパスを調べる
         string INakoPluginsPath = typeof(INakoPlugin).FullName;
 
+        /// <summary>
+        /// プラグインを検索する
+        /// </summary>
+        /// <returns></returns>
         protected NakoPluginInfo[] FindPlugins()
         {
             // プラグインのあるパスを調べる
@@ -118,8 +122,18 @@ namespace Libnako.NakoAPI
     /// </summary>
     public class NakoPluginInfo
     {
+        /// <summary>
+        /// プラグインのパス
+        /// </summary>
         public String Location { get; set; }
+        /// <summary>
+        /// プラグインのクラス名
+        /// </summary>
         public String ClassName { get; set; }
+        /// <summary>
+        /// インスタンスを生成する
+        /// </summary>
+        /// <returns></returns>
         public INakoPlugin CreateInstance()
         {
             if (Location == null || ClassName == null) return null;

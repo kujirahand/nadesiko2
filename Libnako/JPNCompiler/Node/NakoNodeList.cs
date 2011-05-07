@@ -5,10 +5,17 @@ using Libnako.JPNCompiler.Function;
 
 namespace Libnako.JPNCompiler.Node
 {
+    /// <summary>
+    /// ノード一覧クラス
+    /// </summary>
     public class NakoNodeList : IList<NakoNode>
     {
 		private List<NakoNode> _list = new List<NakoNode>();
 		
+        /// <summary>
+        /// 先頭のノードを切り取って返す
+        /// </summary>
+        /// <returns></returns>
 		public NakoNode Shift()
         {
             if (this.Count == 0)
@@ -19,11 +26,19 @@ namespace Libnako.JPNCompiler.Node
             this.RemoveAt(0);
             return r;
         }
-
+        /// <summary>
+        /// ポップ
+        /// </summary>
+        /// <returns></returns>
         public NakoNode Pop()
         {
         	return this.Pop(null);
         }
+        /// <summary>
+        /// 助詞つきでポップ
+        /// </summary>
+        /// <param name="arg"></param>
+        /// <returns></returns>
         public NakoNode Pop(NakoFuncArg arg)
         {
             // 助詞リストをチェックする
@@ -55,13 +70,20 @@ namespace Libnako.JPNCompiler.Node
                 return null;
             }
         }
-
+        /// <summary>
+        /// 末尾に追加
+        /// </summary>
+        /// <param name="value"></param>
         public void Push(NakoNode value)
         {
             this.Add(value);
         }
 
-
+        /// <summary>
+        /// ノードタイプが合致しているか調べる
+        /// </summary>
+        /// <param name="checker"></param>
+        /// <returns></returns>
         public Boolean checkNodeType(NakoNodeType[] checker)
         {
             if (checker.Length != this.Count) return false;
@@ -76,12 +98,15 @@ namespace Libnako.JPNCompiler.Node
             return true;
         }
 
-        // FOR DEBUG
+        /// <summary>
+        /// デバッグ用にタイプ文字列を返す
+        /// </summary>
+        /// <returns></returns>
         public String toTypeString()
         {
         	return this.toTypeString(0);
         }
-        public String toTypeString(int level)
+        private String toTypeString(int level)
         {
             // for indent
             String indent = "- ";
@@ -109,6 +134,10 @@ namespace Libnako.JPNCompiler.Node
             return r;
         }
 
+        /// <summary>
+        /// 配列形式で返す
+        /// </summary>
+        /// <returns></returns>
         public NakoNodeType[] toTypeArray()
         {
             NakoNodeType[] r = new NakoNodeType[this.Count];
@@ -121,22 +150,38 @@ namespace Libnako.JPNCompiler.Node
         }
 
 		#region IList<NakoNode> メンバー
-
+        /// <summary>
+        /// 検索
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
 		public int IndexOf(NakoNode item)
 		{
 			return _list.IndexOf(item);
 		}
-
+        /// <summary>
+        /// 挿入
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="item"></param>
 		public void Insert(int index, NakoNode item)
 		{
 			_list.Insert(index, item);
 		}
-
+        /// <summary>
+        /// 削除
+        /// </summary>
+        /// <param name="index"></param>
 		public void RemoveAt(int index)
 		{
 			_list.RemoveAt(index);
 		}
 
+        /// <summary>
+        /// 要素を返す
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
 		public NakoNode this[int index]
 		{
 			get
@@ -167,22 +212,34 @@ namespace Libnako.JPNCompiler.Node
 		{
 			return _list.Contains(item);
 		}
-
+        /// <summary>
+        /// コピー
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="arrayIndex"></param>
 		public void CopyTo(NakoNode[] array, int arrayIndex)
 		{
 			_list.CopyTo(array, arrayIndex);
 		}
-
+        /// <summary>
+        /// カウント
+        /// </summary>
 		public int Count
 		{
 			get { return _list.Count; }
 		}
-
+        /// <summary>
+        /// 読み取り専用か
+        /// </summary>
 		bool ICollection<NakoNode>.IsReadOnly
 		{
 			get { throw new NotImplementedException(); }
 		}
-
+        /// <summary>
+        /// 削除
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
 		public bool Remove(NakoNode item)
 		{
 			return _list.Remove(item);

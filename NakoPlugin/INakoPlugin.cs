@@ -32,7 +32,7 @@ namespace NakoPlugin
         bool Used { get; set; }
         /// <summary>
         /// プラグインでなでしこの関数を定義する
-        /// <see cref="Libnako.NakoAPI.NakoBaseSystem.DefineFunction">登録例</see>
+        /// Libnako.NakoAPI.NakoBaseSystem.DefineFunction　に登録例あり
         /// </summary>
         /// <param name="bank">このオブジェクトに命令を登録する</param>
         void DefineFunction(INakoPluginBank bank);
@@ -51,37 +51,107 @@ namespace NakoPlugin
     /// </summary>
     public enum NakoVarType
     {
+        /// <summary>
+        /// 型無し/引数無し
+        /// </summary>
         Void,
+        /// <summary>
+        /// 任意のオブジェクト
+        /// </summary>
         Object,     // = 任意のオブジェクト
+        /// <summary>
+        /// 整数(=Int64)
+        /// </summary>
         Int,        // = Int64
+        /// <summary>
+        /// 浮動小数点数(=Double)
+        /// </summary>
         Double,     // = Double
+        /// <summary>
+        /// 文字列
+        /// </summary>
         String,     // = String
+        /// <summary>
+        /// 配列
+        /// </summary>
         Array,      // = NakoVarArray
+        /// <summary>
+        /// グループ
+        /// </summary>
         Group,
+        /// <summary>
+        /// ユーザー関数
+        /// </summary>
         UserFunc,
+        /// <summary>
+        /// システム関数(プラグイン関数)
+        /// </summary>
         SystemFunc
     }
 
     /// <summary>
     /// プラグイン関数呼び出しに使うインターフェイス
     /// </summary>
-    /// <see cref="">本体</see>
+    /// Libnako.JPNCompiler.Functio.NakoFuncCallInfo に本体の定義あり
     public interface INakoFuncCallInfo
     {
         // --- 関数の引数を取得するメソッド
+        /// <summary>
+        /// 引数スタックから値を取り出す
+        /// </summary>
+        /// <returns></returns>
         Object StackPop();
+        /// <summary>
+        /// 引数スタックから文字列を取り出す
+        /// </summary>
+        /// <returns></returns>
         string StackPopAsString();
+        /// <summary>
+        /// 引数スタックから整数を取り出す
+        /// </summary>
+        /// <returns></returns>
         Int64 StackPopAsInt();
+        /// <summary>
+        /// 引数スタックから実数を取り出す
+        /// </summary>
+        /// <returns></returns>
         double StackPopAsDouble();
         // --- システム変数へのアクセス
+        /// <summary>
+        /// インタプリタの変数を取り出す
+        /// </summary>
+        /// <param name="varname"></param>
+        /// <returns></returns>
         NakoVariable GetVariable(string varname);
+        /// <summary>
+        /// インタプリタに変数を与える
+        /// </summary>
+        /// <param name="varname"></param>
+        /// <param name="value"></param>
         void SetVariable(string varname, NakoVariable value);
+        /// <summary>
+        /// インタプリタから変数の値を取り出す
+        /// </summary>
+        /// <param name="varname"></param>
+        /// <returns></returns>
         Object GetVariableValue(string varname);
+        /// <summary>
+        /// インタプリタの変数に値を設定する
+        /// </summary>
+        /// <param name="varname"></param>
+        /// <param name="value"></param>
         void SetVariableValue(string varname, Object value);
         // --- ユーティリティ
-        // ログに値を書き込む
+        /// <summary>
+        /// ログに値を書き込む
+        /// </summary>
+        /// <param name="s"></param>
         void WriteLog(string s);
         // --- 値を作成する
+        /// <summary>
+        /// 配列変数を生成する
+        /// </summary>
+        /// <returns></returns>
         NakoVarArray CreateArray();
     }
 
@@ -95,20 +165,30 @@ namespace NakoPlugin
     /// <summary>
     /// プラグインにシステム関数を追加する
     /// </summary>
-    /// <see cref="Libnako.NakoAPI.NakoAPIFuncBank">実際の定義</see>
+    /// Libnako.NakoAPI.NakoAPIFuncBank に実際の定義がある
     public interface INakoPluginBank
     {
         /// <summary>
         /// 関数をシステムに追加する
         /// </summary>
-        /// <param name="name">関数の名前</param>
-        /// <param name="argdef">引数の定義</param>
-        /// <param name="resultType">関数の戻り値</param>
-        /// <param name="f">実際に処理を行うC#のdelegate</param>
-        /// <param name="desc">関数の説明</param>
-        /// <param name="kana">命令のよみがな</param>
         void SetPluginInstance(INakoPlugin plugin);
+        /// <summary>
+        /// 関数を追加する
+        /// </summary>
+        /// <param name="name">関数の名前(日本語)</param>
+        /// <param name="argdef">引数の定義</param>
+        /// <param name="resultType">戻り値の型</param>
+        /// <param name="f">関数本体</param>
+        /// <param name="desc">説明</param>
+        /// <param name="kana">よみがな(アルファベットはそのままで)</param>
         void AddFunc(String name, String argdef, NakoVarType resultType, SysCallDelegate f, String desc, String kana);
+        /// <summary>
+        /// 変数を追加する
+        /// </summary>
+        /// <param name="name">変数の名前</param>
+        /// <param name="value">変数の初期値</param>
+        /// <param name="desc">変数の説明</param>
+        /// <param name="kane">よみがな(アルファベットはそのままで)</param>
         void AddVar(String name, Object value, String desc, String kane);
     }
     
@@ -117,6 +197,9 @@ namespace NakoPlugin
     /// </summary>
     public interface INakoInterpreter
     {
+        /// <summary>
+        /// インタプリタのID番号
+        /// </summary>
         int InterpreterId { get; }
     }
     
@@ -125,6 +208,10 @@ namespace NakoPlugin
     /// </summary>
     public class NakoPluginRuntimeException : ApplicationException
     {
+        /// <summary>
+        /// エラーを生成するコンストラクタ
+        /// </summary>
+        /// <param name="message"></param>
         public NakoPluginRuntimeException(string message)
             : base(message)
         {
@@ -136,6 +223,10 @@ namespace NakoPlugin
     /// </summary>
     public class NakoPluginArgmentException : ArgumentException
     {
+        /// <summary>
+        /// エラーを生成するコンストラクタ
+        /// </summary>
+        /// <param name="message"></param>
         public NakoPluginArgmentException(string message)
             : base(message)
         {
