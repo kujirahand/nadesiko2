@@ -10,36 +10,76 @@ using NakoPlugin;
 
 namespace Libnako.JPNCompiler
 {
+    /// <summary>
+    /// なでしこコンパイラ・クラス
+    /// </summary>
     public class NakoCompiler
     {
+        /// <summary>
+        /// 読み込み情報
+        /// </summary>
         public NakoCompilerLoaderInfo LoaderInfo { get; set; }
+        /// <summary>
+        /// 名前
+        /// </summary>
         public String name { get; set; }
+        /// <summary>
+        /// フルパス
+        /// </summary>
         public String fullpath { get; set; }
+        /// <summary>
+        /// ソースコード文字列
+        /// </summary>
         public String source { get; set; }
+        /// <summary>
+        /// デバッグモード
+        /// </summary>
         public bool DebugMode { get; set; }
-        // token
+        /// <summary>
+        /// トークンの一覧(内部で使用)
+        /// </summary>
         protected NakoTokenList tokens = null;
+        /// <summary>
+        /// トークンの一覧
+        /// </summary>
         public NakoTokenList Tokens
         {
             get { return tokens; }
         }
-        // node
+        /// <summary>
+        /// ノード(内部で使用)
+        /// </summary>
         protected NakoNode topNode = null;
+        /// <summary>
+        /// ノード
+        /// </summary>
         public NakoNode TopNode
         {
             get { return topNode; }
         }
-        // ilcode
+        /// <summary>
+        /// 生成された中間コード(内部で使用)
+        /// </summary>
         protected NakoILCodeList codes = null;
+        /// <summary>
+        /// 生成された中間コード
+        /// </summary>
         public NakoILCodeList Codes
         {
             get { return codes; }
         }
-        // global variables
+        /// <summary>
+        /// グローバル変数
+        /// </summary>
         public readonly NakoVariableManager GlobalVar = new NakoVariableManager(NakoVariableScope.Global);
-        // NakoTokenDic
+        /// <summary>
+        /// なでしこ単語辞書
+        /// </summary>
         public readonly NakoTokenDic TokenDic = new NakoTokenDic();
 
+        /// <summary>
+        /// constructor
+        /// </summary>
         public NakoCompiler()
         {
             // システムの初期化
@@ -47,7 +87,10 @@ namespace Libnako.JPNCompiler
             LoaderInfo.Init();
             RegisterSysCall();
         }
-        
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="info"></param>
         public NakoCompiler(NakoCompilerLoaderInfo info)
         {
             if (info == null)
@@ -125,6 +168,9 @@ namespace Libnako.JPNCompiler
             set { this.Publish(value); }
         }
 
+        /// <summary>
+        /// パース
+        /// </summary>
         public void ParseOnlyValue()
         {
             NakoParser paser = new NakoParser(tokens);
@@ -132,6 +178,9 @@ namespace Libnako.JPNCompiler
             this.topNode = paser.topNode;
         }
 
+        /// <summary>
+        /// システム関数を登録する
+        /// </summary>
         protected void RegisterSysCall()
         {
             NakoAPIFuncBank bank = NakoAPIFuncBank.Instance;
@@ -177,7 +226,9 @@ namespace Libnako.JPNCompiler
             NakoAPIFuncBank.Instance.RegisterToSystem(TokenDic, GlobalVar);
         }
         
-        private static bool FlagPluginLoaded = false;
+        /// <summary>
+        /// プラグインを読み込む
+        /// </summary>
         protected void LoadPlugins()
         {
         	// Was the plug-in loaded?
@@ -187,19 +238,44 @@ namespace Libnako.JPNCompiler
             NakoPluginLoader loader = new NakoPluginLoader();
             loader.LoadPlugins();
         }
+        /// <summary>
+        /// プラグインを読み込んだどうかのフラグ
+        /// </summary>
+        private static bool FlagPluginLoaded = false;
     }
     
+    /// <summary>
+    /// コンパイラに与えるのローダーオプション情報
+    /// </summary>
     public class NakoCompilerLoaderInfo
     {
+        /// <summary>
+        /// ソースコード
+        /// </summary>
         public string source = "";
+        /// <summary>
+        /// 読み込んでいるモジュール一覧
+        /// </summary>
         public INakoPlugin[] PreloadModules = null;
+        /// <summary>
+        /// 重要なモジュール
+        /// </summary>
         public INakoPlugin[] ImportantModules = null;
+        /// <summary>
+        /// プラグインを利用するかどうか
+        /// </summary>
         public bool UsePlugins { get; set; }
         
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public NakoCompilerLoaderInfo()
         {
         }
         
+        /// <summary>
+        /// 初期化
+        /// </summary>
         public void Init()
         {
             source = "";
@@ -211,8 +287,15 @@ namespace Libnako.JPNCompiler
         }
     }
     
+    /// <summary>
+    /// コンパイラの例外クラス
+    /// </summary>
     public class NakoCompilerException : ApplicationException
     {
+        /// <summary>
+        /// コンパイラ例外を出す
+        /// </summary>
+        /// <param name="msg"></param>
         public NakoCompilerException(string msg) : base(msg)
         {
         }

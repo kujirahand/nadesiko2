@@ -15,32 +15,56 @@ namespace Libnako.JPNCompiler.ILWriter
     /// </summary>
     public class NakoILWriter
     {
+        /// <summary>
+        /// 構文ノードのトップ
+        /// </summary>
         protected NakoNode topNode = null;
+        /// <summary>
+        /// 書き出した結果(内部で利用)
+        /// </summary>
         protected NakoILCodeList result = null;
+        /// <summary>
+        /// 書き出した結果
+        /// </summary>
         public NakoILCodeList Result
         {
             get { return result; }
         }
+        /// <summary>
+        /// ラベル一覧
+        /// </summary>
         protected Dictionary<NakoILCode, Int64> labels = null;
 		private int _labelId = 0;
 		private int GetLableId() { ++_labelId; return _labelId; }
-
+        
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="topNode"></param>
         public NakoILWriter(NakoNode topNode)
         {
             this.topNode = topNode;
             Init();
         }
+        /// <summary>
+        /// constructor
+        /// </summary>
         public NakoILWriter()
         {
             Init();
         }
-
+        /// <summary>
+        /// 初期化
+        /// </summary>
         public void Init()
         {
             this.result = new NakoILCodeList();
             this.labels = new Dictionary<NakoILCode, Int64>();
         }
-
+        /// <summary>
+        /// 中間コードを書き出す
+        /// </summary>
+        /// <param name="node"></param>
         protected void Write_r(NakoNode node)
         {
             if (node == null) return;
@@ -99,14 +123,19 @@ namespace Libnako.JPNCompiler.ILWriter
             if (!node.hasChildren()) return;
             Write_list(node.Children);
         }
-
+        /// <summary>
+        /// 中間コードを書き出す
+        /// </summary>
+        /// <param name="topNode"></param>
         public void Write(NakoNode topNode)
         {
             if (topNode != null) { this.topNode = topNode; }
             Write_r(this.topNode);
             FixLabel();
         }
-
+        /// <summary>
+        /// ラベルを解決する
+        /// </summary>
         public void FixLabel()
         {
             // 現在のラベル位置を調べる
@@ -147,6 +176,10 @@ namespace Libnako.JPNCompiler.ILWriter
             
         }
 
+        /// <summary>
+        /// 指定したリストを書く
+        /// </summary>
+        /// <param name="list"></param>
         protected void Write_list(NakoNodeList list)
         {
             for (int i = 0; i < list.Count; i++)
@@ -155,7 +188,11 @@ namespace Libnako.JPNCompiler.ILWriter
                 Write_r(node);
             }
         }
-
+        /// <summary>
+        /// ラベルを生成する
+        /// </summary>
+        /// <param name="labelName"></param>
+        /// <returns></returns>
         protected NakoILCode createLABEL(String labelName)
         {
             NakoILCode r = NakoILCode.newNop();
@@ -163,6 +200,12 @@ namespace Libnako.JPNCompiler.ILWriter
             labels[r] = -1;
             return r;
         }
+
+        /// <summary>
+        /// ラベルジャンプを生成する
+        /// </summary>
+        /// <param name="label"></param>
+        /// <returns></returns>
         protected NakoILCode createJUMP(NakoILCode label)
         {
             NakoILCode r = new NakoILCode(NakoILType.JUMP, label);
@@ -504,8 +547,15 @@ namespace Libnako.JPNCompiler.ILWriter
         }
     }
     
+    /// <summary>
+    /// 中間コードの書き出しエラークラス
+    /// </summary>
     public class NakoILWriterException : ApplicationException
     {
+        /// <summary>
+        /// 中間コードの書き出しエラーを出す
+        /// </summary>
+        /// <param name="message"></param>
         public NakoILWriterException(String message) : base(message) { }
     }
 }

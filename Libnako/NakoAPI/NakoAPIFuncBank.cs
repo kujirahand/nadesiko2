@@ -38,9 +38,13 @@ namespace Libnako.NakoAPI
         /// (プラグインの関数定義で利用される)定義中のプラグインインスタンス
         /// </summary>
         private INakoPlugin PluginInstance = null;
-        /// <summary>
         
         #region INakoPluginBank の実装
+
+        /// <summary>
+        /// これから処理するプラグインを設定
+        /// </summary>
+        /// <param name="plugin"></param>
         public void SetPluginInstance(INakoPlugin plugin)
         {
             PluginInstance = plugin;

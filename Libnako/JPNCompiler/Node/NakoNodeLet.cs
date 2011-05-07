@@ -4,8 +4,14 @@ using System.Text;
 
 namespace Libnako.JPNCompiler.Node
 {
+    /// <summary>
+    /// 代入ノード
+    /// </summary>
     public class NakoNodeLet : NakoNode
     {
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
         public NakoNodeLet()
         {
             type = NakoNodeType.LET;
@@ -13,7 +19,9 @@ namespace Libnako.JPNCompiler.Node
             AddChild(new NakoNode());           // ValueNode
         }
 
-        // 代入する値を表すノード
+        /// <summary>
+        /// 代入する値を表すノード
+        /// </summary>
         public NakoNode ValueNode
         {
             get
@@ -26,7 +34,9 @@ namespace Libnako.JPNCompiler.Node
             }
         }
         
-        // 代入先の変数を表すノード
+        /// <summary>
+        /// 代入先の変数を表すノード
+        /// </summary>
         public NakoNodeVariable VarNode
         {
             get
@@ -39,8 +49,15 @@ namespace Libnako.JPNCompiler.Node
             }
         }
     }
+
+    /// <summary>
+    /// 代入ノード
+    /// </summary>
     public class NakoNodeLetValue : NakoNode
     {
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
     	public NakoNodeLetValue()
     	{
             type = NakoNodeType.LET_VALUE;

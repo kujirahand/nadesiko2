@@ -198,16 +198,28 @@ namespace Libnako.JPNCompiler.Node
 
 		#region ICollection<NakoNode> メンバー
 
+        /// <summary>
+        /// 追加
+        /// </summary>
+        /// <param name="item"></param>
 		public void Add(NakoNode item)
 		{
 			_list.Add(item);
 		}
 
+        /// <summary>
+        /// 削除
+        /// </summary>
 		public void Clear()
 		{
 			_list.Clear();
 		}
 
+        /// <summary>
+        /// 含む
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
 		public bool Contains(NakoNode item)
 		{
 			return _list.Contains(item);
@@ -249,6 +261,10 @@ namespace Libnako.JPNCompiler.Node
 
 		#region IEnumerable<NakoNode> メンバー
 
+        /// <summary>
+        /// 列挙
+        /// </summary>
+        /// <returns></returns>
 		public IEnumerator<NakoNode> GetEnumerator()
 		{
 			return _list.GetEnumerator();
@@ -258,6 +274,10 @@ namespace Libnako.JPNCompiler.Node
 
 		#region IEnumerable メンバー
 
+        /// <summary>
+        /// 列挙
+        /// </summary>
+        /// <returns></returns>
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 		{
 			return _list.GetEnumerator();

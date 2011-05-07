@@ -7,15 +7,39 @@ using NakoPlugin;
 
 namespace Libnako.JPNCompiler
 {
+    /// <summary>
+    /// なでしこのソースコードを読み込むローダークラス(Singleton)
+    /// </summary>
     public class NakoLoader
     {
+        /// <summary>
+        /// ファイル一覧
+        /// </summary>
         protected List<string> files;
+        /// <summary>
+        /// ネームスペースの一覧
+        /// </summary>
         protected List<NakoCompiler> namespaceList;
+        /// <summary>
+        /// 基本パス
+        /// </summary>
         protected string basePath;
+        /// <summary>
+        /// 最後に利用したコンパイラ
+        /// </summary>
         public NakoCompiler cur;
+        /// <summary>
+        /// 読み込み情報
+        /// </summary>
         public NakoCompilerLoaderInfo LoaderInfo = null;
+        /// <summary>
+        /// デバッグするか
+        /// </summary>
         public bool DebugMode = false;
         private static NakoLoader instance = null;
+        /// <summary>
+        /// ローダー唯一のインスタンス(Singleton)
+        /// </summary>
         public static NakoLoader Instance
         {
             get {
@@ -37,6 +61,7 @@ namespace Libnako.JPNCompiler
         /// ソースコードをトークンに分ける
         /// </summary>
         /// <param name="src"></param>
+        /// <param name="filename"></param>
         public void ParseEx(string src, string filename)
         {
             cur = new NakoCompiler(LoaderInfo);
@@ -53,7 +78,7 @@ namespace Libnako.JPNCompiler
         /// <summary>
         /// ファイルからソースコードを読みこんでパースする
         /// </summary>
-        /// <param name="?"></param>
+        /// <param name="filename"></param>
         public void LoadFromFile(string filename)
         {
             string filename2 = this.RemoveBasePath(filename);
@@ -85,6 +110,11 @@ namespace Libnako.JPNCompiler
             return path;
         }
 
+        /// <summary>
+        /// パスからネームスペースを得る
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public string GetNamespaceFromPath(string path)
         {
             string name = Path.GetFileName(path);
