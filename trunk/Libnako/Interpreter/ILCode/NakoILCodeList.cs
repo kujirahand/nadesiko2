@@ -11,8 +11,16 @@ namespace Libnako.JPNCompiler.ILWriter
     public class NakoILCodeList : IList<NakoILCode>
     {
 		private List<NakoILCode> _list = new List<NakoILCode>();
+        /// <summary>
+        /// グローバル変数
+        /// </summary>
 		public NakoVariableManager globalVar = null;
 
+        /// <summary>
+        /// タイプをチェックする
+        /// </summary>
+        /// <param name="types"></param>
+        /// <returns></returns>
 		public Boolean CheckTypes(NakoILType[] types)
         {
             if (types.Length != this.Count) return false;
@@ -22,6 +30,10 @@ namespace Libnako.JPNCompiler.ILWriter
             }
             return true;
         }
+        /// <summary>
+        /// デバッグ用タイプ文字列を返す
+        /// </summary>
+        /// <returns></returns>
         public String ToTypeString()
         {
             String r = "";
@@ -41,7 +53,10 @@ namespace Libnako.JPNCompiler.ILWriter
             }
             return r;
         }
-
+        /// <summary>
+        /// アドレス付きの文字列
+        /// </summary>
+        /// <returns></returns>
         public String ToAddressString()
         {
             String r = "";
@@ -61,21 +76,37 @@ namespace Libnako.JPNCompiler.ILWriter
 
 		#region IList<NakoILCode> メンバー
 
+        /// <summary>
+        /// 検索
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
 		public int IndexOf(NakoILCode item)
 		{
 			return _list.IndexOf(item);
 		}
-
+        /// <summary>
+        /// 挿入
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="item"></param>
 		public void Insert(int index, NakoILCode item)
 		{
 			_list.Insert(index, item);
 		}
-
+        /// <summary>
+        /// 削除
+        /// </summary>
+        /// <param name="index"></param>
 		public void RemoveAt(int index)
 		{
 			_list.RemoveAt(index);
 		}
-
+        /// <summary>
+        /// 要素を得る
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
 		public NakoILCode this[int index]
 		{
 			get
@@ -92,26 +123,42 @@ namespace Libnako.JPNCompiler.ILWriter
 
 		#region ICollection<NakoILCode> メンバー
 
+        /// <summary>
+        /// 追加
+        /// </summary>
+        /// <param name="item"></param>
 		public void Add(NakoILCode item)
 		{
 			_list.Add(item);
 		}
-
+        /// <summary>
+        /// 削除
+        /// </summary>
 		public void Clear()
 		{
 			_list.Clear();
 		}
-
+        /// <summary>
+        /// 含む
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
 		public bool Contains(NakoILCode item)
 		{
 			return _list.Contains(item);
 		}
-
+        /// <summary>
+        /// コピー
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="arrayIndex"></param>
 		public void CopyTo(NakoILCode[] array, int arrayIndex)
 		{
 			_list.CopyTo(array, arrayIndex);
 		}
-
+        /// <summary>
+        /// 個数
+        /// </summary>
 		public int Count
 		{
 			get { return _list.Count; }
@@ -121,7 +168,11 @@ namespace Libnako.JPNCompiler.ILWriter
 		{
 			get { throw new NotImplementedException(); }
 		}
-
+        /// <summary>
+        /// 削除
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
 		public bool Remove(NakoILCode item)
 		{
 			return _list.Remove(item);
@@ -131,6 +182,10 @@ namespace Libnako.JPNCompiler.ILWriter
 
 		#region IEnumerable<NakoILCode> メンバー
 
+        /// <summary>
+        /// 数え上げ
+        /// </summary>
+        /// <returns></returns>
 		public IEnumerator<NakoILCode> GetEnumerator()
 		{
 			return _list.GetEnumerator();

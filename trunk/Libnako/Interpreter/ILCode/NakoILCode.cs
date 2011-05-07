@@ -11,38 +11,65 @@ namespace Libnako.JPNCompiler.ILWriter
     /// </summary>
     public class NakoILCode : IEquatable<NakoILCode>
     {
+        /// <summary>
+        /// 中間コードのタイプ
+        /// </summary>
 		public NakoILType type { get; set; }
+        /// <summary>
+        /// 値
+        /// </summary>
 		public Object value { get; set; }
-
+        /// <summary>
+        /// constructor
+        /// </summary>
 		public NakoILCode()
 		{
 			this.type = 0;
 			this.value = null;
 		}
-
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="value"></param>
         public NakoILCode(NakoILType type, Object value)
         {
             this.type = type;
             this.value = value;
         }
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="type"></param>
         public NakoILCode(NakoILType type)
         {
             this.type = type;
             this.value = null;
         }
 
+        /// <summary>
+        /// 何もしない NOPコードを生成する
+        /// </summary>
+        /// <returns></returns>
         public static NakoILCode newNop() 
         {
             NakoILCode c = new NakoILCode();
             c.type = NakoILType.NOP;
             return c;
         }
-
+        /// <summary>
+        /// ハッシュコードを返す
+        /// </summary>
+        /// <returns></returns>
 		public override int GetHashCode()
 		{
 			return type.GetHashCode() ^ (value == null ? 0 : value.GetHashCode());
 		}
-
+        /// <summary>
+        /// objが等しいか調べる
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
 		public override bool Equals(object obj)
 		{
 			if (obj == null)
@@ -53,6 +80,10 @@ namespace Libnako.JPNCompiler.ILWriter
 			return ((IEquatable<NakoILCode>)this).Equals(obj as NakoILCode);
 		}
 
+        /// <summary>
+        /// 説明を得る
+        /// </summary>
+        /// <returns></returns>
         public string GetDescription()
         {
             string r = "";

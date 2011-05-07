@@ -10,6 +10,12 @@ using NakoPlugin;
 
 namespace Libnako.Interpreter
 {
+    /// <summary>
+    /// 計算用デリゲート
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <returns></returns>
     delegate Object CalcMethodType(Object a, Object b);
 
     /// <summary>
@@ -53,12 +59,22 @@ namespace Libnako.Interpreter
             get { return _printLog.ToString(); }
             set { _printLog.Remove(0, _printLog.Length); _printLog.Append(value); }
         }
+        /// <summary>
+        /// ログに文字列を追加する
+        /// </summary>
+        /// <param name="str"></param>
         public void AddPrintLog(string str)
         {
             _printLog.Append(str);
         }
         private StringBuilder _printLog = new StringBuilder();
+        /// <summary>
+        /// コンソールに出力するか
+        /// </summary>
         public Boolean UseConsoleOut { get; set; }
+        /// <summary>
+        /// デバッグモード
+        /// </summary>
         public Boolean debugMode { get; set; }
         
         /// <summary>
@@ -67,7 +83,10 @@ namespace Libnako.Interpreter
         public int InterpreterId { get { return _interpreter_id; } }
         private int _interpreter_id;
         private static int _interpreter_id_count = 0;
-
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="list"></param>
         public NakoInterpreter(NakoILCodeList list)
         {
             this.UseConsoleOut = false;
@@ -78,6 +97,9 @@ namespace Libnako.Interpreter
             	this.globalVar = list.globalVar;
             }
         }
+        /// <summary>
+        /// constructor
+        /// </summary>
         public NakoInterpreter()
         {
             this.UseConsoleOut = false;
@@ -146,11 +168,18 @@ namespace Libnako.Interpreter
             FinPlugins();
             return result;
         }
+        /// <summary>
+        /// 実行
+        /// </summary>
+        /// <returns></returns>
         public Boolean Run()
         {
         	return Run(null);
         }
-
+        /// <summary>
+        /// 実行
+        /// </summary>
+        /// <returns></returns>
         protected Boolean _run()
         {
             while (runpos < list.Count)
@@ -168,7 +197,9 @@ namespace Libnako.Interpreter
             }
             return true;
         }
-
+        /// <summary>
+        /// スタックトップを調べる
+        /// </summary>
         public Object StackTop
         {
             get {
@@ -176,7 +207,10 @@ namespace Libnako.Interpreter
                 return calcStack.Peek();
             }
         }
-
+        /// <summary>
+        /// スタックから末尾要素を取り出す
+        /// </summary>
+        /// <returns></returns>
         public Object StackPop()
         {
             Object v = calcStack.Pop();
@@ -186,7 +220,10 @@ namespace Libnako.Interpreter
             }
             return v;
         }
-
+        /// <summary>
+        /// スタックに値をプッシュ
+        /// </summary>
+        /// <param name="v"></param>
         public void StackPush(Object v)
         {
             if (debugMode)
@@ -195,7 +232,10 @@ namespace Libnako.Interpreter
             }
             calcStack.Push(v);
         }
-
+        /// <summary>
+        /// ILを実行する
+        /// </summary>
+        /// <param name="code"></param>
         protected void Run_NakoIL(NakoILCode code)
         {
             if (debugMode)
@@ -769,19 +809,37 @@ namespace Libnako.Interpreter
         }
         
     }
-
+    /// <summary>
+    /// インタプリタの例外クラス
+    /// </summary>
     internal class NakoInterpreterException : ApplicationException
     {
+        /// <summary>
+        /// インタプリタクラスの例外を出す
+        /// </summary>
+        /// <param name="message"></param>
         internal NakoInterpreterException(String message) : base(message)
         {
         }
 
     }
 
+    /// <summary>
+    /// 呼び出しスタック
+    /// </summary>
     public class NakoCallStack
     {
+        /// <summary>
+        /// ローカル変数
+        /// </summary>
 		public NakoVariableManager localVar { get; set; }
+        /// <summary>
+        /// 次の位置
+        /// </summary>
 		public int nextpos { get; set; }
+        /// <summary>
+        /// それ
+        /// </summary>
 		public Object sore { get; set; }
     }
 }

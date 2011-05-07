@@ -14,26 +14,44 @@ namespace Libnako.JPNCompiler.Function
     {
         private NakoInterpreter _runner;
 
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="interpreter"></param>
         public NakoFuncCallInfo(NakoInterpreter interpreter)
         {
             this._runner = interpreter;
         }
 
+        /// <summary>
+        /// インタプリタを返す
+        /// </summary>
         public NakoInterpreter Runner
         {
             get { return _runner; }
         }
 
+        /// <summary>
+        /// LOGを書き出す
+        /// </summary>
+        /// <param name="s"></param>
         public void WriteLog(string s)
         {
             Runner.AddPrintLog(s);
         }
 
+        /// <summary>
+        /// 引数スタックからオブジェクトを取得する
+        /// </summary>
+        /// <returns></returns>
         public Object StackPop()
         {
             return _runner.StackPop();
         }
-
+        /// <summary>
+        /// 引数スタックから文字列を得る
+        /// </summary>
+        /// <returns></returns>
         public string StackPopAsString()
         {
             Object s = _runner.StackPop();
@@ -46,38 +64,57 @@ namespace Libnako.JPNCompiler.Function
                 return Convert.ToString(s);
             }
         }
-        
+        /// <summary>
+        /// 引数スタックから整数を得る
+        /// </summary>
+        /// <returns></returns>
         public Int64 StackPopAsInt()
         {
             Object o = _runner.StackPop();
             return Convert.ToInt64(o);
         }
-        
+        /// <summary>
+        /// 引数スタックからDoubleを得る
+        /// </summary>
+        /// <returns></returns>
         public double StackPopAsDouble()
         {
             Object o = _runner.StackPop();
             return Convert.ToDouble(o);
         }
-        /*
-         * 基本的に PUSH は不要
-        public void StackPush(Object v)
-        {
-            _runner.StackPush(v);
-        }
-        */
+        /// <summary>
+        /// 変数を得る
+        /// </summary>
+        /// <param name="varname"></param>
+        /// <returns></returns>
        public NakoVariable GetVariable(string varname)
        {
        		return _runner.globalVar.GetVar(varname);
        }
-       public void SetVariable(string varname, NakoVariable value)
-       {
-       		_runner.globalVar.SetVar(varname, (NakoVariable)value);
-       }
+        /// <summary>
+        /// 変数をセット
+        /// </summary>
+        /// <param name="varname"></param>
+        /// <param name="value"></param>
+        public void SetVariable(string varname, NakoVariable value)
+        {
+       	    _runner.globalVar.SetVar(varname, (NakoVariable)value);
+        }
+        /// <summary>
+        /// 変数から値を得る
+        /// </summary>
+        /// <param name="varname"></param>
+        /// <returns></returns>
         public Object GetVariableValue(string varname)
         {
         	int index = _runner.globalVar.GetIndex(varname);
         	return _runner.globalVar.GetValue(index);
         }
+        /// <summary>
+        /// 変数に値をセット
+        /// </summary>
+        /// <param name="varname"></param>
+        /// <param name="value"></param>
         public void SetVariableValue(string varname, Object value)
         {
         	int index = _runner.globalVar.GetIndex(varname);
@@ -88,6 +125,10 @@ namespace Libnako.JPNCompiler.Function
         	_runner.globalVar.SetValue(index, value);
         }
         // --- 値を作成する
+        /// <summary>
+        /// 配列変数を生成して返す
+        /// </summary>
+        /// <returns></returns>
         public NakoVarArray CreateArray()
         {
             NakoVarArray v = new NakoVarArray();

@@ -11,7 +11,14 @@ namespace Libnako.JPNCompiler
     /// </summary>
     public enum NakoVariableScope
     {
-        Global, Local
+        /// <summary>
+        /// グローバル
+        /// </summary>
+        Global, 
+        /// <summary>
+        /// ローカル
+        /// </summary>
+        Local
     }
 
     /// <summary>
@@ -29,10 +36,11 @@ namespace Libnako.JPNCompiler
         /// </summary>
         protected Dictionary<String, int> names;
 
-		static NakoVariableManager()
-		{
-		}
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="scope"></param>
         public NakoVariableManager(NakoVariableScope scope)
         {
             list = new List<NakoVariable>();
@@ -49,6 +57,11 @@ namespace Libnako.JPNCompiler
 
         }
 
+        /// <summary>
+        /// 変数名から管理番号を返す
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public int GetIndex(string name)
         {
             if (!names.ContainsKey(name))
@@ -58,6 +71,11 @@ namespace Libnako.JPNCompiler
             return names[name];
         }
 
+        /// <summary>
+        /// 変数番号から変数を返す
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public NakoVariable GetVar(int index)
         {
             if (index < list.Count)
@@ -67,6 +85,11 @@ namespace Libnako.JPNCompiler
             return null;
         }
 
+        /// <summary>
+        /// 変数名から変数を返す
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public NakoVariable GetVar(string name)
         {
             int i = GetIndex(name);
@@ -74,6 +97,11 @@ namespace Libnako.JPNCompiler
             return list[i];
         }
 
+        /// <summary>
+        /// 変数をセット
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="v"></param>
         public void SetVar(int index, NakoVariable v)
         {
             // Create Var
@@ -84,6 +112,11 @@ namespace Libnako.JPNCompiler
             list[index] = v;
         }
 
+        /// <summary>
+        /// 変数をセット
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="v"></param>
         public void SetVar(string name, NakoVariable v)
         {
             int i = GetIndex(name);
@@ -94,10 +127,21 @@ namespace Libnako.JPNCompiler
             list[i] = v;
         }
 
+        /// <summary>
+        /// 変数を作成
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public int CreateVar(string name)
         {
         	return CreateVar(name, null);
         }
+        /// <summary>
+        /// 変数を作成
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="v"></param>
+        /// <returns></returns>
         public int CreateVar(string name, NakoVariable v)
         {
             if (v == null)
@@ -110,16 +154,29 @@ namespace Libnako.JPNCompiler
             return i;
         }
 
+        /// <summary>
+        /// 名前のない変数を作成
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
         public int CreateVarNameless(NakoVariable v)
         {
             string name = ";nameless_" + list.Count; // あり得ない変数名を作る
             return CreateVar(name, v);
         }
+        /// <summary>
+        /// 名前のない変数を作成
+        /// </summary>
+        /// <returns></returns>
         public int CreateVarNameless()
         {
         	return CreateVarNameless(null);
         }
-
+        /// <summary>
+        /// 変数に値を設定
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="value"></param>
         public void SetValue(int index, Object value)
         {
             NakoVariable v = GetVar(index);
@@ -130,7 +187,11 @@ namespace Libnako.JPNCompiler
             }
             v.SetBodyAutoType(value);
         }
-
+        /// <summary>
+        /// 変数の値を取得
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public Object GetValue(int index)
         {
             NakoVariable v = GetVar(index);

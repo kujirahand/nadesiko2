@@ -24,11 +24,11 @@ namespace Libnako.JPNCompiler.Parser
         MOD,
         ///<summary>POWER ^</summary>
         POWER,
-        ///<summary>ADD_STR &</summary>
+        ///<summary>ADD_STR &amp;</summary>
         ADD_STR,
         ///<summary>=  or ==</summary>
         EQ,
-        ///<summary>!= or <></summary>
+        ///<summary>!= or &gt;&lt;</summary>
         NOT_EQ,
         ///<summary>GT</summary>
         GT,
@@ -38,7 +38,7 @@ namespace Libnako.JPNCompiler.Parser
         LT,
         ///<summary>LT_EQ</summary>
         LT_EQ,
-        ///<summary>&&</summary>
+        ///<summary>&amp;&amp;</summary>
         AND,
         ///<summary>||</summary>
         OR,
