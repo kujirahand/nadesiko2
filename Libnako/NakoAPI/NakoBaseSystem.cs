@@ -41,10 +41,12 @@ namespace Libnako.NakoAPI
             bank.AddVar("偽", 0, "0", "ぎ");
             bank.AddVar("改行", "\r\n", "改行", "かいぎょう");
             bank.AddVar("タブ", "\t", "タブ文字", "たぶ");
-            
+
             //+コンソールデバッグ用
             bank.AddFunc("表示", "Sと|Sを", NakoVarType.Void, _show, "メッセージSを表示する", "ひょうじ");
             bank.AddFunc("継続表示", "Sと|Sを", NakoVarType.Void, _show, "メッセージSを表示する", "けいぞくひょうじ");
+            bank.AddVar("コマンドライン", null, "起動時の引数を保持する", "こまんどらいん");
+
             //+計算
             //-四則演算
             bank.AddFunc("足す", "AにBを|Aと", NakoVarType.Object, _add, "値Aと値Bを足して返す", "たす");
@@ -109,7 +111,7 @@ namespace Libnako.NakoAPI
             }
             return a;
         }
-        
+
         public Object _beep(INakoFuncCallInfo info)
         {
         	// BEEP

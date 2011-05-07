@@ -13,6 +13,7 @@ namespace Libnako.JPNCompiler.Parser
     /// </summary>
     public class NakoParserBase
     {
+        public bool DebugMode = false;
 		public NakoNode topNode { get; set; }
         protected NakoNode parentNode;
         protected NakoNode lastNode;
@@ -48,6 +49,12 @@ namespace Libnako.JPNCompiler.Parser
             calcStackCounters = new Stack<int>();
             lastNode = null;
             localVar = new NakoVariableManager(NakoVariableScope.Local);
+        }
+
+        public void WriteLog(string s)
+        {
+            if (!DebugMode) return;
+            Console.Write(s);
         }
 
         /// <summary>

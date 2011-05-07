@@ -8,7 +8,8 @@ using Libnako.Interpreter;
 using Libnako.JPNCompiler.ILWriter;
 using Libnako.JPNCompiler.Tokenizer;
 using Libnako.JPNCompiler.Parser;
-
+using Libnako.NakoAPI;
+using NakoPlugin;
 
 namespace cnako2
 {
@@ -22,6 +23,7 @@ namespace cnako2
         public string source = null;
         public bool UseLog = false;
         public string PrintLog = null;
+        private string[] args = null;
 
         public void ShowHelp()
         {
@@ -37,7 +39,7 @@ namespace cnako2
         {
             // オプションなしなら失敗
             if (args.Length == 0) return false;
-
+            this.args = args;
             source = null;
             runMode = NakoConsoleMode.RunFile;
             
@@ -121,7 +123,11 @@ namespace cnako2
         void OneLinerMode(string code)
         {
             NakoCompiler compiler = new NakoCompiler(GetLoaderInfo());
+            compiler.DebugMode = DebugMode;
             compiler.DirectSource = code;
+            NakoInterpreter runner = new NakoInterpreter(compiler.Codes);
+            SetCommandLine(runner);
+            
             if (DescriptMode)
             {
                 cout = "----------";
@@ -135,7 +141,6 @@ namespace cnako2
                 cout = compiler.Codes.ToAddressString();
                 cout = "----------";
                 cout = "* RUN";
-                NakoInterpreter runner = new NakoInterpreter(compiler.Codes);
                 runner.debugMode = DebugMode;
                 runner.Run();
                 Console.WriteLine("LOG=" + runner.PrintLog);
@@ -144,7 +149,6 @@ namespace cnako2
             }
             else
             {
-                NakoInterpreter runner = new NakoInterpreter(compiler.Codes);
                 runner.debugMode = DebugMode;
                 runner.Run();
                 PrintLog = runner.PrintLog;
@@ -156,6 +160,12 @@ namespace cnako2
         {
             NakoLoader loader = NakoLoader.Instance;
             loader.LoaderInfo = GetLoaderInfo();
+            if (DebugMode)
+            {
+                cout = "----------";
+                cout = "* TOKENIZE";
+            }
+            loader.DebugMode = DebugMode;
             try
             {
                 loader.LoadFromFile(sourcefile);
@@ -171,8 +181,13 @@ namespace cnako2
                 return;
             }
             NakoCompiler compiler = loader.cur;
+            
+            NakoInterpreter runner = new NakoInterpreter(compiler.Codes);
+            SetCommandLine(runner);
+            
             if (DescriptMode)
             {
+                cout = "";
                 cout = "----------";
                 cout = "* TOKENS:";
                 cout = compiler.Tokens.toTypeString();
@@ -184,7 +199,6 @@ namespace cnako2
                 cout = compiler.Codes.ToAddressString();
                 cout = "----------";
                 cout = "* RUN";
-                NakoInterpreter runner = new NakoInterpreter(compiler.Codes);
                 runner.debugMode = DebugMode;
                 runner.Run();
                 Console.WriteLine("LOG=" + runner.PrintLog);
@@ -193,12 +207,18 @@ namespace cnako2
             }
             else
             {
-                NakoInterpreter runner = new NakoInterpreter(compiler.Codes);
                 runner.debugMode = DebugMode;
                 runner.Run();
                 // Console.WriteLine(runner.PrintLog);
                 PrintLog = runner.PrintLog;
             }
+        }
+
+        void SetCommandLine(NakoInterpreter runner)
+        {
+            NakoVarArray a = new NakoVarArray();
+            a.SetValuesFromStrings(this.args);
+            runner.globalVar.SetVar("コマンドライン", a);
         }
 
         static void _w(string s)

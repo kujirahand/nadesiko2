@@ -172,6 +172,16 @@ namespace NakoPlugin
             }
         }
 
+        public void SetValuesFromStrings(string[] strings)
+        {
+            Clear();
+            int i = 0;
+            foreach (string n in strings)
+            {
+                SetValue(i++, n);
+            }
+        }
+
         public void RemoveAt(int index)
         {
             list.RemoveAt(index);
