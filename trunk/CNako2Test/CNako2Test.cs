@@ -62,15 +62,15 @@ namespace CNako2Test
         public void Test_Run_Oneliner_Comment()
         {
             CNako2Executor e = new CNako2Executor();
-            string line = "`abc`を表示。\n" +
+            string line = "`abc`を継続表示。\n" +
                 "# comment\n" +
-                "`cde`を表示。\n" +
+                "`cde`を継続表示。\n" +
                 "";
             string[] args = { "-e", line };
             e.UseLog = true;
             e.setOptions(args);
             e.Run();
-            Assert.AreEqual("abc\r\ncde\r\n", e.PrintLog);
+            Assert.AreEqual("abccde", e.PrintLog);
         }
         [Test]
         public void Test_Run_Oneliner_Comment2()
