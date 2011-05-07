@@ -6,6 +6,9 @@ using System.IO;
 
 namespace NakoPlugin
 {
+    /// <summary>
+    /// 文字コードの判定など、文字列処理に便利なクラス
+    /// </summary>
     public class StrUnit
     {
         /// <summary>
@@ -17,7 +20,7 @@ namespace NakoPlugin
         /// Jcode.pm(http://openlab.ring.gr.jp/Jcode/index-j.html)
         /// Jcode.pmのCopyright: Copyright 1999-2005 Dan Kogai
         /// </remarks>
-        /// <param name="byts">文字コードを調べるデータ</param>
+        /// <param name="bytes">文字コードを調べるデータ</param>
         /// <returns>適当と思われるEncodingオブジェクト。
         /// 判断できなかった時はnull。</returns>
         public static System.Text.Encoding GetCode(byte[] bytes)

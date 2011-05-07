@@ -17,6 +17,9 @@ namespace Libnako.NakoAPI
         /// </summary>
         public SysCallDelegate FuncDl { get; set; }
         
+        /// <summary>
+        /// プラグインが利用されたかどうかを表す値
+        /// </summary>
         public Boolean Used { get; set; }
         
         /// <summary>
@@ -24,6 +27,13 @@ namespace Libnako.NakoAPI
         /// </summary>
         public INakoPlugin PluginInstance { get; set; }
 
+        /// <summary>
+        /// なでしこのシステム関数を定義する関数
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="argdef"></param>
+        /// <param name="resultType"></param>
+        /// <param name="FuncDl"></param>
         public NakoAPIFunc(String name, String argdef, NakoVarType resultType, SysCallDelegate FuncDl)
             : base(name, argdef)
         {
@@ -32,12 +42,18 @@ namespace Libnako.NakoAPI
             this.Used = false;
         }
 
+        /// <summary>
+        /// 初期化
+        /// </summary>
         public override void Init()
         {
             base.Init();
             funcType = NakoFuncType.SysCall;
         }
 
+        /// <summary>
+        /// 実行
+        /// </summary>
         public override void Execute()
         {
         }

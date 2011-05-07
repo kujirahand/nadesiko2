@@ -15,7 +15,9 @@ namespace Libnako.NakoAPI
     /// </summary>
     public class NakoAPIFuncBank : INakoPluginBank
     {
-        // Singleton
+        /// <summary>
+        /// なでしこ関数管理バンク、唯一のインスタンス(Singleton)
+        /// </summary>
         public static readonly NakoAPIFuncBank Instance = new NakoAPIFuncBank();
         private NakoAPIFuncBank() { }
         
@@ -44,6 +46,15 @@ namespace Libnako.NakoAPI
             PluginInstance = plugin;
         }
         
+        /// <summary>
+        /// 関数を追加
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="argdef"></param>
+        /// <param name="resultType"></param>
+        /// <param name="f"></param>
+        /// <param name="desc"></param>
+        /// <param name="kana"></param>
         public void AddFunc(string name, string argdef, NakoVarType resultType, NakoPlugin.SysCallDelegate f, string desc, string kana)
         {
             name = NakoToken.TrimOkurigana(name);
@@ -52,6 +63,13 @@ namespace Libnako.NakoAPI
             this.AddFuncToList(s);
         }
 
+        /// <summary>
+        /// 変数を追加
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        /// <param name="desc"></param>
+        /// <param name="kane"></param>
         public void AddVar(String name, Object value, String desc, String kane)
         {
             name = NakoToken.TrimOkurigana(name);
@@ -74,6 +92,11 @@ namespace Libnako.NakoAPI
             }
         }
 
+        /// <summary>
+        /// システムに登録する
+        /// </summary>
+        /// <param name="dic"></param>
+        /// <param name="globalVar"></param>
         public void RegisterToSystem(NakoTokenDic dic, NakoVariableManager globalVar)
         {
             // --- 関数
@@ -109,6 +132,9 @@ namespace Libnako.NakoAPI
             }
         }
         
+        /// <summary>
+        /// プラグイン使用したかどうかのフラグを初期化
+        /// </summary>
         public void ResetUsedFlag()
         {
             foreach (NakoAPIFunc func in FuncList)

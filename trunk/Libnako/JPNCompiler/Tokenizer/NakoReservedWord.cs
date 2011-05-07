@@ -9,6 +9,10 @@ namespace Libnako.JPNCompiler.Tokenizer
     /// </summary>
     public class NakoReservedWord
     {
+        /// <summary>
+        /// 単語の初期化
+        /// </summary>
+        /// <param name="dic"></param>
         public static void Init(NakoTokenDic dic)
         {
             // 構文

@@ -13,6 +13,9 @@ namespace NakoPlugin
 		/// 変数のタイプ
 		/// </summary>
         public NakoVarType Type { get { return _type; } }
+        /// <summary>
+        /// 変数のタイプ(内部で使用する)
+        /// </summary>
         protected NakoVarType _type = NakoVarType.Void;
 
         /// <summary>
@@ -21,6 +24,9 @@ namespace NakoPlugin
         public Object Body { 
             get { return _body; } 
         }
+        /// <summary>
+        /// 変数の値(内部で使用する)
+        /// </summary>
         protected Object _body = null;
 
         /// <summary>
@@ -33,17 +39,29 @@ namespace NakoPlugin
         /// </summary>
         public string key { get; set; }
 
+        /// <summary>
+        /// 変数を生成するコンストラクタ
+        /// </summary>
         public NakoVariable()
         {
             varNo = -1;
         }
 
+        /// <summary>
+        /// 値と型を明示して設定する
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="type"></param>
         public void SetBody(Object value, NakoVarType type)
         {
             _body = value;
             _type = type;
         }
 
+        /// <summary>
+        /// 値の型を自動的に判別し、値と型を設定する
+        /// </summary>
+        /// <param name="value"></param>
         public void SetBodyAutoType(Object value)
         {
             // detect type
@@ -78,7 +96,10 @@ namespace NakoPlugin
                 _body = value;
             }
         }
-
+        /// <summary>
+        /// 変数の内容を文字列に変換して返す
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             // detect type

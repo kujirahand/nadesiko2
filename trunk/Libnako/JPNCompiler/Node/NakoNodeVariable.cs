@@ -7,6 +7,9 @@ using NakoPlugin;
 
 namespace Libnako.JPNCompiler.Node
 {
+    /// <summary>
+    /// 変数を表すノード
+    /// </summary>
     public class NakoNodeVariable : NakoNode
     {
         /// <summary>
@@ -30,6 +33,10 @@ namespace Libnako.JPNCompiler.Node
         /// </summary>
         public Boolean useElement { get { return this.hasChildren(); } }
 
+        /// <summary>
+        /// 値型かどうか
+        /// </summary>
+        /// <returns></returns>
         public Boolean IsVarTypeSimple()
         {
             return (varType == NakoVarType.Int ||
@@ -37,15 +44,24 @@ namespace Libnako.JPNCompiler.Node
                 varType == NakoVarType.String);
         }
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
 		public NakoNodeVariable() : base()
 		{
 			Init();
 		}
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="value"></param>
 		public NakoNodeVariable(Object value) : base(value)
 		{
 			Init();
 		}
-		
+		/// <summary>
+		/// 初期化
+		/// </summary>
 		public void Init()
 		{
 			this.scope = NakoVariableScope.Global;
@@ -54,6 +70,10 @@ namespace Libnako.JPNCompiler.Node
 			this.varBy = VarByType.ByVal;
 		}
 
+        /// <summary>
+        /// タイプを表す文字列を返す
+        /// </summary>
+        /// <returns></returns>
         public override String ToTypeString()
         {
             string r = type.ToString();

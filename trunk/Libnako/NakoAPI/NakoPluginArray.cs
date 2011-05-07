@@ -19,18 +19,21 @@ namespace Libnako.NakoAPI
     /// <summary>
     /// 配列関数プラグイン
     /// </summary>
-    public class NakoPluginArray : INakoPlugin
+    public class NakoPluginArray : NakoPluginTemplate, INakoPlugin
     {
-        string _description = "配列関数プラグイン";
-        double _version = 1.0;
-        //--- プラグイン共通の部分 ---
-        public double TargetNakoVersion { get { return 2.0; } }
-        public bool Used { get; set; }
-        public string Name { get { return this.GetType().FullName; } }
-        public double PluginVersion { get { return _version; } }
-        public string Description { get { return _description; } }
-        //--- 関数の定義 ---
-        public void DefineFunction(INakoPluginBank bank)
+        /// <summary>
+        /// プラグインのバージョン番号
+        /// </summary>
+        new protected double _pluginVersion = 1.0;
+        /// <summary>
+        /// プラグインの説明
+        /// </summary>
+        new protected string _pluginDescript = "配列処理を行うプラグイン";
+        /// <summary>
+        /// 関数の定義
+        /// </summary>
+        /// <param name="bank"></param>
+        new public void DefineFunction(INakoPluginBank bank)
         {
             bank.AddFunc("配列追加", "{参照渡し}AにSを", NakoVarType.Void, _append,"配列Aに要素Sを追加する。Aの内容を書き換える。", "はいれつついか");
             bank.AddFunc("配列ポップ", "{参照渡し}Aの", NakoVarType.Object, _pop, "配列Aの末尾を削除して、削除した要素を返り値として返す。Aの内容を書き換える。", "はいれつぽっぷ");
@@ -42,21 +45,13 @@ namespace Libnako.NakoAPI
             bank.AddFunc("配列ハッシュキー列挙", "Aの", NakoVarType.Array, _enumKeys, "配列Aのキー一覧を配列で返す。", "はいれつはっしゅきーれっきょ");
         }
         
-        // プラグインの初期化処理
-        public void PluginInit(INakoInterpreter runner)
-        {
-        }
-        // プラグインの終了処理
-        public void PluginFin(INakoInterpreter runner)
-        {
-        }
 
         /// <summary>
         /// 配列のキー列挙
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        public Object _enumKeys(INakoFuncCallInfo info)
+        private Object _enumKeys(INakoFuncCallInfo info)
         {
             Object ar = info.StackPop();
             NakoVarArray arv = (NakoVarArray)ar;
@@ -74,7 +69,7 @@ namespace Libnako.NakoAPI
             return res;
         }
 
-        public Object _append(INakoFuncCallInfo info){
+        private Object _append(INakoFuncCallInfo info){
 
             Object ary = info.StackPop(); // 参照渡しなので変数への参照が得られる
             Object s   = info.StackPop();
@@ -94,7 +89,7 @@ namespace Libnako.NakoAPI
             return null;
         }
 
-        public Object _pop(INakoFuncCallInfo info)
+        private Object _pop(INakoFuncCallInfo info)
         {
 
             Object ary = info.StackPop(); // 参照渡しなので変数への参照が得られる
@@ -112,7 +107,7 @@ namespace Libnako.NakoAPI
             return null;
         }
 
-        public Object _count(INakoFuncCallInfo info)
+        private Object _count(INakoFuncCallInfo info)
         {
             Object ar = info.StackPop();
             if (!(ar is NakoVarArray))
@@ -123,7 +118,7 @@ namespace Libnako.NakoAPI
             return arr.Count;
         }
 
-        public Object _removeAt(INakoFuncCallInfo info){
+        private Object _removeAt(INakoFuncCallInfo info){
 
             Object a = info.StackPop();
             long   i = info.StackPopAsInt();
@@ -151,7 +146,7 @@ namespace Libnako.NakoAPI
             // 結果をセット
             return null;
         }
-        public Object _concat(INakoFuncCallInfo info){
+        private Object _concat(INakoFuncCallInfo info){
             Object ar = info.StackPop();
             String s = info.StackPopAsString();
             if (!(ar is NakoVarArray))
@@ -172,7 +167,7 @@ namespace Libnako.NakoAPI
             }
             return sb.ToString();
         }
-        public Object _reverse(INakoFuncCallInfo info){
+        private Object _reverse(INakoFuncCallInfo info){
 
             Object ar = info.StackPop();
             if (!(ar is NakoVariable))
@@ -194,7 +189,7 @@ namespace Libnako.NakoAPI
             // 結果をセット
             return null;
         }
-        public Object _search(INakoFuncCallInfo info){
+        private Object _search(INakoFuncCallInfo info){
             Object ar = info.StackPop();
             int i = (int)info.StackPopAsInt();
             Object key = info.StackPop();

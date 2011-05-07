@@ -5,28 +5,56 @@ using System.Text;
 
 namespace Libnako.JPNCompiler.Tokenizer
 {
+    /// <summary>
+    /// トークンを表すクラス
+    /// </summary>
     public class NakoToken
     {
+        /// <summary>
+        /// トークンの値
+        /// </summary>
         public string value { get; set; }
+        /// <summary>
+        /// 行番号
+        /// </summary>
         public int lineno   { get; set; }
+        /// <summary>
+        /// インデントレベル
+        /// </summary>
         public int level    { get; set; }
+        /// <summary>
+        /// 助詞
+        /// </summary>
         public string josi  { get; set; }
-        protected NakoTokenType _type = 0;
-        public NakoTokenType type
-        {
-            get { return _type;  }
-            set { _type = value; }
-        }
+        /// <summary>
+        /// トークンタイプ
+        /// </summary>
+        public NakoTokenType type { get; set; }
 
+        /// <summary>
+        /// トークンの生成（コンストラクタ）
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="lineno"></param>
+        /// <param name="level"></param>
         public NakoToken(NakoTokenType type, int lineno, int level)
         {
         	Init(type, lineno, level);
         }
+        /// <summary>
+        /// トークンの生成
+        /// </summary>
+        /// <param name="type"></param>
         public NakoToken(NakoTokenType type)
         {
         	Init(type, 0, 0);
         }
-        
+        /// <summary>
+        /// 初期化
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="lineno"></param>
+        /// <param name="level"></param>
         public void Init(NakoTokenType type, int lineno, int level)
         {
             this.lineno = lineno;
@@ -35,11 +63,14 @@ namespace Libnako.JPNCompiler.Tokenizer
 			this.josi = "";
 			this.value = null;
         }
-
+        /// <summary>
+        /// デバッグ用の文字列を返す
+        /// </summary>
+        /// <returns></returns>
         public String ToStringForDebug()
         {
             string s = "[";
-            s += _type.ToString();
+            s += type.ToString();
             if (!(value == null || value == ""))
             {
                 s += ":" + value;
@@ -53,11 +84,19 @@ namespace Libnako.JPNCompiler.Tokenizer
             return s;
         }
 
+        /// <summary>
+        /// 名前としての値を得る(送り仮名を削除)
+        /// </summary>
+        /// <returns></returns>
         public String getValueAsName()
         {
             return TrimOkurigana(value);
         }
-
+        /// <summary>
+        /// 送り仮名を削除
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static String TrimOkurigana(String name)
         {
             String s = "";
@@ -87,10 +126,14 @@ namespace Libnako.JPNCompiler.Tokenizer
             return s;
         }
         
+        /// <summary>
+        /// 計算の演算子かどうか
+        /// </summary>
+        /// <returns></returns>
         public bool isCalcFlag()
         {
             bool result = false;
-            switch (_type) {
+            switch (type) {
                 case NakoTokenType.AND:
                 case NakoTokenType.AND_AND:
                 case NakoTokenType.EQ_EQ:

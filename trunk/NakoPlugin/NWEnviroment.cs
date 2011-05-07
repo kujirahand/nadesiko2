@@ -3,8 +3,15 @@ using System.IO;
 
 namespace NakoPlugin
 {
+    /// <summary>
+    /// OSや各種環境を判別するクラス
+    /// </summary>
     public class NWEnviroment
     {
+        /// <summary>
+        /// OSのバージョンを文字列として返す
+        /// </summary>
+        /// <returns>OS名</returns>
         public static string osVersionStr()
         {
             string res = "";
@@ -68,6 +75,9 @@ namespace NakoPlugin
             }
             return res;
         }
+        /// <summary>
+        /// 実行ファイルのパス
+        /// </summary>
         public static string ExePath
         {
             get
@@ -75,6 +85,9 @@ namespace NakoPlugin
                 return System.Reflection.Assembly.GetExecutingAssembly().Location;
             }
         }
+        /// <summary>
+        /// 実行ファイルのあるフォルダのパス
+        /// </summary>
         public static string AppPath
         {
             get
@@ -84,6 +97,11 @@ namespace NakoPlugin
             }
         }
         
+        /// <summary>
+        /// パスの最後に区切り記号(\)を追加する
+        /// </summary>
+        /// <param name="dir"></param>
+        /// <returns></returns>
         public static string AppendLastPathFlag(string dir)
         {
         	if (dir.EndsWith(Path.DirectorySeparatorChar.ToString()))
