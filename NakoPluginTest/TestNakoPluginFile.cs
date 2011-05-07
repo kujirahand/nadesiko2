@@ -21,6 +21,8 @@ namespace NakoPluginTest
             NakoCompilerLoaderInfo info = new NakoCompilerLoaderInfo();
             info.PreloadModules = new NakoPlugin.INakoPlugin[] {
                 new NakoBaseSystem(),
+                new NakoPluginArray(),
+                new NakoPluginString(),
                 new NakoPluginFile.NakoPluginFile()
             };
             com = new NakoCompiler(info);

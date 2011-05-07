@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CNako2Test", "CNako2Test\CN
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakoPlugin", "NakoPlugin\NakoPlugin.csproj", "{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoCNako2", "DemoCNako2\DemoCNako2.csproj", "{BA184544-C0CB-4399-BF10-4E02A37F41BB}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Nako2_cnako.vsmdi
@@ -64,6 +66,18 @@ Global
 		{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}.Release|x86.ActiveCfg = Release|Any CPU
+		{BA184544-C0CB-4399-BF10-4E02A37F41BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA184544-C0CB-4399-BF10-4E02A37F41BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA184544-C0CB-4399-BF10-4E02A37F41BB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BA184544-C0CB-4399-BF10-4E02A37F41BB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BA184544-C0CB-4399-BF10-4E02A37F41BB}.Debug|x86.ActiveCfg = Debug|x86
+		{BA184544-C0CB-4399-BF10-4E02A37F41BB}.Debug|x86.Build.0 = Debug|x86
+		{BA184544-C0CB-4399-BF10-4E02A37F41BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA184544-C0CB-4399-BF10-4E02A37F41BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA184544-C0CB-4399-BF10-4E02A37F41BB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BA184544-C0CB-4399-BF10-4E02A37F41BB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BA184544-C0CB-4399-BF10-4E02A37F41BB}.Release|x86.ActiveCfg = Release|x86
+		{BA184544-C0CB-4399-BF10-4E02A37F41BB}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

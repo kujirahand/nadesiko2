@@ -21,8 +21,7 @@ namespace DemoCNako2
             // Compile
             NakoCompiler compiler = new NakoCompiler();
             compiler.DirectSource =
-                "1でエクセル起動。「起動」と言う。" +
-                //"A=「」;A[`a`]=30;A[`b`]=31;Aの配列ハッシュキー列挙。それを「,」で配列結合して表示。" +
+                "利用中プラグイン列挙して表示。"+
                 "";
             cout = "----------";
             cout = "* TOKENS:";
