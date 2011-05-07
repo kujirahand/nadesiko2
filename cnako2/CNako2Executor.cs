@@ -184,6 +184,7 @@ namespace cnako2
             
             NakoInterpreter runner = new NakoInterpreter(compiler.Codes);
             SetCommandLine(runner);
+            runner.debugMode = DebugMode;
             
             if (DescriptMode)
             {
@@ -199,7 +200,6 @@ namespace cnako2
                 cout = compiler.Codes.ToAddressString();
                 cout = "----------";
                 cout = "* RUN";
-                runner.debugMode = DebugMode;
                 runner.Run();
                 Console.WriteLine("LOG=" + runner.PrintLog);
                 cout = "----------";
@@ -207,9 +207,7 @@ namespace cnako2
             }
             else
             {
-                runner.debugMode = DebugMode;
                 runner.Run();
-                // Console.WriteLine(runner.PrintLog);
                 PrintLog = runner.PrintLog;
             }
         }
@@ -218,7 +216,8 @@ namespace cnako2
         {
             NakoVarArray a = new NakoVarArray();
             a.SetValuesFromStrings(this.args);
-            runner.globalVar.SetVar("コマンドライン", a);
+            int i = runner.globalVar.GetIndex("コマンドライン");
+            runner.globalVar.SetValue(i, a);
         }
 
         static void _w(string s)
