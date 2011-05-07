@@ -28,6 +28,7 @@ namespace Libnako.NakoAPI
             bank.AddFunc("ナデシコバージョン", "", NakoVarType.Double, _nakoVersion, "なでしこのバージョン番号を返す", "なでしこばーじょん");
             bank.AddFunc("OSバージョン", "", NakoVarType.String, _osVersion, "OSのバージョン番号を返す", "OSばーじょん");
             bank.AddFunc("OS", "", NakoVarType.String, _os, "OSの種類を返す", "OS");
+            bank.AddFunc("利用中プラグイン列挙", "", NakoVarType.Array, _getPlugins, "現在読み込まれているプラグイン一覧を返す", "りようちゅうぷらぐいんれっきょ");
             
             //-基本定数
             bank.AddVar("はい", 1, "1", "はい");
@@ -95,6 +96,18 @@ namespace Libnako.NakoAPI
         public Object _os(INakoFuncCallInfo info)
         {
             return NWEnviroment.osVersionStr();
+        }
+
+        public Object _getPlugins(INakoFuncCallInfo info)
+        {
+            NakoVarArray a = info.CreateArray();
+            foreach (KeyValuePair<string, INakoPlugin> pair in NakoAPIFuncBank.Instance.PluginList)
+            {
+                NakoVariable v = new NakoVariable();
+                v.SetBodyAutoType(pair.Key);
+                a.Add(v);
+            }
+            return a;
         }
         
         public Object _beep(INakoFuncCallInfo info)
