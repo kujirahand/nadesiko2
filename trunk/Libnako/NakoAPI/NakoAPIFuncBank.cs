@@ -20,11 +20,23 @@ namespace Libnako.NakoAPI
         private NakoAPIFuncBank() { }
         
         // FuncList & Token Dictionary
+        /// <summary>
+        /// なでしこ関数リスト
+        /// </summary>
         public List<NakoAPIFunc> FuncList = new List<NakoAPIFunc>();
-        public Dictionary<string, Object> VarList = new Dictionary<string, Object>();
+        /// <summary>
+        /// なでしこ変数リスト
+        /// </summary>
+        public Dictionary<string, object> VarList = new Dictionary<string, object>();
+        /// <summary>
+        /// なでしこプラグインリスト
+        /// </summary>
         public Dictionary<string, INakoPlugin> PluginList = new Dictionary<string, INakoPlugin>();
-        //
+        /// <summary>
+        /// (プラグインの関数定義で利用される)定義中のプラグインインスタンス
+        /// </summary>
         private INakoPlugin PluginInstance = null;
+        /// <summary>
         
         #region INakoPluginBank の実装
         public void SetPluginInstance(INakoPlugin plugin)

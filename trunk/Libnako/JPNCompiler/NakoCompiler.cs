@@ -16,6 +16,7 @@ namespace Libnako.JPNCompiler
         public String name { get; set; }
         public String fullpath { get; set; }
         public String source { get; set; }
+        public bool DebugMode { get; set; }
         // token
         protected NakoTokenList tokens = null;
         public NakoTokenList Tokens
@@ -81,6 +82,7 @@ namespace Libnako.JPNCompiler
         public void Parse()
         {
             NakoParser parser = new NakoParser(tokens);
+            parser.DebugMode = this.DebugMode;
             parser.globalVar = this.GlobalVar;
             parser.Parse();
             this.topNode = parser.topNode;

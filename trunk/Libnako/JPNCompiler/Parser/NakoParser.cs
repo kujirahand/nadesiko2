@@ -372,6 +372,7 @@ namespace Libnako.JPNCompiler.Parser
             TokenTry();
             while (!tok.IsEOF())
             {
+                WriteLog(tok.CurrentToken.ToStringForDebug());
                 if (Accept(NakoTokenType.EOL))
                 {
                     tok.MoveNext();
@@ -393,8 +394,16 @@ namespace Libnako.JPNCompiler.Parser
                     NakoNode n = calcStack.Shift();
                     if (!(n is NakoNodeCallFunction))
                     {
+                        // 余剰スタックの値を得る
+                        string r = "";
+                        for (int i = 0; i < calcStack.Count; i++)
+                        {
+                            if (i != 0) r += ",";
+                            NakoNode n0 = calcStack[i];
+                            r += n0.ToTypeString();
+                        }
                         throw new NakoParserException(
-                            "無効な式か値があります。(余剰スタックのチェック)",
+                            "無効な式か値があります。(余剰スタックのチェック):" + r,
                             startToken);
                     }
                     parentNode.AddChild(n);

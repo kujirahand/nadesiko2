@@ -14,7 +14,7 @@ namespace Libnako.JPNCompiler
         protected string basePath;
         public NakoCompiler cur;
         public NakoCompilerLoaderInfo LoaderInfo = null;
-
+        public bool DebugMode = false;
         private static NakoLoader instance = null;
         public static NakoLoader Instance
         {
@@ -40,6 +40,7 @@ namespace Libnako.JPNCompiler
         public void ParseEx(string src, string filename)
         {
             cur = new NakoCompiler(LoaderInfo);
+            cur.DebugMode = this.DebugMode;
             cur.source = src;
             cur.fullpath = filename;
             cur.name = this.GetNamespaceFromPath(filename);

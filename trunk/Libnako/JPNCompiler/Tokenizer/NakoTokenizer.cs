@@ -223,6 +223,10 @@ namespace Libnako.JPNCompiler.Tokenizer
 
             // SWITCH
             switch (c) {
+                // Check BOM
+                case (char)0xFEFF:
+                    cur++;
+                    return null;
                 // Check EOL
                 case '\r':
                     cur++;

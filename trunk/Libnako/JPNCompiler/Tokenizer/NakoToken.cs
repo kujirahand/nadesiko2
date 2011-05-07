@@ -38,7 +38,19 @@ namespace Libnako.JPNCompiler.Tokenizer
 
         public String ToStringForDebug()
         {
-            return "[" + _type.ToString() + ":" + value + "]" + josi + "(" + (lineno+1) + ")";
+            string s = "[";
+            s += _type.ToString();
+            if (!(value == null || value == ""))
+            {
+                s += ":" + value;
+            }
+            if (!(josi == null || josi == ""))
+            {
+                s += "{" + josi + "}";
+            }
+            s += "(" + (lineno + 1) + ")";
+            s += "]";
+            return s;
         }
 
         public String getValueAsName()
