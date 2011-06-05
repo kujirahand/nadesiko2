@@ -29,5 +29,20 @@ namespace Libnako.JPNCompiler.Node
         {
             this.type = NakoNodeType.IF;
         }
+        /// <summary>
+        /// タイプ文字列を得る
+        /// </summary>
+        /// <returns></returns>
+        public override String ToTypeString()
+        {
+            String r = type.ToString() + "\n";
+            r += "  |-- COND:";
+            if (nodeCond != null) r += nodeCond.ToTypeString() + "\n";
+            r += "  |-- TRUE:\n";
+            if (nodeTrue != null) r += nodeTrue.ToTypeString() + "\n";
+            r += "  |-- FALSE:\n";
+            if (nodeFalse != null) r += nodeFalse.ToTypeString() + "\n";
+            return r;
+        }
     }
 }

@@ -64,5 +64,28 @@ namespace NakoPluginTest
             runner.Run(codes);
             Assert.AreEqual(runner.PrintLog, "aaa");
         }
+        [Test]
+        public void TestFOR1()
+        {
+            codes = ns.Publish(
+                "Iを1から5まで繰り返す\n" +
+                "　　PRINT I\n" +
+                "\n"
+                );
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "12345");
+        }
+        [Test]
+        public void TestFOR2_BREAK()
+        {
+            codes = ns.Publish(
+                "Iを1から5まで繰り返す\n" +
+                "　　PRINT I\n" +
+                "    もし、I=3ならば、抜ける。\n" +
+                "\n"
+                );
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "123");
+        }
     }
 }

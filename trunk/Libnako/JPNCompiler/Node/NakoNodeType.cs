@@ -70,6 +70,10 @@ namespace Libnako.JPNCompiler.Node
 
         // --- DEBUG ---
         ///<summary>PRINT</summary>
-        PRINT
+        PRINT,
+
+        // --- OTHER ---
+        ///<summary>JUMP</summary>
+        JUMP
     }
 }

@@ -132,11 +132,13 @@ namespace Libnako.JPNCompiler.Parser
             if (Accept(NakoTokenType.CONTINUE))
             {
                 parentNode.AddChild(new NakoNodeContinue());
+                tok.MoveNext();
                 return true;
             }
             if (Accept(NakoTokenType.BREAK))
             {
                 parentNode.AddChild(new NakoNodeBreak());
+                tok.MoveNext();
                 return true;
             }
 

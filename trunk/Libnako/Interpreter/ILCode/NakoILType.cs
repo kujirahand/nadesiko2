@@ -119,5 +119,10 @@ namespace Libnako.JPNCompiler.ILWriter
         ///<summary>PRINT</summary>
         PRINT            = 0x80, // { args:0, push:0, pop:1 }
 
+        /// --- 内部使用(実際に書き出されることはない ---
+        ///<summary>_BREAK</summary>
+        _BREAK      = 0xF1, // { args:0, push:0, pop:0 }
+        ///<summary>_CONTINUE</summary>
+        _CONTINUE = 0xF2, // { args:0, push:0, pop:0 }
     }
 }

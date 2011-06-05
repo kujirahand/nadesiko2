@@ -109,6 +109,12 @@ namespace Libnako.JPNCompiler.ILWriter
                 case NakoNodeType.FOR:
                     _for((NakoNodeFor)node);
                     return;
+                case NakoNodeType.BREAK:
+                    addNewILCode(NakoILType.NOP, "BREAK");
+                    return;
+                case NakoNodeType.CONTINUE:
+                    addNewILCode(NakoILType.NOP, "CONTINUE");
+                    return;
                 case NakoNodeType.REPEAT_TIMES:
                     _repeat_times((NakoNodeRepeatTimes)node);
                     return;
@@ -118,6 +124,15 @@ namespace Libnako.JPNCompiler.ILWriter
                 case NakoNodeType.DEF_FUNCTION:
                     _def_function((NakoNodeDefFunction)node);
                     return;
+                case NakoNodeType.JUMP:
+                    _jump((NakoNodeJump)node);
+                    return;
+                //TODO
+                case NakoNodeType.LET_VALUE:
+                    addNewILCode(NakoILType.NOP, "LET_VALUE");
+                    break;
+                default:
+                    throw new NakoCompilerException("未定義のノードタイプ: " + node.type.ToString());
             }
             // ---
             if (!node.hasChildren()) return;
@@ -212,6 +227,11 @@ namespace Libnako.JPNCompiler.ILWriter
             return r;
         }
 
+        private void _insertTemp(NakoILType type)
+        {
+            addNewILCode(type);
+        }
+
         private void _if(NakoNodeIf node)
         {
 			int labelId = GetLableId();
@@ -249,6 +269,7 @@ namespace Libnako.JPNCompiler.ILWriter
 			NakoILCode label_while_end = createLABEL("WHILE_END" + labelId.ToString());
             addNewILCode(NakoILType.BRANCH_FALSE, label_while_end);
             // (3) ループブロックを書き込む
+            _loop_check_break_continue(node.nodeBlocks, label_while_end, label_while_begin);
             Write_r(node.nodeBlocks);
             result.Add(createJUMP(label_while_begin));
             result.Add(label_while_end);
@@ -291,6 +312,7 @@ namespace Libnako.JPNCompiler.ILWriter
             addNewILCode(NakoILType.BRANCH_FALSE, label_for_end);
 
             // (3) 繰り返し文を実行する
+            _loop_check_break_continue(node.nodeBlocks, label_for_end, label_for_cond);
             Write_r(node.nodeBlocks);
 
             // (4) 変数を加算する (ここ最適化できそう)
@@ -301,6 +323,52 @@ namespace Libnako.JPNCompiler.ILWriter
             // (5) 手順2に戻る
             result.Add(createJUMP(label_for_cond));
             result.Add(label_for_end);
+        }
+
+        // BREAK/CONTINUE文を解決する
+        private void _loop_check_break_continue(NakoNode block, NakoILCode break_label, NakoILCode continue_label)
+        {
+            if (block == null) return;
+            if (!block.hasChildren()) return;
+            for (int i = 0; i < block.Children.Count; i++)
+            {
+                NakoNode item = block.Children[i];
+
+                switch (item.type)
+                {
+                    case NakoNodeType.BREAK:
+                        item.type = NakoNodeType.JUMP;
+                        ((NakoNodeBreak)item).label = break_label;
+                        break;
+                    case NakoNodeType.CONTINUE:
+                        item.type = NakoNodeType.JUMP;
+                        ((NakoNodeBreak)item).label = continue_label;
+                        break;
+
+                    // ジャンプポイントが変わる構文があれば、その下層ブロックは処理しない
+                    case NakoNodeType.FOR: break;
+                    case NakoNodeType.WHILE: break;
+                    case NakoNodeType.REPEAT_TIMES: break;
+                    case NakoNodeType.FOREACH: break;
+                    case NakoNodeType.IF:
+                        NakoNodeIf ifnode = (NakoNodeIf)item;
+                        _loop_check_break_continue(ifnode.nodeTrue,  break_label, continue_label);
+                        _loop_check_break_continue(ifnode.nodeFalse, break_label, continue_label);
+                        break;
+                    default:
+                        if (item.hasChildren())
+                        {
+                            _loop_check_break_continue(item, break_label, continue_label);
+                        }
+                        break;
+                }
+            }
+        }
+
+        private void _jump(NakoNodeJump node)
+        {
+            NakoILCode jmp = new NakoILCode(NakoILType.JUMP, node.label);
+            result.Add(jmp);
         }
 
         private void _repeat_times(NakoNodeRepeatTimes node)
@@ -332,6 +400,7 @@ namespace Libnako.JPNCompiler.ILWriter
             addNewILCode(NakoILType.BRANCH_FALSE, label_for_end);
 
             // (3) 繰り返し文を実行する
+            _loop_check_break_continue(node.nodeBlocks, label_for_end, label_for_begin);
             Write_r(node.nodeBlocks);
 
             // (4) 変数を加算する (ここ最適化できそう)

@@ -107,6 +107,14 @@ namespace Libnako.JPNCompiler.Node
         public virtual String ToTypeString()
         {
             String r = type.ToString();
+            if (hasChildren())
+            {
+                r += "\n";
+                for (int i = 0; i < children.Count; i++)
+                {
+                    r += "  |-- " + children[i].ToTypeString() + "\n";
+                }
+            }
             return r;
         }
 

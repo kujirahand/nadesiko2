@@ -6,6 +6,7 @@ namespace Libnako.JPNCompiler.Tokenizer
 {
     /// <summary>
     /// [単語:トークンタイプ]を覚えておくための辞書
+    /// NakoReservedWord.cs で実際に単語を定義している
     /// </summary>
     public class NakoTokenDic : IDictionary<string, NakoTokenType>
     {
