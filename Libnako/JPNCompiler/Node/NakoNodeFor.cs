@@ -17,5 +17,18 @@ namespace Libnako.JPNCompiler.Node
         {
             type = NakoNodeType.FOR;
         }
+
+        /// <summary>
+        /// タイプ文字列を得る
+        /// </summary>
+        /// <returns></returns>
+        public override String ToTypeString()
+        {
+            String r = type.ToString() + "\n";
+            r += "  |-- FROM: " + nodeFrom.ToTypeString() + "\n";
+            r += "  |-- TO  : " + nodeTo.ToTypeString() + "\n";
+            r += "  |-- BLOCKS:\n" + nodeBlocks.ToTypeString() + "\n";
+            return r;
+        }
     }
 }

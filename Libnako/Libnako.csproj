@@ -83,6 +83,7 @@
     <Compile Include="JPNCompiler\Node\NakoNodeDefFunction.cs" />
     <Compile Include="JPNCompiler\Node\NakoNodeFor.cs" />
     <Compile Include="JPNCompiler\Node\NakoNodeIf.cs" />
+    <Compile Include="JPNCompiler\Node\NakoNodeJump.cs" />
     <Compile Include="JPNCompiler\Node\NakoNodeLet.cs" />
     <Compile Include="JPNCompiler\Node\NakoNodeList.cs" />
     <Compile Include="JPNCompiler\Node\NakoNodePop.cs" />
