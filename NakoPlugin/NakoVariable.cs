@@ -24,10 +24,20 @@ namespace NakoPlugin
         public Object Body { 
             get { return _body; } 
         }
+
+        /// <summary>
+        /// 値を整数として参照する
+        /// </summary>
+        public Int64 AsInt
+        {
+            get { return (Int64)_body; }
+            set { _body = value; }
+        }
+
         /// <summary>
         /// 変数の値(内部で使用する)
         /// </summary>
-        protected Object _body = null;
+        private Object _body;
 
         /// <summary>
         /// 変数の管理番号
@@ -122,6 +132,5 @@ namespace NakoPlugin
             }
         }
     }
-
 
 }

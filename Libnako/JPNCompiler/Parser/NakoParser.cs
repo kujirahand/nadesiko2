@@ -108,6 +108,7 @@ namespace Libnako.JPNCompiler.Parser
         //>            | _if_stmt
         //>            | _white
         //>            | _for
+        //>            | _foreach
         //>            | _repeat_times
         //>            | _def_function
         //>            | _def_variable
@@ -124,6 +125,7 @@ namespace Libnako.JPNCompiler.Parser
             if (_if_stmt()) return true;
             if (_while()) return true;
             if (_for()) return true;
+            if (_foreach()) return true;
             if (_repeat_times()) return true;
             if (_def_function()) return true;
             if (_def_variable()) return true;
@@ -364,6 +366,37 @@ namespace Libnako.JPNCompiler.Parser
             repnode.nodeTimes = calcStack.Pop();
             repnode.nodeBlocks = _scope_or_statement();
             repnode.loopVarNo = localVar.CreateVarNameless();
+            repnode.timesVarNo = localVar.CreateVarNameless();
+
+            this.parentNode.AddChild(repnode);
+            lastNode = repnode;
+            return true;
+        }
+
+        //> _foreach : _value FOREACH _scope_or_statement
+        //>          ;
+        private Boolean _foreach()
+        {
+            TokenTry();
+            if (!_value()) return false;
+            if (!Accept(NakoTokenType.FOREACH))
+            {
+                TokenBack();
+                return false;
+            }
+            TokenFinally();
+            tok.MoveNext(); // skip FOREACH
+
+            NakoNodeForeach repnode = new NakoNodeForeach();
+            // ローカル変数の領域を確保
+            repnode.taisyouVarNo = localVar.GetIndex(NakoReservedWord.TAISYOU, true); // 変数「対象」の変数番号を取得
+            repnode.kaisuVarNo = localVar.GetIndex(NakoReservedWord.KAISU, true); // カウンタ変数「回数」の変数番号を取得
+            repnode.loopVarNo = localVar.CreateVarNameless(); // ループカウンタ
+            repnode.lenVarNo = localVar.CreateVarNameless(); // 要素サイズを記録
+            repnode.valueVarNo = localVar.CreateVarNameless(); // valueを評価した値を保持
+            // ノードの取得
+            repnode.nodeValue = calcStack.Pop();
+            repnode.nodeBlocks = _scope_or_statement();
 
             this.parentNode.AddChild(repnode);
             lastNode = repnode;
@@ -788,6 +821,7 @@ namespace Libnako.JPNCompiler.Parser
 
 
         //> _variable : WORD '[' VALUE ']'
+        //>           | WORD '\'
         //>           | WORD ;
         private Boolean _variable()
         {

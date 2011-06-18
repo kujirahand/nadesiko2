@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Libnako.JPNCompiler.ILWriter
+namespace Libnako.Interpreter.ILCode
 {
     /// <summary>
     /// なでしこ2の仮想バイトコード(IL)を定義したもの
@@ -50,9 +50,11 @@ namespace Libnako.JPNCompiler.ILWriter
         ///<summary>ST_ELEM</summary>
         ST_ELEM           = 0x31, // { args:0, push:0, pop:3 }
         ///<summary>LD_ELEM</summary>
-        LD_ELEM           = 0x32, // { args:0, push:0, pop:2 }
+        LD_ELEM           = 0x32, // { args:0, push:1, pop:2 }
         ///<summary>LD_ELEM_REF</summary>
-        LD_ELEM_REF       = 0x33, // { args:0, push:0, pop:2 }
+        LD_ELEM_REF       = 0x33, // { args:0, push:1, pop:2 }
+        ///<summary>ARR_LENGTH</summary>
+        ARR_LENGTH        = 0x34, // { args:0, push:1, pop:1 }
 
         // --- 計算する ---
         ///<summary>ADD</summary>
@@ -89,6 +91,7 @@ namespace Libnako.JPNCompiler.ILWriter
         DEC              = 0x57, // { args:0, push:1, pop:1 }
         ///<summary>NEG</summary>
         NEG              = 0x58, // { args:0, push:1, pop:1 }
+
         // --- 演算 ---
         ///<summary>AND</summary>
         AND              = 0x59, // { args:0, push:1, pop:2 }
@@ -118,6 +121,16 @@ namespace Libnako.JPNCompiler.ILWriter
         // --- DEBUG用 ---
         ///<summary>PRINT</summary>
         PRINT            = 0x80, // { args:0, push:0, pop:1 }
+
+        // --- ローカル変数に対する操作 ---
+        ///<summary>ローカル変数の値を1増やす</summary>
+        INC_LOCAL = 0x90, // { args:1, push:0, pop:0 }
+        ///<summary>ローカル変数の値を1減らす</summary>
+        DEC_LOCAL = 0x91, // { args:1, push:0, pop:0 }
+
+        // --- スタックに対する操作 ---
+        /// <summary>スタックの先頭要素を複製する</summary>
+        DUP = 0x95, // { args:0, push:1, pop:0 }
 
         /// --- 内部使用(実際に書き出されることはない ---
         ///<summary>_BREAK</summary>

@@ -5,6 +5,7 @@ using Libnako.JPNCompiler.Node;
 using Libnako.JPNCompiler.Tokenizer;
 using Libnako.JPNCompiler.ILWriter;
 using Libnako.JPNCompiler.Parser;
+using Libnako.Interpreter.ILCode;
 using Libnako.NakoAPI;
 using NakoPlugin;
 

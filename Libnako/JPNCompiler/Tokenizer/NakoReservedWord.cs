@@ -23,6 +23,7 @@ namespace Libnako.JPNCompiler.Tokenizer
             dic.AddWord("繰り返す", NakoTokenType.FOR);
             dic.AddWord("間", NakoTokenType.WHILE);
             dic.AddWord("回", NakoTokenType.REPEAT_TIMES);
+            dic.AddWord("反復", NakoTokenType.FOREACH);
             dic.AddWord("条件分岐", NakoTokenType.SWITCH);
             dic.AddWord("抜ける", NakoTokenType.BREAK);
             dic.AddWord("続ける", NakoTokenType.CONTINUE);
@@ -36,6 +37,24 @@ namespace Libnako.JPNCompiler.Tokenizer
             dic.AddWord("文字列", NakoTokenType.DIM_STRING);
             dic.AddWord("変数", NakoTokenType.DIM_VARIABLE);
             dic.AddWord("配列変数", NakoTokenType.DIM_ARRAY);
+            // 予約変数名
+            dic.AddWord("それ", NakoTokenType.WORD); // SORE
+            dic.AddWord("対象", NakoTokenType.WORD); // TAISYOU
+            dic.AddWord("回数", NakoTokenType.WORD); // KAISU
         }
+
+        // システム予約変数名対象
+        /// <summary>
+        /// 変数「対象」を文字列として定義したもの
+        /// </summary>
+        public const string TAISYOU = "対象";
+        /// <summary>
+        /// 変数「それ」を文字列として定義したもの
+        /// </summary>
+        public const string SORE = "それ";
+        /// <summary>
+        /// 変数「回数」を文字列として定義したもの
+        /// </summary>
+        public const string KAISU = "回数";
     }
 }

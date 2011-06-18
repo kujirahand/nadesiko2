@@ -6,6 +6,7 @@ using Libnako.JPNCompiler.ILWriter;
 using Libnako.JPNCompiler;
 using Libnako.NakoAPI;
 using Libnako.JPNCompiler.Function;
+using Libnako.Interpreter.ILCode;
 using NakoPlugin;
 
 namespace Libnako.Interpreter
@@ -268,6 +269,7 @@ namespace Libnako.Interpreter
                 case NakoILType.LD_ELEM:        ld_elem(); break;
                 case NakoILType.LD_ELEM_REF:    ld_elem_ref(); break;
                 case NakoILType.ST_ELEM:        st_elem(); break;
+                case NakoILType.ARR_LENGTH:     arr_length(); break;
                 // 計算処理
                 case NakoILType.ADD:        exec_calc(calc_method_add); break;
                 case NakoILType.SUB:        exec_calc(calc_method_sub); break;
@@ -300,9 +302,32 @@ namespace Libnako.Interpreter
                 case NakoILType.RET:            exec_ret(code); break;
                 // デバッグ用
                 case NakoILType.PRINT:          exec_print(); break;
+                // ローカル変数に対する操作
+                case NakoILType.INC_LOCAL: inc_local(code); break;
+                case NakoILType.DEC_LOCAL: dec_local(code); break;
+                case NakoILType.DUP: dup(); break;
+                //
                 default:
                     throw new NakoInterpreterException("未実装のILコード");
             }
+        }
+
+        private void dup()
+        {
+            // スタックトップの値を複製
+            object o = calcStack.Peek();
+            calcStack.Push(o);
+        }
+
+        private void inc_local(NakoILCode code)
+        {
+            NakoVariable v = localVar.GetVar((int)code.value);
+            v.AsInt++;
+        }
+        private void dec_local(NakoILCode code)
+        {
+            NakoVariable v = localVar.GetVar((int)code.value);
+            v.AsInt--;
         }
 
         private void exec_usrcall(NakoILCode code)
@@ -502,6 +527,24 @@ namespace Libnako.Interpreter
                 StackPush(null);
                 return;
             }
+            if (var is NakoVarArray)
+            {
+                NakoVarArray a = (NakoVarArray)var;
+                NakoVariable elem = a.GetVarFromObj(idx);
+                StackPush(elem);
+                return;
+            }
+            if (((NakoVariable)var).Body is NakoVarArray)
+            {
+                var_ary = (NakoVarArray)((NakoVariable)var).Body;
+                NakoVariable elem = var_ary.GetVarFromObj(idx);
+                if (elem == null)
+                {
+                    elem = new NakoVariable();
+                    var_ary.SetVarFromObj(idx, elem);
+                }
+                StackPush(elem);
+            }
 
             if (((NakoVariable)var).Body == null)
             {
@@ -566,6 +609,35 @@ namespace Libnako.Interpreter
                     }
                 }
             }
+        }
+
+        private void arr_length()
+        {
+            Object value = StackPop();
+            
+            // 配列要素を取り出す
+            NakoVarArray arr = null;
+            if (value is NakoVarArray)
+            {
+                arr = (NakoVarArray)value;
+            }
+            else if (value is NakoVariable)
+            {
+                NakoVariable v = (NakoVariable)value;
+                if (v.Type == NakoVarType.Array)
+                {
+                    arr = (NakoVarArray)v.Body;
+                }
+            }
+            if (arr != null)
+            {
+                StackPush(arr.Count);
+            }
+            else
+            {
+                StackPush(0L);
+            }
+            return;
         }
 
         private void exec_print()
@@ -671,6 +743,8 @@ namespace Libnako.Interpreter
         }
         private Object calc_method_add_str(Object a, Object b)
         {
+            if (a == null) a = "";
+            if (b == null) b = "";
             String sa = a.ToString();
             String sb = b.ToString();
             return sa + sb;
