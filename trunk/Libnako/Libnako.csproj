@@ -91,6 +91,7 @@
     <Compile Include="JPNCompiler\Node\NakoNodeType.cs" />
     <Compile Include="JPNCompiler\Node\NakoNodeVariable.cs" />
     <Compile Include="JPNCompiler\Node\NakoNodeWhile.cs" />
+    <Compile Include="JPNCompiler\Node\nakoNodeForeach.cs" />
     <Compile Include="JPNCompiler\Parser\CalcType.cs" />
     <Compile Include="JPNCompiler\Parser\NakoParser.cs" />
     <Compile Include="JPNCompiler\Parser\NakoParserBase.cs" />

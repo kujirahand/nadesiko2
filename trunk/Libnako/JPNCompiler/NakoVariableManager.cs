@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using System.Text;
 using NakoPlugin;
+using Libnako.JPNCompiler.Tokenizer;
 
 namespace Libnako.JPNCompiler
 {
@@ -52,7 +53,7 @@ namespace Libnako.JPNCompiler
                 NakoVariable sore = new NakoVariable();
                 sore.SetBody(0, NakoVarType.Int);
                 list.Add(sore);
-                names["それ"] = 0;
+                names[NakoReservedWord.SORE] = 0;
             }
 
         }
@@ -69,6 +70,22 @@ namespace Libnako.JPNCompiler
                 return -1;
             }
             return names[name];
+        }
+
+        /// <summary>
+        /// 変数名から管理番号を返す(autoCreate=trueのとき存在しなければ作成処理を行う)
+        /// </summary>
+        /// <param name="name">変数名</param>
+        /// <param name="autoCreate">自動生成を行うか</param>
+        /// <returns></returns>
+        public int GetIndex(string name, bool autoCreate)
+        {
+            int no = GetIndex(name);
+            if (no < 0 && autoCreate)
+            {
+                no = CreateVar(name);
+            }
+            return no;
         }
 
         /// <summary>

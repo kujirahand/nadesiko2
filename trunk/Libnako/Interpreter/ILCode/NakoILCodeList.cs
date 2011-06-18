@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 
 using System.Text;
+using Libnako.JPNCompiler;
 
-namespace Libnako.JPNCompiler.ILWriter
+namespace Libnako.Interpreter.ILCode
 {
     /// <summary>
     /// なでしこの仮想バイトコード一覧を管理するクラス

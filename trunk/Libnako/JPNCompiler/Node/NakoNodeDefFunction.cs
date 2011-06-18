@@ -4,6 +4,7 @@ using System.Text;
 using Libnako.JPNCompiler.Function;
 using Libnako.JPNCompiler.Parser;
 using Libnako.JPNCompiler.ILWriter;
+using Libnako.Interpreter.ILCode;
 
 namespace Libnako.JPNCompiler.Node
 {

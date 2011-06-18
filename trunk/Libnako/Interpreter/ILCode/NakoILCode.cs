@@ -4,7 +4,7 @@ using System.Text;
 
 using Libnako.NakoAPI;
 
-namespace Libnako.JPNCompiler.ILWriter
+namespace Libnako.Interpreter.ILCode
 {
     /// <summary>
     /// なでしこの仮想バイトコード(IL)を表わすクラス

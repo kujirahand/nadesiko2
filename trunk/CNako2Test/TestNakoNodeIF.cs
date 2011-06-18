@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Libnako.JPNCompiler;
 using Libnako.Interpreter;
 using Libnako.JPNCompiler.ILWriter;
+using Libnako.Interpreter.ILCode;
 
 namespace NakoPluginTest
 {

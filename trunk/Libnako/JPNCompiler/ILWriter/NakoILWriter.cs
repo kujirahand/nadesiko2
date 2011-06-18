@@ -7,6 +7,7 @@ using Libnako.JPNCompiler.Node;
 using Libnako.JPNCompiler.Parser;
 using Libnako.JPNCompiler.Function;
 using Libnako.NakoAPI;
+using Libnako.Interpreter.ILCode;
 
 namespace Libnako.JPNCompiler.ILWriter
 {
@@ -117,6 +118,9 @@ namespace Libnako.JPNCompiler.ILWriter
                     return;
                 case NakoNodeType.REPEAT_TIMES:
                     _repeat_times((NakoNodeRepeatTimes)node);
+                    return;
+                case NakoNodeType.FOREACH:
+                    _foreach((NakoNodeForeach)node);
                     return;
                 case NakoNodeType.CALL_FUNCTION:
                     _call_function((NakoNodeCallFunction)node);
@@ -373,8 +377,6 @@ namespace Libnako.JPNCompiler.ILWriter
 
         private void _repeat_times(NakoNodeRepeatTimes node)
         {
-            // (1)
-            int loopVarNo = node.loopVarNo;
 			int labelId = GetLableId();
 
             // (0)
@@ -384,16 +386,19 @@ namespace Libnako.JPNCompiler.ILWriter
             // (1) 変数を初期化する
             result.Add(label_for_begin);
             addNewILCode(NakoILType.LD_CONST_INT, 1L);
-            addNewILCode(NakoILType.ST_LOCAL, loopVarNo);
+            addNewILCode(NakoILType.ST_LOCAL, node.loopVarNo);
+            // 何回実行するか回数を評価する
+            Write_r(node.nodeTimes);
+            addNewILCode(NakoILType.ST_LOCAL, node.timesVarNo);
 
             // (2) 条件をコードにする
             // i <= iTo
 			NakoILCode label_for_cond = createLABEL("TIMES_COND" + labelId.ToString());
             result.Add(label_for_cond);
             // L
-            addNewILCode(NakoILType.LD_LOCAL, loopVarNo);
+            addNewILCode(NakoILType.LD_LOCAL, node.loopVarNo);
             // R
-            Write_r(node.nodeTimes); // TODO:最適化
+            addNewILCode(NakoILType.LD_LOCAL, node.timesVarNo);
             // LT_EQ
             addNewILCode(NakoILType.LT_EQ);
             // IF BRANCH FALSE
@@ -404,9 +409,69 @@ namespace Libnako.JPNCompiler.ILWriter
             Write_r(node.nodeBlocks);
 
             // (4) 変数を加算する (ここ最適化できそう)
+            addNewILCode(NakoILType.INC_LOCAL, node.loopVarNo);
+
+            // (5) 手順2に戻る
+            result.Add(createJUMP(label_for_cond));
+            result.Add(label_for_end);
+        }
+
+        private void _foreach(NakoNodeForeach node)
+        {
+            int labelId = GetLableId();
+            int loopVarNo = node.loopVarNo;
+            int lenVarNo = node.lenVarNo;
+            int valueVarNo = node.valueVarNo;
+            int taisyouVarNo = node.taisyouVarNo;
+            int kaisuVarNo = node.kaisuVarNo;
+
+            // (0)
+            NakoILCode label_for_begin = createLABEL("FOREACH_BEGIN" + labelId.ToString());
+            NakoILCode label_for_end = createLABEL("FOREACH_END" + labelId.ToString());
+
+            // (1) 変数を初期化する
+            result.Add(label_for_begin);
+            // カウンタ変数を初期化
+            addNewILCode(NakoILType.LD_CONST_INT, 0L);
+            addNewILCode(NakoILType.ST_LOCAL, loopVarNo);
+            // 反復要素の評価
+            Write_r(node.nodeValue); // 値を評価
+            addNewILCode(NakoILType.ST_LOCAL, valueVarNo);
+            // 要素数を得る
+            addNewILCode(NakoILType.LD_LOCAL, valueVarNo);
+            addNewILCode(NakoILType.ARR_LENGTH);
+            addNewILCode(NakoILType.ST_LOCAL, lenVarNo);
+            
+            // (2) 条件をコードにする
+            // i < iTo
+            NakoILCode label_for_cond = createLABEL("FOREACH_COND" + labelId.ToString());
+            result.Add(label_for_cond);
+            // L
+            addNewILCode(NakoILType.LD_LOCAL, loopVarNo);
+            // R
+            addNewILCode(NakoILType.LD_LOCAL, lenVarNo);
+            // LT
+            addNewILCode(NakoILType.LT);
+            // IF BRANCH FALSE
+            addNewILCode(NakoILType.BRANCH_FALSE, label_for_end);
+            // 反復する値を変数「対象」にセット
+            // ** 対象=値\(ループカウンタ)
+            addNewILCode(NakoILType.LD_LOCAL, valueVarNo);
+            addNewILCode(NakoILType.LD_LOCAL, loopVarNo);
+            addNewILCode(NakoILType.LD_ELEM_REF);
+            //addNewILCode(NakoILType.NOP, "let-taisyou"); // for DEBUG
+            addNewILCode(NakoILType.ST_LOCAL, taisyouVarNo);
+            // ** 回数=ループカウンタ+1
             addNewILCode(NakoILType.LD_LOCAL, loopVarNo);
             addNewILCode(NakoILType.INC);
-            addNewILCode(NakoILType.ST_LOCAL, loopVarNo);
+            addNewILCode(NakoILType.ST_LOCAL, kaisuVarNo);
+
+            // (3) 繰り返し文を実行する
+            _loop_check_break_continue(node.nodeBlocks, label_for_end, label_for_begin);
+            Write_r(node.nodeBlocks);
+
+            // (4) 変数を加算する
+            addNewILCode(NakoILType.INC_LOCAL, loopVarNo);
 
             // (5) 手順2に戻る
             result.Add(createJUMP(label_for_cond));

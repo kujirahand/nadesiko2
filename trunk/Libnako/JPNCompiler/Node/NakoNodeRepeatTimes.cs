@@ -11,6 +11,7 @@ namespace Libnako.JPNCompiler.Node
 		public NakoNode nodeTimes { get; set; }
 		public NakoNode nodeBlocks { get; set; }
 		public int loopVarNo { get; set; }
+        public int timesVarNo { get; set; }
 
         public NakoNodeRepeatTimes()
         {
