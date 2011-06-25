@@ -60,6 +60,10 @@ namespace NakoPluginFile
             //-ファイル列挙
             bank.AddFunc("ファイル列挙", "PATHの", NakoVarType.Array, _enumFiles, "PATHにあるファイルを列挙する", "ふぁいるれっきょ");
             bank.AddFunc("フォルダ列挙", "PATHの", NakoVarType.Array, _enumDirs, "PATHにあるフォルダを列挙する", "ふぉるだれっきょ");
+            //-パス操作
+            bank.AddFunc("パス抽出", "PATHの", NakoVarType.String, _dirname, "PATHからパスを抽出して返す", "ぱすちゅうしゅつ");
+            bank.AddFunc("ファイル名抽出", "PATHの", NakoVarType.String, _basename, "PATHからパスを抽出して返す", "ふぁいるめいちゅうしゅつ");
+            bank.AddFunc("拡張子抽出", "PATHの", NakoVarType.String, _extname, "PATHから拡張子を抽出して返す", "かくちょうしちゅうしゅつ");
         }
         // プラグインの初期化処理
         public void PluginInit(INakoInterpreter runner)
@@ -277,6 +281,25 @@ namespace NakoPluginFile
             }
             return res;
         }
-        
+        //------------------------------------------------------------------
+        // パス操作
+        public Object _dirname(INakoFuncCallInfo info)
+        {
+            string path = info.StackPopAsString();
+            string res = Path.GetDirectoryName(path);
+            return res;
+        }
+        public Object _basename(INakoFuncCallInfo info)
+        {
+            string path = info.StackPopAsString();
+            string res = Path.GetFileName(path);
+            return res;
+        }
+        public Object _extname(INakoFuncCallInfo info)
+        {
+            string path = info.StackPopAsString();
+            string res = Path.GetExtension(path);
+            return res;
+        }
     }
 }
