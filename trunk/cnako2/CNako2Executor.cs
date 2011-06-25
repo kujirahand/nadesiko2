@@ -127,15 +127,23 @@ namespace cnako2
         /// </summary>
         public void Run()
         {
-            switch (runMode)
+            try
             {
-                case NakoConsoleMode.OneLiner:
-                    OneLinerMode(source);
-                    break;
-                case NakoConsoleMode.RunFile:
-                    RunFileMode(source);
-                    break;
+                switch (runMode)
+                {
+                    case NakoConsoleMode.OneLiner:
+                        OneLinerMode(source);
+                        break;
+                    case NakoConsoleMode.RunFile:
+                        RunFileMode(source);
+                        break;
+                }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine("[SystemError]" + e.Message);
+            }
+            //
             if (WaitMode)
             {
                 Console.ReadLine();
