@@ -31,24 +31,39 @@ namespace NakoPluginTest
         [Test]
         public void TestMatch()
         {
-            com.DirectSource = 
+            com.DirectSource =
                 "「なでしこ」の「^(.*?)こ$」を正規表現マッチを表示。";
             runner.Run(com.Codes);
-            Assert.AreEqual( "なでしこ", runner.PrintLog);
-            com.DirectSource = 
+            Assert.AreEqual("なでしこ", runner.PrintLog);
+            com.DirectSource =
                 "「なでしこ」の「^(.*?)こ$」を正規表現マッチ。\n" +
                 "抽出文字列[1]を表示";
             runner.Run(com.Codes);
-            Assert.AreEqual( "なでし", runner.PrintLog);
+            Assert.AreEqual("なでし", runner.PrintLog);
+        }
+
+        [Test]
+        public void TestMatchAll()
+        {
+            com.DirectSource =
+                "A=「1なでしこ2なでしこ3なでしこ」を「\\d(.*?)こ」で正規表現全マッチ。\n" +
+                "A[0]を表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual("1なでしこ", runner.PrintLog);
+            com.DirectSource =
+                "「なでしこ」の「.」を正規表現全マッチ。\n" +
+                "抽出文字列の配列要素数を表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual("4", runner.PrintLog);
         }
 
         [Test]
         public void TestReplace()
         {
-            com.DirectSource = 
+            com.DirectSource =
                 "「なでしここ」の「^.*?こ」を「ら」に正規表現置換を表示。";
             runner.Run(com.Codes);
-            Assert.AreEqual( "らこ", runner.PrintLog);
+            Assert.AreEqual("らこ", runner.PrintLog);
         }
     }
 }

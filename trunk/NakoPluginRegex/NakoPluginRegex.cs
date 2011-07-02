@@ -31,7 +31,7 @@ namespace NakoPluginRegex
         public void DefineFunction(INakoPluginBank bank)
         {
             bank.AddFunc("正規表現マッチ", "SをPATTERNで", NakoVarType.String, _match, ".Netの正規表現。文字列AをパターンBで最初にマッチした結果を返す。", "せいきひょうげんまっち");
-            bank.AddFunc("正規表現全てマッチ", "SをPATTERNで", NakoVarType.String, _matchAll, ".Netの正規表現。文字列AをパターンBでマッチした結果を全て返す。", "せいきひょうげんすべてまっち");
+            bank.AddFunc("正規表現全マッチ", "SをPATTERNで", NakoVarType.String, _matchAll, ".Netの正規表現。文字列AをパターンBでマッチした結果を全て返す。", "せいきひょうげんすべてまっち");
             bank.AddFunc("正規表現置換", "SのPATTERNをREPLACEに", NakoVarType.String, _replace, ".Netの正規表現。文字列SのパターンAをBで置換して結果を返す。", "せいきひょうげんちかん");
         }
         
@@ -67,18 +67,25 @@ namespace NakoPluginRegex
         	m = Regex.Match(s,pattern);
         	NakoVarArray res = info.CreateArray();
         	int index = 0;
-//        	NakoVarArray groups = new NakoVarArray();
+        	NakoVarArray groups = new NakoVarArray();
 //        	NakoVariable ret = new NakoVariable();
         	while(m.Success){
                 res.SetValue(index,m.Value);
-                index++;
-                m.NextMatch();
+                NakoVarArray subgroups = new NakoVarArray();
+                for (int i = 0; i < m.Groups.Count; i++)
+                {
+                    subgroups.SetValue(i,m.Groups[i].Value);
+                }
+                groups.Add(subgroups);
 //        	    for(int i = 0;i < m.Groups.Count;i++){
 //        	        groups.SetValue(i,m.Groups[i].Value);
 //        	    }
 //        	    ret.Type = NakoVarType.Array;
 //        	    ret.Body = groups;
-        	}
+                index++;
+                m = m.NextMatch();
+            }
+            info.SetVariableValue("抽出文字列", groups);
      	    return res;
         }
         private Match m;
