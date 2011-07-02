@@ -563,6 +563,7 @@ namespace Libnako.JPNCompiler.Tokenizer
             }
             // 文字列の終端までスキャンする
             String str = "";
+			bool is_skip_blank = false;
             while (!IsEOF())
             {
                 if (CompareStr(eos))
@@ -571,11 +572,25 @@ namespace Libnako.JPNCompiler.Tokenizer
                     break;
                 }
                 c = CurrentCharRaw;
-                str += c;
                 cur++;
+
+				if (is_skip_blank)
+				{
+					if (c == ' ' || c == '　' || c == '\t')
+					{
+						continue;
+					}
+					else
+					{
+						is_skip_blank = false;
+					}
+				}
+
+                str += c;
                 if (c == '\n')
                 {
                     lineno++;
+					is_skip_blank = true;
                 }
             }
             // Extract ?
