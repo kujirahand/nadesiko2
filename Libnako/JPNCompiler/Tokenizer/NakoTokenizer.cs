@@ -642,13 +642,13 @@ namespace Libnako.JPNCompiler.Tokenizer
         public NakoToken GetToken_Word()
         {
             NakoToken token = new NakoToken(NakoTokenType.WORD, lineno, level);
-            String s = "";
+            StringBuilder s = new StringBuilder();
             while (!IsEOF())
             {
                 Char c = CurrentChar;
                 if (IsAlpha(c) || IsNumber(c) || c == '_' || c == '!' || c == '?')
                 {
-                    s += c;
+                    s.Append(c);
                     cur++;
                     continue;
                 }
@@ -660,13 +660,18 @@ namespace Libnako.JPNCompiler.Tokenizer
                 // 全角文字なら読む
                 if (c >= 0xFF)
                 {
-                    s += c;
+                    s.Append(c);
                     cur++;
+					// 特別な予約語なら区切る
+					if (s.ToString() == "もし" || s.ToString() == "ならば")
+					{
+						break;
+					}
                     continue;
                 }
                 break;
             }
-            token.value = s;
+            token.value = s.ToString();
             return token;
         }
 
