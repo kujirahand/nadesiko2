@@ -60,6 +60,8 @@ namespace Libnako.NakoAPI
             bank.AddFunc("掛ける!", "{参照渡し}AにBを", NakoVarType.Object, _mulEx, "変数Aと値Bを掛けて返す(変数A自身を書き換える)", "かける!");
             bank.AddFunc("割る", "AをBで", NakoVarType.Object, _div, "値Aを値Bで割って返す", "わる");
             bank.AddFunc("割る!", "{参照渡し}AをBで", NakoVarType.Object, _divEx, "変数Aを値Bで割って返す(変数A自身を書き換える)", "わる");
+            bank.AddFunc("余り", "AをBで", NakoVarType.Object, _mod, "値Aを値Bで割ったあまり返す", "あまり");
+            bank.AddFunc("割った余り", "AをBで", NakoVarType.Object, _mod, "変数Aを値Bで割った余りを返す", "わったあまり");
             //-計算関数
             bank.AddFunc("乱数", "Nの", NakoVarType.Int, _random, "0から(N-1)までの範囲の乱数を返す", "らんすう");
             bank.AddFunc("絶対値", "Vの", NakoVarType.Int, _abs, "値Vの絶対値を返す", "ぜったいち");
@@ -301,6 +303,22 @@ namespace Libnako.NakoAPI
             double v = info.StackPopAsDouble();
             v = Math.Abs(v);
             return v;
+        }
+
+        private Object _mod(INakoFuncCallInfo info)
+        {
+            Object a = info.StackPop();
+            Object b = info.StackPop();
+            if (a is Int64 && b is Int64)
+            {
+                return ((Int64)a % (Int64)b);
+            }
+            else
+            {
+                Double da = NakoValueConveter.ToDouble(a);
+                Double db = NakoValueConveter.ToDouble(b);
+                return (da % db);
+            }
         }
 
     }
