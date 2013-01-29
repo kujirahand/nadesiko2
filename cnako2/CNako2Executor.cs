@@ -116,6 +116,31 @@ namespace cnako2
                 }
                 i++;
             }
+
+            foreach(string arg in args)
+            {
+                if (arg == "-e" || arg == "-eval")
+                {
+                    runMode = NakoConsoleMode.OneLiner;
+                }
+                else if (arg == "-desc" || arg == "-descript")
+                {
+                    DescriptMode = true;
+                    UseLog = true;
+                }
+                else if (arg == "-debug")
+                {
+                    DebugMode = true;
+                }
+                else if (arg == "-wait")
+                {
+                    WaitMode = true;
+                }
+                else if (source == null) // other
+                {
+                    source = args[i];
+                }
+            }
             // ソースファイルが指定されてなければエラー
             if (runMode == NakoConsoleMode.RunFile && source == null) return false;
             
