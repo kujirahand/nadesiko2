@@ -13,7 +13,7 @@ namespace NakoPlugin
         /// <summary>
         /// 対応プラグインのバージョン番号 (現在は必ず 2.0 を返すようにする)
         /// </summary>
-        double TargetNakoVersion { get; }
+        Version TargetNakoVersion { get; }
         /// <summary>
         /// プラグインの名前 ( this.GetType().FullName とクラスのフルパスを指定する )
         /// </summary>
@@ -21,7 +21,7 @@ namespace NakoPlugin
         /// <summary>
         /// プラグインのバージョン（任意の値を返すことができる）
         /// </summary>
-        double PluginVersion { get; }
+        Version PluginVersion { get; }
         /// <summary>
         /// プラグインの説明を返す
         /// </summary>
