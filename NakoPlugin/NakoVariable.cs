@@ -115,18 +115,8 @@ namespace NakoPlugin
             // detect type
             switch (Type)
             {
-                case NakoVarType.Array:
-                    return Body.ToString();
-                case NakoVarType.Int:
-                    return Body.ToString();
-                case NakoVarType.Double:
-                    return Body.ToString();
-                case NakoVarType.Object:
-                    return Body.ToString();
                 case NakoVarType.Void:
                     return "";
-                case NakoVarType.String:
-                    return (string)Body;
                 default:
                     return Body.ToString();
             }
