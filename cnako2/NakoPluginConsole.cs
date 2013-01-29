@@ -13,12 +13,12 @@ namespace NakoPluginConsole
     {
         //--- プラグインの宣言 ---
         string _description = "コンソール出力を行うプラグイン";
-        double _version = 1.0;
+        Version _version = new Version(1, 0);
         //--- プラグイン共通の部分 ---
         /// <summary>
         /// ターゲットとなるなでしこのバージョン
         /// </summary>
-        public double TargetNakoVersion { get { return 2.0; } }
+        public Version TargetNakoVersion { get { return new Version(2, 0); } }
         /// <summary>
         /// プラグインが利用されているかを判定するフラグ
         /// </summary>
@@ -30,7 +30,7 @@ namespace NakoPluginConsole
         /// <summary>
         /// このプラグインのバージョン情報
         /// </summary>
-        public double PluginVersion { get { return _version; } }
+        public Version PluginVersion { get { return _version; } }
         /// <summary>
         /// このプラグインの説明
         /// </summary>
