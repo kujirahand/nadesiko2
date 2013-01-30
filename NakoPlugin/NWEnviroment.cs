@@ -14,66 +14,57 @@ namespace NakoPlugin
         /// <returns>OS名</returns>
         public static string osVersionStr()
         {
-            string res = "";
-            System.OperatingSystem os = System.Environment.OSVersion;
+            OperatingSystem os = Environment.OSVersion;
             switch (os.Platform)
             {
-                case System.PlatformID.Win32Windows:
+                case PlatformID.Win32Windows:
                     if (os.Version.Major >= 4)
                     {
                         switch (os.Version.Major)
                         {
-                            case 0: res = "Windows 95"; break;
-                            case 10: res = "Windows 98"; break;
-                            case 90: res = "Windows Me"; break;
+                            case 0: return "Windows 95";
+                            case 10: return "Windows 98";
+                            case 90: return "Windows Me";
                         }
                     }
                     break;
-                case System.PlatformID.Win32NT:
+                case PlatformID.Win32NT:
                     switch (os.Version.Major)
                     {
                         case 3:
                             switch (os.Version.Minor)
                             {
-                                case 0: res = "Windows NT 3"; break;
-                                case 1: res = "Windows NT 3.1"; break;
-                                case 5: res = "Windows NT 3.5"; break;
-                                case 51: res = "Windows NT 3.51"; break;
+                                case 0: return "Windows NT 3";
+                                case 1: return "Windows NT 3.1";
+                                case 5: return "Windows NT 3.5";
+                                case 51: return "Windows NT 3.51";
                             }
                             break;
-                        case 4: res = "Windows NT 4.0"; break;
+                        case 4: return "Windows NT 4.0";
                         case 5:
                             switch (os.Version.Minor)
                             {
-                                case 0: res = "Windows 2000"; break;
-                                case 1: res = "Windows XP"; break;
-                                case 2: res = "Windows Server 2003"; break;
+                                case 0: return "Windows 2000";
+                                case 1: return "Windows XP";
+                                case 2: return "Windows Server 2003";
                             }
                             break;
                         case 6:
                             switch (os.Version.Minor)
                             {
-                                case 0: res = "Windows Vista"; break;
-                                case 1: res = "Windows 7"; break;
+                                case 0: return "Windows Vista";
+                                case 1: return "Windows 7";
                             }
                             break;
                     }
                     break;
-                case System.PlatformID.Unix:
-                    res = "Unix"; break;
-                case System.PlatformID.Xbox:
-                    res = "Xbox"; break;
-                case System.PlatformID.MacOSX:
-                    res = "Mac OS X"; break;
-                case System.PlatformID.WinCE:
-                    res = "Windows CE"; break;
+                case PlatformID.Unix: return "Unix";
+                case PlatformID.Xbox: return "Xbox";
+                case PlatformID.MacOSX: return "Mac OS X";
+                case PlatformID.WinCE: return "Windows CE";
 
             }
-            if (res == "")
-            {
-                res = os.VersionString;
-            }
-            return res;
+            return os.VersionString;
         }
         /// <summary>
         /// 実行ファイルのパス

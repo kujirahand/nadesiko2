@@ -104,8 +104,7 @@ namespace Libnako.JPNCompiler.Tokenizer
         {
             get
             {
-                if (IsEOF()) return '\0';
-                return NakoHalfFlag.ConvertChar(source[cur]);
+                return NakoHalfFlag.ConvertChar(CurrentCharRaw);
             }
         }
         /// <summary>
@@ -140,7 +139,7 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        public Boolean CompareStr(String str)
+        public bool CompareStr(String str)
         {
             if (source.Length < (cur + str.Length)) { return false;  }
             return (source.Substring(cur, str.Length) == str);
