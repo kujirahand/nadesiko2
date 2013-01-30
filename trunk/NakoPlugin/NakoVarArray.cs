@@ -54,7 +54,7 @@ namespace NakoPlugin
         /// </summary>
         public void Clear()
         {
-            list = new List<NakoVariable>();
+            list.Clear();
         }
 
         /// <summary>
