@@ -756,28 +756,22 @@ namespace Libnako.JPNCompiler.Tokenizer
         public int CountIndent()
         {
             int indent = 0;
-            while (!IsEOF())
+            for (; !IsEOF(); cur++ )
             {
-                char c = this.source[cur];
-                if (c == ' ')
+                switch (source[cur])
                 {
-                    indent++;
-                    cur++;
-                    continue;
+                    case ' ':
+                        indent++;
+                        break;
+                    case '\t':
+                        indent += 4;
+                        break;
+                    case '　':
+                        indent += 2;
+                        break;
+                    default:
+                        return indent;
                 }
-                if (c == '\t')
-                {
-                    indent += 4;
-                    cur++;
-                    continue;
-                }
-                if (c == '　')
-                {
-                    indent += 2;
-                    cur++;
-                    continue;
-                }
-                break;
             }
             return indent;
         }
