@@ -138,27 +138,27 @@ namespace NakoPluginTest
             tokenizer.Initialization();
             tokenizer.source = "1234";
             token = tokenizer.GetToken_Number();
-            Assert.AreEqual(NakoTokenType.INT, token.type);
-            Assert.AreEqual("1234", token.value);
+            Assert.AreEqual(NakoTokenType.INT, token.Type);
+            Assert.AreEqual("1234", token.Value);
             // 2
             tokenizer.Initialization();
             tokenizer.source = "12.3456";
             token = tokenizer.GetToken_Number();
-            Assert.AreEqual(NakoTokenType.NUMBER, token.type);
-            Assert.AreEqual("12.3456", token.value);
+            Assert.AreEqual(NakoTokenType.NUMBER, token.Type);
+            Assert.AreEqual("12.3456", token.Value);
             // 3
             tokenizer.Initialization();
             tokenizer.source = "0.123";
             token = tokenizer.GetToken_Number();
-            Assert.AreEqual(NakoTokenType.NUMBER, token.type);
-            Assert.AreEqual("0.123", token.value);
+            Assert.AreEqual(NakoTokenType.NUMBER, token.Type);
+            Assert.AreEqual("0.123", token.Value);
             // 4
             tokenizer.Initialization();
             tokenizer.source = "32から";
             token = tokenizer.GetToken_Number();
-            Assert.AreEqual(NakoTokenType.INT, token.type);
-            Assert.AreEqual("32", token.value);
-            Assert.AreEqual("から", token.josi);
+            Assert.AreEqual(NakoTokenType.INT, token.Type);
+            Assert.AreEqual("32", token.Value);
+            Assert.AreEqual("から", token.Josi);
         }
         [Test]
         public void TestGetToken_Word()
@@ -169,36 +169,36 @@ namespace NakoPluginTest
             tokenizer.Initialization();
             tokenizer.source = "ABC";
             token = tokenizer.GetToken_Word();
-            Assert.AreEqual(NakoTokenType.WORD, token.type);
-            Assert.AreEqual("ABC", token.value);
+            Assert.AreEqual(NakoTokenType.WORD, token.Type);
+            Assert.AreEqual("ABC", token.Value);
             // 2
             tokenizer.Initialization();
             tokenizer.source = "豆腐から";
             token = tokenizer.GetToken_Word();
-            Assert.AreEqual(NakoTokenType.WORD, token.type);
-            Assert.AreEqual("豆腐", token.value);
-            Assert.AreEqual("から", token.josi);
+            Assert.AreEqual(NakoTokenType.WORD, token.Type);
+            Assert.AreEqual("豆腐", token.Value);
+            Assert.AreEqual("から", token.Josi);
             // 3
             tokenizer.Initialization();
             tokenizer.source = "F_豆腐から";
             token = tokenizer.GetToken_Word();
-            Assert.AreEqual(NakoTokenType.WORD, token.type);
-            Assert.AreEqual("F_豆腐", token.value);
-            Assert.AreEqual("から", token.josi);
+            Assert.AreEqual(NakoTokenType.WORD, token.Type);
+            Assert.AreEqual("F_豆腐", token.Value);
+            Assert.AreEqual("から", token.Josi);
             // 4
             tokenizer.Initialization();
             tokenizer.source = "F123から";
             token = tokenizer.GetToken_Word();
-            Assert.AreEqual(NakoTokenType.WORD, token.type);
-            Assert.AreEqual("F123", token.value);
-            Assert.AreEqual("から", token.josi);
+            Assert.AreEqual(NakoTokenType.WORD, token.Type);
+            Assert.AreEqual("F123", token.Value);
+            Assert.AreEqual("から", token.Josi);
             // 5
             tokenizer.Initialization();
             tokenizer.source = "__から";
             token = tokenizer.GetToken_Word();
-            Assert.AreEqual(NakoTokenType.WORD, token.type);
-            Assert.AreEqual("__", token.value);
-            Assert.AreEqual("から", token.josi);
+            Assert.AreEqual(NakoTokenType.WORD, token.Type);
+            Assert.AreEqual("__", token.Value);
+            Assert.AreEqual("から", token.Josi);
             // 6
             var tokens = tokenizer.Tokenize("AからBへファイルコピー");
             Assert.IsTrue(
@@ -208,14 +208,14 @@ namespace NakoPluginTest
                     NakoTokenType.WORD
                 }));
             token = tokens[0];
-            Assert.AreEqual("A", token.value);
-            Assert.AreEqual("から", token.josi);
+            Assert.AreEqual("A", token.Value);
+            Assert.AreEqual("から", token.Josi);
             token = tokens[1];
-            Assert.AreEqual("B", token.value);
-            Assert.AreEqual("へ", token.josi);
+            Assert.AreEqual("B", token.Value);
+            Assert.AreEqual("へ", token.Josi);
             token = tokens[2];
-            Assert.AreEqual("ファイルコピー", token.value);
-            Assert.AreEqual("", token.josi);
+            Assert.AreEqual("ファイルコピー", token.Value);
+            Assert.AreEqual("", token.Josi);
         }
         [Test]
         public void TestGetToken_String()
@@ -226,49 +226,49 @@ namespace NakoPluginTest
             tokenizer.Initialization();
             tokenizer.source = "「ABC」";
             token = tokenizer.GetStringToken();
-            Assert.AreEqual(NakoTokenType.STRING_EX, token.type);
-            Assert.AreEqual("ABC", token.value);
-            Assert.AreEqual("", token.josi);
+            Assert.AreEqual(NakoTokenType.STRING_EX, token.Type);
+            Assert.AreEqual("ABC", token.Value);
+            Assert.AreEqual("", token.Josi);
             // 2
             tokenizer.Initialization();
             tokenizer.source = "`豆腐`から";
             token = tokenizer.GetStringToken();
-            Assert.AreEqual(NakoTokenType.STRING, token.type);
-            Assert.AreEqual("豆腐", token.value);
-            Assert.AreEqual("から", token.josi);
+            Assert.AreEqual(NakoTokenType.STRING, token.Type);
+            Assert.AreEqual("豆腐", token.Value);
+            Assert.AreEqual("から", token.Josi);
             // 3
             tokenizer.Initialization();
             tokenizer.source = "「「豆腐」」から";
             token = tokenizer.GetStringToken();
-            Assert.AreEqual(NakoTokenType.STRING_EX, token.type);
-            Assert.AreEqual("豆腐", token.value);
-            Assert.AreEqual("から", token.josi);
+            Assert.AreEqual(NakoTokenType.STRING_EX, token.Type);
+            Assert.AreEqual("豆腐", token.Value);
+            Assert.AreEqual("から", token.Josi);
             // 4
             tokenizer.Initialization();
             tokenizer.source = "『『『F123』』』へ飛ぶ";
             token = tokenizer.GetStringToken();
-            Assert.AreEqual(NakoTokenType.STRING, token.type);
-            Assert.AreEqual("F123", token.value);
-            Assert.AreEqual("へ", token.josi);
+            Assert.AreEqual(NakoTokenType.STRING, token.Type);
+            Assert.AreEqual("F123", token.Value);
+            Assert.AreEqual("へ", token.Josi);
             // 5
             tokenizer.Initialization();
             tokenizer.source = "「aaa\nbbb\nccc」から「豆腐」へ";
             token = tokenizer.GetStringToken();
-            Assert.AreEqual(NakoTokenType.STRING_EX, token.type);
-            Assert.AreEqual("aaa\nbbb\nccc", token.value);
-            Assert.AreEqual("から", token.josi);
+            Assert.AreEqual(NakoTokenType.STRING_EX, token.Type);
+            Assert.AreEqual("aaa\nbbb\nccc", token.Value);
+            Assert.AreEqual("から", token.Josi);
             token = tokenizer.GetStringToken();
-            Assert.AreEqual(NakoTokenType.STRING_EX, token.type);
-            Assert.AreEqual("豆腐", token.value);
-            Assert.AreEqual("へ", token.josi);
-            Assert.AreEqual(2, token.lineno);
+            Assert.AreEqual(NakoTokenType.STRING_EX, token.Type);
+            Assert.AreEqual("豆腐", token.Value);
+            Assert.AreEqual("へ", token.Josi);
+            Assert.AreEqual(2, token.LineNumber);
             // 6
             tokenizer.Initialization();
             tokenizer.source = "`abc\tabc`";
             token = tokenizer.GetStringToken();
-            Assert.AreEqual(NakoTokenType.STRING, token.type);
-            Assert.AreEqual("abc\tabc", token.value);
-            Assert.AreEqual("", token.josi);
+            Assert.AreEqual(NakoTokenType.STRING, token.Type);
+            Assert.AreEqual("abc\tabc", token.Value);
+            Assert.AreEqual("", token.Josi);
         }
         [Test]
         public void TestGetToken_String_ex()

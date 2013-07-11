@@ -18,7 +18,7 @@ namespace Libnako.JPNCompiler.Node
         {
             String r = type.ToString();
             r += "=";
-            r += Token.value;
+            r += Token.Value;
             return r;
         }
     }
