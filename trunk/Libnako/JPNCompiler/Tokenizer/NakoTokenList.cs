@@ -105,7 +105,7 @@ namespace Libnako.JPNCompiler.Tokenizer
             get {
                 NakoToken t = CurrentToken;
                 if (t == null) return NakoTokenType.UNKNOWN;
-                return t.type;
+                return t.Type;
             }
         }
 
@@ -118,7 +118,7 @@ namespace Libnako.JPNCompiler.Tokenizer
             {
                 NakoToken t = NextToken;
                 if (t == null) return NakoTokenType.UNKNOWN;
-                return t.type;
+                return t.Type;
             }
         }
         /// <summary>
@@ -171,31 +171,31 @@ namespace Libnako.JPNCompiler.Tokenizer
             {
                 t = this[i];
                 // break?
-                if (t.type == keytype)
+                if (t.Type == keytype)
                 {
                     return true;
                 }
                 if (EOLStop)
                 {
-                    if (t.type == NakoTokenType.EOL) break;
+                    if (t.Type == NakoTokenType.EOL) break;
                 }
                 // ---
                 // nest check
-                if (t.type == NakoTokenType.BLACKETS_L)
+                if (t.Type == NakoTokenType.BLACKETS_L)
                 {
                     bla_nest++;
                 }
-                if (t.type == NakoTokenType.BLACKETS_R)
+                if (t.Type == NakoTokenType.BLACKETS_R)
                 {
                     bla_nest--;
                     if (bla_nest < 0) return false; // tokenが見つかる前に角カッコの不整合を見つけた
                 }
                 // ---
-                if (t.type == NakoTokenType.PARENTHESES_L)
+                if (t.Type == NakoTokenType.PARENTHESES_L)
                 {
                     par_nest++;
                 }
-                if (t.type == NakoTokenType.PARENTHESES_R)
+                if (t.Type == NakoTokenType.PARENTHESES_R)
                 {
                     par_nest--;
                     if (par_nest < 0) return false; // tokenが見つかる前に丸カッコの不整合を見つけた
@@ -215,10 +215,10 @@ namespace Libnako.JPNCompiler.Tokenizer
             foreach (NakoToken t in this)
             {
                 if (s != "") { s += ","; }
-                s += t.type.ToString();
-                if (t.value is string)
+                s += t.Type.ToString();
+                if (t.Value is string)
                 {
-                    s += "(" + (string)t.value + ")";
+                    s += "(" + (string)t.Value + ")";
                 }
             }
             return s;
@@ -238,7 +238,7 @@ namespace Libnako.JPNCompiler.Tokenizer
             {
                 NakoToken chk = checker[i];
                 NakoToken tok = this[i];
-                if (chk.type == tok.type && chk.value == tok.value)
+                if (chk.Type == tok.Type && chk.Value == tok.Value)
                 {
                     continue;
                 }
@@ -261,7 +261,7 @@ namespace Libnako.JPNCompiler.Tokenizer
             {
                 NakoToken tok = this[i];
                 if (tok == null) return false;
-                if (tok.type == checker[i])
+                if (tok.Type == checker[i])
                 {
                     continue;
                 }

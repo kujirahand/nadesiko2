@@ -24,48 +24,48 @@ namespace Libnako.JPNCompiler.Function
                 NakoToken tok = tokens[i];
                 NakoFuncArg arg = null;
                 // オプション指定モード(optMode) の on/off
-                if (tok.type == NakoTokenType.BRACES_L)
+                if (tok.Type == NakoTokenType.BRACES_L)
                 {
                     // オプションの初期化
                     optMode = true;
                     argOpt.Init();
                     continue;
                 }
-                if (tok.type == NakoTokenType.BRACES_R)
+                if (tok.Type == NakoTokenType.BRACES_R)
                 {
                     optMode = false; 
                     continue;
                 }
                 if (optMode)
                 {
-                    if (tok.type == NakoTokenType.WORD)
+                    if (tok.Type == NakoTokenType.WORD)
                     {
-                        string opt = (string)tok.value;
+                        string opt = (string)tok.Value;
                         if (opt == "参照渡し") argOpt.varBy = VarByType.ByRef;
                     }
                     continue;
                 }
 
                 // WORD
-                if (tok.type == NakoTokenType.WORD)
+                if (tok.Type == NakoTokenType.WORD)
                 {
-                    int idx = indexOfName(tok.value);
+                    int idx = indexOfName(tok.Value);
                     if (idx < 0)
                     {
                         arg = new NakoFuncArg();
-                        arg.name = tok.value;
+                        arg.name = tok.Value;
                         arg.varBy = argOpt.varBy;
-                        arg.AddJosi(tok.josi);
+                        arg.AddJosi(tok.Josi);
                         this.Add(arg);
                         argOpt.Init();
                     }
                     else
                     {
                         arg = this[idx];
-                        arg.AddJosi(tok.josi);
+                        arg.AddJosi(tok.Josi);
                     }
                 }
-                if (tok.type == NakoTokenType.OR || tok.type == NakoTokenType.OR_OR)
+                if (tok.Type == NakoTokenType.OR || tok.Type == NakoTokenType.OR_OR)
                 {
                     continue;
                 }

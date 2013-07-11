@@ -68,7 +68,7 @@ namespace Libnako.JPNCompiler.Node
             set
             {
                 this.token = value;
-                this.josi = token.josi;
+                this.josi = token.Josi;
             }
         }
 

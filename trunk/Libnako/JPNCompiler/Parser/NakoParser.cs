@@ -307,7 +307,8 @@ namespace Libnako.JPNCompiler.Parser
             // local variable
             if (!Accept(NakoTokenType.WORD)) return false;
             tokVar = tok.CurrentToken;
-            if (!(tokVar.josi == "を" || tokVar.josi == "で")) {
+            if (!(tokVar.Josi == "を" || tokVar.Josi == "で"))
+            {
                 return false;
             }
             tok.MoveNext();
@@ -329,7 +330,7 @@ namespace Libnako.JPNCompiler.Parser
             fornode.loopVar = v;
             v.scope = NakoVariableScope.Local;
             v.Token = tokVar;
-            v.varNo = localVar.CreateVar(tokVar.value);
+            v.varNo = localVar.CreateVar(tokVar.Value);
 
             fornode.nodeTo = calcStack.Pop();
             fornode.nodeFrom = calcStack.Pop();
@@ -755,7 +756,7 @@ namespace Libnako.JPNCompiler.Parser
             n.type = NakoNodeType.ST_VARIABLE;
             n.Token = tok.CurrentToken;
             // 変数アクセス
-            String name = (String)tok.CurrentToken.value;
+            String name = (String)tok.CurrentToken.Value;
             _variable__detectVariable(n, name);
             tok.MoveNext();// skip WORD
 
@@ -832,7 +833,7 @@ namespace Libnako.JPNCompiler.Parser
             n.type = NakoNodeType.LD_VARIABLE;
             n.Token = tok.CurrentToken;
 
-            String name = (String)tok.CurrentToken.value;
+            String name = (String)tok.CurrentToken.Value;
             _variable__detectVariable(n, name);
             lastNode = n;
             tok.MoveNext();
@@ -1151,7 +1152,7 @@ namespace Libnako.JPNCompiler.Parser
                 )
             {
                 NakoNodeCalc node = new NakoNodeCalc();
-                switch (tok.CurrentToken.type)
+                switch (tok.CurrentToken.Type)
                 {
                     case NakoTokenType.GT: node.calc_type = CalcType.GT; break;
                     case NakoTokenType.LT: node.calc_type = CalcType.LT; break;
@@ -1200,7 +1201,7 @@ namespace Libnako.JPNCompiler.Parser
             if (Accept(NakoTokenType.INT))
             {
                 node.type = NakoNodeType.INT;
-                node.value = long.Parse(node.Token.value);
+                node.value = long.Parse(node.Token.Value);
                 lastNode = node;
                 tok.MoveNext();
                 calcStack.Push(node);
@@ -1209,7 +1210,7 @@ namespace Libnako.JPNCompiler.Parser
             else if (Accept(NakoTokenType.NUMBER))
             {
                 node.type = NakoNodeType.NUMBER;
-                node.value = double.Parse(node.Token.value);
+                node.value = double.Parse(node.Token.Value);
                 lastNode = node;
                 tok.MoveNext();
                 calcStack.Push(node);
@@ -1218,7 +1219,7 @@ namespace Libnako.JPNCompiler.Parser
             else if (Accept(NakoTokenType.STRING))
             {
                 node.type = NakoNodeType.STRING;
-                node.value = node.Token.value;
+                node.value = node.Token.Value;
                 lastNode = node;
                 tok.MoveNext();
                 calcStack.Push(node);

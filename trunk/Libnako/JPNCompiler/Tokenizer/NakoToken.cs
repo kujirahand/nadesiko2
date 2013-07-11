@@ -13,23 +13,23 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// <summary>
         /// トークンの値
         /// </summary>
-        public string value { get; set; }
+        public string Value { get; set; }
         /// <summary>
         /// 行番号
         /// </summary>
-        public int lineno   { get; set; }
+        public int LineNumber { get; set; }
         /// <summary>
         /// インデントレベル
         /// </summary>
-        public int level    { get; set; }
+        public int IndentLevel { get; set; }
         /// <summary>
         /// 助詞
         /// </summary>
-        public string josi  { get; set; }
+        public string Josi { get; set; }
         /// <summary>
         /// トークンタイプ
         /// </summary>
-        public NakoTokenType type { get; set; }
+        public NakoTokenType Type { get; set; }
 
         /// <summary>
         /// トークンの生成（コンストラクタ）
@@ -57,11 +57,11 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// <param name="level"></param>
         public void Init(NakoTokenType type, int lineno, int level)
         {
-            this.lineno = lineno;
-            this.level = level;
-            this.type = type;
-			this.josi = "";
-			this.value = null;
+            this.LineNumber = lineno;
+            this.IndentLevel = level;
+            this.Type = type;
+			this.Josi = "";
+			this.Value = null;
         }
         /// <summary>
         /// デバッグ用の文字列を返す
@@ -70,16 +70,16 @@ namespace Libnako.JPNCompiler.Tokenizer
         public String ToStringForDebug()
         {
             string s = "[";
-            s += type.ToString();
-            if (!(value == null || value == ""))
+            s += Type.ToString();
+            if (!(Value == null || Value == ""))
             {
-                s += ":" + value;
+                s += ":" + Value;
             }
-            if (!(josi == null || josi == ""))
+            if (!(Josi == null || Josi == ""))
             {
-                s += "{" + josi + "}";
+                s += "{" + Josi + "}";
             }
-            s += "(" + (lineno + 1) + ")";
+            s += "(" + (LineNumber + 1) + ")";
             s += "]";
             return s;
         }
@@ -90,7 +90,7 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// <returns></returns>
         public String getValueAsName()
         {
-            return TrimOkurigana(value);
+            return TrimOkurigana(Value);
         }
         /// <summary>
         /// 送り仮名を削除
@@ -133,7 +133,7 @@ namespace Libnako.JPNCompiler.Tokenizer
         public bool isCalcFlag()
         {
             bool result = false;
-            switch (type) {
+            switch (Type) {
                 case NakoTokenType.AND:
                 case NakoTokenType.AND_AND:
                 case NakoTokenType.EQ_EQ:

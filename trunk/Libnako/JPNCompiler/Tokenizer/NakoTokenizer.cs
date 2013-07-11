@@ -247,13 +247,13 @@ namespace Libnako.JPNCompiler.Tokenizer
                     string key = token.getValueAsName();
                     if (TokenDic.ContainsKey(key))
                     {
-                        token.type = TokenDic[key];
+                        token.Type = TokenDic[key];
                     }
                 }
                 // 助詞が「は」ならば、代入文に変える
-                if (tokens.CurrentToken.josi == "は")
+                if (tokens.CurrentToken.Josi == "は")
                 {
-                    tokens.CurrentToken.josi = "";
+                    tokens.CurrentToken.Josi = "";
                     tokens.InsertAfterCurrentToken(new NakoToken(NakoTokenType.EQ));
                 }
                 // コメントならばトークンから取り除く
@@ -305,7 +305,7 @@ namespace Libnako.JPNCompiler.Tokenizer
                     }
                     // 関数名を辞書に登録する
                     TokenDic[fnameToken.getValueAsName()] = NakoTokenType.FUNCTION_NAME;
-                    fnameToken.type = NakoTokenType.FUNCTION_NAME;
+                    fnameToken.Type = NakoTokenType.FUNCTION_NAME;
                     break;
                 }
                 // 関数名の可能性
@@ -334,10 +334,10 @@ namespace Libnako.JPNCompiler.Tokenizer
             {
                 NakoToken token = GetToken();
                 if (token == null) continue;
-                lastTokenType = token.type;
+                lastTokenType = token.Type;
 
                 // 文字列の展開があればここで処理してしまう
-                if (token.type == NakoTokenType.STRING_EX)
+                if (token.Type == NakoTokenType.STRING_EX)
                 {
                     Tokenize_ExtractSTring(token);
                     continue;
@@ -410,7 +410,7 @@ namespace Libnako.JPNCompiler.Tokenizer
                     position++;
                     return null;
                 case '\n':
-                    token.type = NakoTokenType.EOL;
+                    token.Type = NakoTokenType.EOL;
                     position++;
                     lineNumber++;
                     tokens.Add(token);
@@ -423,7 +423,7 @@ namespace Libnako.JPNCompiler.Tokenizer
                     return null;
                 // 句読点
                 case ';':
-                    token.type = NakoTokenType.EOL; // 明確な区切り
+                    token.Type = NakoTokenType.EOL; // 明確な区切り
                     position++;
                     return token;
                 case ',':
@@ -434,12 +434,12 @@ namespace Libnako.JPNCompiler.Tokenizer
                     nc = NextChar;
                     if (nc == '=') {
                         position += 2;
-                        token.type = NakoTokenType.EQ_EQ;
+                        token.Type = NakoTokenType.EQ_EQ;
                     }
                     else
                     {
                         position++;
-                        token.type = NakoTokenType.EQ;
+                        token.Type = NakoTokenType.EQ;
                     }
                     return token;
                 // Check Flag
@@ -448,12 +448,12 @@ namespace Libnako.JPNCompiler.Tokenizer
                     if (nc == '&')
                     {
                         position += 2;
-                        token.type = NakoTokenType.AND_AND;
+                        token.Type = NakoTokenType.AND_AND;
                     }
                     else
                     {
                         position++;
-                        token.type = NakoTokenType.AND;
+                        token.Type = NakoTokenType.AND;
                     }
                     return token;
                 case '|':
@@ -461,12 +461,12 @@ namespace Libnako.JPNCompiler.Tokenizer
                     if (nc == '|')
                     {
                         position += 2;
-                        token.type = NakoTokenType.OR_OR;
+                        token.Type = NakoTokenType.OR_OR;
                     }
                     else
                     {
                         position++;
-                        token.type = NakoTokenType.OR;
+                        token.Type = NakoTokenType.OR;
                     }
                     return token;
                 case '<':
@@ -474,17 +474,17 @@ namespace Libnako.JPNCompiler.Tokenizer
                     if (nc == '=')
                     {
                         position += 2;
-                        token.type = NakoTokenType.LT_EQ;
+                        token.Type = NakoTokenType.LT_EQ;
                     }
                     else if (nc == '>')
                     {
                         position += 2;
-                        token.type = NakoTokenType.NOT_EQ;
+                        token.Type = NakoTokenType.NOT_EQ;
                     }
                     else
                     {
                         position++;
-                        token.type = NakoTokenType.LT;
+                        token.Type = NakoTokenType.LT;
                     }
                     return token;
                 case '>':
@@ -492,17 +492,17 @@ namespace Libnako.JPNCompiler.Tokenizer
                     if (nc == '=')
                     {
                         position += 2;
-                        token.type = NakoTokenType.GT_EQ;
+                        token.Type = NakoTokenType.GT_EQ;
                     }
                     else if (nc == '<')
                     {
                         position += 2;
-                        token.type = NakoTokenType.NOT_EQ;
+                        token.Type = NakoTokenType.NOT_EQ;
                     }
                     else
                     {
                         position++;
-                        token.type = NakoTokenType.GT;
+                        token.Type = NakoTokenType.GT;
                     }
                     return token;
                 case '!':
@@ -510,12 +510,12 @@ namespace Libnako.JPNCompiler.Tokenizer
                     if (nc == '=')
                     {
                         position += 2;
-                        token.type = NakoTokenType.NOT_EQ;
+                        token.Type = NakoTokenType.NOT_EQ;
                     }
                     else
                     {
                         position++;
-                        token.type = NakoTokenType.NOT;
+                        token.Type = NakoTokenType.NOT;
                     }
                     return token;
                 case '「':
@@ -524,22 +524,22 @@ namespace Libnako.JPNCompiler.Tokenizer
                 case '`':
                     return GetStringToken();
                 case '+':
-                    token.type = NakoTokenType.PLUS;
+                    token.Type = NakoTokenType.PLUS;
                     position++;
                     return token;
                 case '-':
-                    token.type = NakoTokenType.MINUS;
+                    token.Type = NakoTokenType.MINUS;
                     position++;
                     return token;
                 case '*':
                     if (lastTokenType == NakoTokenType.EOL ||
                         lastTokenType == NakoTokenType.UNKNOWN)
                     {
-                        token.type = NakoTokenType.DEF_FUNCTION;
+                        token.Type = NakoTokenType.DEF_FUNCTION;
                     }
                     else
                     {
-                        token.type = NakoTokenType.MUL;
+                        token.Type = NakoTokenType.MUL;
                     }
                     position++;
                     return token;
@@ -549,46 +549,46 @@ namespace Libnako.JPNCompiler.Tokenizer
                     if (nc == '*') return GetRangeComment(token);
                     if (nc == '/') return GetLineComment(token);
                     // 割り算かな？
-                    token.type = NakoTokenType.DIV;
+                    token.Type = NakoTokenType.DIV;
                     position++;
                     return token;
                 case '%':
-                    token.type = NakoTokenType.MOD;
+                    token.Type = NakoTokenType.MOD;
                     position++;
                     return token;
                 case '^':
-                    token.type = NakoTokenType.POWER;
+                    token.Type = NakoTokenType.POWER;
                     position++;
                     return token;
                 case '(':
-                    token.type = NakoTokenType.PARENTHESES_L;
+                    token.Type = NakoTokenType.PARENTHESES_L;
                     position++;
                     return token;
                 case ')':
-                    token.type = NakoTokenType.PARENTHESES_R;
+                    token.Type = NakoTokenType.PARENTHESES_R;
                     position++;
                     CheckJosi(token);
                     return token;
                 case '{':
-                    token.type = NakoTokenType.BRACES_L;
+                    token.Type = NakoTokenType.BRACES_L;
                     position++;
                     return token;
                 case '}':
-                    token.type = NakoTokenType.BRACES_R;
+                    token.Type = NakoTokenType.BRACES_R;
                     position++;
                     CheckJosi(token);
                     return token;
                 case '[':
-                    token.type = NakoTokenType.BLACKETS_L;
+                    token.Type = NakoTokenType.BLACKETS_L;
                     position++;
                     return token;
                 case ']':
-                    token.type = NakoTokenType.BLACKETS_R;
+                    token.Type = NakoTokenType.BLACKETS_R;
                     position++;
                     CheckJosi(token);
                     return token;
                 case '\\':
-                    token.type = NakoTokenType.YEN;
+                    token.Type = NakoTokenType.YEN;
                     position++;
                     return token;
                 case '#':
@@ -619,7 +619,7 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// <returns></returns>
         private NakoToken GetLineComment(NakoToken tok)
         {
-            tok.type = NakoTokenType.COMMENT;
+            tok.Type = NakoTokenType.COMMENT;
             
             char first_char = CurrentChar;
             position++;
@@ -633,7 +633,7 @@ namespace Libnako.JPNCompiler.Tokenizer
                 comment += ch;
                 position++;
             }
-            tok.value = comment; // コメントの文字列をセット
+            tok.Value = comment; // コメントの文字列をセット
             return tok;
         }
         /// <summary>
@@ -643,7 +643,7 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// <returns></returns>
         private NakoToken GetRangeComment(NakoToken tok)
         {
-            tok.type = NakoTokenType.COMMENT;
+            tok.Type = NakoTokenType.COMMENT;
 
             char ch1 = CurrentChar; // = '/'
             char ch2 = NextChar;    // = '*'
@@ -669,7 +669,7 @@ namespace Libnako.JPNCompiler.Tokenizer
                 comment += ch;
                 position++;
             }
-            tok.value = comment; // コメントの文字列をセット
+            tok.Value = comment; // コメントの文字列をセット
             return tok;
         }
         /// <summary>
@@ -688,10 +688,10 @@ namespace Libnako.JPNCompiler.Tokenizer
             // S = 「...」
             switch (start)
             {
-                case '「': stringEnd = "」"; token.type = NakoTokenType.STRING_EX; break;
-                case '『': stringEnd = "』"; token.type = NakoTokenType.STRING; break;
-                case '"': stringEnd = "\""; token.type = NakoTokenType.STRING_EX; break;
-                case '`': stringEnd = "`"; token.type = NakoTokenType.STRING; break;
+                case '「': stringEnd = "」"; token.Type = NakoTokenType.STRING_EX; break;
+                case '『': stringEnd = "』"; token.Type = NakoTokenType.STRING; break;
+                case '"': stringEnd = "\""; token.Type = NakoTokenType.STRING_EX; break;
+                case '`': stringEnd = "`"; token.Type = NakoTokenType.STRING; break;
                 default: throw new NakoTokenizerException("", null);
             }
             position++;
@@ -706,13 +706,13 @@ namespace Libnako.JPNCompiler.Tokenizer
                 {
                     if (CurrentChar == '「')
                     {
-                        token.type = NakoTokenType.STRING_EX;
+                        token.Type = NakoTokenType.STRING_EX;
                         stringEnd += '」';
                         position++;
                     }
                     else if (CurrentChar == '『')
                     {
-                        token.type = NakoTokenType.STRING;
+                        token.Type = NakoTokenType.STRING;
                         stringEnd += '』';
                         position++;
                     }
@@ -752,7 +752,7 @@ namespace Libnako.JPNCompiler.Tokenizer
                     isSkipBlank = true;
                 }
             }
-            token.value = builder.ToString();
+            token.Value = builder.ToString();
             CheckJosi(token);
             return token;
         }
@@ -838,7 +838,7 @@ namespace Libnako.JPNCompiler.Tokenizer
                 }
                 break;
             }
-            token.value = s.ToString();
+            token.Value = s.ToString();
             return token;
         }
         /// <summary>
@@ -860,7 +860,7 @@ namespace Libnako.JPNCompiler.Tokenizer
             {
                 if (this.CompareStr(josi))
                 {
-                    base_t.josi = josi;
+                    base_t.Josi = josi;
                     position += josi.Length;
                     return true;
                 }
@@ -885,7 +885,7 @@ namespace Libnako.JPNCompiler.Tokenizer
             if (CurrentChar == '.' && IsNumber(NextChar))
             {
                 s += CurrentChar;
-                token.type = NakoTokenType.NUMBER;
+                token.Type = NakoTokenType.NUMBER;
                 position++;
                 while (!IsEOF())
                 {
@@ -895,7 +895,7 @@ namespace Libnako.JPNCompiler.Tokenizer
                     position++;
                 }
             }
-            token.value = s;
+            token.Value = s;
             CheckJosi(token);
             return token;
         }
@@ -938,7 +938,7 @@ namespace Libnako.JPNCompiler.Tokenizer
         public void Tokenize_ExtractSTring(NakoToken t)
         {
             string tmp = "";
-            string s = t.value;
+            string s = t.Value;
             int i = 0;
             bool is_first = true;
             while (i < s.Length)
@@ -952,7 +952,7 @@ namespace Libnako.JPNCompiler.Tokenizer
                     }
                     else
                     {
-                        tokens.Add(new NakoToken(NakoTokenType.AND, t.lineno, t.level));
+                        tokens.Add(new NakoToken(NakoTokenType.AND, t.LineNumber, t.IndentLevel));
                     }
                     char eoc = (c == '{') ? '}' : '｝';
                     i++;
@@ -1010,29 +1010,29 @@ namespace Libnako.JPNCompiler.Tokenizer
                         str_ex = "";
                     }
                     // string
-                    NakoToken tt = new NakoToken(NakoTokenType.STRING, t.lineno, t.level);
-                    tt.value = tmp;
+                    NakoToken tt = new NakoToken(NakoTokenType.STRING, t.LineNumber, t.IndentLevel);
+                    tt.Value = tmp;
                     tokens.Add(tt);
                     tmp = "";
                     if (str_ex != "")
                     {
 	                    // &
-	                    tokens.Add(new NakoToken(NakoTokenType.AND, t.lineno, t.level));
+                        tokens.Add(new NakoToken(NakoTokenType.AND, t.LineNumber, t.IndentLevel));
 	                    // "("
-	                    tokens.Add(new NakoToken(NakoTokenType.PARENTHESES_L, t.lineno, t.lineno));
+                        tokens.Add(new NakoToken(NakoTokenType.PARENTHESES_L, t.LineNumber, t.LineNumber));
 	                    // 再帰的にトークン解析を行う
 	                    NakoTokenizer tok = new NakoTokenizer();
                         tok.Initialization();
                         tok.source = str_ex;
-                        tok.lineNumber = t.lineno;
-                        tok.indentLevel = t.level;
+                        tok.lineNumber = t.LineNumber;
+                        tok.indentLevel = t.IndentLevel;
 	                    tok.TokenizeFirst(); // とりあえず区切るだけ
 	                    foreach (NakoToken st in tok.tokens)
 	                    {
 	                        tokens.Add(st);
 	                    }
 	                    // ")"
-	                    tokens.Add(new NakoToken(NakoTokenType.PARENTHESES_R, t.lineno, t.lineno));
+                        tokens.Add(new NakoToken(NakoTokenType.PARENTHESES_R, t.LineNumber, t.LineNumber));
                     }
                     continue;
                 }
@@ -1045,19 +1045,19 @@ namespace Libnako.JPNCompiler.Tokenizer
                 if (!is_first)
                 {
                     // &
-                    tokens.Add(new NakoToken(NakoTokenType.AND, t.lineno, t.level));
+                    tokens.Add(new NakoToken(NakoTokenType.AND, t.LineNumber, t.IndentLevel));
                 }
                 // string
-                NakoToken t3 = new NakoToken(NakoTokenType.STRING, t.lineno, t.level);
-                t3.value = tmp;
+                NakoToken t3 = new NakoToken(NakoTokenType.STRING, t.LineNumber, t.IndentLevel);
+                t3.Value = tmp;
                 tokens.Add(t3);
             }
             else {
                 // 必要なら空文字列を追加
                 if (is_first)
                 {
-                    NakoToken t4 = new NakoToken(NakoTokenType.STRING, t.lineno, t.level);
-                    t4.value = "";
+                    NakoToken t4 = new NakoToken(NakoTokenType.STRING, t.LineNumber, t.IndentLevel);
+                    t4.Value = "";
                     tokens.Add(t4);
                 }
             }
