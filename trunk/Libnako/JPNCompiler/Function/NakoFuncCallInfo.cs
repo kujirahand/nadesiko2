@@ -68,13 +68,13 @@ namespace Libnako.JPNCompiler.Function
         /// 引数スタックから整数を得る
         /// </summary>
         /// <returns></returns>
-        public Int64 StackPopAsInt()
+        public long StackPopAsInt()
         {
             Object o = _runner.StackPop();
             return Convert.ToInt64(o);
         }
         /// <summary>
-        /// 引数スタックからDoubleを得る
+        /// 引数スタックからdoubleを得る
         /// </summary>
         /// <returns></returns>
         public double StackPopAsDouble()

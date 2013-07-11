@@ -51,7 +51,7 @@ namespace Libnako.Interpreter
         /// <summary>
         /// 自動的に runpos を進めるかどうか
         /// </summary>
-        protected Boolean autoIncPos = true;
+        protected bool autoIncPos = true;
         /// <summary>
         /// デバッグ用のログ記録用変数
         /// </summary>
@@ -72,11 +72,11 @@ namespace Libnako.Interpreter
         /// <summary>
         /// コンソールに出力するか
         /// </summary>
-        public Boolean UseConsoleOut { get; set; }
+        public bool UseConsoleOut { get; set; }
         /// <summary>
         /// デバッグモード
         /// </summary>
-        public Boolean debugMode { get; set; }
+        public bool debugMode { get; set; }
         
         /// <summary>
         /// インタプリタ識別用ID
@@ -153,7 +153,7 @@ namespace Libnako.Interpreter
         /// </summary>
         /// <param name="list">実行するILコードリスト</param>
         /// <returns>実行が成功したかどうか</returns>
-        public Boolean Run(NakoILCodeList list)
+        public bool Run(NakoILCodeList list)
         {
             if (list != null)
             {
@@ -173,7 +173,7 @@ namespace Libnako.Interpreter
         /// 実行
         /// </summary>
         /// <returns></returns>
-        public Boolean Run()
+        public bool Run()
         {
         	return Run(null);
         }
@@ -181,7 +181,7 @@ namespace Libnako.Interpreter
         /// 実行
         /// </summary>
         /// <returns></returns>
-        protected Boolean _run()
+        protected bool _run()
         {
             while (runpos < list.Count)
             {
@@ -340,7 +340,7 @@ namespace Libnako.Interpreter
             callStack.Push(c);
             // JUMP
             autoIncPos = false;
-            runpos = Convert.ToInt32((Int64)code.value);
+            runpos = Convert.ToInt32((long)code.value);
         }
 
         private void exec_ret(NakoILCode code)
@@ -358,7 +358,7 @@ namespace Libnako.Interpreter
             if (NakoValueConveter.ToLong(v) > 0)
             {
                 autoIncPos = false;
-                runpos = Convert.ToInt32((Int64)code.value);
+                runpos = Convert.ToInt32((long)code.value);
             }
         }
 
@@ -368,26 +368,26 @@ namespace Libnako.Interpreter
             if (NakoValueConveter.ToLong(v) == 0)
             {
                 autoIncPos = false;
-                runpos = Convert.ToInt32((Int64)code.value);
+                runpos = Convert.ToInt32((long)code.value);
             }
         }
 
         private void _jump(NakoILCode code)
         {
             autoIncPos = false;
-            runpos = Convert.ToInt32((Int64)(code.value));
+            runpos = Convert.ToInt32((long)(code.value));
         }
 
         private void _inc()
         {
-            Int64 v = (Int64)calcStack.Pop();
+            long v = (long)calcStack.Pop();
             v++;
             StackPush(v);
         }
 
         private void _dec()
         {
-            Int64 v = (Int64)calcStack.Pop();
+            long v = (long)calcStack.Pop();
             v--;
             StackPush(v);
         }
@@ -395,13 +395,13 @@ namespace Libnako.Interpreter
         private void _neg()
         {
             Object v = calcStack.Pop();
-            if (v is Int64)
+            if (v is long)
             {
-                StackPush((Int64)v * -1);
+                StackPush((long)v * -1);
             }
-            if (v is Double)
+            if (v is double)
             {
-                StackPush((Double)v * -1);
+                StackPush((double)v * -1);
             }
             throw new NakoInterpreterException("数値以外にマイナスをつけました");
         }
@@ -409,13 +409,13 @@ namespace Libnako.Interpreter
         private void _not()
         {
             Object v = calcStack.Pop();
-            if (v is Int64)
+            if (v is long)
             {
-                StackPush(((Int64)v == 0) ? 1 : 0);
+                StackPush(((long)v == 0) ? 1 : 0);
             }
-            if (v is Double)
+            if (v is double)
             {
-                StackPush(((Double)v == 0) ? 1 : 0);
+                StackPush(((double)v == 0) ? 1 : 0);
             }
             throw new NakoInterpreterException("数値以外にマイナスをつけました");
         }
@@ -469,15 +469,15 @@ namespace Libnako.Interpreter
 
         private string ld_elem_slice(string s, Object index)
         {
-            if (!(index is Int64))
+            if (!(index is long))
             {
                 return null;
             }
-            Int64 idx = (Int64)index;
+            long idx = (long)index;
             string[] a = s.Split(new string[] { "\r\n" }, StringSplitOptions.None);
             if (a.Length > idx)
             {
-                return a[(Int64)idx];
+                return a[(long)idx];
             }
             return null;
         }
@@ -597,7 +597,7 @@ namespace Libnako.Interpreter
                     {
                         elem = new NakoVariable();
                         elem.SetBodyAutoType(value);
-                        if (index is Int64)
+                        if (index is long)
                         {
                             elem.varNo = Convert.ToInt32(index);
                         }
@@ -675,14 +675,14 @@ namespace Libnako.Interpreter
             StackPush(f(a, b));
         }
 
-        private Double ToDouble(Object v)
+        private double ToDouble(Object v)
         {
             return NakoValueConveter.ToDouble(v);
         }
 
-        private Boolean IsBothInt(Object a, Object b)
+        private bool IsBothInt(Object a, Object b)
         {
-            Boolean r = (a is Int64 && b is Int64);
+            bool r = (a is long && b is long);
             return r;
         }
 
@@ -690,12 +690,12 @@ namespace Libnako.Interpreter
         {
             if (IsBothInt(a, b))
             {
-                Int64 i = (Int64)a + (Int64)b;
+                long i = (long)a + (long)b;
                 return (Object)i;
             }
             else
             {
-                Double d = ToDouble(a) + ToDouble(b);
+                double d = ToDouble(a) + ToDouble(b);
                 return (Object)d;
             }
         }
@@ -703,12 +703,12 @@ namespace Libnako.Interpreter
         {
             if (IsBothInt(a, b))
             {
-                Int64 i = (Int64)a - (Int64)b;
+                long i = (long)a - (long)b;
                 return (Object)i;
             }
             else
             {
-                Double d = ToDouble(a) - ToDouble(b);
+                double d = ToDouble(a) - ToDouble(b);
                 return (Object)d;
             }
         }
@@ -716,24 +716,24 @@ namespace Libnako.Interpreter
         {
             if (IsBothInt(a, b))
             {
-                Int64 i = (Int64)a * (Int64)b;
+                long i = (long)a * (long)b;
                 return (Object)i;
             }
             else
             {
-                Double d = ToDouble(a) * ToDouble(b);
+                double d = ToDouble(a) * ToDouble(b);
                 return (Object)d;
             }
         }
         private Object calc_method_div(Object a, Object b)
         {
             // "1 ÷ 2" のような場合を想定して、割り算は常に実数にすることにした
-            Double d = ToDouble(a) / ToDouble(b);
+            double d = ToDouble(a) / ToDouble(b);
             return (Object)d;
         }
         private Object calc_method_mod(Object a, Object b)
         {
-            Int64 i = (Int64)a % (Int64)b;
+            long i = (long)a % (long)b;
             return (Object)i;
         }
         private Object calc_method_power(Object a, Object b)
@@ -751,15 +751,15 @@ namespace Libnako.Interpreter
         }
         private Object calc_method_eq(Object a, Object b)
         {
-            if (a is Int64 && b is Int64)
+            if (a is long && b is long)
             {
-                return (Int64)a == (Int64)b;
+                return (long)a == (long)b;
             }
             if (a is String || b is String)
             {
                 return NakoValueConveter.ToString(a) == NakoValueConveter.ToString(b);
             }
-            if (a is Double || b is Double)
+            if (a is double || b is double)
             {
                 return NakoValueConveter.ToDouble(a) == NakoValueConveter.ToDouble(b);
             }
@@ -767,15 +767,15 @@ namespace Libnako.Interpreter
         }
         private Object calc_method_not_eq(Object a, Object b)
         {
-            if (a is Int64 && b is Int64)
+            if (a is long && b is long)
             {
-                return (Int64)a != (Int64)b;
+                return (long)a != (long)b;
             }
             if (a is String || b is String)
             {
                 return NakoValueConveter.ToString(a) != NakoValueConveter.ToString(b);
             }
-            if (a is Double || b is Double)
+            if (a is double || b is double)
             {
                 return NakoValueConveter.ToDouble(a) != NakoValueConveter.ToDouble(b);
             }
@@ -783,15 +783,15 @@ namespace Libnako.Interpreter
         }
         private Object calc_method_gt(Object a, Object b)
         {
-            if (a is Int64 && b is Int64)
+            if (a is long && b is long)
             {
-                return (Int64)a > (Int64)b;
+                return (long)a > (long)b;
             }
             if (a is String || b is String)
             {
                 return (String.Compare(NakoValueConveter.ToString(a), NakoValueConveter.ToString(b)) > 0);
             }
-            if (a is Double || b is Double)
+            if (a is double || b is double)
             {
                 return NakoValueConveter.ToDouble(a) > NakoValueConveter.ToDouble(b);
             }
@@ -799,15 +799,15 @@ namespace Libnako.Interpreter
         }
         private Object calc_method_gteq(Object a, Object b)
         {
-            if (a is Int64 && b is Int64)
+            if (a is long && b is long)
             {
-                return (Int64)a >= (Int64)b;
+                return (long)a >= (long)b;
             }
             if (a is String || b is String)
             {
                 return (String.Compare(NakoValueConveter.ToString(a), NakoValueConveter.ToString(b)) >= 0);
             }
-            if (a is Double || b is Double)
+            if (a is double || b is double)
             {
                 return NakoValueConveter.ToDouble(a) >= NakoValueConveter.ToDouble(b);
             }
@@ -815,15 +815,15 @@ namespace Libnako.Interpreter
         }
         private Object calc_method_lt(Object a, Object b)
         {
-            if (a is Int64 && b is Int64)
+            if (a is long && b is long)
             {
-                return (Int64)a < (Int64)b;
+                return (long)a < (long)b;
             }
             if (a is String || b is String)
             {
                 return (String.Compare(NakoValueConveter.ToString(a), NakoValueConveter.ToString(b)) < 0);
             }
-            if (a is Double || b is Double)
+            if (a is double || b is double)
             {
                 return NakoValueConveter.ToDouble(a) < NakoValueConveter.ToDouble(b);
             }
@@ -831,15 +831,15 @@ namespace Libnako.Interpreter
         }
         private Object calc_method_lteq(Object a, Object b)
         {
-            if (a is Int64 && b is Int64)
+            if (a is long && b is long)
             {
-                return (Int64)a <= (Int64)b;
+                return (long)a <= (long)b;
             }
             if (a is String || b is String)
             {
                 return (String.Compare(NakoValueConveter.ToString(a), NakoValueConveter.ToString(b)) <= 0);
             }
-            if (a is Double || b is Double)
+            if (a is double || b is double)
             {
                 return NakoValueConveter.ToDouble(a) <= NakoValueConveter.ToDouble(b);
             }
@@ -847,11 +847,11 @@ namespace Libnako.Interpreter
         }
         private Object calc_method_and(Object a, Object b)
         {
-            if (a is Int64 && b is Int64)
+            if (a is long && b is long)
             {
-                return (Int64)a & (Int64)b;
+                return (long)a & (long)b;
             }
-            if (a is Double || b is Double)
+            if (a is double || b is double)
             {
                 return NakoValueConveter.ToLong(a) & NakoValueConveter.ToLong(b);
             }
@@ -859,11 +859,11 @@ namespace Libnako.Interpreter
         }
         private Object calc_method_or(Object a, Object b)
         {
-            if (a is Int64 && b is Int64)
+            if (a is long && b is long)
             {
-                return (Int64)a | (Int64)b;
+                return (long)a | (long)b;
             }
-            if (a is Double || b is Double)
+            if (a is double || b is double)
             {
                 return NakoValueConveter.ToLong(a) | NakoValueConveter.ToLong(b);
             }
@@ -871,11 +871,11 @@ namespace Libnako.Interpreter
         }
         private Object calc_method_xor(Object a, Object b)
         {
-            if (a is Int64 && b is Int64)
+            if (a is long && b is long)
             {
-                return (Int64)a ^ (Int64)b;
+                return (long)a ^ (long)b;
             }
-            if (a is Double || b is Double)
+            if (a is double || b is double)
             {
                 return NakoValueConveter.ToLong(a) ^ NakoValueConveter.ToLong(b);
             }

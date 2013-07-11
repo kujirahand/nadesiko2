@@ -34,7 +34,7 @@ namespace Libnako.JPNCompiler.ILWriter
         /// <summary>
         /// ラベル一覧
         /// </summary>
-        protected Dictionary<NakoILCode, Int64> labels = null;
+        protected Dictionary<NakoILCode, long> labels = null;
 		private int _labelId = 0;
 		private int GetLableId() { ++_labelId; return _labelId; }
         
@@ -60,7 +60,7 @@ namespace Libnako.JPNCompiler.ILWriter
         public void Init()
         {
             this.result = new NakoILCodeList();
-            this.labels = new Dictionary<NakoILCode, Int64>();
+            this.labels = new Dictionary<NakoILCode, long>();
         }
         /// <summary>
         /// 中間コードを書き出す

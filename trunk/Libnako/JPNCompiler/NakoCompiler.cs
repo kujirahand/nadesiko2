@@ -23,15 +23,15 @@ namespace Libnako.JPNCompiler
         /// <summary>
         /// 名前
         /// </summary>
-        public String name { get; set; }
+        public string name { get; set; }
         /// <summary>
         /// フルパス
         /// </summary>
-        public String fullpath { get; set; }
+        public string fullpath { get; set; }
         /// <summary>
         /// ソースコード文字列
         /// </summary>
-        public String source { get; set; }
+        public string source { get; set; }
         /// <summary>
         /// デバッグモード
         /// </summary>
@@ -113,10 +113,9 @@ namespace Libnako.JPNCompiler
         /// </summary>
         public void Tokenize()
         {
-            NakoTokenizer tok = new NakoTokenizer(source);
+            NakoTokenizer tok = new NakoTokenizer();
             tok.TokenDic = this.TokenDic;
-            tok.Tokenize();
-            tokens = tok.Tokens;
+            tokens = tok.Tokenize(source);
         }
 
         /// <summary>
@@ -148,7 +147,7 @@ namespace Libnako.JPNCompiler
         /// 字句解析と構文解析を一気に行う
         /// </summary>
         /// <param name="source">必要なら新たにソースを指定</param>
-        public NakoILCodeList Publish(String source)
+        public NakoILCodeList Publish(string source)
         {
             if (source != null)
             {

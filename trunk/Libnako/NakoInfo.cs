@@ -12,7 +12,7 @@ namespace Libnako
         /// <summary>
         /// なでしこのバージョン
         /// </summary>
-        public static readonly Double NakoVersion = 0.001;
+        public static readonly double NakoVersion = 0.001;
 
         /// <summary>
         /// なでしこの開発コードネーム

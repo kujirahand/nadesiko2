@@ -25,7 +25,7 @@ namespace NakoPluginTest
             ns.Tokenize();
             ns.ParseOnlyValue();
             Assert.IsTrue(ns.TopNode.hasChildren());
-            Boolean r = ns.TopNode.Children.checkNodeType(new NakoNodeType[] {
+            bool r = ns.TopNode.Children.checkNodeType(new NakoNodeType[] {
                 NakoNodeType.CALC
             });
             Assert.IsTrue(r);

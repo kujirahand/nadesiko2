@@ -99,20 +99,29 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// <returns></returns>
         public static String TrimOkurigana(String name)
         {
+            String s = "";
+            int cur = 0;
+            char c;
             if (name == "") return "";
+            c = name[cur];
+
             // 一文字目がひらがななら省略は難しい
-            if (NakoTokenizer.IsHira(name[0]))
+            if (NakoTokenizer.IsHira(c))
             {
                 return name;
             }
-            string s = "";
+            s += c;
+            cur++;
+
             // 送りがなを省略する
-            foreach(char c in name)
+            while (cur < name.Length)
             {
+                c = name[cur];
                 if (!NakoTokenizer.IsHira(c))
                 {
                     s += c;
                 }
+                cur++;
             }
             return s;
         }

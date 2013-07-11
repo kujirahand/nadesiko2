@@ -23,7 +23,7 @@ namespace NakoPlugin
         /// <param name="bytes">文字コードを調べるデータ</param>
         /// <returns>適当と思われるEncodingオブジェクト。
         /// 判断できなかった時はnull。</returns>
-        public static Encoding GetCode(byte[] bytes)
+        public static System.Text.Encoding GetCode(byte[] bytes)
         {
             const byte bEscape = 0x1B;
             const byte bAt = 0x40;
@@ -51,7 +51,7 @@ namespace NakoPlugin
                     if (b1 == 0x00 && i < len - 1 && bytes[i + 1] <= 0x7F)
                     {
                         //smells like raw unicode
-                        return Encoding.Unicode;
+                        return System.Text.Encoding.Unicode;
                     }
                 }
             }
@@ -73,7 +73,7 @@ namespace NakoPlugin
             }
             if (notJapanese)
             {
-                return Encoding.ASCII;
+                return System.Text.Encoding.ASCII;
             }
 
             for (int i = 0; i < len - 2; i++)
@@ -88,25 +88,25 @@ namespace NakoPlugin
                     {
                         //JIS_0208 1978
                         //JIS
-                        return Encoding.GetEncoding(50220);
+                        return System.Text.Encoding.GetEncoding(50220);
                     }
                     else if (b2 == bDollar && b3 == bB)
                     {
                         //JIS_0208 1983
                         //JIS
-                        return Encoding.GetEncoding(50220);
+                        return System.Text.Encoding.GetEncoding(50220);
                     }
                     else if (b2 == bOpen && (b3 == bB || b3 == bJ))
                     {
                         //JIS_ASC
                         //JIS
-                        return Encoding.GetEncoding(50220);
+                        return System.Text.Encoding.GetEncoding(50220);
                     }
                     else if (b2 == bOpen && b3 == bI)
                     {
                         //JIS_KANA
                         //JIS
-                        return Encoding.GetEncoding(50220);
+                        return System.Text.Encoding.GetEncoding(50220);
                     }
                     if (i < len - 3)
                     {
@@ -115,7 +115,7 @@ namespace NakoPlugin
                         {
                             //JIS_0212
                             //JIS
-                            return Encoding.GetEncoding(50220);
+                            return System.Text.Encoding.GetEncoding(50220);
                         }
                         if (i < len - 5 &&
                             b2 == bAnd && b3 == bAt && b4 == bEscape &&
@@ -123,7 +123,7 @@ namespace NakoPlugin
                         {
                             //JIS_0208 1990
                             //JIS
-                            return Encoding.GetEncoding(50220);
+                            return System.Text.Encoding.GetEncoding(50220);
                         }
                     }
                 }
@@ -201,17 +201,17 @@ namespace NakoPlugin
             if (euc > sjis && euc > utf8)
             {
                 //EUC
-                return Encoding.GetEncoding(51932);
+                return System.Text.Encoding.GetEncoding(51932);
             }
             else if (sjis > euc && sjis > utf8)
             {
                 //SJIS
-                return Encoding.GetEncoding(932);
+                return System.Text.Encoding.GetEncoding(932);
             }
             else if (utf8 > euc && utf8 > sjis)
             {
                 //UTF8
-                return Encoding.UTF8;
+                return System.Text.Encoding.UTF8;
             }
 
             return null;
@@ -224,14 +224,43 @@ namespace NakoPlugin
         /// <returns></returns>
         public static string LoadFromFileAutoEnc(string filename)
         {
+            string src;
+
             // 文字コード判別
             byte[] data = System.IO.File.ReadAllBytes(filename);
-            Encoding enc = GetCode(data);
-            if(enc == null)
+            System.Text.Encoding enc = GetCode(data);
+
+            // UTF-8
+            if (enc == Encoding.UTF8)
+            {
+                src = Encoding.UTF8.GetString(data);
+            }
+            // UNICODE
+            else if (enc == Encoding.Unicode)
+            {
+                src = Encoding.Unicode.GetString(data);
+            }
+            // Shift_JIS
+            else if (enc == System.Text.Encoding.GetEncoding(932))
+            {
+                src = System.Text.Encoding.GetEncoding(932).GetString(data);
+            }
+            // JIS
+            else if (enc == Encoding.GetEncoding(50220))
+            {
+                src = System.Text.Encoding.GetEncoding(50220).GetString(data);
+            }
+            // EUC-JP
+            else if (enc == Encoding.GetEncoding(51932))
+            {
+                src = System.Text.Encoding.GetEncoding(51932).GetString(data);
+            }
+            else
             {
                 throw new ApplicationException("[Source Code Encoding Error]: " + filename);
             }
-            return enc.GetString(data);
+
+            return src;
         }
     }
 }

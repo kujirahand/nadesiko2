@@ -39,24 +39,24 @@ namespace NakoPlugin
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static Int64 ToLong(Object value)
+        public static long ToLong(Object value)
         {
-            if (value is Int64)
+            if (value is long)
             {
-                return (Int64)value;
+                return (long)value;
             }
-            if (value is Boolean)
+            if (value is bool)
             {
-                return (Boolean)value ? 1 : 0;
+                return (bool)value ? 1 : 0;
             }
-            if (value is Double)
+            if (value is double)
             {
-                return (Int64)((Double)value);
+                return (long)((double)value);
             }
             if (value is String)
             {
-                Int64 i;
-                if (Int64.TryParse((String)value, out i)) { return i; } else { return 0; }
+                long i;
+                if (long.TryParse((String)value, out i)) { return i; } else { return 0; }
             }
             return 0;
         }
@@ -66,27 +66,27 @@ namespace NakoPlugin
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static Double ToDouble(Object value)
+        public static double ToDouble(Object value)
         {
             Type t = value.GetType();
-            if (t == typeof(Int64))
+            if (t == typeof(long))
             {
-                Int64 tmpi = (Int64)value;
-                Double tmpd = (Double)tmpi;
+                long tmpi = (long)value;
+                double tmpd = (double)tmpi;
                 return tmpd;
             }
-            if (t == typeof(Double))
+            if (t == typeof(double))
             {
-                return (Double)value;
+                return (double)value;
             }
-            if (t == typeof(Boolean))
+            if (t == typeof(bool))
             {
-                return (Boolean)value ? 1 : 0;
+                return (bool)value ? 1 : 0;
             }
             if (t == typeof(String))
             {
-                Double i;
-                if (Double.TryParse((String)value, out i)) { return i; } else { return 0; }
+                double i;
+                if (double.TryParse((String)value, out i)) { return i; } else { return 0; }
             }
             return 0;
         }

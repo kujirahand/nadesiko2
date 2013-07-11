@@ -52,7 +52,7 @@ namespace Libnako.JPNCompiler.Parser
         /// <summary>
         /// 値の設定時か
         /// </summary>
-        protected Boolean flag_set_variable = false;
+        protected bool flag_set_variable = false;
         /// <summary>
         /// ローカル変数
         /// </summary>
@@ -104,7 +104,7 @@ namespace Libnako.JPNCompiler.Parser
         /// 値を１つだけ解析したい場合
         /// </summary>
         /// <returns></returns>
-        public Boolean ParseOnlyValue()
+        public bool ParseOnlyValue()
         {
             lastNode = null;
             if (tok.IsEOF()) return false;
@@ -117,7 +117,7 @@ namespace Libnako.JPNCompiler.Parser
         /// 値の取得
         /// </summary>
         /// <returns></returns>
-        protected virtual Boolean _value()
+        protected virtual bool _value()
         {
         	return false;
         }
@@ -127,7 +127,7 @@ namespace Libnako.JPNCompiler.Parser
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        protected Boolean Accept(NakoTokenType type)
+        protected bool Accept(NakoTokenType type)
         {
             return (tok.CurrentTokenType == type);
         }

@@ -22,7 +22,7 @@ namespace Libnako.Interpreter.ILCode
         /// </summary>
         /// <param name="types"></param>
         /// <returns></returns>
-		public Boolean CheckTypes(NakoILType[] types)
+		public bool CheckTypes(NakoILType[] types)
         {
             if (types.Length != this.Count) return false;
             for (int i = 0; i < types.Length; i++)

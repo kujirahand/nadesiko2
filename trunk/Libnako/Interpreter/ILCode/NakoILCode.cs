@@ -112,7 +112,7 @@ namespace Libnako.Interpreter.ILCode
                 case NakoILType.JUMP:
                 case NakoILType.BRANCH_FALSE:
                 case NakoILType.BRANCH_TRUE:
-                    r += "->" + String.Format("{0,0:X4}", (Int64)value);
+                    r += "->" + String.Format("{0,0:X4}", (long)value);
                     break;
             }
             return r;

@@ -9,7 +9,7 @@ namespace Libnako.JPNCompiler.Tokenizer
     /// </summary>
 	public static class NakoHalfFlag
     {
-		private static Dictionary<Char, Char> _dictionary;
+		private static Dictionary<char, char> _dictionary;
 
 		/// <summary>
 		/// 全角文字を半角文字に変換する。
@@ -17,7 +17,7 @@ namespace Libnako.JPNCompiler.Tokenizer
 		/// </summary>
 		/// <param name="c">変換対象文字</param>
 		/// <returns>変換された文字</returns>
-        public static Char ConvertChar(Char c)
+        public static char ConvertChar(char c)
         {
             // 半角なら変換不要
             if (c <= 0xFF)
@@ -26,15 +26,15 @@ namespace Libnako.JPNCompiler.Tokenizer
             }
             // 数字?
             if ('０' <= c && c <= '９') {
-                return (Char)('0' + c - '０');
+                return (char)('0' + c - '０');
             }
             // アルファベット?
             if ('Ａ' <= c && c <= 'Ｚ') {
-                return (Char)('A' + c - 'Ａ');
+                return (char)('A' + c - 'Ａ');
             }
             if ('ａ' <= c && c <= 'ｚ')
             {
-                return (Char)('a' + c - 'ａ');
+                return (char)('a' + c - 'ａ');
             }
 
             // 変換の可能性

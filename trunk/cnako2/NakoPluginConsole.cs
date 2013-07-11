@@ -13,12 +13,12 @@ namespace NakoPluginConsole
     {
         //--- プラグインの宣言 ---
         string _description = "コンソール出力を行うプラグイン";
-        Version _version = new Version(1, 0);
+        double _version = 1.0;
         //--- プラグイン共通の部分 ---
         /// <summary>
         /// ターゲットとなるなでしこのバージョン
         /// </summary>
-        public Version TargetNakoVersion { get { return new Version(2, 0); } }
+        public double TargetNakoVersion { get { return 2.0; } }
         /// <summary>
         /// プラグインが利用されているかを判定するフラグ
         /// </summary>
@@ -30,7 +30,7 @@ namespace NakoPluginConsole
         /// <summary>
         /// このプラグインのバージョン情報
         /// </summary>
-        public Version PluginVersion { get { return _version; } }
+        public double PluginVersion { get { return _version; } }
         /// <summary>
         /// このプラグインの説明
         /// </summary>
@@ -100,9 +100,9 @@ namespace NakoPluginConsole
         /// <returns></returns>
         public Object _cin(INakoFuncCallInfo info)
         {
-        	Int64 count = info.StackPopAsInt();
+        	long count = info.StackPopAsInt();
         	//TODO:標準入力の取得方法が効率が悪い
-        	Int64 i = 0;
+        	long i = 0;
         	string r = "";
         	while (i < count)
         	{

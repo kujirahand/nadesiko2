@@ -16,7 +16,7 @@ namespace Libnako.JPNCompiler.Function
         /// </summary>
         public void analizeArgTokens(NakoTokenList tokens)
         {
-            Boolean optMode = false;
+            bool optMode = false;
             ArgOpt argOpt = new ArgOpt();
 
             for (int i = 0; i < tokens.Count; i++)
@@ -76,11 +76,10 @@ namespace Libnako.JPNCompiler.Function
         /// 引数の定義文字列を読んで、関数の引数として登録する
         /// </summary>
         /// <param name="str"></param>
-        public void analizeArgStr(String str)
+        public void analizeArgStr(string str)
         {
-            NakoTokenizer tokenizer = new NakoTokenizer(str);
-            tokenizer.splitWord();
-            NakoTokenList tokens = tokenizer.Tokens;
+            NakoTokenizer tokenizer = new NakoTokenizer();
+            NakoTokenList tokens = tokenizer.SplitWord(str);
             analizeArgTokens(tokens);
         }
 
@@ -89,7 +88,7 @@ namespace Libnako.JPNCompiler.Function
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public int indexOfName(String name)
+        public int indexOfName(string name)
         {
             for (int i = 0; i < this.Count; i++)
             {

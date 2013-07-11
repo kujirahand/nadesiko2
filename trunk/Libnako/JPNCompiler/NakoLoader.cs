@@ -88,7 +88,7 @@ namespace Libnako.JPNCompiler
                 return;
             }
             files.Add(filename2);
-            String src = StrUnit.LoadFromFileAutoEnc(filename);
+            string src = StrUnit.LoadFromFileAutoEnc(filename);
                         
             // Parse
             this.ParseEx(src, filename);

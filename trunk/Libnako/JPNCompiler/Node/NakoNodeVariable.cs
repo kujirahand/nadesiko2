@@ -31,13 +31,13 @@ namespace Libnako.JPNCompiler.Node
         /// <summary>
         /// a[3] のように配列かプロパティへのアクセスかどうか？
         /// </summary>
-        public Boolean useElement { get { return this.hasChildren(); } }
+        public bool useElement { get { return this.hasChildren(); } }
 
         /// <summary>
         /// 値型かどうか
         /// </summary>
         /// <returns></returns>
-        public Boolean IsVarTypeSimple()
+        public bool IsVarTypeSimple()
         {
             return (varType == NakoVarType.Int ||
                 varType == NakoVarType.Double ||
