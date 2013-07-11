@@ -28,9 +28,9 @@ namespace NakoPlugin
         /// <summary>
         /// 値を整数として参照する
         /// </summary>
-        public Int64 AsInt
+        public long AsInt
         {
-            get { return (Int64)_body; }
+            get { return (long)_body; }
             set { _body = value; }
         }
 
@@ -80,12 +80,12 @@ namespace NakoPlugin
                 _type = NakoVarType.Int;
                 _body = Convert.ToInt64(value);
             }
-            else if (value is Int64)
+            else if (value is long)
             {
                 _type = NakoVarType.Int;
                 _body = value;
             }
-            else if (value is Double)
+            else if (value is double)
             {
                 _type = NakoVarType.Double;
                 _body = value;
@@ -115,8 +115,18 @@ namespace NakoPlugin
             // detect type
             switch (Type)
             {
+                case NakoVarType.Array:
+                    return Body.ToString();
+                case NakoVarType.Int:
+                    return Body.ToString();
+                case NakoVarType.Double:
+                    return Body.ToString();
+                case NakoVarType.Object:
+                    return Body.ToString();
                 case NakoVarType.Void:
                     return "";
+                case NakoVarType.String:
+                    return (string)Body;
                 default:
                     return Body.ToString();
             }

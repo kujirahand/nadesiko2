@@ -42,7 +42,7 @@ namespace Libnako.JPNCompiler.Node
         /// 子ノードがあるか
         /// </summary>
         /// <returns></returns>
-        public Boolean hasChildren()
+        public bool hasChildren()
         {
             if (children == null) return false;
             if (children.Count == 0) return false;

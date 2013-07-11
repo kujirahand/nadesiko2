@@ -7,36 +7,205 @@ namespace Libnako.JPNCompiler.Tokenizer
     /// <summary>
     /// トークン解析器クラス
     /// </summary>
-    public class NakoTokenizer : NakoTokenizerBase
+    public class NakoTokenizer
     {
+        /// <summary>
+        /// 現在解析中のトークン位置を表す
+        /// </summary>
+        private int position;
+        /// <summary>
+        /// 現在のインデントレベル
+        /// </summary>
+        private int indentLevel;
+        /// <summary>
+        /// インデントレベルで使うインデントの数
+        /// </summary>
+        private int indentCount;
+        /// <summary>
+        /// 現在の行番号
+        /// </summary>
+        private int lineNumber;
+        /// <summary>
+        /// トークン辞書
+        /// </summary>
+        public NakoTokenDic TokenDic { get; set; }
+        /// <summary>
+        /// 前回のトークンタイプ
+        /// </summary>
+        private NakoTokenType lastTokenType;
+        /// <summary>
+        /// 生のソースコード
+        /// </summary>
+        internal string source;
+        /// <summary>
+        /// トークン一覧
+        /// </summary>
+        private NakoTokenList tokens;
         /// <summary>
         /// トークン解析器のコンストラクタ
         /// </summary>
-        /// <param name="source"></param>
-        public NakoTokenizer(string source)
+        public NakoTokenizer()
         {
-            Init();
-            this.source = source; 
+            TokenDic = new NakoTokenDic();
+            Initialization();
         }
-
+        /// <summary>
+        /// 初期化
+        /// </summary>
+        public void Initialization()
+        {
+            position = 0;
+            indentLevel = 0;
+            lineNumber = 0;
+            indentCount = 0;
+            lastTokenType = NakoTokenType.UNKNOWN;
+            tokens = new NakoTokenList();
+        }
+        /// <summary>
+        /// ソース終端か
+        /// </summary>
+        /// <returns></returns>
+        public bool IsEOF()
+        {
+            return (position >= source.Length);
+        }
+        /// <summary>
+        /// 現在の文字(大文字小文字整形済み)
+        /// </summary>
+        public char CurrentChar
+        {
+            get
+            {
+                return NakoHalfFlag.ConvertChar(CurrentCharRaw);
+            }
+        }
+        /// <summary>
+        /// 現在の文字(整形なし)
+        /// </summary>
+        public char CurrentCharRaw
+        {
+            get
+            {
+                if (IsEOF()) return '\0';
+                return source[position];
+            }
+        }
+        /// <summary>
+        /// 次の文字
+        /// </summary>
+        public char NextChar
+        {
+            get
+            {
+                if ((position + 1) >= source.Length)
+                {
+                    return '\0';
+                }
+                return NakoHalfFlag.ConvertChar(source[position + 1]);
+            }
+        }
+        /// <summary>
+        /// 文字列の比較
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        internal bool CompareStr(string str)
+        {
+            if (source.Length < (position + str.Length)) { return false; }
+            return (source.Substring(position, str.Length) == str);
+        }
+        /// <summary>
+        /// 指定した文字まで取得する(区切り文字を含めない)
+        /// </summary>
+        /// <param name="splitter"></param>
+        /// <returns></returns>
+        public string GetToSplitter(string splitter)
+        {
+        	return GetToSplitter(splitter, false);
+        }
+        /// <summary>
+        /// 指定した文字列まで取得する
+        /// </summary>
+        /// <param name="splitter">区切り文字列</param>
+        /// <param name="need_splitter">区切り文字を含めるかどうか</param>
+        /// <returns></returns>
+        public string GetToSplitter(string splitter, bool need_splitter)
+        {
+            string r = "";
+            while (!IsEOF())
+            {
+                if (CompareStr(splitter))
+                {
+                    if (need_splitter)
+                    {
+                        r += splitter;
+                    }
+                    position += splitter.Length;
+                    break;
+                }
+                // 全角半角変換しない
+                r += source[position];
+                position++;
+            }
+            return r;
+        }
+        /// <summary>
+        /// 指定した文字まで取得
+        /// </summary>
+        /// <param name="splitter"></param>
+        /// <returns></returns>
+        public string GetToSplitter(char splitter)
+        {
+        	return GetToSplitter(splitter, false);
+        }
+        /// <summary>
+        /// 指定したも文字まで取得
+        /// </summary>
+        /// <param name="splitter"></param>
+        /// <param name="need_splitter"></param>
+        /// <returns></returns>
+        public string GetToSplitter(char splitter, bool need_splitter)
+        {
+            string r = "";
+            while (!IsEOF())
+            {
+                char c = source[position];
+                if (c == splitter)
+                {
+                    if (need_splitter)
+                    {
+                        r += splitter;
+                    }
+                    position++;
+                    break;
+                }
+                r += c;
+                position++;
+            }
+            return r;
+        }
         /// <summary>
         /// トークン解析を行う
         /// </summary>
-        public void Tokenize()
+        public NakoTokenList Tokenize(string source)
         {
+            Initialization();
+            this.source = source;
             // 1回目の解析 --- トークンをひたすら区切る
             TokenizeFirst();
             // 2回目の解析 --- 関数宣言など辞書登録を行う
             TokenizeAnalize();
             // 3回目の解析 --- T_WORDを置き換える
             TokenizeCheckWord();
+            return tokens;
         }
-
         /// <summary>
         /// トークンをひたすらぶった切るだけ、文法を一切考慮しない
         /// </summary>
-        public void splitWord()
+        public NakoTokenList SplitWord(string source)
         {
+            Initialization();
+            this.source = source;
             // 繰り返しトークンを取得する
             while (!IsEOF())
             {
@@ -44,13 +213,12 @@ namespace Libnako.JPNCompiler.Tokenizer
                 if (token == null) continue;
                 tokens.Add(token);
             }
+            return tokens;
         }
-
-
         /// <summary>
         /// 関数宣言など辞書登録を行う
         /// </summary>
-        protected void TokenizeAnalize()
+        private void TokenizeAnalize()
         {
             tokens.MoveTop();
             while (!tokens.IsEOF())
@@ -63,11 +231,10 @@ namespace Libnako.JPNCompiler.Tokenizer
                 tokens.MoveNext();
             }
         }
-
         /// <summary>
         /// 予約後のチェックや代入文への変換作業などを行う
         /// </summary>
-        protected void TokenizeCheckWord()
+        private void TokenizeCheckWord()
         {
             // 予約語句のチェックなど
             tokens.MoveTop();
@@ -98,18 +265,17 @@ namespace Libnako.JPNCompiler.Tokenizer
                 tokens.MoveNext();
             }
         }
-        
         /// <summary>
         /// 関数の定義
         /// </summary>
-        protected void TokenizeAnalize_DefFunction()
+        private void TokenizeAnalize_DefFunction()
         {
             NakoToken firstToken = tokens.CurrentToken;
             tokens.MoveNext(); // skip '*' (DEF_FUNCTION)
             
             // 関数宣言を軽く舐めて、関数名を特定する
             NakoToken fnameToken = null;
-            Boolean argMode = false;
+            bool argMode = false;
             while (!tokens.IsEOF())
             {
                 // 引数宣言に ( ... ) がある場合を考慮
@@ -150,26 +316,25 @@ namespace Libnako.JPNCompiler.Tokenizer
                 tokens.MoveNext();
             }
         }
-
         /// <summary>
         /// トークンをひたすらぶった切る！
         /// </summary>
-        protected void TokenizeFirst()
+        private void TokenizeFirst()
         {
             // [注意]
             // このメソッドでは Init() を呼んではいけない @see: NakoTokenizer.Tokenize_ExtractSTring()
             // 文字列展開中に lineno がセットされる場合がある
 
             // はじめにインデントを数える
-            this.indentCount = this.CountIndent();
-            this.level = 0;
+            indentCount = this.CountIndent();
+            indentLevel = 0;
             
             // 繰り返しトークンを取得する
             while (!IsEOF())
             {
                 NakoToken token = GetToken();
                 if (token == null) continue;
-                last_token_type = token.type;
+                lastTokenType = token.type;
 
                 // 文字列の展開があればここで処理してしまう
                 if (token.type == NakoTokenType.STRING_EX)
@@ -183,9 +348,7 @@ namespace Libnako.JPNCompiler.Tokenizer
             // レベルが合うまで T_SCOPE_END を差し込む
             CheckScope();
         }
-
         private Stack<int> indentStack = null;
-
         private void CheckScope()
         {
             if (indentStack == null) {
@@ -197,14 +360,14 @@ namespace Libnako.JPNCompiler.Tokenizer
             if (newIndent == indentCount) return;
             if (newIndent > indentCount)
             {
-                level++;
-                NakoToken token = new NakoToken(NakoTokenType.SCOPE_BEGIN, lineno, level);
+                indentLevel++;
+                NakoToken token = new NakoToken(NakoTokenType.SCOPE_BEGIN, lineNumber, indentLevel);
                 tokens.Add(token);
                 indentStack.Push(newIndent);
             }
             else
             {
-                NakoToken t = new NakoToken(NakoTokenType.SCOPE_END, lineno, level);
+                NakoToken t = new NakoToken(NakoTokenType.SCOPE_END, lineNumber, indentLevel);
                 // 連続で POP する可能性がある
                 while (true)
                 {
@@ -214,69 +377,68 @@ namespace Libnako.JPNCompiler.Tokenizer
                     {
                         throw new NakoTokenizerException("インデントレベルが間違っています。", t);
                     }
-                    level--;
+                    indentLevel--;
                     indentStack.Pop();
-                    NakoToken token = new NakoToken(NakoTokenType.SCOPE_END, lineno, level);
+                    NakoToken token = new NakoToken(NakoTokenType.SCOPE_END, lineNumber, indentLevel);
                     tokens.Add(token);
                 }
             }
             indentCount = newIndent;
         }
-
         /// <summary>
         /// トークンを１つ取得する
         /// </summary>
         /// <returns></returns>
-        public NakoToken GetToken()
+        private NakoToken GetToken()
         {
             // カーソルが最後まで行ったか?
             if (IsEOF()) return null;
 
             // トークン１文字を取得
-            NakoToken token = new NakoToken(NakoTokenType.UNKNOWN, lineno, level);
-            Char c = CurrentChar;
-            Char nc;
+            NakoToken token = new NakoToken(NakoTokenType.UNKNOWN, lineNumber, indentLevel);
+            char c = CurrentChar;
+            char nc;
 
             // SWITCH
             switch (c) {
                 // Check BOM
                 case (char)0xFEFF:
-                    cur++;
+                    position++;
                     return null;
                 // Check EOL
                 case '\r':
-                    cur++;
+                    position++;
                     return null;
                 case '\n':
                     token.type = NakoTokenType.EOL;
-                    cur++;
-                    lineno++;
+                    position++;
+                    lineNumber++;
                     tokens.Add(token);
                     CheckScope();
                     return null;
                 // Check Indent
                 case ' ':
                 case '\t':
-                    cur++; // skip
+                    position++; // skip
                     return null;
                 // 句読点
                 case ';':
                     token.type = NakoTokenType.EOL; // 明確な区切り
-                    cur++;
+                    position++;
                     return token;
                 case ',':
-                    cur++;
+                    position++;
                     return null;
                 // Check Flag
                 case '=':
                     nc = NextChar;
                     if (nc == '=') {
-                        cur += 2;
+                        position += 2;
                         token.type = NakoTokenType.EQ_EQ;
                     }
                     else
                     {
-                        cur++;
+                        position++;
                         token.type = NakoTokenType.EQ;
                     }
                     return token;
@@ -285,12 +447,12 @@ namespace Libnako.JPNCompiler.Tokenizer
                     nc = NextChar;
                     if (nc == '&')
                     {
-                        cur += 2;
+                        position += 2;
                         token.type = NakoTokenType.AND_AND;
                     }
                     else
                     {
-                        cur++;
+                        position++;
                         token.type = NakoTokenType.AND;
                     }
                     return token;
@@ -298,12 +460,12 @@ namespace Libnako.JPNCompiler.Tokenizer
                     nc = NextChar;
                     if (nc == '|')
                     {
-                        cur += 2;
+                        position += 2;
                         token.type = NakoTokenType.OR_OR;
                     }
                     else
                     {
-                        cur++;
+                        position++;
                         token.type = NakoTokenType.OR;
                     }
                     return token;
@@ -311,17 +473,17 @@ namespace Libnako.JPNCompiler.Tokenizer
                     nc = NextChar;
                     if (nc == '=')
                     {
-                        cur += 2;
+                        position += 2;
                         token.type = NakoTokenType.LT_EQ;
                     }
                     else if (nc == '>')
                     {
-                        cur += 2;
+                        position += 2;
                         token.type = NakoTokenType.NOT_EQ;
                     }
                     else
                     {
-                        cur++;
+                        position++;
                         token.type = NakoTokenType.LT;
                     }
                     return token;
@@ -329,17 +491,17 @@ namespace Libnako.JPNCompiler.Tokenizer
                     nc = NextChar;
                     if (nc == '=')
                     {
-                        cur += 2;
+                        position += 2;
                         token.type = NakoTokenType.GT_EQ;
                     }
                     else if (nc == '<')
                     {
-                        cur += 2;
+                        position += 2;
                         token.type = NakoTokenType.NOT_EQ;
                     }
                     else
                     {
-                        cur++;
+                        position++;
                         token.type = NakoTokenType.GT;
                     }
                     return token;
@@ -347,12 +509,12 @@ namespace Libnako.JPNCompiler.Tokenizer
                     nc = NextChar;
                     if (nc == '=')
                     {
-                        cur += 2;
+                        position += 2;
                         token.type = NakoTokenType.NOT_EQ;
                     }
                     else
                     {
-                        cur++;
+                        position++;
                         token.type = NakoTokenType.NOT;
                     }
                     return token;
@@ -360,18 +522,18 @@ namespace Libnako.JPNCompiler.Tokenizer
                 case '『':
                 case '"':
                 case '`':
-                    return GetToken_String();
+                    return GetStringToken();
                 case '+':
                     token.type = NakoTokenType.PLUS;
-                    cur++;
+                    position++;
                     return token;
                 case '-':
                     token.type = NakoTokenType.MINUS;
-                    cur++;
+                    position++;
                     return token;
                 case '*':
-                    if (last_token_type == NakoTokenType.EOL ||
-                        last_token_type == NakoTokenType.UNKNOWN)
+                    if (lastTokenType == NakoTokenType.EOL ||
+                        lastTokenType == NakoTokenType.UNKNOWN)
                     {
                         token.type = NakoTokenType.DEF_FUNCTION;
                     }
@@ -379,7 +541,7 @@ namespace Libnako.JPNCompiler.Tokenizer
                     {
                         token.type = NakoTokenType.MUL;
                     }
-                    cur++;
+                    position++;
                     return token;
                 case '/':
                     // コメントかチェック
@@ -388,46 +550,46 @@ namespace Libnako.JPNCompiler.Tokenizer
                     if (nc == '/') return GetLineComment(token);
                     // 割り算かな？
                     token.type = NakoTokenType.DIV;
-                    cur++;
+                    position++;
                     return token;
                 case '%':
                     token.type = NakoTokenType.MOD;
-                    cur++;
+                    position++;
                     return token;
                 case '^':
                     token.type = NakoTokenType.POWER;
-                    cur++;
+                    position++;
                     return token;
                 case '(':
                     token.type = NakoTokenType.PARENTHESES_L;
-                    cur++;
+                    position++;
                     return token;
                 case ')':
                     token.type = NakoTokenType.PARENTHESES_R;
-                    cur++;
+                    position++;
                     CheckJosi(token);
                     return token;
                 case '{':
                     token.type = NakoTokenType.BRACES_L;
-                    cur++;
+                    position++;
                     return token;
                 case '}':
                     token.type = NakoTokenType.BRACES_R;
-                    cur++;
+                    position++;
                     CheckJosi(token);
                     return token;
                 case '[':
                     token.type = NakoTokenType.BLACKETS_L;
-                    cur++;
+                    position++;
                     return token;
                 case ']':
                     token.type = NakoTokenType.BLACKETS_R;
-                    cur++;
+                    position++;
                     CheckJosi(token);
                     return token;
                 case '\\':
                     token.type = NakoTokenType.YEN;
-                    cur++;
+                    position++;
                     return token;
                 case '#':
                     return GetLineComment(token);
@@ -435,11 +597,11 @@ namespace Libnako.JPNCompiler.Tokenizer
                     NakoToken tt = GetToken_NotFlag();
                     if (tt == null)
                     {
-                        String msg = "未定義の文字列:";
-                        Char ch = CurrentChar;
+                        string msg = "未定義の文字列:";
+                        char ch = CurrentChar;
                         if (ch < 33)
                         {
-                            msg += String.Format("0x{0,0:X2}", (int)ch);
+                            msg += string.Format("0x{0,0:X2}", (int)ch);
                         }
                         else
                         {
@@ -455,12 +617,12 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// </summary>
         /// <param name="tok"></param>
         /// <returns></returns>
-        public NakoToken GetLineComment(NakoToken tok)
+        private NakoToken GetLineComment(NakoToken tok)
         {
             tok.type = NakoTokenType.COMMENT;
             
             char first_char = CurrentChar;
-            cur++;
+            position++;
 
             // 行末までスキップ
             string comment = "";
@@ -469,24 +631,23 @@ namespace Libnako.JPNCompiler.Tokenizer
                 char ch = CurrentCharRaw;
                 if (ch == '\r' || ch == '\n') break;
                 comment += ch;
-                cur++;
+                position++;
             }
             tok.value = comment; // コメントの文字列をセット
             return tok;
         }
-
         /// <summary>
         /// 範囲コメントを得る
         /// </summary>
         /// <param name="tok"></param>
         /// <returns></returns>
-        public NakoToken GetRangeComment(NakoToken tok)
+        private NakoToken GetRangeComment(NakoToken tok)
         {
             tok.type = NakoTokenType.COMMENT;
 
             char ch1 = CurrentChar; // = '/'
             char ch2 = NextChar;    // = '*'
-            cur += 2;
+            position += 2;
             
             // コメントの最後までを取得
             string comment = "";
@@ -495,86 +656,84 @@ namespace Libnako.JPNCompiler.Tokenizer
                 char ch = CurrentChar;
                 if (ch == '\n')
                 {
-                    lineno++; // 行番号がずれてしまうので重要
+                    lineNumber++; // 行番号がずれてしまうので重要
                 }
                 if (ch == ch2)
                 {
                     if (NextChar == ch1)
                     {
-                        cur += 2;
+                        position += 2;
                         break;
                     }
                 }
                 comment += ch;
-                cur++;
+                position++;
             }
             tok.value = comment; // コメントの文字列をセット
             return tok;
         }
-
         /// <summary>
         /// 文字列の取得
         /// </summary>
         /// <returns></returns>
-        public NakoToken GetToken_String()
+        internal NakoToken GetStringToken()
         {
             if (IsEOF()) return null;
-            NakoToken token = new NakoToken(NakoTokenType.STRING, lineno, level);
-            Char c = CurrentChar;
-            Char nc = NextChar;
-            String eos = "」";
-            Boolean is_extract = true;
+            var token = new NakoToken(NakoTokenType.STRING, lineNumber, indentLevel);
+            char start = CurrentChar;
+            char nc = NextChar;
+            string stringEnd;
 
             // 終端文字列の判別
             // S = 「...」
-            switch (c)
+            switch (start)
             {
-                case '「': eos = "」"; is_extract = true; break;
-                case '『': eos = "』"; is_extract = false; break;
-                case '"' : eos = "\""; is_extract = true; break;
-                case '`' : eos = "`" ; is_extract = false; break;
+                case '「': stringEnd = "」"; token.type = NakoTokenType.STRING_EX; break;
+                case '『': stringEnd = "』"; token.type = NakoTokenType.STRING; break;
+                case '"': stringEnd = "\""; token.type = NakoTokenType.STRING_EX; break;
+                case '`': stringEnd = "`"; token.type = NakoTokenType.STRING; break;
+                default: throw new NakoTokenizerException("", null);
             }
-            cur++;
+            position++;
             // ヒアドキュメント文字列
             // S = 「「 ... 」」
             // S = 「「「 ... 」」」
-            if (c == nc && (c == '「' || c == '『'))
+            if (start == '「' || start == '『')
             {
-                cur--;
-                eos = "";
+                position--;
+                stringEnd = "";
                 while (!IsEOF())
                 {
-                    if (c == '「' && CurrentChar == '「')
+                    if (CurrentChar == '「')
                     {
-                        is_extract = true;
-                        eos += '」';
-                        cur++;
-                        continue;
+                        token.type = NakoTokenType.STRING_EX;
+                        stringEnd += '」';
+                        position++;
                     }
-                    if (c == '『' && CurrentChar == '『')
+                    else if (CurrentChar == '『')
                     {
-                        is_extract = false;
-                        eos += '』';
-                        cur++;
-                        continue;
+                        token.type = NakoTokenType.STRING;
+                        stringEnd += '』';
+                        position++;
                     }
-                    break;
+                    else break;
                 }
             }
             // 文字列の終端までスキャンする
-            String str = "";
-			bool is_skip_blank = false;
+            char c;
+            var builder = new StringBuilder();
+			bool isSkipBlank = false;
             while (!IsEOF())
             {
-                if (CompareStr(eos))
+                if (CompareStr(stringEnd))
                 {
-                    cur += eos.Length;
+                    position += stringEnd.Length;
                     break;
                 }
                 c = CurrentCharRaw;
-                cur++;
+                position++;
 
-				if (is_skip_blank)
+                if (isSkipBlank)
 				{
 					if (c == ' ' || c == '　' || c == '\t')
 					{
@@ -582,33 +741,27 @@ namespace Libnako.JPNCompiler.Tokenizer
 					}
 					else
 					{
-						is_skip_blank = false;
+                        isSkipBlank = false;
 					}
 				}
 
-                str += c;
+                builder.Append(c);
                 if (c == '\n')
                 {
-                    lineno++;
-					is_skip_blank = true;
+                    lineNumber++;
+                    isSkipBlank = true;
                 }
             }
-            // Extract ?
-            if (is_extract)
-            {
-                token.type = NakoTokenType.STRING_EX;
-            }
-            token.value = str;
+            token.value = builder.ToString();
             CheckJosi(token);
             return token;
         }
-
         /// <summary>
         /// アルファベットか
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
-        public static Boolean IsAlpha(Char c)
+        private static bool IsAlpha(char c)
         {
             return ('a' <= c && c <= 'z') || ('A' <= c && c <= 'Z');
         }
@@ -617,7 +770,7 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
-        public static Boolean IsNumber(Char c)
+        private static bool IsNumber(char c)
         {
             return ('0' <= c && c <= '9');
         }
@@ -626,7 +779,7 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// </summary>
         /// <param name="c"></param>
         /// <returns></returns>
-        public static Boolean IsHira(Char c)
+        public static bool IsHira(char c)
         {
             return ('ぁ' <= c && c <= 'ん');
         }
@@ -636,7 +789,7 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// <returns></returns>
         private NakoToken GetToken_NotFlag()
         {
-            Char c = CurrentChar;
+            char c = CurrentChar;
             // Number
             if (IsNumber(c))
             {
@@ -649,22 +802,21 @@ namespace Libnako.JPNCompiler.Tokenizer
             }
             return null;
         }
-
         /// <summary>
         /// WORDトークンの取得
         /// </summary>
         /// <returns></returns>
-        public NakoToken GetToken_Word()
+        internal NakoToken GetToken_Word()
         {
-            NakoToken token = new NakoToken(NakoTokenType.WORD, lineno, level);
+            var token = new NakoToken(NakoTokenType.WORD, lineNumber, indentLevel);
             StringBuilder s = new StringBuilder();
             while (!IsEOF())
             {
-                Char c = CurrentChar;
+                char c = CurrentChar;
                 if (IsAlpha(c) || IsNumber(c) || c == '_' || c == '!' || c == '?')
                 {
                     s.Append(c);
-                    cur++;
+                    position++;
                     continue;
                 }
                 // 助詞なら区切る
@@ -676,7 +828,7 @@ namespace Libnako.JPNCompiler.Tokenizer
                 if (c >= 0xFF)
                 {
                     s.Append(c);
-                    cur++;
+                    position++;
 					// 特別な予約語なら区切る
 					if (s.ToString() == "もし" || s.ToString() == "ならば")
 					{
@@ -689,28 +841,27 @@ namespace Libnako.JPNCompiler.Tokenizer
             token.value = s.ToString();
             return token;
         }
-
         /// <summary>
         /// 助詞があるか調べる
         /// </summary>
         /// <param name="base_t">助詞をセットするトークン</param>
         /// <returns>助詞があったなら true を返す</returns>
-        public Boolean CheckJosi(NakoToken base_t)
+        private bool CheckJosi(NakoToken base_t)
         {
             if (IsEOF()) return false;
             
             // 助詞はひらがなである
-            Char c = CurrentChar;
+            char c = CurrentChar;
             if (!IsHira(c)) return false;
 
             // 助詞を１つずつ調べる
             NakoJosi JosiList = NakoJosi.Instance;
-            foreach (String josi in JosiList)
+            foreach (string josi in JosiList)
             {
                 if (this.CompareStr(josi))
                 {
                     base_t.josi = josi;
-                    cur += josi.Length;
+                    position += josi.Length;
                     return true;
                 }
             }
@@ -720,75 +871,79 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// 数字の取得
         /// </summary>
         /// <returns></returns>
-        public NakoToken GetToken_Number()
+        internal NakoToken GetToken_Number()
         {
-            NakoToken token = new NakoToken(NakoTokenType.INT, lineno, level);
-            String s = "";
+            NakoToken token = new NakoToken(NakoTokenType.INT, lineNumber, indentLevel);
+            string s = "";
             while (!IsEOF())
             {
-                Char c = CurrentChar;
+                char c = CurrentChar;
                 if (!IsNumber(c)) break;
                 s += c;
-                cur++;
+                position++;
             }
             if (CurrentChar == '.' && IsNumber(NextChar))
             {
                 s += CurrentChar;
                 token.type = NakoTokenType.NUMBER;
-                cur++;
+                position++;
                 while (!IsEOF())
                 {
-                    Char c = CurrentChar;
+                    char c = CurrentChar;
                     if (!IsNumber(c)) break;
                     s += c;
-                    cur++;
+                    position++;
                 }
             }
             token.value = s;
             CheckJosi(token);
             return token;
         }
-
         /// <summary>
         /// インデントを数える
         /// </summary>
         /// <returns></returns>
-        public int CountIndent()
+        internal int CountIndent()
         {
             int indent = 0;
-            for (; !IsEOF(); cur++ )
+            while (!IsEOF())
             {
-                switch (source[cur])
+                char c = this.source[position];
+                if (c == ' ')
                 {
-                    case ' ':
-                        indent++;
-                        break;
-                    case '\t':
-                        indent += 4;
-                        break;
-                    case '　':
-                        indent += 2;
-                        break;
-                    default:
-                        return indent;
+                    indent++;
+                    position++;
+                    continue;
                 }
+                if (c == '\t')
+                {
+                    indent += 4;
+                    position++;
+                    continue;
+                }
+                if (c == '　')
+                {
+                    indent += 2;
+                    position++;
+                    continue;
+                }
+                break;
             }
             return indent;
         }
-
         /// <summary>
         /// 展開あり文字列を再帰的に展開する
         /// </summary>
         /// <param name="t"></param>
         public void Tokenize_ExtractSTring(NakoToken t)
         {
-            String tmp = "";
-            String s = t.value;
+            string tmp = "";
+            string s = t.value;
             int i = 0;
-            Boolean is_first = true;
+            bool is_first = true;
             while (i < s.Length)
             {
-                Char c = s[i];
+                char c = s[i];
                 if (c == '{' || c == '｛')
                 {
                     if (is_first)
@@ -799,9 +954,9 @@ namespace Libnako.JPNCompiler.Tokenizer
                     {
                         tokens.Add(new NakoToken(NakoTokenType.AND, t.lineno, t.level));
                     }
-                    Char eoc = (c == '{') ? '}' : '｝';
+                    char eoc = (c == '{') ? '}' : '｝';
                     i++;
-                    String str_ex = "";
+                    string str_ex = "";
                     while (i < s.Length)
                     {
                         if (s[i] == eoc)
@@ -834,14 +989,14 @@ namespace Libnako.JPNCompiler.Tokenizer
                         {
                             str_ex = str_ex.Substring(1);
                             int i_ex = int.Parse(str_ex);
-                            tmp += (Char)i_ex;
+                            tmp += (char)i_ex;
                             str_ex = "";
                         }
                         else if (str_ex[1] == '$')
                         {
                             str_ex = "0x" + str_ex.Substring(2);
                             int i_ex = int.Parse(str_ex);
-                            tmp += (Char)i_ex;
+                            tmp += (char)i_ex;
                             str_ex = "";
                         }
                         else {
@@ -866,9 +1021,11 @@ namespace Libnako.JPNCompiler.Tokenizer
 	                    // "("
 	                    tokens.Add(new NakoToken(NakoTokenType.PARENTHESES_L, t.lineno, t.lineno));
 	                    // 再帰的にトークン解析を行う
-	                    NakoTokenizer tok = new NakoTokenizer(str_ex);
-	                    tok.lineno = t.lineno;
-	                    tok.level = t.level;
+	                    NakoTokenizer tok = new NakoTokenizer();
+                        tok.Initialization();
+                        tok.source = str_ex;
+                        tok.lineNumber = t.lineno;
+                        tok.indentLevel = t.level;
 	                    tok.TokenizeFirst(); // とりあえず区切るだけ
 	                    foreach (NakoToken st in tok.tokens)
 	                    {

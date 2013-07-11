@@ -102,7 +102,6 @@
     <Compile Include="JPNCompiler\Tokenizer\NakoToken.cs" />
     <Compile Include="JPNCompiler\Tokenizer\NakoTokenDic.cs" />
     <Compile Include="JPNCompiler\Tokenizer\NakoTokenizer.cs" />
-    <Compile Include="JPNCompiler\Tokenizer\NakoTokenizerBase.cs" />
     <Compile Include="JPNCompiler\Tokenizer\NakoTokenizerException.cs" />
     <Compile Include="JPNCompiler\Tokenizer\NakoTokenList.cs" />
     <Compile Include="JPNCompiler\Tokenizer\NakoTokenType.cs" />

@@ -127,14 +127,14 @@ namespace Libnako.NakoAPI
         {
             Object a = info.StackPop();
             Object b = info.StackPop();
-            if (a is Int64 && b is Int64)
+            if (a is long && b is long)
             {
-                return ((Int64)a + (Int64)b);
+                return ((long)a + (long)b);
             }
             else
             {
-                Double da = NakoValueConveter.ToDouble(a);
-                Double db = NakoValueConveter.ToDouble(b);
+                double da = NakoValueConveter.ToDouble(a);
+                double db = NakoValueConveter.ToDouble(b);
                 return (da + db);
             }
         }
@@ -149,14 +149,14 @@ namespace Libnako.NakoAPI
             }
             Object a = ((NakoVariable)ar).Body;
             Object c;
-            if (a is Int64 && b is Int64)
+            if (a is long && b is long)
             {
-                c = (Int64)a + (Int64)b;
+                c = (long)a + (long)b;
             }
             else
             {
-                Double da = NakoValueConveter.ToDouble(a);
-                Double db = NakoValueConveter.ToDouble(b);
+                double da = NakoValueConveter.ToDouble(a);
+                double db = NakoValueConveter.ToDouble(b);
                 c = da + db;
             }
             // 結果をセット
@@ -168,14 +168,14 @@ namespace Libnako.NakoAPI
         {
             Object a = info.StackPop();
             Object b = info.StackPop();
-            if (a is Int64 && b is Int64)
+            if (a is long && b is long)
             {
-                return ((Int64)a - (Int64)b);
+                return ((long)a - (long)b);
             }
             else
             {
-                Double da = NakoValueConveter.ToDouble(a);
-                Double db = NakoValueConveter.ToDouble(b);
+                double da = NakoValueConveter.ToDouble(a);
+                double db = NakoValueConveter.ToDouble(b);
                 return (da - db);
             }
         }
@@ -190,14 +190,14 @@ namespace Libnako.NakoAPI
             }
             Object a = ((NakoVariable)ar).Body;
             Object c;
-            if (a is Int64 && b is Int64)
+            if (a is long && b is long)
             {
-                c = (Int64)a - (Int64)b;
+                c = (long)a - (long)b;
             }
             else
             {
-                Double da = NakoValueConveter.ToDouble(a);
-                Double db = NakoValueConveter.ToDouble(b);
+                double da = NakoValueConveter.ToDouble(a);
+                double db = NakoValueConveter.ToDouble(b);
                 c = da - db;
             }
             // 結果をセット
@@ -209,14 +209,14 @@ namespace Libnako.NakoAPI
         {
             Object a = info.StackPop();
             Object b = info.StackPop();
-            if (a is Int64 && b is Int64)
+            if (a is long && b is long)
             {
-                return ((Int64)a * (Int64)b);
+                return ((long)a * (long)b);
             }
             else
             {
-                Double da = NakoValueConveter.ToDouble(a);
-                Double db = NakoValueConveter.ToDouble(b);
+                double da = NakoValueConveter.ToDouble(a);
+                double db = NakoValueConveter.ToDouble(b);
                 return (da * db);
             }
         }
@@ -231,14 +231,14 @@ namespace Libnako.NakoAPI
             }
             Object a = ((NakoVariable)ar).Body;
             Object c;
-            if (a is Int64 && b is Int64)
+            if (a is long && b is long)
             {
-                c = (Int64)a * (Int64)b;
+                c = (long)a * (long)b;
             }
             else
             {
-                Double da = NakoValueConveter.ToDouble(a);
-                Double db = NakoValueConveter.ToDouble(b);
+                double da = NakoValueConveter.ToDouble(a);
+                double db = NakoValueConveter.ToDouble(b);
                 c = da * db;
             }
             // 結果をセット
@@ -250,14 +250,14 @@ namespace Libnako.NakoAPI
         {
             Object a = info.StackPop();
             Object b = info.StackPop();
-            if (a is Int64 && b is Int64)
+            if (a is long && b is long)
             {
-                return ((Int64)a / (Int64)b);
+                return ((long)a / (long)b);
             }
             else
             {
-                Double da = NakoValueConveter.ToDouble(a);
-                Double db = NakoValueConveter.ToDouble(b);
+                double da = NakoValueConveter.ToDouble(a);
+                double db = NakoValueConveter.ToDouble(b);
                 return (da / db);
             }
         }
@@ -272,14 +272,14 @@ namespace Libnako.NakoAPI
             }
             Object a = ((NakoVariable)ar).Body;
             Object c;
-            if (a is Int64 && b is Int64)
+            if (a is long && b is long)
             {
-                c = (Int64)a / (Int64)b;
+                c = (long)a / (long)b;
             }
             else
             {
-                Double da = NakoValueConveter.ToDouble(a);
-                Double db = NakoValueConveter.ToDouble(b);
+                double da = NakoValueConveter.ToDouble(a);
+                double db = NakoValueConveter.ToDouble(b);
                 c = da / db;
             }
             // 結果をセット
@@ -290,12 +290,12 @@ namespace Libnako.NakoAPI
         private Random _randObj = null;
         private Object _random(INakoFuncCallInfo info)
         {
-            Int64 range = info.StackPopAsInt();
+            long range = info.StackPopAsInt();
             if (_randObj == null) {
                 _randObj = new Random();
             }
             int v = _randObj.Next((int)range);
-            return (Int64)v;
+            return (long)v;
         }
 
         private Object _abs(INakoFuncCallInfo info)
@@ -309,14 +309,14 @@ namespace Libnako.NakoAPI
         {
             Object a = info.StackPop();
             Object b = info.StackPop();
-            if (a is Int64 && b is Int64)
+            if (a is long && b is long)
             {
-                return ((Int64)a % (Int64)b);
+                return ((long)a % (long)b);
             }
             else
             {
-                Double da = NakoValueConveter.ToDouble(a);
-                Double db = NakoValueConveter.ToDouble(b);
+                double da = NakoValueConveter.ToDouble(a);
+                double db = NakoValueConveter.ToDouble(b);
                 return (da % db);
             }
         }

@@ -13,7 +13,7 @@ namespace NakoPlugin
         /// <summary>
         /// 対応プラグインのバージョン番号 (現在は必ず 2.0 を返すようにする)
         /// </summary>
-        Version TargetNakoVersion { get; }
+        double TargetNakoVersion { get; }
         /// <summary>
         /// プラグインの名前 ( this.GetType().FullName とクラスのフルパスを指定する )
         /// </summary>
@@ -21,7 +21,7 @@ namespace NakoPlugin
         /// <summary>
         /// プラグインのバージョン（任意の値を返すことができる）
         /// </summary>
-        Version PluginVersion { get; }
+        double PluginVersion { get; }
         /// <summary>
         /// プラグインの説明を返す
         /// </summary>
@@ -60,13 +60,13 @@ namespace NakoPlugin
         /// </summary>
         Object,     // = 任意のオブジェクト
         /// <summary>
-        /// 整数(=Int64)
+        /// 整数(=long)
         /// </summary>
-        Int,        // = Int64
+        Int,        // = long
         /// <summary>
-        /// 浮動小数点数(=Double)
+        /// 浮動小数点数(=double)
         /// </summary>
-        Double,     // = Double
+        Double,     // = double
         /// <summary>
         /// 文字列
         /// </summary>
@@ -110,7 +110,7 @@ namespace NakoPlugin
         /// 引数スタックから整数を取り出す
         /// </summary>
         /// <returns></returns>
-        Int64 StackPopAsInt();
+        long StackPopAsInt();
         /// <summary>
         /// 引数スタックから実数を取り出す
         /// </summary>

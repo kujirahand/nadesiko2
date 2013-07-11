@@ -35,7 +35,7 @@ namespace Libnako.JPNCompiler.Parser
         //> // 繰り返し => { a b }
         //  // 省略可   => a [ b ] c
         //> _program : empty | _blocks ... ;
-        private Boolean _program()
+        private bool _program()
         {
             while (!tok.IsEOF())
             {
@@ -46,7 +46,7 @@ namespace Libnako.JPNCompiler.Parser
         }
 
         //> _scope : SCOPE_BEGIN _blocks SCOPE_END ;
-        private Boolean _scope()
+        private bool _scope()
         {
             if (!Accept(NakoTokenType.SCOPE_BEGIN)) return false;
             tok.MoveNext();
@@ -64,7 +64,7 @@ namespace Libnako.JPNCompiler.Parser
         //> _blocks : empty
         //>         | { _statement | _eol }
         //>         ;
-        private Boolean _blocks()
+        private bool _blocks()
         {
             if (tok.IsEOF()) return true;
 
@@ -88,7 +88,7 @@ namespace Libnako.JPNCompiler.Parser
         }
 
         //> _eol : EOL ;
-        private Boolean _eol()
+        private bool _eol()
         {
             if (tok.IsEOF()) return false;
             if (Accept(NakoTokenType.EOL))
@@ -117,7 +117,7 @@ namespace Libnako.JPNCompiler.Parser
         //>            | CONTINUE
         //>            | BREAK
         //>            ;
-        private Boolean _statement()
+        private bool _statement()
         {
             if (tok.IsEOF()) return true;
 
@@ -158,7 +158,7 @@ namespace Libnako.JPNCompiler.Parser
 
         //> _def_variable : WORD (DIM_VARIABLE|DIM_NUMBER|DIM_INT|DIM_STRING|DIM_ARRAY) [=_value]
         //>               ;
-        private Boolean _def_variable()
+        private bool _def_variable()
         {
             if (!Accept(NakoTokenType.WORD)) return false;
             NakoVarType st = NakoVarType.Object;
@@ -230,7 +230,7 @@ namespace Libnako.JPNCompiler.Parser
 
         //> _if_stmt : IF _value THEN [EOL] _scope_or_statement [ ELSE _scope_or_statement ]
         //>          ;
-        private Boolean _if_stmt()
+        private bool _if_stmt()
         {
             if (!Accept(NakoTokenType.IF)) return false;
             tok.MoveNext(); // skip IF
@@ -267,7 +267,7 @@ namespace Libnako.JPNCompiler.Parser
 
         //> _while   : _value WHILE _scope_or_statement
         //>          ;
-        private Boolean _while()
+        private bool _while()
         {
             TokenTry();
             if (!_value())
@@ -298,7 +298,7 @@ namespace Libnako.JPNCompiler.Parser
 
         //> _for     : WORD _value _value FOR _scope_or_statement
         //>          ;
-        private Boolean _for()
+        private bool _for()
         {
             NakoToken tokVar = null;
 
@@ -350,7 +350,7 @@ namespace Libnako.JPNCompiler.Parser
 
         //> _repeat_times : _value REPEAT_TIMES _scope_or_statement
         //>               ;
-        private Boolean _repeat_times()
+        private bool _repeat_times()
         {
             TokenTry();
             if (!_value()) return false;
@@ -375,7 +375,7 @@ namespace Libnako.JPNCompiler.Parser
 
         //> _foreach : _value FOREACH _scope_or_statement
         //>          ;
-        private Boolean _foreach()
+        private bool _foreach()
         {
             TokenTry();
             if (!_value()) return false;
@@ -405,7 +405,7 @@ namespace Libnako.JPNCompiler.Parser
 
         //> _callfunc : { [{_value}] FUNCTION_NAME }
         //>           ;
-        private Boolean _callfunc_stmt()
+        private bool _callfunc_stmt()
         {
             NakoToken startToken = tok.CurrentToken;
             TokenTry();
@@ -457,7 +457,7 @@ namespace Libnako.JPNCompiler.Parser
         
         //> _arglist : '(' { _value } ')'
         //>          ;
-        private Boolean _arglist(NakoNodeCallFunction node)
+        private bool _arglist(NakoNodeCallFunction node)
         {
             NakoToken firstT = tok.CurrentToken;
             int nest = 0;
@@ -510,7 +510,7 @@ namespace Libnako.JPNCompiler.Parser
         //> _callfunc : FUNCTION_NAME
         //>           | FUNCTION_NAME _arglist
         //>           ;
-        private Boolean _callfunc()
+        private bool _callfunc()
         {
             NakoToken t = tok.CurrentToken;
             
@@ -576,7 +576,7 @@ namespace Libnako.JPNCompiler.Parser
 
         //> _def_function : DEF_FUNCTION _def_function_args _scope
         //>               ;
-        private Boolean _def_function()
+        private bool _def_function()
         {
             if (!Accept(NakoTokenType.DEF_FUNCTION)) return false;
             NakoToken t = tok.CurrentToken;
@@ -618,11 +618,11 @@ namespace Libnako.JPNCompiler.Parser
         //>                    | { WORD } FUNCTION_NAME
         //>                    | FUNCTION_NAME '(' { WORD } ')'
         //>                    ;
-        private Boolean _def_function_args(NakoFunc func)
+        private bool _def_function_args(NakoFunc func)
         {
             NakoToken firstT = tok.CurrentToken;
             NakoTokenList argTokens = new NakoTokenList();
-            Boolean argMode = false;
+            bool argMode = false;
             NakoToken funcName = null;
 
             // 関数の引数宣言を取得する
@@ -665,7 +665,7 @@ namespace Libnako.JPNCompiler.Parser
 
 
         //> _print : PRINT _value
-        private Boolean _print()
+        private bool _print()
         {
             if (tok.CurrentTokenType != NakoTokenType.PRINT)
             {
@@ -686,7 +686,7 @@ namespace Libnako.JPNCompiler.Parser
         }
 
         //> _let : _setVariable EQ _value
-        private Boolean _let()
+        private bool _let()
         {
             TokenTry();
             if (!_setVariable())
@@ -747,7 +747,7 @@ namespace Libnako.JPNCompiler.Parser
 
         //> _setVariable : WORD _variable_elements
         //>              | WORD ;
-        private Boolean _setVariable()
+        private bool _setVariable()
         {
             if (!Accept(NakoTokenType.WORD)) return false;
             // 設定用変数の取得
@@ -775,7 +775,7 @@ namespace Libnako.JPNCompiler.Parser
         //> _variable_elements : '[' _value ']'
         //>                    | '\' _value
         //>                    ;
-        private Boolean _variable_elements(NakoNodeVariable n)
+        private bool _variable_elements(NakoNodeVariable n)
         {
             NakoToken firstT = tok.CurrentToken;
             // 配列アクセス?
@@ -823,7 +823,7 @@ namespace Libnako.JPNCompiler.Parser
         //> _variable : WORD '[' VALUE ']'
         //>           | WORD '\'
         //>           | WORD ;
-        private Boolean _variable()
+        private bool _variable()
         {
             if (!Accept(NakoTokenType.WORD)) return false;
             
@@ -852,7 +852,7 @@ namespace Libnako.JPNCompiler.Parser
         /// 値を得る(関数形式)
         /// </summary>
         /// <returns></returns>
-        protected Boolean _value_nojfunc()
+        protected bool _value_nojfunc()
         {
             bool tmp = _canCallJFunction;
             try {
@@ -869,7 +869,7 @@ namespace Libnako.JPNCompiler.Parser
         /// 値を得る
         /// </summary>
         /// <returns></returns>
-        protected override Boolean _value()
+        protected override bool _value()
         {
             // TODO: _value は再帰が多くコストが高いのであり得る値だけチェックする
             switch (tok.CurrentTokenType)
@@ -911,7 +911,7 @@ namespace Libnako.JPNCompiler.Parser
         //>             | _callfunc
         //>             | { _simple_value } _callfunc
         //>             ;
-        private Boolean _calc_value()
+        private bool _calc_value()
         {
             // FUNCTION(no args)
             if (_callfunc()) return true;
@@ -920,7 +920,7 @@ namespace Libnako.JPNCompiler.Parser
         
         //> _simple_value : [MINUS] _const | _variable 
         //>               ;
-        private Boolean _simple_value()
+        private bool _simple_value()
         {
             // --- CHECK CONST or VARIABLE
             // MINUS?
@@ -931,8 +931,8 @@ namespace Libnako.JPNCompiler.Parser
             if (_variable()) return true;
             return false;
         }
-        
-        private Boolean _callfunc_with_args()
+
+        private bool _callfunc_with_args()
         {
             // 例外的な処理
             // パーサーの副作用回避のため、
@@ -969,18 +969,18 @@ namespace Libnako.JPNCompiler.Parser
             TokenBack();
             return false;
         }
-        
-        private Boolean _minus_flag()
+
+        private bool _minus_flag()
         {
             tok.MoveNext();
             if (Accept(NakoTokenType.INT)||Accept(NakoTokenType.NUMBER))
             {
                 _const();
                 NakoNodeConst c = (NakoNodeConst)calcStack.Pop();
-                if (c.value is Int64) {
-                    c.value = ((Int64)(c.value) * -1);
+                if (c.value is long) {
+                    c.value = ((long)(c.value) * -1);
                 } else {
-                    c.value = ((Double)(c.value) * -1);
+                    c.value = ((double)(c.value) * -1);
                 }
                 calcStack.Push(c);
                 lastNode = c;
@@ -1001,7 +1001,7 @@ namespace Libnako.JPNCompiler.Parser
         //> _calc_formula : PARENTHESES_L _value PARENTHESES_R 
         //>               | _calc_value
         //>               ;
-        private Boolean _calc_formula()
+        private bool _calc_formula()
         {
             // Check '(' *** ')'
             if (Accept(NakoTokenType.PARENTHESES_L))
@@ -1027,7 +1027,7 @@ namespace Libnako.JPNCompiler.Parser
 
         //> _calc_power : _calc_formula { POWER _calc_formula }
         //>             ;
-        private Boolean _calc_power()
+        private bool _calc_power()
         {
             if (!_calc_formula())
             {
@@ -1056,7 +1056,7 @@ namespace Libnako.JPNCompiler.Parser
 
         //> _calc_expr : _calc_power { (MUL|DIV|MOD) _calc_power }
         //>            ;
-        private Boolean _calc_expr()
+        private bool _calc_expr()
         {
             if (!_calc_power()) { return false; }
             
@@ -1087,7 +1087,7 @@ namespace Libnako.JPNCompiler.Parser
 
         //> _calc_term : _calc_expr { (PLUS|MINUS) _calc_expr }
         //>            ;
-        private Boolean _calc_term()
+        private bool _calc_term()
         {
             if (!_calc_expr())
             {
@@ -1125,7 +1125,7 @@ namespace Libnako.JPNCompiler.Parser
 
         //> _calc_comp : _calc_term  { (GT|GT_EQ|LT|LT_EQ|EQ|EQ_EQ|NOT_EQ) _calc_term }
         //>            ;
-        private Boolean _calc_comp()
+        private bool _calc_comp()
         {
             if (!_calc_term())
             {
@@ -1182,7 +1182,7 @@ namespace Libnako.JPNCompiler.Parser
 
         //> _calc_fact : _calc_comp
         //>            ;
-        private Boolean _calc_fact()
+        private bool _calc_fact()
         {
             if (_calc_comp())
             {
@@ -1192,7 +1192,7 @@ namespace Libnako.JPNCompiler.Parser
         }
         
         //> _const : INT | NUMBER | STRING ;
-        private Boolean _const()
+        private bool _const()
         {
             NakoNodeConst node = new NakoNodeConst();
             node.Token = tok.CurrentToken;
@@ -1200,7 +1200,7 @@ namespace Libnako.JPNCompiler.Parser
             if (Accept(NakoTokenType.INT))
             {
                 node.type = NakoNodeType.INT;
-                node.value = Int64.Parse(node.Token.value);
+                node.value = long.Parse(node.Token.value);
                 lastNode = node;
                 tok.MoveNext();
                 calcStack.Push(node);
@@ -1209,7 +1209,7 @@ namespace Libnako.JPNCompiler.Parser
             else if (Accept(NakoTokenType.NUMBER))
             {
                 node.type = NakoNodeType.NUMBER;
-                node.value = Double.Parse(node.Token.value);
+                node.value = double.Parse(node.Token.value);
                 lastNode = node;
                 tok.MoveNext();
                 calcStack.Push(node);

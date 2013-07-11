@@ -16,7 +16,7 @@ namespace NakoPluginTest
         {
             NakoCompiler ns = new NakoCompiler();
             NakoILWriter writer = new NakoILWriter(null);
-            Boolean r;
+            bool r;
 
             // (1)
             ns.source = "1+2*3";

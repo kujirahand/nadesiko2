@@ -20,7 +20,7 @@ namespace Libnako.NakoAPI
         /// <summary>
         /// プラグインが利用されたかどうかを表す値
         /// </summary>
-        public Boolean Used { get; set; }
+        public bool Used { get; set; }
         
         /// <summary>
         /// INakoPlugin Instance

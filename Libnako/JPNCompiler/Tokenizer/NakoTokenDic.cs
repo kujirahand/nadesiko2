@@ -19,7 +19,8 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// <param name="type">単語の種類</param>
         public void AddWord(string key, NakoTokenType type)
         {
-            Add(NakoToken.TrimOkurigana(key), type);
+            key = NakoToken.TrimOkurigana(key);
+            this._dictionary.Add(key, type);
         }
 
         #region IDictionary<string,NakoTokenType> メンバー

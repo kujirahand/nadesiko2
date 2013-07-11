@@ -84,7 +84,7 @@ namespace Libnako.JPNCompiler.Node
         /// </summary>
         /// <param name="checker"></param>
         /// <returns></returns>
-        public Boolean checkNodeType(NakoNodeType[] checker)
+        public bool checkNodeType(NakoNodeType[] checker)
         {
             if (checker.Length != this.Count) return false;
             for (int i = 0; i < checker.Length; i++)

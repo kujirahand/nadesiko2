@@ -30,7 +30,8 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// <returns></returns>
         public int Restore()
         {
-            return curStack.Pop();
+            cur = curStack.Pop();
+            return cur;
         }
 
         /// <summary>
@@ -39,7 +40,7 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// <returns></returns>
         public int RemoveTop()
         {
-            return Restore();
+            return curStack.Pop();
         }
 
         /// <summary>
@@ -79,7 +80,7 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public Boolean Accept(NakoTokenType t)
+        public bool Accept(NakoTokenType t)
         {
             return (t == CurrentTokenType);
         }
@@ -140,7 +141,7 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// 終端か?
         /// </summary>
         /// <returns></returns>
-        public Boolean IsEOF()
+        public bool IsEOF()
         {
             return (cur >= this.Count);
         }
@@ -160,12 +161,13 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// <param name="keytype"></param>
         /// <param name="EOLStop"></param>
         /// <returns></returns>
-        public bool SearchToken(NakoTokenType keytype, Boolean EOLStop)
+        public bool SearchToken(NakoTokenType keytype, bool EOLStop)
         {
+            int i = cur;
             NakoToken t;
             int par_nest = 0;
             int bla_nest = 0;
-            for (int i = cur; i < Count; i++ )
+            while (i < this.Count)
             {
                 t = this[i];
                 // break?
@@ -198,6 +200,7 @@ namespace Libnako.JPNCompiler.Tokenizer
                     par_nest--;
                     if (par_nest < 0) return false; // tokenが見つかる前に丸カッコの不整合を見つけた
                 }
+                i++;
             }
             return false;
         }
@@ -206,9 +209,9 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// トークンのタイプを表す文字列を返す
         /// </summary>
         /// <returns></returns>
-        public string toTypeString()
+        public String toTypeString()
         {
-            string s = "";
+            String s = "";
             foreach (NakoToken t in this)
             {
                 if (s != "") { s += ","; }
@@ -235,10 +238,11 @@ namespace Libnako.JPNCompiler.Tokenizer
             {
                 NakoToken chk = checker[i];
                 NakoToken tok = this[i];
-                if (!(chk.type == tok.type && chk.value == tok.value))
+                if (chk.type == tok.type && chk.value == tok.value)
                 {
-                    return false;
+                    continue;
                 }
+                return false;
             }
             return true;
         }
@@ -248,7 +252,7 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// </summary>
         /// <param name="checker"></param>
         /// <returns></returns>
-        public Boolean CheckTokenType(NakoTokenType[] checker)
+        public bool CheckTokenType(NakoTokenType[] checker)
         {
             // 要素数が異なる
             if (checker.Length != this.Count) return false;
