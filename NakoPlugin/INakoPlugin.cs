@@ -13,7 +13,7 @@ namespace NakoPlugin
         /// <summary>
         /// 対応プラグインのバージョン番号 (現在は必ず 2.0 を返すようにする)
         /// </summary>
-        double TargetNakoVersion { get; }
+        Version TargetNakoVersion { get; }
         /// <summary>
         /// プラグインの名前 ( this.GetType().FullName とクラスのフルパスを指定する )
         /// </summary>
@@ -21,7 +21,7 @@ namespace NakoPlugin
         /// <summary>
         /// プラグインのバージョン（任意の値を返すことができる）
         /// </summary>
-        double PluginVersion { get; }
+        Version PluginVersion { get; }
         /// <summary>
         /// プラグインの説明を返す
         /// </summary>
@@ -70,7 +70,7 @@ namespace NakoPlugin
         /// <summary>
         /// 文字列
         /// </summary>
-        String,     // = String
+        String,     // = string
         /// <summary>
         /// 配列
         /// </summary>
@@ -100,7 +100,7 @@ namespace NakoPlugin
         /// 引数スタックから値を取り出す
         /// </summary>
         /// <returns></returns>
-        Object StackPop();
+        object StackPop();
         /// <summary>
         /// 引数スタックから文字列を取り出す
         /// </summary>
@@ -134,13 +134,13 @@ namespace NakoPlugin
         /// </summary>
         /// <param name="varname"></param>
         /// <returns></returns>
-        Object GetVariableValue(string varname);
+        object GetVariableValue(string varname);
         /// <summary>
         /// インタプリタの変数に値を設定する
         /// </summary>
         /// <param name="varname"></param>
         /// <param name="value"></param>
-        void SetVariableValue(string varname, Object value);
+        void SetVariableValue(string varname, object value);
         // --- ユーティリティ
         /// <summary>
         /// ログに値を書き込む
@@ -160,7 +160,7 @@ namespace NakoPlugin
     /// </summary>
     /// <param name="info">インタプリタの情報を受け取る</param>
     /// <returns></returns>
-    public delegate Object SysCallDelegate(INakoFuncCallInfo info);
+    public delegate object SysCallDelegate(INakoFuncCallInfo info);
 
     /// <summary>
     /// プラグインにシステム関数を追加する
@@ -181,7 +181,7 @@ namespace NakoPlugin
         /// <param name="f">関数本体</param>
         /// <param name="desc">説明</param>
         /// <param name="kana">よみがな(アルファベットはそのままで)</param>
-        void AddFunc(String name, String argdef, NakoVarType resultType, SysCallDelegate f, String desc, String kana);
+        void AddFunc(string name, string argdef, NakoVarType resultType, SysCallDelegate f, string desc, string kana);
         /// <summary>
         /// 変数を追加する
         /// </summary>
@@ -189,7 +189,7 @@ namespace NakoPlugin
         /// <param name="value">変数の初期値</param>
         /// <param name="desc">変数の説明</param>
         /// <param name="kane">よみがな(アルファベットはそのままで)</param>
-        void AddVar(String name, Object value, String desc, String kane);
+        void AddVar(string name, object value, string desc, string kane);
     }
     
     /// <summary>

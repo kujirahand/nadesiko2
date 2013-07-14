@@ -36,9 +36,9 @@ namespace Libnako.JPNCompiler.Node
         /// タイプを表す文字列
         /// </summary>
         /// <returns></returns>
-        public override String ToTypeString()
+        public override string ToTypeString()
         {
-            String r = "";
+            string r = "";
             r += "(";
             r += base.ToTypeString() + ":";
             r += calc_type.ToString() + " ";

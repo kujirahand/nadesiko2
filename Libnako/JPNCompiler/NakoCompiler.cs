@@ -113,9 +113,7 @@ namespace Libnako.JPNCompiler
         /// </summary>
         public void Tokenize()
         {
-            NakoTokenizer tok = new NakoTokenizer();
-            tok.TokenDic = this.TokenDic;
-            tokens = tok.Tokenize(source);
+            tokens = NakoTokenization.Tokenize(source, TokenDic);
         }
 
         /// <summary>

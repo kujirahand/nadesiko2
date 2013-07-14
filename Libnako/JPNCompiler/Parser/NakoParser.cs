@@ -183,7 +183,7 @@ namespace Libnako.JPNCompiler.Parser
                     return false;
             }
             NakoToken t = tok.CurrentToken;
-            int varNo = localVar.CreateVar(t.getValueAsName());
+            int varNo = localVar.CreateVar(t.GetValueAsName());
             NakoVariable v = localVar.GetVar(varNo);
             v.SetBody(null, st);
             tok.MoveNext(); // skip WORD
@@ -521,7 +521,7 @@ namespace Libnako.JPNCompiler.Parser
             }
             tok.MoveNext(); // skip FUNCTION_NAME
 
-            string fname = t.getValueAsName();
+            string fname = t.GetValueAsName();
             NakoVariable var = globalVar.GetVar(fname);
             if (var == null)
             {
@@ -659,7 +659,7 @@ namespace Libnako.JPNCompiler.Parser
                 tok.MoveNext();
             }
             if (funcName == null) { throw new NakoParserException("関数名がありません。", firstT); }
-            func.name = funcName.getValueAsName();
+            func.name = funcName.GetValueAsName();
             func.args.analizeArgTokens(argTokens);
             return true;
         }
@@ -722,7 +722,7 @@ namespace Libnako.JPNCompiler.Parser
             return true;
         }
 
-        private void _variable__detectVariable(NakoNodeVariable n, String name)
+        private void _variable__detectVariable(NakoNodeVariable n, string name)
         {
             int varno;
             // local ?
@@ -756,12 +756,12 @@ namespace Libnako.JPNCompiler.Parser
             n.type = NakoNodeType.ST_VARIABLE;
             n.Token = tok.CurrentToken;
             // 変数アクセス
-            String name = (String)tok.CurrentToken.Value;
+            string name = (string)tok.CurrentToken.Value;
             _variable__detectVariable(n, name);
             tok.MoveNext();// skip WORD
 
             // 要素へのアクセスがあるか
-            if (Accept(NakoTokenType.BLACKETS_L) || Accept(NakoTokenType.YEN))
+            if (Accept(NakoTokenType.BRACKETS_L) || Accept(NakoTokenType.YEN))
             {
                 // _value を読む前に setVariable のフラグをたてる
                 flag_set_variable = true;
@@ -780,7 +780,7 @@ namespace Libnako.JPNCompiler.Parser
         {
             NakoToken firstT = tok.CurrentToken;
             // 配列アクセス?
-            if (!Accept(NakoTokenType.BLACKETS_L) && !Accept(NakoTokenType.YEN))
+            if (!Accept(NakoTokenType.BRACKETS_L) && !Accept(NakoTokenType.YEN))
             {
                 return false;
             }
@@ -789,14 +789,14 @@ namespace Libnako.JPNCompiler.Parser
             {
                 t = tok.CurrentTokenType;
 
-                if (t == NakoTokenType.BLACKETS_L)
+                if (t == NakoTokenType.BRACKETS_L)
                 {
                     tok.MoveNext(); // skip ']'
                     if (!_value())
                     {
                         throw new NakoParserException("変数要素へのアクセスで要素式にエラー。", firstT);
                     }
-                    if (!Accept(NakoTokenType.BLACKETS_R))
+                    if (!Accept(NakoTokenType.BRACKETS_R))
                     {
                         throw new NakoParserException("変数要素へのアクセスで閉じ角カッコがありません。", firstT);
                     }
@@ -813,7 +813,7 @@ namespace Libnako.JPNCompiler.Parser
                     n.AddChild(calcStack.Pop());
                 }
                 // 引き続き、変数要素へのアクセスがあるかどうか
-                if (Accept(NakoTokenType.BLACKETS_L)) continue;
+                if (Accept(NakoTokenType.BRACKETS_L)) continue;
                 if (Accept(NakoTokenType.YEN)) continue;
                 break;
             }
@@ -833,13 +833,13 @@ namespace Libnako.JPNCompiler.Parser
             n.type = NakoNodeType.LD_VARIABLE;
             n.Token = tok.CurrentToken;
 
-            String name = (String)tok.CurrentToken.Value;
+            string name = (string)tok.CurrentToken.Value;
             _variable__detectVariable(n, name);
             lastNode = n;
             tok.MoveNext();
 
             // 要素へのアクセスがあるか
-            if (Accept(NakoTokenType.BLACKETS_L) || Accept(NakoTokenType.YEN))
+            if (Accept(NakoTokenType.BRACKETS_L) || Accept(NakoTokenType.YEN))
             {
                 _variable_elements(n);
             }
@@ -892,7 +892,7 @@ namespace Libnako.JPNCompiler.Parser
             {
                 // 計算符号があるか？
                 if (!tok.IsEOF()) {
-                    if (tok.CurrentToken.isCalcFlag()) {
+                    if (tok.CurrentToken.IsCalcFlag()) {
                         //TODO: 計算処理
                         throw new NakoParserException(
                             "すみません。現在のところ、関数呼び出しの後に、計算フラグを置くことはできません。" +

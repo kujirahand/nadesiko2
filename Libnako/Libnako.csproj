@@ -96,7 +96,8 @@
     <Compile Include="JPNCompiler\Parser\NakoParser.cs" />
     <Compile Include="JPNCompiler\Parser\NakoParserBase.cs" />
     <Compile Include="JPNCompiler\Parser\NakoParserException.cs" />
-    <Compile Include="JPNCompiler\Tokenizer\NakoHalfFlag.cs" />
+    <Compile Include="JPNCompiler\Tokenizer\NakoTokenization.cs" />
+    <Compile Include="JPNCompiler\Tokenizer\NakoUtility.cs" />
     <Compile Include="JPNCompiler\Tokenizer\NakoJosi.cs" />
     <Compile Include="JPNCompiler\Tokenizer\NakoReservedWord.cs" />
     <Compile Include="JPNCompiler\Tokenizer\NakoToken.cs" />

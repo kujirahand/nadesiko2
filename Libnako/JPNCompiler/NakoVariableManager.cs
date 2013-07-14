@@ -35,7 +35,7 @@ namespace Libnako.JPNCompiler
         /// <summary>
         /// 名前から変数番号を取得するための辞書
         /// </summary>
-        protected Dictionary<String, int> names;
+        protected Dictionary<string, int> names;
 
 
         /// <summary>
@@ -194,7 +194,7 @@ namespace Libnako.JPNCompiler
         /// </summary>
         /// <param name="index"></param>
         /// <param name="value"></param>
-        public void SetValue(int index, Object value)
+        public void SetValue(int index, object value)
         {
             NakoVariable v = GetVar(index);
             if (v == null)
@@ -209,7 +209,7 @@ namespace Libnako.JPNCompiler
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public Object GetValue(int index)
+        public object GetValue(int index)
         {
             NakoVariable v = GetVar(index);
             if (v == null)

@@ -16,7 +16,7 @@ namespace Libnako.JPNCompiler.Node
         /// <summary>
         /// 関数名
         /// </summary>
-		public String funcName { get; set; }
+		public string funcName { get; set; }
         /// <summary>
         /// 関数オブジェクト
         /// </summary>

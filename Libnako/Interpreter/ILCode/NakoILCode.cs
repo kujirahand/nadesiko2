@@ -18,7 +18,7 @@ namespace Libnako.Interpreter.ILCode
         /// <summary>
         /// 値
         /// </summary>
-		public Object value { get; set; }
+		public object value { get; set; }
         /// <summary>
         /// constructor
         /// </summary>
@@ -32,7 +32,7 @@ namespace Libnako.Interpreter.ILCode
         /// </summary>
         /// <param name="type"></param>
         /// <param name="value"></param>
-        public NakoILCode(NakoILType type, Object value)
+        public NakoILCode(NakoILType type, object value)
         {
             this.type = type;
             this.value = value;
@@ -112,7 +112,7 @@ namespace Libnako.Interpreter.ILCode
                 case NakoILType.JUMP:
                 case NakoILType.BRANCH_FALSE:
                 case NakoILType.BRANCH_TRUE:
-                    r += "->" + String.Format("{0,0:X4}", (long)value);
+                    r += "->" + string.Format("{0,0:X4}", (long)value);
                     break;
             }
             return r;

@@ -7,9 +7,9 @@ namespace Libnako.JPNCompiler.Tokenizer
     /// <summary>
     /// なでしこ助詞リスト
     /// </summary>
-    public class NakoJosi : IList<String>
+    public class NakoJosi : IList<string>
     {
-		private List<String> _list = new List<string>();
+		private List<string> _list = new List<string>();
         
         /// <summary>
         /// 助詞リストの唯一のインスタンスを返す(Singleton)
@@ -60,10 +60,10 @@ namespace Libnako.JPNCompiler.Tokenizer
         protected void SortAsLength()
         {
             this.Sort(
-                delegate (String a, String b) {
+                delegate (string a, string b) {
                     if (a.Length == b.Length)
                     {
-                        return String.Compare(a, b);
+                        return string.Compare(a, b);
                     }
                     return b.Length - a.Length;
                 }

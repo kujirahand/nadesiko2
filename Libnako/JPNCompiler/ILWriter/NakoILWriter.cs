@@ -186,7 +186,7 @@ namespace Libnako.JPNCompiler.ILWriter
                 {
                     if (labels.ContainsKey( (NakoILCode)code.value) )
                     {
-                        code.value = (Object)labels[(NakoILCode)code.value];
+                        code.value = (object)labels[(NakoILCode)code.value];
                         continue;
                     }
                     throw new NakoILWriterException("ラベルが解決できません");
@@ -212,7 +212,7 @@ namespace Libnako.JPNCompiler.ILWriter
         /// </summary>
         /// <param name="labelName"></param>
         /// <returns></returns>
-        protected NakoILCode createLABEL(String labelName)
+        protected NakoILCode createLABEL(string labelName)
         {
             NakoILCode r = NakoILCode.newNop();
             r.value = labelName;
@@ -279,7 +279,7 @@ namespace Libnako.JPNCompiler.ILWriter
             result.Add(label_while_end);
         }
 
-        private void addNewILCode(NakoILType type, Object value)
+        private void addNewILCode(NakoILType type, object value)
         {
             result.Add(new NakoILCode(type, value));
         }
@@ -690,6 +690,6 @@ namespace Libnako.JPNCompiler.ILWriter
         /// 中間コードの書き出しエラーを出す
         /// </summary>
         /// <param name="message"></param>
-        public NakoILWriterException(String message) : base(message) { }
+        public NakoILWriterException(string message) : base(message) { }
     }
 }

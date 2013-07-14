@@ -17,12 +17,12 @@ namespace Libnako.JPNCompiler.Node
         /// <summary>
         /// ノードの値
         /// </summary>
-		public Object value { get; set; }
-        private String _josi;
+		public object value { get; set; }
+        private string _josi;
         /// <summary>
         /// 助詞
         /// </summary>
-        public String josi
+        public string josi
         {
             set { _josi = value; }
             get { return getJosi(); }
@@ -54,7 +54,7 @@ namespace Libnako.JPNCompiler.Node
         /// 助詞を取得する
         /// </summary>
         /// <returns></returns>
-        protected String getJosi()
+        protected string getJosi()
         {
             return _josi;
         }
@@ -83,7 +83,7 @@ namespace Libnako.JPNCompiler.Node
         /// ノードのコンストラクタ
         /// </summary>
         /// <param name="value"></param>
-        public NakoNode(Object value)
+        public NakoNode(object value)
         {
 			type = NakoNodeType.NOP;
 			this.value = value;
@@ -104,9 +104,9 @@ namespace Libnako.JPNCompiler.Node
         /// タイプ文字列
         /// </summary>
         /// <returns></returns>
-        public virtual String ToTypeString()
+        public virtual string ToTypeString()
         {
-            String r = type.ToString();
+            string r = type.ToString();
             if (hasChildren())
             {
                 r += "\n";

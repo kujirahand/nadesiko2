@@ -14,9 +14,9 @@ namespace Libnako.JPNCompiler.Node
         /// タイプ文字列を得る
         /// </summary>
         /// <returns></returns>
-        public override String ToTypeString()
+        public override string ToTypeString()
         {
-            String r = type.ToString();
+            string r = type.ToString();
             r += "=";
             r += Token.Value;
             return r;

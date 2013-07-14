@@ -34,7 +34,7 @@ namespace Libnako.NakoAPI
         /// <param name="argdef"></param>
         /// <param name="resultType"></param>
         /// <param name="FuncDl"></param>
-        public NakoAPIFunc(String name, String argdef, NakoVarType resultType, SysCallDelegate FuncDl)
+        public NakoAPIFunc(string name, string argdef, NakoVarType resultType, SysCallDelegate FuncDl)
             : base(name, argdef)
         {
             this.FuncDl = FuncDl;

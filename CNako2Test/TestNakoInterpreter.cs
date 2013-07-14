@@ -20,7 +20,7 @@ namespace NakoPluginTest
             NakoCompiler ns = new NakoCompiler();
             NakoILWriter w = new NakoILWriter();
             NakoInterpreter runner = new NakoInterpreter();
-            Object o;
+            object o;
 
             // 1
             ns.source = "1+2*3";

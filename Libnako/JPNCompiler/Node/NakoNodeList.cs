@@ -44,7 +44,7 @@ namespace Libnako.JPNCompiler.Node
             // 助詞リストをチェックする
             if (arg != null)
             {
-                foreach (String josi in arg.josiList)
+                foreach (string josi in arg.josiList)
                 {
                     for (int i = 0; i < this.Count; i++)
                     {
@@ -102,20 +102,20 @@ namespace Libnako.JPNCompiler.Node
         /// デバッグ用にタイプ文字列を返す
         /// </summary>
         /// <returns></returns>
-        public String toTypeString()
+        public string toTypeString()
         {
         	return this.toTypeString(0);
         }
-        private String toTypeString(int level)
+        private string toTypeString(int level)
         {
             // for indent
-            String indent = "- ";
+            string indent = "- ";
             for (int i = 0; i < level; i++)
             {
                 indent += "|-- ";
             }
             // this children
-            String r = "";
+            string r = "";
             foreach (NakoNode n in this)
             {
                 if (n != null)

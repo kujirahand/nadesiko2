@@ -51,28 +51,28 @@ namespace Libnako.NakoAPI
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        private Object _enumKeys(INakoFuncCallInfo info)
+        private object _enumKeys(INakoFuncCallInfo info)
         {
-            Object ar = info.StackPop();
+            object ar = info.StackPop();
             NakoVarArray arv = (NakoVarArray)ar;
             if (arv.Type != NakoVarType.Array)
             {
                 throw new NakoPluginArgmentException("『ハッシュキー列挙』の引数が配列ではありません。");
             }
-            String[] keys = arv.GetKeys();
+            string[] keys = arv.GetKeys();
             NakoVarArray res = info.CreateArray();
             int i = 0;
-            foreach (String key in keys)
+            foreach (string key in keys)
             {
                 res.SetValue(i++, key);
             }
             return res;
         }
 
-        private Object _append(INakoFuncCallInfo info){
+        private object _append(INakoFuncCallInfo info){
 
-            Object ary = info.StackPop(); // 参照渡しなので変数への参照が得られる
-            Object s   = info.StackPop();
+            object ary = info.StackPop(); // 参照渡しなので変数への参照が得られる
+            object s   = info.StackPop();
             if (!(ary is NakoVariable))
             {
                 throw new NakoPluginRuntimeException("『追加』の引数がvariableではありません");
@@ -89,10 +89,10 @@ namespace Libnako.NakoAPI
             return null;
         }
 
-        private Object _pop(INakoFuncCallInfo info)
+        private object _pop(INakoFuncCallInfo info)
         {
 
-            Object ary = info.StackPop(); // 参照渡しなので変数への参照が得られる
+            object ary = info.StackPop(); // 参照渡しなので変数への参照が得られる
             if (!(ary is NakoVariable))
             {
                 throw new NakoPluginRuntimeException("『ポップ』の引数がvariableではありません");
@@ -107,9 +107,9 @@ namespace Libnako.NakoAPI
             return null;
         }
 
-        private Object _count(INakoFuncCallInfo info)
+        private object _count(INakoFuncCallInfo info)
         {
-            Object ar = info.StackPop();
+            object ar = info.StackPop();
             if (!(ar is NakoVarArray))
             {
                 throw new NakoPluginRuntimeException("『要素数』の引数がarrayではありません");
@@ -118,9 +118,9 @@ namespace Libnako.NakoAPI
             return arr.Count;
         }
 
-        private Object _removeAt(INakoFuncCallInfo info){
+        private object _removeAt(INakoFuncCallInfo info){
 
-            Object a = info.StackPop();
+            object a = info.StackPop();
             long   i = info.StackPopAsInt();
             if (!(a is NakoVariable))
             {
@@ -146,9 +146,9 @@ namespace Libnako.NakoAPI
             // 結果をセット
             return null;
         }
-        private Object _concat(INakoFuncCallInfo info){
-            Object ar = info.StackPop();
-            String s = info.StackPopAsString();
+        private object _concat(INakoFuncCallInfo info){
+            object ar = info.StackPop();
+            string s = info.StackPopAsString();
             if (!(ar is NakoVarArray))
             {
                 throw new NakoPluginRuntimeException("『結合』の引数が配列ではありません");
@@ -158,7 +158,7 @@ namespace Libnako.NakoAPI
             int index = 0;
             while(arr.GetValue(index)!=null){
                 if(index > 0) sb.Append(s);
-                Object var = arr.GetValue(index);
+                object var = arr.GetValue(index);
                 if (var != null)
                 {
                     sb.Append(var.ToString());
@@ -167,14 +167,14 @@ namespace Libnako.NakoAPI
             }
             return sb.ToString();
         }
-        private Object _reverse(INakoFuncCallInfo info){
+        private object _reverse(INakoFuncCallInfo info){
 
-            Object ar = info.StackPop();
+            object ar = info.StackPop();
             if (!(ar is NakoVariable))
             {
                 throw new NakoPluginRuntimeException("『逆順』の引数が変数ではありません");
             }
-            Object a = ((NakoVariable)ar).Body;
+            object a = ((NakoVariable)ar).Body;
             if (a is NakoVarArray)
             {
                 ((NakoVarArray)a).Reverse();
@@ -189,17 +189,17 @@ namespace Libnako.NakoAPI
             // 結果をセット
             return null;
         }
-        private Object _search(INakoFuncCallInfo info){
-            Object ar = info.StackPop();
+        private object _search(INakoFuncCallInfo info){
+            object ar = info.StackPop();
             int i = (int)info.StackPopAsInt();
-            Object key = info.StackPop();
+            object key = info.StackPop();
             if (!(ar is NakoVarArray))
             {
                 throw new NakoPluginRuntimeException("『検索』の引数が配列ではありません");
             }
             NakoVarArray arr = (NakoVarArray)ar;
             while(arr.GetValue(i)!=null){
-               Object var = arr.GetValue(i);
+               object var = arr.GetValue(i);
                if(var.ToString()==key.ToString()){
                    return i;
                }

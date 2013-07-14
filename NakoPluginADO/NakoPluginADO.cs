@@ -22,12 +22,12 @@ namespace NakoPluginADO
     {
         //TODO:グループみたいに使いたい。ネイティブドライバの時でも同じメソッドを使える感じで
         string _description = "ODBCドライバによるＤＢ処理を行うプラグイン";
-        double _version = 1.0;
+        Version _version = new Version(1, 0);
         //--- プラグイン共通の部分 ---
-        public double TargetNakoVersion { get { return 2.0; } }
+        public Version TargetNakoVersion { get { return new Version(2, 0); } }
         public bool Used { get; set; }
         public string Name { get { return this.GetType().FullName; } }
-        public double PluginVersion { get { return _version; } }
+        public Version PluginVersion { get { return _version; } }
         public string Description { get { return _description; } }
         //--- 関数の定義 ---
         public void DefineFunction(INakoPluginBank bank)
@@ -51,7 +51,7 @@ namespace NakoPluginADO
         {
         }
         
-        public Object _open(INakoFuncCallInfo info)
+        public object _open(INakoFuncCallInfo info)
         {
         	String s = info.StackPopAsString();
         	ADODB.Connection con = new ADODB.Connection();
@@ -59,9 +59,9 @@ namespace NakoPluginADO
         	
         	return con;
         }
-        public Object _close(INakoFuncCallInfo info)
+        public object _close(INakoFuncCallInfo info)
         {
-            Object c = info.StackPop();
+            object c = info.StackPop();
             if(!(c is ADODB.Connection)){
                 throw new NakoPluginArgmentException("connection not found");
             }
@@ -70,9 +70,9 @@ namespace NakoPluginADO
             return null;
         }
         ADODB.Recordset _rs = new ADODB.Recordset();
-        public Object _execute(INakoFuncCallInfo info)
+        public object _execute(INakoFuncCallInfo info)
         {
-            Object c = info.StackPop();
+            object c = info.StackPop();
             if(!(c is ADODB.Connection)){
                 throw new NakoPluginArgmentException("connection not found");
             }
@@ -82,24 +82,24 @@ namespace NakoPluginADO
             _rs = con.Execute(q,out affectedrows,(int)ADODB.CommandTypeEnum.adCmdText);
             return affectedrows;
         }
-        public Object _getField(INakoFuncCallInfo info)
+        public object _getField(INakoFuncCallInfo info)
         {
-            Object c = info.StackPop();
+            object c = info.StackPop();
             String s = info.StackPopAsString();
             return _rs.Fields[s].Value;
             
         }
-        public Object _next(INakoFuncCallInfo info)
+        public object _next(INakoFuncCallInfo info)
         {
             _rs.MoveNext();
             return null;
             
         }
-        public Object _isEnd(INakoFuncCallInfo info)
+        public object _isEnd(INakoFuncCallInfo info)
         {
             return _rs.EOF;
         }
-        public Object _isExist(INakoFuncCallInfo info)
+        public object _isExist(INakoFuncCallInfo info)
         {
             return !_rs.EOF;
         }

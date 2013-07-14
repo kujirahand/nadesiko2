@@ -35,7 +35,7 @@ namespace Libnako.JPNCompiler.Node
         /// タイプ文字列を得る
         /// </summary>
         /// <returns></returns>
-        public override String ToTypeString()
+        public override string ToTypeString()
         {
             string r = type.ToString();
             r += "(" + this.func.name + "{args:" + func.args.Count + "})";

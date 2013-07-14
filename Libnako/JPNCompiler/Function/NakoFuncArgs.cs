@@ -78,8 +78,7 @@ namespace Libnako.JPNCompiler.Function
         /// <param name="str"></param>
         public void analizeArgStr(string str)
         {
-            NakoTokenizer tokenizer = new NakoTokenizer();
-            NakoTokenList tokens = tokenizer.SplitWord(str);
+            NakoTokenList tokens = NakoTokenization.TokenizeSplitOnly(str);
             analizeArgTokens(tokens);
         }
 
@@ -235,7 +234,7 @@ namespace Libnako.JPNCompiler.Function
     internal class ArgOpt
     {
         internal VarByType varBy = VarByType.ByVal;
-        internal Object defaultValue;
+        internal object defaultValue;
         internal void Init()
         {
             varBy = VarByType.ByVal;

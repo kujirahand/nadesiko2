@@ -181,11 +181,11 @@ namespace Libnako.JPNCompiler.Tokenizer
                 }
                 // ---
                 // nest check
-                if (t.Type == NakoTokenType.BLACKETS_L)
+                if (t.Type == NakoTokenType.BRACKETS_L)
                 {
                     bla_nest++;
                 }
-                if (t.Type == NakoTokenType.BLACKETS_R)
+                if (t.Type == NakoTokenType.BRACKETS_R)
                 {
                     bla_nest--;
                     if (bla_nest < 0) return false; // tokenが見つかる前に角カッコの不整合を見つけた
@@ -209,9 +209,9 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// トークンのタイプを表す文字列を返す
         /// </summary>
         /// <returns></returns>
-        public String toTypeString()
+        public string toTypeString()
         {
-            String s = "";
+            string s = "";
             foreach (NakoToken t in this)
             {
                 if (s != "") { s += ","; }

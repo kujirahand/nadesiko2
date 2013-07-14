@@ -71,33 +71,33 @@ namespace Libnako.NakoAPI
         }
 
         /*
-        public Object _say(NakoFuncCallInfo info)
+        public object _say(NakoFuncCallInfo info)
         {
-            Object s = info.StackPop();
+            object s = info.StackPop();
             if (s == null) s = "";
-            String msg = s.ToString();
+            string msg = s.ToString();
 
             MessageBox.Show(msg);
             return null;
         }
          */
 
-        private Object _nakoVersion(INakoFuncCallInfo info)
+        private object _nakoVersion(INakoFuncCallInfo info)
         {
             return NakoInfo.NakoVersion;
         }
 
-        private Object _osVersion(INakoFuncCallInfo info)
+        private object _osVersion(INakoFuncCallInfo info)
         {
             return System.Environment.OSVersion.Version;
         }
 
-        private Object _os(INakoFuncCallInfo info)
+        private object _os(INakoFuncCallInfo info)
         {
             return NWEnviroment.osVersionStr();
         }
 
-        private Object _getPlugins(INakoFuncCallInfo info)
+        private object _getPlugins(INakoFuncCallInfo info)
         {
             NakoVarArray a = info.CreateArray();
             foreach (KeyValuePair<string, INakoPlugin> pair in NakoAPIFuncBank.Instance.PluginList)
@@ -109,24 +109,24 @@ namespace Libnako.NakoAPI
             return a;
         }
 
-        private Object _beep(INakoFuncCallInfo info)
+        private object _beep(INakoFuncCallInfo info)
         {
         	// BEEP
         	System.Media.SystemSounds.Beep.Play();
             return null;
         }
 
-        private Object _show(INakoFuncCallInfo info)
+        private object _show(INakoFuncCallInfo info)
         {
-            String msg = info.StackPopAsString();
+            string msg = info.StackPopAsString();
             info.WriteLog(msg);
             return null;
         }
 
-        private Object _add(INakoFuncCallInfo info)
+        private object _add(INakoFuncCallInfo info)
         {
-            Object a = info.StackPop();
-            Object b = info.StackPop();
+            object a = info.StackPop();
+            object b = info.StackPop();
             if (a is long && b is long)
             {
                 return ((long)a + (long)b);
@@ -139,16 +139,16 @@ namespace Libnako.NakoAPI
             }
         }
 
-        private Object _addEx(INakoFuncCallInfo info)
+        private object _addEx(INakoFuncCallInfo info)
         {
-            Object ar = info.StackPop();
-            Object b = info.StackPop();
+            object ar = info.StackPop();
+            object b = info.StackPop();
             if (!(ar is NakoVariable))
             {
                 throw new ApplicationException("『足す!』の引数が変数ではありません");
             }
-            Object a = ((NakoVariable)ar).Body;
-            Object c;
+            object a = ((NakoVariable)ar).Body;
+            object c;
             if (a is long && b is long)
             {
                 c = (long)a + (long)b;
@@ -164,10 +164,10 @@ namespace Libnako.NakoAPI
             return (c);
         }
 
-        private Object _sub(INakoFuncCallInfo info)
+        private object _sub(INakoFuncCallInfo info)
         {
-            Object a = info.StackPop();
-            Object b = info.StackPop();
+            object a = info.StackPop();
+            object b = info.StackPop();
             if (a is long && b is long)
             {
                 return ((long)a - (long)b);
@@ -180,16 +180,16 @@ namespace Libnako.NakoAPI
             }
         }
 
-        private Object _subEx(INakoFuncCallInfo info)
+        private object _subEx(INakoFuncCallInfo info)
         {
-            Object ar = info.StackPop();
-            Object b = info.StackPop();
+            object ar = info.StackPop();
+            object b = info.StackPop();
             if (!(ar is NakoVariable))
             {
                 throw new ApplicationException("『引く!』の引数が変数ではありません");
             }
-            Object a = ((NakoVariable)ar).Body;
-            Object c;
+            object a = ((NakoVariable)ar).Body;
+            object c;
             if (a is long && b is long)
             {
                 c = (long)a - (long)b;
@@ -205,10 +205,10 @@ namespace Libnako.NakoAPI
             return (c);
         }
 
-        private Object _mul(INakoFuncCallInfo info)
+        private object _mul(INakoFuncCallInfo info)
         {
-            Object a = info.StackPop();
-            Object b = info.StackPop();
+            object a = info.StackPop();
+            object b = info.StackPop();
             if (a is long && b is long)
             {
                 return ((long)a * (long)b);
@@ -221,16 +221,16 @@ namespace Libnako.NakoAPI
             }
         }
 
-        private Object _mulEx(INakoFuncCallInfo info)
+        private object _mulEx(INakoFuncCallInfo info)
         {
-            Object ar = info.StackPop();
-            Object b = info.StackPop();
+            object ar = info.StackPop();
+            object b = info.StackPop();
             if (!(ar is NakoVariable))
             {
                 throw new ApplicationException("『掛ける!』の引数が変数ではありません");
             }
-            Object a = ((NakoVariable)ar).Body;
-            Object c;
+            object a = ((NakoVariable)ar).Body;
+            object c;
             if (a is long && b is long)
             {
                 c = (long)a * (long)b;
@@ -246,10 +246,10 @@ namespace Libnako.NakoAPI
             return (c);
         }
 
-        private Object _div(INakoFuncCallInfo info)
+        private object _div(INakoFuncCallInfo info)
         {
-            Object a = info.StackPop();
-            Object b = info.StackPop();
+            object a = info.StackPop();
+            object b = info.StackPop();
             if (a is long && b is long)
             {
                 return ((long)a / (long)b);
@@ -262,16 +262,16 @@ namespace Libnako.NakoAPI
             }
         }
 
-        private Object _divEx(INakoFuncCallInfo info)
+        private object _divEx(INakoFuncCallInfo info)
         {
-            Object ar = info.StackPop();
-            Object b = info.StackPop();
+            object ar = info.StackPop();
+            object b = info.StackPop();
             if (!(ar is NakoVariable))
             {
                 throw new ApplicationException("『掛ける!』の引数が変数ではありません");
             }
-            Object a = ((NakoVariable)ar).Body;
-            Object c;
+            object a = ((NakoVariable)ar).Body;
+            object c;
             if (a is long && b is long)
             {
                 c = (long)a / (long)b;
@@ -288,7 +288,7 @@ namespace Libnako.NakoAPI
         }
 
         private Random _randObj = null;
-        private Object _random(INakoFuncCallInfo info)
+        private object _random(INakoFuncCallInfo info)
         {
             long range = info.StackPopAsInt();
             if (_randObj == null) {
@@ -298,17 +298,17 @@ namespace Libnako.NakoAPI
             return (long)v;
         }
 
-        private Object _abs(INakoFuncCallInfo info)
+        private object _abs(INakoFuncCallInfo info)
         {
             double v = info.StackPopAsDouble();
             v = Math.Abs(v);
             return v;
         }
 
-        private Object _mod(INakoFuncCallInfo info)
+        private object _mod(INakoFuncCallInfo info)
         {
-            Object a = info.StackPop();
-            Object b = info.StackPop();
+            object a = info.StackPop();
+            object b = info.StackPop();
             if (a is long && b is long)
             {
                 return ((long)a % (long)b);

@@ -17,7 +17,7 @@ namespace Libnako.JPNCompiler.Function
         /// <summary>
         /// 関数の名前
         /// </summary>
-		public String name { get; set; }
+		public string name { get; set; }
         /// <summary>
         /// 引数のリスト
         /// </summary>
@@ -46,7 +46,7 @@ namespace Libnako.JPNCompiler.Function
         /// </summary>
         /// <param name="name"></param>
         /// <param name="argdef"></param>
-        public NakoFunc(String name, String argdef)
+        public NakoFunc(string name, string argdef)
         {
             Init();
             this.name = name;
