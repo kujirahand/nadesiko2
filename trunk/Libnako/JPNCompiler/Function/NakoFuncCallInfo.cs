@@ -44,7 +44,7 @@ namespace Libnako.JPNCompiler.Function
         /// 引数スタックからオブジェクトを取得する
         /// </summary>
         /// <returns></returns>
-        public Object StackPop()
+        public object StackPop()
         {
             return _runner.StackPop();
         }
@@ -54,7 +54,7 @@ namespace Libnako.JPNCompiler.Function
         /// <returns></returns>
         public string StackPopAsString()
         {
-            Object s = _runner.StackPop();
+            object s = _runner.StackPop();
             if (s is NakoVariable)
             {
                 return s.ToString();
@@ -70,7 +70,7 @@ namespace Libnako.JPNCompiler.Function
         /// <returns></returns>
         public long StackPopAsInt()
         {
-            Object o = _runner.StackPop();
+            object o = _runner.StackPop();
             return Convert.ToInt64(o);
         }
         /// <summary>
@@ -79,7 +79,7 @@ namespace Libnako.JPNCompiler.Function
         /// <returns></returns>
         public double StackPopAsDouble()
         {
-            Object o = _runner.StackPop();
+            object o = _runner.StackPop();
             return Convert.ToDouble(o);
         }
         /// <summary>
@@ -105,7 +105,7 @@ namespace Libnako.JPNCompiler.Function
         /// </summary>
         /// <param name="varname"></param>
         /// <returns></returns>
-        public Object GetVariableValue(string varname)
+        public object GetVariableValue(string varname)
         {
         	int index = _runner.globalVar.GetIndex(varname);
         	return _runner.globalVar.GetValue(index);
@@ -115,7 +115,7 @@ namespace Libnako.JPNCompiler.Function
         /// </summary>
         /// <param name="varname"></param>
         /// <param name="value"></param>
-        public void SetVariableValue(string varname, Object value)
+        public void SetVariableValue(string varname, object value)
         {
         	int index = _runner.globalVar.GetIndex(varname);
             if (index < 0)

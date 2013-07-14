@@ -15,7 +15,7 @@ namespace Libnako.JPNCompiler.Parser
         /// </summary>
         /// <param name="message"></param>
         /// <param name="tok"></param>
-        public NakoParserException(String message, NakoToken tok) : base(message + ":" + tok.ToStringForDebug())
+        public NakoParserException(string message, NakoToken tok) : base(message + ":" + tok.ToStringForDebug())
         {
         }
     }

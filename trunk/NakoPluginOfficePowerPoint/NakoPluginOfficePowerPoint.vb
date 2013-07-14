@@ -29,18 +29,18 @@ Public Class NakoPluginOfficePowerPoint
     ''' <summary>
     ''' プラグインのバージョン
     ''' </summary>
-    Public ReadOnly Property PluginVersion As Double Implements NakoPlugin.INakoPlugin.PluginVersion
+    Public ReadOnly Property PluginVersion As Version Implements NakoPlugin.INakoPlugin.PluginVersion
         Get
-            Return 1.0
+            Return New Version(1, 0)
         End Get
     End Property
 
     ''' <summary>
     ''' ターゲットとするなでしこのバージョン
     ''' </summary>
-    Public ReadOnly Property TargetNakoVersion As Double Implements NakoPlugin.INakoPlugin.TargetNakoVersion
+    Public ReadOnly Property TargetNakoVersion As Version Implements NakoPlugin.INakoPlugin.TargetNakoVersion
         Get
-            Return 2.0
+            Return New Version(2, 0)
         End Get
     End Property
 

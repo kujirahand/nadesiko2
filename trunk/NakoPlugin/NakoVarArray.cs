@@ -38,9 +38,9 @@ namespace NakoPlugin
         /// ハッシュのキーを得る
         /// </summary>
         /// <returns></returns>
-        public String[] GetKeys()
+        public string[] GetKeys()
         {
-            String[] r = new String[list.Count];
+            string[] r = new string[list.Count];
             for (int i = 0; i < list.Count; i++)
             {
                 NakoVariable v = list[i];
@@ -73,7 +73,7 @@ namespace NakoPlugin
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public Object GetValue(int index)
+        public object GetValue(int index)
         {
             NakoVariable v = GetVar(index);
             if (v == null) return null;
@@ -101,7 +101,7 @@ namespace NakoPlugin
         /// </summary>
         /// <param name="v"></param>
         /// <returns></returns>
-        public int FindValue(Object v)
+        public int FindValue(object v)
         {
             for (int i = 0; i < list.Count; i++)
             {
@@ -128,7 +128,7 @@ namespace NakoPlugin
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public NakoVariable GetVarFromObj(Object key)
+        public NakoVariable GetVarFromObj(object key)
         {
             if (key is string)
             {
@@ -146,7 +146,7 @@ namespace NakoPlugin
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public Object GetValueFromObj(Object key)
+        public object GetValueFromObj(object key)
         {
             NakoVariable v = GetVarFromObj(key);
             if (v != null)
@@ -161,7 +161,7 @@ namespace NakoPlugin
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public Object GetValueFromKey(string key)
+        public object GetValueFromKey(string key)
         {
             NakoVariable v = GetVarFromKey(key);
             if (v != null) return v.Body;
@@ -184,7 +184,7 @@ namespace NakoPlugin
         /// </summary>
         /// <param name="key">整数 or 文字列でキーを指定</param>
         /// <param name="value"></param>
-        public void SetVarFromObj(Object key, NakoVariable value)
+        public void SetVarFromObj(object key, NakoVariable value)
         {
             if (key is string)
             {
@@ -218,7 +218,7 @@ namespace NakoPlugin
         /// </summary>
         /// <param name="index"></param>
         /// <param name="value"></param>
-        public void SetValue(int index, Object value)
+        public void SetValue(int index, object value)
         {
             NakoVariable v = new NakoVariable();
             v.SetBodyAutoType(value);
@@ -230,7 +230,7 @@ namespace NakoPlugin
         /// </summary>
         /// <param name="key"></param>
         /// <param name="value"></param>
-        public void SetValueFromKey(String key, Object value)
+        public void SetValueFromKey(string key, object value)
         {
             NakoVariable v = new NakoVariable();
             v.key = key;
@@ -242,13 +242,13 @@ namespace NakoPlugin
         /// 文字列を改行で区切って配列変数に変換する
         /// </summary>
         /// <param name="str"></param>
-        public void SetValuesFromString(String str)
+        public void SetValuesFromString(string str)
         {
             Clear();
             string[] splitter = new string[] { "\r\n" };
-            String[] a = str.Split(splitter, StringSplitOptions.None);
+            string[] a = str.Split(splitter, StringSplitOptions.None);
             int i = 0;
-            foreach (String n in a)
+            foreach (string n in a)
             {
                 SetValue(i++, n);
             }

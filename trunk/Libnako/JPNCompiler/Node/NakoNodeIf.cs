@@ -33,9 +33,9 @@ namespace Libnako.JPNCompiler.Node
         /// タイプ文字列を得る
         /// </summary>
         /// <returns></returns>
-        public override String ToTypeString()
+        public override string ToTypeString()
         {
-            String r = type.ToString() + "\n";
+            string r = type.ToString() + "\n";
             r += "  |-- COND:";
             if (nodeCond != null) r += nodeCond.ToTypeString() + "\n";
             r += "  |-- TRUE:\n";

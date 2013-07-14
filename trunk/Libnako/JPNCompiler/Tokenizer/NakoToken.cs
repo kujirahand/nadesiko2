@@ -1,138 +1,127 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Libnako.JPNCompiler.Tokenizer
 {
     /// <summary>
-    /// トークンを表すクラス
+    /// トークンを表します。
     /// </summary>
     public class NakoToken
     {
         /// <summary>
-        /// トークンの値
+        /// トークンの種類を取得または設定します。
         /// </summary>
-        public string Value { get; set; }
+        public NakoTokenType Type { get; set; }
         /// <summary>
-        /// 行番号
+        /// 行番号を取得または設定します。
         /// </summary>
-        public int LineNumber { get; set; }
+        public int LineNo { get; set; }
         /// <summary>
-        /// インデントレベル
+        /// インデントレベルを取得または設定します。
         /// </summary>
         public int IndentLevel { get; set; }
         /// <summary>
-        /// 助詞
+        /// 値を取得または設定します。
+        /// </summary>
+        public string Value { get; set; }
+        /// <summary>
+        /// 助詞を取得または設定します。
         /// </summary>
         public string Josi { get; set; }
         /// <summary>
-        /// トークンタイプ
+        /// NakoToken クラスの新しいインスタンスを、指定した種類を使用して初期化します。
         /// </summary>
-        public NakoTokenType Type { get; set; }
-
-        /// <summary>
-        /// トークンの生成（コンストラクタ）
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="lineno"></param>
-        /// <param name="level"></param>
-        public NakoToken(NakoTokenType type, int lineno, int level)
-        {
-        	Init(type, lineno, level);
-        }
-        /// <summary>
-        /// トークンの生成
-        /// </summary>
-        /// <param name="type"></param>
+        /// <param name="type">種類。</param>
         public NakoToken(NakoTokenType type)
+            : this(type, 0, 0)
         {
-        	Init(type, 0, 0);
-        }
-        /// <summary>
-        /// 初期化
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="lineno"></param>
-        /// <param name="level"></param>
-        public void Init(NakoTokenType type, int lineno, int level)
-        {
-            this.LineNumber = lineno;
-            this.IndentLevel = level;
-            this.Type = type;
-			this.Josi = "";
-			this.Value = null;
-        }
-        /// <summary>
-        /// デバッグ用の文字列を返す
-        /// </summary>
-        /// <returns></returns>
-        public String ToStringForDebug()
-        {
-            string s = "[";
-            s += Type.ToString();
-            if (!(Value == null || Value == ""))
-            {
-                s += ":" + Value;
-            }
-            if (!(Josi == null || Josi == ""))
-            {
-                s += "{" + Josi + "}";
-            }
-            s += "(" + (LineNumber + 1) + ")";
-            s += "]";
-            return s;
-        }
 
+        }
         /// <summary>
-        /// 名前としての値を得る(送り仮名を削除)
+        /// NakoToken クラスの新しいインスタンスを、指定した種類、行番号、インデントレベルを使用して初期化します。
         /// </summary>
-        /// <returns></returns>
-        public String getValueAsName()
+        /// <param name="type">種類。</param>
+        /// <param name="lineNo">行番号。</param>
+        /// <param name="indentLevel">インデントレベル。</param>
+        public NakoToken(NakoTokenType type, int lineNo, int indentLevel)
+            : this(type, lineNo, indentLevel, "")
+        {
+
+        }
+        /// <summary>
+        /// NakoToken クラスの新しいインスタンスを、指定した種類、行番号、インデントレベル、値を使用して初期化します。
+        /// </summary>
+        /// <param name="type">種類。</param>
+        /// <param name="lineNo">行番号。</param>
+        /// <param name="indentLevel">インデントレベル。</param>
+        /// <param name="value">値。</param>
+        public NakoToken(NakoTokenType type, int lineNo, int indentLevel, string value)
+        {
+            Type = type;
+            LineNo = lineNo;
+            IndentLevel = indentLevel;
+            Value = value;
+            Josi = "";
+        }
+        /// <summary>
+        /// このインスタンスを、それと等価なデバック用の文字列形式に変換します。
+        /// </summary>
+        /// <returns>このインスタンスのデバック用の文字列形式。</returns>
+        public string ToStringForDebug()
+        {
+            string result = "["; 0.1.ToString();
+            result += Type.ToString();
+            if (!string.IsNullOrEmpty(Value))
+            {
+                result += ":" + Value;
+            }
+            if (!string.IsNullOrEmpty(Josi))
+            {
+                result += "{" + Josi + "}";
+            }
+            result += "(" + (LineNo + 1) + ")";
+            result += "]";
+            return result;
+        }
+        /// <summary>
+        /// 送り仮名を削除した、名前としての値を取得します。
+        /// </summary>
+        /// <returns>送り仮名を削除した、名前としての値。</returns>
+        public string GetValueAsName()
         {
             return TrimOkurigana(Value);
         }
         /// <summary>
-        /// 送り仮名を削除
+        /// 送り仮名を削除します。
         /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static String TrimOkurigana(String name)
+        /// <param name="name">名前。</param>
+        /// <returns>送り仮名を削除した名前。</returns>
+        public static string TrimOkurigana(string name)
         {
-            String s = "";
-            int cur = 0;
-            char c;
             if (name == "") return "";
-            c = name[cur];
-
-            // 一文字目がひらがななら省略は難しい
-            if (NakoTokenizer.IsHira(c))
+            // 1文字目がひらがななら省略を諦める
+            if (NakoUtility.IsHiragana(name[0]))
             {
                 return name;
             }
-            s += c;
-            cur++;
-
+            string result = "";
             // 送りがなを省略する
-            while (cur < name.Length)
+            foreach (char c in name)
             {
-                c = name[cur];
-                if (!NakoTokenizer.IsHira(c))
+                if (!NakoUtility.IsHiragana(c))
                 {
-                    s += c;
+                    result += c;
                 }
-                cur++;
             }
-            return s;
+            return result;
         }
-        
         /// <summary>
-        /// 計算の演算子かどうか
+        /// このインスタンスが演算子のトークンであるかどうかを示しす値を取得します。
         /// </summary>
-        /// <returns></returns>
-        public bool isCalcFlag()
+        /// <returns>このインスタンスが演算子のトークンの場合は true。それ以外の場合は false。</returns>
+        public bool IsCalcFlag()
         {
-            bool result = false;
             switch (Type) {
                 case NakoTokenType.AND:
                 case NakoTokenType.AND_AND:
@@ -150,10 +139,9 @@ namespace Libnako.JPNCompiler.Tokenizer
                 case NakoTokenType.OR_OR:
                 case NakoTokenType.PLUS:
                 case NakoTokenType.POWER:
-                    result = true;
-                    break;
+                    return true;
             }
-            return result;
+            return false;
         }
     }
 }

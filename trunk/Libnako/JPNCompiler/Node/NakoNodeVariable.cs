@@ -55,7 +55,7 @@ namespace Libnako.JPNCompiler.Node
         /// コンストラクタ
         /// </summary>
         /// <param name="value"></param>
-		public NakoNodeVariable(Object value) : base(value)
+		public NakoNodeVariable(object value) : base(value)
 		{
 			Init();
 		}
@@ -74,7 +74,7 @@ namespace Libnako.JPNCompiler.Node
         /// タイプを表す文字列を返す
         /// </summary>
         /// <returns></returns>
-        public override String ToTypeString()
+        public override string ToTypeString()
         {
             string r = type.ToString();
             r += "(" + this.varNo + ")";

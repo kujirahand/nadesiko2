@@ -6,20 +6,20 @@ using System.Text;
 namespace NakoPlugin
 {
     /// <summary>
-    /// Objectの値を変換するコンバーター
+    /// objectの値を変換するコンバーター
     /// </summary>
     public class NakoValueConveter
     {
         /// <summary>
         /// 内部で使う値
         /// </summary>
-        protected Object value = null;
+        protected object value = null;
 
         /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="v"></param>
-        public NakoValueConveter(Object v)
+        public NakoValueConveter(object v)
         {
             this.value = v;
         }
@@ -29,7 +29,7 @@ namespace NakoPlugin
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static int ToInt(Object value)
+        public static int ToInt(object value)
         {
             return Convert.ToInt32(value);
         }
@@ -39,7 +39,7 @@ namespace NakoPlugin
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static long ToLong(Object value)
+        public static long ToLong(object value)
         {
             if (value is long)
             {
@@ -53,10 +53,10 @@ namespace NakoPlugin
             {
                 return (long)((double)value);
             }
-            if (value is String)
+            if (value is string)
             {
                 long i;
-                if (long.TryParse((String)value, out i)) { return i; } else { return 0; }
+                if (long.TryParse((string)value, out i)) { return i; } else { return 0; }
             }
             return 0;
         }
@@ -66,7 +66,7 @@ namespace NakoPlugin
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static double ToDouble(Object value)
+        public static double ToDouble(object value)
         {
             Type t = value.GetType();
             if (t == typeof(long))
@@ -83,10 +83,10 @@ namespace NakoPlugin
             {
                 return (bool)value ? 1 : 0;
             }
-            if (t == typeof(String))
+            if (t == typeof(string))
             {
                 double i;
-                if (double.TryParse((String)value, out i)) { return i; } else { return 0; }
+                if (double.TryParse((string)value, out i)) { return i; } else { return 0; }
             }
             return 0;
         }
@@ -96,7 +96,7 @@ namespace NakoPlugin
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static String ToString(Object value)
+        public static string ToString(object value)
         {
             return value.ToString();
         }
@@ -104,7 +104,7 @@ namespace NakoPlugin
         /// <summary>
         /// 値
         /// </summary>
-        public Object Value
+        public object Value
         {
             get { return value; }
         }

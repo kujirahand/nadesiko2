@@ -35,9 +35,9 @@ namespace Libnako.Interpreter.ILCode
         /// デバッグ用タイプ文字列を返す
         /// </summary>
         /// <returns></returns>
-        public String ToTypeString()
+        public string ToTypeString()
         {
-            String r = "";
+            string r = "";
             for (int i = 0; i < this.Count; i++)
             {
                 NakoILCode c;
@@ -58,15 +58,15 @@ namespace Libnako.Interpreter.ILCode
         /// アドレス付きの文字列
         /// </summary>
         /// <returns></returns>
-        public String ToAddressString()
+        public string ToAddressString()
         {
-            String r = "";
+            string r = "";
             for (int i = 0; i < this.Count; i++)
             {
                 NakoILCode c;
                 c = this[i];
                 // address
-                r += String.Format("{0,0:X4}:", i);
+                r += string.Format("{0,0:X4}:", i);
                 // type
                 r += c.type.ToString();
                 r += c.GetDescription();

@@ -71,9 +71,9 @@ namespace Libnako.NakoAPI
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        private Object _length(INakoFuncCallInfo info)
+        private object _length(INakoFuncCallInfo info)
         {
-        	String s = info.StackPopAsString();
+        	string s = info.StackPopAsString();
             return s.Length;
         }
         /// <summary>
@@ -81,10 +81,10 @@ namespace Libnako.NakoAPI
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        private Object _search(INakoFuncCallInfo info)
+        private object _search(INakoFuncCallInfo info)
         {
-        	String s = info.StackPopAsString();
-        	String needle = info.StackPopAsString();
+        	string s = info.StackPopAsString();
+        	string needle = info.StackPopAsString();
         	return s.IndexOf(needle) + 1;
         }
         /// <summary>
@@ -92,11 +92,11 @@ namespace Libnako.NakoAPI
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        private Object _replace(INakoFuncCallInfo info)
+        private object _replace(INakoFuncCallInfo info)
         {
-        	String s = info.StackPopAsString();
-        	String search = info.StackPopAsString();
-        	String replace = info.StackPopAsString();
+        	string s = info.StackPopAsString();
+        	string search = info.StackPopAsString();
+        	string replace = info.StackPopAsString();
         	return s.Replace(search,replace);
         }
         /// <summary>
@@ -104,14 +104,14 @@ namespace Libnako.NakoAPI
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        private Object _replace_a(INakoFuncCallInfo info)
+        private object _replace_a(INakoFuncCallInfo info)
         {
-        	String s = info.StackPopAsString();
-        	String search = info.StackPopAsString();
-        	String replace = info.StackPopAsString();
+        	string s = info.StackPopAsString();
+        	string search = info.StackPopAsString();
+        	string replace = info.StackPopAsString();
         	int index = s.IndexOf(search);
-        	String pre = s.Substring(0,index);
-        	String post = s.Substring(index+search.Length);
+        	string pre = s.Substring(0,index);
+        	string post = s.Substring(index+search.Length);
         	return pre + replace + post;
         }
         /// <summary>
@@ -119,9 +119,9 @@ namespace Libnako.NakoAPI
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        private Object _left(INakoFuncCallInfo info)
+        private object _left(INakoFuncCallInfo info)
         {
-        	String s = info.StackPopAsString();
+        	string s = info.StackPopAsString();
         	int len = (int)info.StackPopAsInt();
         	return s.Substring(0,len);
         }
@@ -130,9 +130,9 @@ namespace Libnako.NakoAPI
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        private Object _trim(INakoFuncCallInfo info)
+        private object _trim(INakoFuncCallInfo info)
         {
-        	String s = info.StackPopAsString();
+        	string s = info.StackPopAsString();
         	return s.Trim();
         }
         /// <summary>
@@ -140,8 +140,8 @@ namespace Libnako.NakoAPI
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        private Object _right(INakoFuncCallInfo info){
-        	String s = info.StackPopAsString();
+        private object _right(INakoFuncCallInfo info){
+        	string s = info.StackPopAsString();
         	int len = (int)info.StackPopAsInt();
         	return s.Substring(s.Length-len);
         }
@@ -150,17 +150,17 @@ namespace Libnako.NakoAPI
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        private Object _cut(INakoFuncCallInfo info){
-            Object sr = info.StackPop();
-            String a = info.StackPopAsString();
+        private object _cut(INakoFuncCallInfo info){
+            object sr = info.StackPop();
+            string a = info.StackPopAsString();
             string[] delim = {a};
             if(!(sr is NakoVariable)){
                 throw new ApplicationException("『切り取る』に変数が設定されていません");
             }
-            Object s = ((NakoVariable)sr).Body;
-            Object ret;
-            if(s is String){
-                string[] split_s = ((String)s).Split(delim,2,StringSplitOptions.None);
+            object s = ((NakoVariable)sr).Body;
+            object ret;
+            if(s is string){
+                string[] split_s = ((string)s).Split(delim,2,StringSplitOptions.None);
                 if(split_s.Length==2){
                    ret = split_s[1];
                    ((NakoVariable)sr).SetBodyAutoType(ret);
@@ -174,14 +174,14 @@ namespace Libnako.NakoAPI
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        private Object _extract(INakoFuncCallInfo info){
-            String s = info.StackPopAsString();
+        private object _extract(INakoFuncCallInfo info){
+            string s = info.StackPopAsString();
             int a = NadesikoPositionToCSPosition((int)info.StackPopAsInt());
             int cnt = (int)info.StackPopAsInt();
             return s.Substring(a,cnt);
         }
-        private Object _Em(INakoFuncCallInfo info){
-            String s = info.StackPopAsString();
+        private object _Em(INakoFuncCallInfo info){
+            string s = info.StackPopAsString();
             char c1 = s[0];
             int num = Encoding.GetEncoding("Shift_JIS").GetByteCount(c1.ToString());
             if(num==2){
@@ -190,28 +190,28 @@ namespace Libnako.NakoAPI
                 return 0;
             }
         }
-        private Object _remove(INakoFuncCallInfo info){
-            Object sr = info.StackPop();
+        private object _remove(INakoFuncCallInfo info){
+            object sr = info.StackPop();
             int a = NadesikoPositionToCSPosition((int)info.StackPopAsInt());
             int b = (int)info.StackPopAsInt();
-            Object s = ((NakoVariable)sr).Body;
-            Object ret;
-            if(s is String){
-                ret = ((String)s).Remove(a,b);
+            object s = ((NakoVariable)sr).Body;
+            object ret;
+            if(s is string){
+                ret = ((string)s).Remove(a,b);
             }else{
                 ret = null;
             }
             ((NakoVariable)sr).SetBodyAutoType(ret);
             return null;
         }
-        private Object _insert(INakoFuncCallInfo info){
+        private object _insert(INakoFuncCallInfo info){
             StringBuilder s = new StringBuilder(info.StackPopAsString());
             int cnt = NadesikoPositionToCSPosition((int)info.StackPopAsInt());
-            String a = info.StackPopAsString();
+            string a = info.StackPopAsString();
             return s.Insert(cnt,a).ToString();
         }
-        private Object _degrade(INakoFuncCallInfo info){
-            String s = info.StackPopAsString();
+        private object _degrade(INakoFuncCallInfo info){
+            string s = info.StackPopAsString();
             char[] splitted = s.ToCharArray();
              NakoVarArray arr = info.CreateArray();
             for(int i=0;i<splitted.Length;i++){
@@ -219,9 +219,9 @@ namespace Libnako.NakoAPI
             }
             return arr;
        }
-        private Object _explode(INakoFuncCallInfo info){
-            String s = info.StackPopAsString();
-            String a = info.StackPopAsString();
+        private object _explode(INakoFuncCallInfo info){
+            string s = info.StackPopAsString();
+            string a = info.StackPopAsString();
             string[] splitted = s.Split(new string[]{a},StringSplitOptions.None);
             NakoVarArray arr = info.CreateArray();
             for(int i=0;i<splitted.Length;i++){
@@ -229,8 +229,8 @@ namespace Libnako.NakoAPI
             }
             return arr;
         }
-        private Object _num(INakoFuncCallInfo info){
-            String s = info.StackPopAsString();
+        private object _num(INakoFuncCallInfo info){
+            string s = info.StackPopAsString();
             char c1 = s[0];
             int num;
             if(int.TryParse(c1.ToString(), out num)){
@@ -244,14 +244,14 @@ namespace Libnako.NakoAPI
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        private Object _append(INakoFuncCallInfo info){
+        private object _append(INakoFuncCallInfo info){
             StringBuilder s = new StringBuilder(info.StackPopAsString());
-            String a = info.StackPopAsString();
+            string a = info.StackPopAsString();
             return s.Append(a).ToString();
         }
-        private Object _alnumToEn(INakoFuncCallInfo info)
+        private object _alnumToEn(INakoFuncCallInfo info)
         {
-        	String s = info.StackPopAsString();
+        	string s = info.StackPopAsString();
         	return Regex.Replace(s,@"[０-９Ａ-Ｚａ-ｚ：－　]+",delegate(Match m){ return Strings.StrConv(m.Value, VbStrConv.Narrow, 0); });
         }
         /// <summary>
@@ -259,34 +259,34 @@ namespace Libnako.NakoAPI
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        private Object _zeroFill(INakoFuncCallInfo info){
+        private object _zeroFill(INakoFuncCallInfo info){
         	long s = info.StackPopAsInt();
-        	String l = info.StackPopAsInt().ToString();
-        	return　String.Format(@"{0:D"+l+"}",s);
+        	string l = info.StackPopAsInt().ToString();
+        	return　string.Format(@"{0:D"+l+"}",s);
         }
         
-        private Object _toEn(INakoFuncCallInfo info){
-        	String s = info.StackPopAsString();
+        private object _toEn(INakoFuncCallInfo info){
+        	string s = info.StackPopAsString();
             return Strings.StrConv(s, VbStrConv.Narrow, 0);
         }
         private int NadesikoPositionToCSPosition(int nadesiko_pos){
             return nadesiko_pos - 1;
         }
         
-        private Object _lowercase(INakoFuncCallInfo info)
+        private object _lowercase(INakoFuncCallInfo info)
         {
-        	String s = info.StackPopAsString();
+        	string s = info.StackPopAsString();
         	return s.ToLower();
         }
-        private Object _uppercase(INakoFuncCallInfo info)
+        private object _uppercase(INakoFuncCallInfo info)
         {
-        	String s = info.StackPopAsString();
+        	string s = info.StackPopAsString();
         	return s.ToUpper();
         }
-        private Object _strpos(INakoFuncCallInfo info)
+        private object _strpos(INakoFuncCallInfo info)
         {
-            String s = info.StackPopAsString();
-            String ss = info.StackPopAsString();
+            string s = info.StackPopAsString();
+            string ss = info.StackPopAsString();
             int i = s.IndexOf(ss);
             return (i + 1); // 1からはじまるので
         }

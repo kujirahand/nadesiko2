@@ -6,132 +6,129 @@ using System.Text;
 namespace Libnako.JPNCompiler.Tokenizer
 {
     /// <summary>
-    /// トークンの種類を定義したもの
+    /// トークンの種類を表します。
     /// </summary>
     public enum NakoTokenType
     {
-        // --- Define Token ---
-        ///<summary>UNKNOWN</summary>
+        // --- トークン定義 (Define Token) ---
+        ///<summary>トークンの種類は不明です。</summary>
         UNKNOWN,
-        // --- Literal ---
-        ///<summary>RESERVED</summary>
+        // --- リテラル (Literal) ---
+        ///<summary>予約されたトークンの種類です。</summary>
         RESERVED,
-        ///<summary>COMMENT</summary>
+        ///<summary>トークンの種類はコメントです。</summary>
         COMMENT,
-        ///<summary>EOL</summary>
+        ///<summary>トークンの種類は行末です。</summary>
         EOL,
-        ///<summary>WORD</summary>
+        ///<summary>トークンの種類は単語です。</summary>
         WORD,
-        ///<summary>FUNCTION_NAME</summary>
+        ///<summary>トークンの種類は関数の名前です。</summary>
         FUNCTION_NAME,
-        ///<summary>NUMBER</summary>
+        ///<summary>トークンの種類は数値です。</summary>
         NUMBER,
-        ///<summary>INT</summary>
+        ///<summary>トークンの種類は整数です。</summary>
         INT,
-        ///<summary>STRING</summary>
+        ///<summary>トークンの種類は文字列です。</summary>
         STRING,
-        ///<summary>STRING_EX</summary>
+        ///<summary>トークンの種類は展開あり文字列です。</summary>
         STRING_EX,
-        // --- Flow Controll ---
-        ///<summary>IF</summary>
+        // --- フロー制御 (Flow Controll) ---
+        ///<summary>トークンの種類は "もし" 文です。</summary>
         IF,
-        ///<summary>WHILE</summary>
+        ///<summary>トークンの種類は "間" 文です。</summary>
         WHILE,
-        ///<summary>SWITCH</summary>
+        ///<summary>トークンの種類は "条件分岐" 文です。</summary>
         SWITCH,
-        ///<summary>FOR</summary>
+        ///<summary>トークンの種類は "繰り返す" 文です。</summary>
         FOR,
-        ///<summary>FOREACH</summary>
+        ///<summary>トークンの種類は "反復" 文です。</summary>
         FOREACH,
-        ///<summary>REPEAT_TIMES</summary>
+        ///<summary>トークンの種類は "回数" 文です。</summary>
         REPEAT_TIMES,
-        ///<summary>BREAK</summary>
+        ///<summary>トークンの種類は "抜ける" 文です。</summary>
         BREAK,
-        ///<summary>CONTINUE</summary>
+        ///<summary>トークンの種類は "続ける" 文です。</summary>
         CONTINUE,
         // ---  ---
-        ///<summary>THEN</summary>
+        ///<summary>トークンの種類は "Then" です。</summary>
         THEN,
-        ///<summary>ELSE</summary>
+        ///<summary>トークンの種類は "違えば" です。</summary>
         ELSE,
-        ///<summary>KOKOMADE</summary>
+        ///<summary>トークンの種類は "ここまで" です。</summary>
         KOKOMADE,
-        ///<summary>SCOPE_BEGIN</summary>
+        ///<summary>トークンの種類はスコープ開始です。</summary>
         SCOPE_BEGIN,
-        ///<summary>SCOPE_END</summary>
+        ///<summary>トークンの種類はスコープ終了です。</summary>
         SCOPE_END,
         // ---  ---
-        ///<summary>DEF_FUNCTION</summary>
+        ///<summary>トークンの種類は関数定義です。</summary>
         DEF_FUNCTION,
-        ///<summary>DEF_GROUP</summary>
+        ///<summary>トークンの種類はグループ定義です。</summary>
         DEF_GROUP,
         // --- Flags ---
-        ///<summary>EQ</summary>
+        ///<summary>トークンの種類は代入演算子 (Equal, "=") です。</summary>
         EQ,
-        ///<summary>EQ_EQ</summary>
+        ///<summary>トークンの種類は等価演算子 (EqualEqual, "==") です。</summary>
         EQ_EQ,
-        ///<summary>NOT_EQ</summary>
+        ///<summary>トークンの種類は非等価演算子 (NotEqual, "!=") です。</summary>
         NOT_EQ,
-        ///<summary>GT</summary>
+        ///<summary>トークンの種類は大なり演算子 (GreaterThan, "&gt;") です。</summary>
         GT,
-        ///<summary>GT_EQ</summary>
+        ///<summary>トークンの種類は大なりイコール演算子 (GreaterThanEqual, "&gt;=") です。</summary>
         GT_EQ,
-        ///<summary>LT</summary>
+        ///<summary>トークンの種類は小なり演算子 (LessThan, "&lt;") です。</summary>
         LT,
-        ///<summary>LT_EQ</summary>
+        ///<summary>トークンの種類は小なりイコール演算子 (LessThanEqual, "&lt;=") です。</summary>
         LT_EQ,
-        ///<summary>NOT</summary>
+        ///<summary>トークンの種類は Not 演算子 ("!") です。</summary>
         NOT,
-        ///<summary>AND</summary>
+        ///<summary>トークンの種類は And 演算子 ("&amp;") です。</summary>
         AND,
-        ///<summary>AND_AND</summary>
+        ///<summary>トークンの種類は AndAnd 演算子 ("&amp;&amp;") です。</summary>
         AND_AND,
-        ///<summary>OR</summary>
+        ///<summary>トークンの種類は Or 演算子 ("|") です。</summary>
         OR,
-        ///<summary>OR_OR</summary>
+        ///<summary>トークンの種類は OrOr 演算子 ("||") です。</summary>
         OR_OR,
-        ///<summary>PLUS</summary>
+        ///<summary>トークンの種類は加算演算子 (Plus, "+") です。</summary>
         PLUS,
-        ///<summary>MINUS</summary>
+        ///<summary>トークンの種類は減算演算子 (Minus, "-") です。</summary>
         MINUS,
-        ///<summary>MUL</summary>
+        ///<summary>トークンの種類は乗算演算子 (Multiplication, "*") です。</summary>
         MUL,
-        ///<summary>DIV</summary>
+        ///<summary>トークンの種類は除算演算子 (Division, "/") です。</summary>
         DIV,
-        ///<summary>MOD</summary>
+        ///<summary>トークンの種類は剰余算演算子 (Modulus, "%") です。</summary>
         MOD,
-        ///<summary>POWER</summary>
+        ///<summary>トークンの種類は Power 演算子 ("^") です。</summary>
         POWER,
-        ///<summary>YEN</summary>
+        ///<summary>トークンの種類は円記号 (Yen, "\") です。</summary>
         YEN,
-        // --- 角カッコ ---
-        ///<summary>BLACKETS_L</summary>
-        BLACKETS_L,
-        ///<summary>BLACKETS_R</summary>
-        BLACKETS_R,
-        // --- 丸括弧 ---
-        ///<summary>PARENTHESES_L</summary>
+        ///<summary>トークンの種類は左角括弧 (BracketsLeft, "[") です。</summary>
+        BRACKETS_L,
+        ///<summary>トークンの種類は右角括弧 (BracketsRight, "]") です。</summary>
+        BRACKETS_R,
+        ///<summary>トークンの種類は左丸括弧 (ParenthesesLeft, "(") です。</summary>
         PARENTHESES_L,
-        ///<summary>PARENTHESES_R</summary>
+        ///<summary>トークンの種類は右丸括弧 (ParenthesesRight, ")") です。</summary>
         PARENTHESES_R,
-        // --- 波括弧(中括弧) ---
-        ///<summary>BRACES_L</summary>
+        ///<summary>トークンの種類は左波括弧 (BracesLeft, "{") です。</summary>
         BRACES_L,
-        ///<summary>BRACES_R</summary>
+        ///<summary>トークンの種類は右波括弧 (BracesRight, "}") です。</summary>
         BRACES_R,
         // --- 数値、整数、文字列 ---
-        ///<summary>DIM_NUMBER</summary>
+        ///<summary>トークンの種類は DIM_NUMBER です。</summary>
         DIM_NUMBER,
-        ///<summary>DIM_INT</summary>
+        ///<summary>トークンの種類は DIM_INT です。</summary>
         DIM_INT,
-        ///<summary>DIM_STRING</summary>
+        ///<summary>トークンの種類は DIM_STRING です。</summary>
         DIM_STRING,
-        ///<summary>DIM_VARIABLE</summary>
+        ///<summary>トークンの種類は DIM_VARIABLE です。</summary>
         DIM_VARIABLE,
-        ///<summary>DIM_ARRAY</summary>
+        ///<summary>トークンの種類は DIM_ARRAY です。</summary>
         DIM_ARRAY,
-        // --- DEBUG ---
-        ///<summary>PRINT</summary>
+        // --- デバック (DEBUG) ---
+        ///<summary>トークンの種類は PRINT </summary>
         PRINT
     }
 }

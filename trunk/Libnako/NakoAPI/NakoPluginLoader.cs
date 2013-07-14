@@ -125,11 +125,11 @@ namespace Libnako.NakoAPI
         /// <summary>
         /// プラグインのパス
         /// </summary>
-        public String Location { get; set; }
+        public string Location { get; set; }
         /// <summary>
         /// プラグインのクラス名
         /// </summary>
-        public String ClassName { get; set; }
+        public string ClassName { get; set; }
         /// <summary>
         /// インスタンスを生成する
         /// </summary>

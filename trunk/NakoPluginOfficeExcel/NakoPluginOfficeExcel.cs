@@ -17,12 +17,12 @@ namespace NakoPluginOfficeExcel
     {
         //--- プラグインの宣言 ---
         string _description = "エクセル命令 by 粗茶";
-        double _version = 1.0;  //2011.1.7より作業開始
+        Version _version = new Version(1, 0);  //2011.1.7より作業開始
         //--- プラグイン共通の部分 ---
-        public double TargetNakoVersion { get { return 2.0; } }
+        public Version TargetNakoVersion { get { return new Version(2, 0); } }
         public bool Used { get; set; }
         public string Name { get { return this.GetType().FullName; } }
-        public double PluginVersion { get { return _version; } }
+        public Version PluginVersion { get { return _version; } }
         public string Description { get { return _description; } }
         //--- プラグインの初期化処理 ---
         public void PluginInit(INakoInterpreter runner) { }

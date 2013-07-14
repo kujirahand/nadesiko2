@@ -13,12 +13,12 @@ namespace NakoPluginConsole
     {
         //--- プラグインの宣言 ---
         string _description = "コンソール出力を行うプラグイン";
-        double _version = 1.0;
+        Version _version = new Version(1, 0);
         //--- プラグイン共通の部分 ---
         /// <summary>
         /// ターゲットとなるなでしこのバージョン
         /// </summary>
-        public double TargetNakoVersion { get { return 2.0; } }
+        public Version TargetNakoVersion { get { return new Version(2, 0); } }
         /// <summary>
         /// プラグインが利用されているかを判定するフラグ
         /// </summary>
@@ -30,7 +30,7 @@ namespace NakoPluginConsole
         /// <summary>
         /// このプラグインのバージョン情報
         /// </summary>
-        public double PluginVersion { get { return _version; } }
+        public Version PluginVersion { get { return _version; } }
         /// <summary>
         /// このプラグインの説明
         /// </summary>
@@ -74,7 +74,7 @@ namespace NakoPluginConsole
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        public Object _coutLine(INakoFuncCallInfo info)
+        public object _coutLine(INakoFuncCallInfo info)
         {
             string s = info.StackPopAsString();
             if (UsePrintLog) { info.WriteLog(s+"\r\n"); } else { System.Console.WriteLine(s); }
@@ -86,7 +86,7 @@ namespace NakoPluginConsole
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        public Object _cout(INakoFuncCallInfo info)
+        public object _cout(INakoFuncCallInfo info)
         {
         	string s = info.StackPopAsString();
             if (UsePrintLog) { info.WriteLog(s); } else { System.Console.Write(s); }
@@ -98,7 +98,7 @@ namespace NakoPluginConsole
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        public Object _cin(INakoFuncCallInfo info)
+        public object _cin(INakoFuncCallInfo info)
         {
         	long count = info.StackPopAsInt();
         	//TODO:標準入力の取得方法が効率が悪い
@@ -119,7 +119,7 @@ namespace NakoPluginConsole
         /// </summary>
         /// <param name="info"></param>
         /// <returns></returns>
-        public Object _cinLine(INakoFuncCallInfo info)
+        public object _cinLine(INakoFuncCallInfo info)
         {
         	string s = info.StackPopAsString();
         	System.Console.WriteLine(s);

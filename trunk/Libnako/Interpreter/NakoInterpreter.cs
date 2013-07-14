@@ -17,7 +17,7 @@ namespace Libnako.Interpreter
     /// <param name="a"></param>
     /// <param name="b"></param>
     /// <returns></returns>
-    delegate Object CalcMethodType(Object a, Object b);
+    delegate object CalcMethodType(object a, object b);
 
     /// <summary>
     /// なでしこの中間コード（NakoILCode）を実行するインタプリタ
@@ -27,7 +27,7 @@ namespace Libnako.Interpreter
         /// <summary>
         /// 計算用のスタック
         /// </summary>
-        protected Stack<Object> calcStack;
+        protected Stack<object> calcStack;
         /// <summary>
         /// 仮想バイトコードの一覧
         /// </summary>
@@ -55,7 +55,7 @@ namespace Libnako.Interpreter
         /// <summary>
         /// デバッグ用のログ記録用変数
         /// </summary>
-        public String PrintLog
+        public string PrintLog
         {
             get { return _printLog.ToString(); }
             set { _printLog.Remove(0, _printLog.Length); _printLog.Append(value); }
@@ -117,7 +117,7 @@ namespace Libnako.Interpreter
             _interpreter_id = _interpreter_id_count;
             _interpreter_id_count++;
             // スタックや変数などを生成
-            calcStack = new Stack<Object>();
+            calcStack = new Stack<object>();
 			globalVar = new NakoVariableManager(NakoVariableScope.Global);
             localVar = new NakoVariableManager(NakoVariableScope.Local);
             callStack = new Stack<NakoCallStack>();
@@ -201,7 +201,7 @@ namespace Libnako.Interpreter
         /// <summary>
         /// スタックトップを調べる
         /// </summary>
-        public Object StackTop
+        public object StackTop
         {
             get {
                 if (calcStack.Count == 0) return null;
@@ -212,9 +212,9 @@ namespace Libnako.Interpreter
         /// スタックから末尾要素を取り出す
         /// </summary>
         /// <returns></returns>
-        public Object StackPop()
+        public object StackPop()
         {
-            Object v = calcStack.Pop();
+            object v = calcStack.Pop();
             if (debugMode)
             {
                 Console.WriteLine("- POP:" + Convert.ToString(v));
@@ -225,7 +225,7 @@ namespace Libnako.Interpreter
         /// スタックに値をプッシュ
         /// </summary>
         /// <param name="v"></param>
-        public void StackPush(Object v)
+        public void StackPush(object v)
         {
             if (debugMode)
             {
@@ -243,8 +243,8 @@ namespace Libnako.Interpreter
             {
                 int i = runpos;
                 string s = "";
-                s += String.Format("{0,4:X4}:", i);
-                s += String.Format("{0,-14}", code.type.ToString());
+                s += string.Format("{0,4:X4}:", i);
+                s += string.Format("{0,-14}", code.type.ToString());
                 s += code.GetDescription();
                 Console.WriteLine(s);
             }
@@ -354,7 +354,7 @@ namespace Libnako.Interpreter
 
         private void _branch_true(NakoILCode code)
         {
-            Object v = calcStack.Pop();
+            object v = calcStack.Pop();
             if (NakoValueConveter.ToLong(v) > 0)
             {
                 autoIncPos = false;
@@ -364,7 +364,7 @@ namespace Libnako.Interpreter
 
         private void _branch_false(NakoILCode code)
         {
-            Object v = calcStack.Pop();
+            object v = calcStack.Pop();
             if (NakoValueConveter.ToLong(v) == 0)
             {
                 autoIncPos = false;
@@ -394,7 +394,7 @@ namespace Libnako.Interpreter
 
         private void _neg()
         {
-            Object v = calcStack.Pop();
+            object v = calcStack.Pop();
             if (v is long)
             {
                 StackPush((long)v * -1);
@@ -408,7 +408,7 @@ namespace Libnako.Interpreter
 
         private void _not()
         {
-            Object v = calcStack.Pop();
+            object v = calcStack.Pop();
             if (v is long)
             {
                 StackPush(((long)v == 0) ? 1 : 0);
@@ -422,25 +422,25 @@ namespace Libnako.Interpreter
 
         private void st_local(int no)
         {
-            Object p = calcStack.Pop();
+            object p = calcStack.Pop();
             localVar.SetValue(no, p);
         }
 
         private void st_global(int no)
         {
-            Object p = calcStack.Pop();
+            object p = calcStack.Pop();
             globalVar.SetValue(no, p);
         }
 
         private void ld_local(int no)
         {
-            Object p = localVar.GetValue(no);
+            object p = localVar.GetValue(no);
             StackPush(p);
         }
 
         private void ld_global(int no)
         {
-            Object p = globalVar.GetValue(no);
+            object p = globalVar.GetValue(no);
             StackPush(p);
         }
 
@@ -467,7 +467,7 @@ namespace Libnako.Interpreter
             StackPush(v);
         }
 
-        private string ld_elem_slice(string s, Object index)
+        private string ld_elem_slice(string s, object index)
         {
             if (!(index is long))
             {
@@ -484,9 +484,9 @@ namespace Libnako.Interpreter
 
         private void ld_elem()
         {
-            Object idx = StackPop();
-            Object var = StackPop();
-            Object r = null;
+            object idx = StackPop();
+            object var = StackPop();
+            object r = null;
             if (var is NakoVarArray)
             {
                 r = ((NakoVarArray)var).GetValueFromObj(idx);
@@ -517,8 +517,8 @@ namespace Libnako.Interpreter
         /// </summary>
         private void ld_elem_ref()
         {
-            Object idx = StackPop();
-            Object var = StackPop();
+            object idx = StackPop();
+            object var = StackPop();
             NakoVarArray var_ary;
 
             // var が不正なら null を乗せて帰る
@@ -569,9 +569,9 @@ namespace Libnako.Interpreter
         }
         private void st_elem()
         {
-            Object value = StackPop();
-            Object index = StackPop();
-            Object var = StackPop();
+            object value = StackPop();
+            object index = StackPop();
+            object var = StackPop();
             if (var is NakoVariable)
             {
                 NakoVariable var2 = (NakoVariable)var;
@@ -582,7 +582,7 @@ namespace Libnako.Interpreter
                 }
                 if (!(var2.Body is NakoVarArray))
                 {
-                    String s = "";
+                    string s = "";
                     if (var2.Body != null) s = var2.Body.ToString();
                     var2.SetBody(new NakoVarArray(), NakoVarType.Array);
                     ((NakoVarArray)var2.Body).SetValuesFromString(s);
@@ -613,7 +613,7 @@ namespace Libnako.Interpreter
 
         private void arr_length()
         {
-            Object value = StackPop();
+            object value = StackPop();
             
             // 配列要素を取り出す
             NakoVarArray arr = null;
@@ -642,8 +642,8 @@ namespace Libnako.Interpreter
 
         private void exec_print()
         {
-            Object o = calcStack.Pop();
-            String s;
+            object o = calcStack.Pop();
+            string s;
             if (o == null) {
                 s = "";
             } else {
@@ -662,7 +662,7 @@ namespace Libnako.Interpreter
             int funcNo = (int)code.value;
             NakoAPIFunc s = NakoAPIFuncBank.Instance.FuncList[funcNo];
             NakoFuncCallInfo f = new NakoFuncCallInfo(this);
-            Object result = s.FuncDl(f);
+            object result = s.FuncDl(f);
 			if (s.updateSore)
 				globalVar.SetValue(0, result); // 変数「それ」に値をセット
             StackPush(result); // 関数の結果を PUSH する
@@ -670,92 +670,92 @@ namespace Libnako.Interpreter
 
         private void exec_calc(CalcMethodType f)
         {
-            Object b = calcStack.Pop();
-            Object a = calcStack.Pop();
+            object b = calcStack.Pop();
+            object a = calcStack.Pop();
             StackPush(f(a, b));
         }
 
-        private double ToDouble(Object v)
+        private double ToDouble(object v)
         {
             return NakoValueConveter.ToDouble(v);
         }
 
-        private bool IsBothInt(Object a, Object b)
+        private bool IsBothInt(object a, object b)
         {
             bool r = (a is long && b is long);
             return r;
         }
 
-        private Object calc_method_add(Object a, Object b)
+        private object calc_method_add(object a, object b)
         {
             if (IsBothInt(a, b))
             {
                 long i = (long)a + (long)b;
-                return (Object)i;
+                return (object)i;
             }
             else
             {
                 double d = ToDouble(a) + ToDouble(b);
-                return (Object)d;
+                return (object)d;
             }
         }
-        private Object calc_method_sub(Object a, Object b)
+        private object calc_method_sub(object a, object b)
         {
             if (IsBothInt(a, b))
             {
                 long i = (long)a - (long)b;
-                return (Object)i;
+                return (object)i;
             }
             else
             {
                 double d = ToDouble(a) - ToDouble(b);
-                return (Object)d;
+                return (object)d;
             }
         }
-        private Object calc_method_mul(Object a, Object b)
+        private object calc_method_mul(object a, object b)
         {
             if (IsBothInt(a, b))
             {
                 long i = (long)a * (long)b;
-                return (Object)i;
+                return (object)i;
             }
             else
             {
                 double d = ToDouble(a) * ToDouble(b);
-                return (Object)d;
+                return (object)d;
             }
         }
-        private Object calc_method_div(Object a, Object b)
+        private object calc_method_div(object a, object b)
         {
             // "1 ÷ 2" のような場合を想定して、割り算は常に実数にすることにした
             double d = ToDouble(a) / ToDouble(b);
-            return (Object)d;
+            return (object)d;
         }
-        private Object calc_method_mod(Object a, Object b)
+        private object calc_method_mod(object a, object b)
         {
             long i = (long)a % (long)b;
-            return (Object)i;
+            return (object)i;
         }
-        private Object calc_method_power(Object a, Object b)
+        private object calc_method_power(object a, object b)
         {
-            return (Object)
+            return (object)
                 Math.Pow(ToDouble(a), ToDouble(b));
         }
-        private Object calc_method_add_str(Object a, Object b)
+        private object calc_method_add_str(object a, object b)
         {
             if (a == null) a = "";
             if (b == null) b = "";
-            String sa = a.ToString();
-            String sb = b.ToString();
+            string sa = a.ToString();
+            string sb = b.ToString();
             return sa + sb;
         }
-        private Object calc_method_eq(Object a, Object b)
+        private object calc_method_eq(object a, object b)
         {
             if (a is long && b is long)
             {
                 return (long)a == (long)b;
             }
-            if (a is String || b is String)
+            if (a is string || b is string)
             {
                 return NakoValueConveter.ToString(a) == NakoValueConveter.ToString(b);
             }
@@ -765,13 +765,13 @@ namespace Libnako.Interpreter
             }
             return NakoValueConveter.ToString(a) == NakoValueConveter.ToString(b);
         }
-        private Object calc_method_not_eq(Object a, Object b)
+        private object calc_method_not_eq(object a, object b)
         {
             if (a is long && b is long)
             {
                 return (long)a != (long)b;
             }
-            if (a is String || b is String)
+            if (a is string || b is string)
             {
                 return NakoValueConveter.ToString(a) != NakoValueConveter.ToString(b);
             }
@@ -781,15 +781,15 @@ namespace Libnako.Interpreter
             }
             return a != b;
         }
-        private Object calc_method_gt(Object a, Object b)
+        private object calc_method_gt(object a, object b)
         {
             if (a is long && b is long)
             {
                 return (long)a > (long)b;
             }
-            if (a is String || b is String)
+            if (a is string || b is string)
             {
-                return (String.Compare(NakoValueConveter.ToString(a), NakoValueConveter.ToString(b)) > 0);
+                return (string.Compare(NakoValueConveter.ToString(a), NakoValueConveter.ToString(b)) > 0);
             }
             if (a is double || b is double)
             {
@@ -797,15 +797,15 @@ namespace Libnako.Interpreter
             }
             throw new NakoInterpreterException("オブジェクトは比較できません");
         }
-        private Object calc_method_gteq(Object a, Object b)
+        private object calc_method_gteq(object a, object b)
         {
             if (a is long && b is long)
             {
                 return (long)a >= (long)b;
             }
-            if (a is String || b is String)
+            if (a is string || b is string)
             {
-                return (String.Compare(NakoValueConveter.ToString(a), NakoValueConveter.ToString(b)) >= 0);
+                return (string.Compare(NakoValueConveter.ToString(a), NakoValueConveter.ToString(b)) >= 0);
             }
             if (a is double || b is double)
             {
@@ -813,15 +813,15 @@ namespace Libnako.Interpreter
             }
             throw new NakoInterpreterException("オブジェクトは比較できません");
         }
-        private Object calc_method_lt(Object a, Object b)
+        private object calc_method_lt(object a, object b)
         {
             if (a is long && b is long)
             {
                 return (long)a < (long)b;
             }
-            if (a is String || b is String)
+            if (a is string || b is string)
             {
-                return (String.Compare(NakoValueConveter.ToString(a), NakoValueConveter.ToString(b)) < 0);
+                return (string.Compare(NakoValueConveter.ToString(a), NakoValueConveter.ToString(b)) < 0);
             }
             if (a is double || b is double)
             {
@@ -829,15 +829,15 @@ namespace Libnako.Interpreter
             }
             throw new NakoInterpreterException("オブジェクトは比較できません");
         }
-        private Object calc_method_lteq(Object a, Object b)
+        private object calc_method_lteq(object a, object b)
         {
             if (a is long && b is long)
             {
                 return (long)a <= (long)b;
             }
-            if (a is String || b is String)
+            if (a is string || b is string)
             {
-                return (String.Compare(NakoValueConveter.ToString(a), NakoValueConveter.ToString(b)) <= 0);
+                return (string.Compare(NakoValueConveter.ToString(a), NakoValueConveter.ToString(b)) <= 0);
             }
             if (a is double || b is double)
             {
@@ -845,7 +845,7 @@ namespace Libnako.Interpreter
             }
             throw new NakoInterpreterException("オブジェクトは比較できません");
         }
-        private Object calc_method_and(Object a, Object b)
+        private object calc_method_and(object a, object b)
         {
             if (a is long && b is long)
             {
@@ -857,7 +857,7 @@ namespace Libnako.Interpreter
             }
             throw new NakoInterpreterException("オブジェクトは論理演算できません");
         }
-        private Object calc_method_or(Object a, Object b)
+        private object calc_method_or(object a, object b)
         {
             if (a is long && b is long)
             {
@@ -869,7 +869,7 @@ namespace Libnako.Interpreter
             }
             throw new NakoInterpreterException("オブジェクトは論理演算できません");
         }
-        private Object calc_method_xor(Object a, Object b)
+        private object calc_method_xor(object a, object b)
         {
             if (a is long && b is long)
             {
@@ -892,7 +892,7 @@ namespace Libnako.Interpreter
         /// インタプリタクラスの例外を出す
         /// </summary>
         /// <param name="message"></param>
-        internal NakoInterpreterException(String message) : base(message)
+        internal NakoInterpreterException(string message) : base(message)
         {
         }
 
@@ -914,6 +914,6 @@ namespace Libnako.Interpreter
         /// <summary>
         /// それ
         /// </summary>
-		public Object sore { get; set; }
+		public object sore { get; set; }
     }
 }

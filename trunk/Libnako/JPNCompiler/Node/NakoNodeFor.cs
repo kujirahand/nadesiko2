@@ -22,9 +22,9 @@ namespace Libnako.JPNCompiler.Node
         /// タイプ文字列を得る
         /// </summary>
         /// <returns></returns>
-        public override String ToTypeString()
+        public override string ToTypeString()
         {
-            String r = type.ToString() + "\n";
+            string r = type.ToString() + "\n";
             r += "  |-- FROM: " + nodeFrom.ToTypeString() + "\n";
             r += "  |-- TO  : " + nodeTo.ToTypeString() + "\n";
             r += "  |-- BLOCKS:\n" + nodeBlocks.ToTypeString() + "\n";

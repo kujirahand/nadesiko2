@@ -27,11 +27,11 @@ namespace Libnako.JPNCompiler.Function
 		/// <summary>
 		/// 引数の名前
 		/// </summary>
-        public String name { get; set; }
+        public string name { get; set; }
         /// <summary>
         /// 助詞リスト
         /// </summary>
-		public List<String> josiList { get; set; }
+		public List<string> josiList { get; set; }
         /// <summary>
         /// 値渡しか参照渡しか
         /// </summary>
@@ -42,13 +42,13 @@ namespace Libnako.JPNCompiler.Function
         public NakoFuncArg()
         {
 			varBy = VarByType.ByVal;
-			josiList = new List<String>();    
+			josiList = new List<string>();    
         }
         /// <summary>
         /// 助詞を追加
         /// </summary>
         /// <param name="josi"></param>
-        public void AddJosi(String josi)
+        public void AddJosi(string josi)
         {
             if (!josiList.Contains(josi))
             {
