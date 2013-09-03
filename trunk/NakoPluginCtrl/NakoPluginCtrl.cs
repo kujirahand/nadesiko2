@@ -40,7 +40,7 @@ namespace NakoPluginCtrl
         // Define Method
         public Object _copyToClipboard(INakoFuncCallInfo info)
         {
-            String s = info.StackPopAsString();
+            string s = info.StackPopAsString();
             Clipboard.SetDataObject(s, true);
             return null;
         }
@@ -52,8 +52,8 @@ namespace NakoPluginCtrl
 
         public Object _sendKeys(INakoFuncCallInfo info)
         {
-            String title = info.StackPopAsString();
-            String keys  = info.StackPopAsString();
+            string title = info.StackPopAsString();
+            string keys  = info.StackPopAsString();
             EnumWindows.ActivateWindow(title);
             SendKeys.Send(keys);
             return null;
@@ -61,13 +61,13 @@ namespace NakoPluginCtrl
         
         public Object _enumWindows(INakoFuncCallInfo info)
         {
-            String s = EnumWindows.GetTitle();
+            string s = EnumWindows.GetTitle();
             return s;
         }
         
         public Object _findWindowsRegExp(INakoFuncCallInfo info)
         {
-            String pattern = info.StackPopAsString();
+            string pattern = info.StackPopAsString();
             IntPtr hWnd = EnumWindows.FindWindowRE(pattern);
             int h = hWnd.ToInt32();
             return h;

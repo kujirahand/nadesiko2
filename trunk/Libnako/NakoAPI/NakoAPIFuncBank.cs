@@ -73,8 +73,8 @@ namespace Libnako.NakoAPI
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <param name="desc"></param>
-        /// <param name="kane"></param>
-        public void AddVar(string name, object value, string desc, string kane)
+        /// <param name="kana"></param>
+        public void AddVar(string name, object value, string desc, string kana)
         {
             name = NakoToken.TrimOkurigana(name);
             this.AddVarToList(name, value);

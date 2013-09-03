@@ -53,7 +53,7 @@ namespace NakoPluginADO
         
         public object _open(INakoFuncCallInfo info)
         {
-        	String s = info.StackPopAsString();
+        	string s = info.StackPopAsString();
         	ADODB.Connection con = new ADODB.Connection();
         	con.Open(s,null,null,0);
         	
@@ -76,7 +76,7 @@ namespace NakoPluginADO
             if(!(c is ADODB.Connection)){
                 throw new NakoPluginArgmentException("connection not found");
             }
-            String q = info.StackPopAsString();
+            string q = info.StackPopAsString();
             ADODB.Connection con = (ADODB.Connection)c;
             object affectedrows;
             _rs = con.Execute(q,out affectedrows,(int)ADODB.CommandTypeEnum.adCmdText);
@@ -85,7 +85,7 @@ namespace NakoPluginADO
         public object _getField(INakoFuncCallInfo info)
         {
             object c = info.StackPop();
-            String s = info.StackPopAsString();
+            string s = info.StackPopAsString();
             return _rs.Fields[s].Value;
             
         }

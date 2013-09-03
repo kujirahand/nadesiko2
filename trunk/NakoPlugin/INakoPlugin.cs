@@ -188,8 +188,8 @@ namespace NakoPlugin
         /// <param name="name">変数の名前</param>
         /// <param name="value">変数の初期値</param>
         /// <param name="desc">変数の説明</param>
-        /// <param name="kane">よみがな(アルファベットはそのままで)</param>
-        void AddVar(string name, object value, string desc, string kane);
+        /// <param name="kana">よみがな(アルファベットはそのままで)</param>
+        void AddVar(string name, object value, string desc, string kana);
     }
     
     /// <summary>

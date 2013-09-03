@@ -41,7 +41,7 @@ namespace NakoPluginDialog
 
         public Object _say(INakoFuncCallInfo info)
         {
-            String s = info.StackPopAsString();
+            string s = info.StackPopAsString();
             MessageBox.Show(s, "メッセージ",
                 MessageBoxButtons.OK);
             return null;
@@ -49,7 +49,7 @@ namespace NakoPluginDialog
 
         public Object _yesNo(INakoFuncCallInfo info)
         {
-            String s = info.StackPopAsString();
+            string s = info.StackPopAsString();
             DialogResult res = MessageBox.Show(s, "メッセージ",
                 MessageBoxButtons.YesNo);
             Object result = (res == DialogResult.Yes) ? 1 : 0;
@@ -58,7 +58,7 @@ namespace NakoPluginDialog
 
         public Object _yesNoCancel(INakoFuncCallInfo info)
         {
-            String s = info.StackPopAsString();
+            string s = info.StackPopAsString();
             DialogResult res = MessageBox.Show(s, "メッセージ",
                 MessageBoxButtons.YesNoCancel);
             Object r = 0;
@@ -73,8 +73,8 @@ namespace NakoPluginDialog
         
         public Object _inputBox(INakoFuncCallInfo info)
         {
-            String s = info.StackPopAsString();
-            String res = Interaction.InputBox(s, null, "", -1, -1);
+            string s = info.StackPopAsString();
+            string res = Interaction.InputBox(s, null, "", -1, -1);
             return res;
         }
 
@@ -97,7 +97,7 @@ namespace NakoPluginDialog
 
         public Object _openFileDialog(INakoFuncCallInfo info)
         {
-            String s = info.StackPopAsString();
+            string s = info.StackPopAsString();
 
             //OpenFileDialogクラスのインスタンスを作成
             OpenFileDialog ofd = new OpenFileDialog();
@@ -140,7 +140,7 @@ namespace NakoPluginDialog
 
         public Object _saveFileDialog(INakoFuncCallInfo info)
         {
-            String s = info.StackPopAsString();
+            string s = info.StackPopAsString();
 
             //OpenFileDialogクラスのインスタンスを作成
             SaveFileDialog ofd = new SaveFileDialog();

@@ -47,8 +47,8 @@ namespace NakoPluginRegex
         // Define Method
         public Object _match(INakoFuncCallInfo info)
         {
-        	String s = info.StackPopAsString();
-        	String pattern = info.StackPopAsString();
+        	string s = info.StackPopAsString();
+        	string pattern = info.StackPopAsString();
         	m = Regex.Match(s,pattern);
         	NakoVarArray groups = info.CreateArray();
         	if(m.Success){
@@ -62,8 +62,8 @@ namespace NakoPluginRegex
         }
         public Object _matchAll(INakoFuncCallInfo info)
         {
-        	String s = info.StackPopAsString();
-        	String pattern = info.StackPopAsString();
+        	string s = info.StackPopAsString();
+        	string pattern = info.StackPopAsString();
         	m = Regex.Match(s,pattern);
         	NakoVarArray res = info.CreateArray();
         	int index = 0;
@@ -102,9 +102,9 @@ namespace NakoPluginRegex
         
         public Object _replace(INakoFuncCallInfo info)
         {
-        	String s = info.StackPopAsString();
-        	String pattern = info.StackPopAsString();
-        	String replace = info.StackPopAsString();
+        	string s = info.StackPopAsString();
+        	string pattern = info.StackPopAsString();
+        	string replace = info.StackPopAsString();
         	return Regex.Replace(s,pattern,replace);
         }
         

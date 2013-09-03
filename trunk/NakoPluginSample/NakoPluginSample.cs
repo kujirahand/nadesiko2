@@ -45,9 +45,9 @@ namespace NakoPluginSample
             }
             Object a = ((NakoVariable)ar).Body;
             Object c;
-            if (a is String && b is String)
+            if (a is string && b is string)
             {
-                c = (String)a + (String)b;
+                c = (string)a + (string)b;
             }
             else
             {

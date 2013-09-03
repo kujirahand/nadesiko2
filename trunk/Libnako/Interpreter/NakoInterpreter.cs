@@ -243,8 +243,8 @@ namespace Libnako.Interpreter
             {
                 int i = runpos;
                 string s = "";
-                s += string.Format("{0,4:X4}:", i);
-                s += string.Format("{0,-14}", code.type.ToString());
+                s += String.Format("{0,4:X4}:", i);
+                s += String.Format("{0,-14}", code.type.ToString());
                 s += code.GetDescription();
                 Console.WriteLine(s);
             }

@@ -9,18 +9,18 @@ namespace DemoCNako2
 {
     class Program
     {
-        static NakoCompiler nc2 = new NakoCompiler();
-        static NakoInterpreter ni2 = new NakoInterpreter();
+        //static NakoCompiler nc2 = new NakoCompiler();
+        //static NakoInterpreter ni2 = new NakoInterpreter();
         
         [STAThread]
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             // --------------------------------------------------
             // Compile
             NakoCompiler compiler = new NakoCompiler();
-            compiler.DirectSource =
-                "デスクトップ。\nそれのファイル列挙。\nそれを「/」で配列結合。\nそれを表示。" +
-                "";
+            compiler.DirectSource = "A=「あ」。Aと継続表示。";
+//                "デスクトップ。\nそれのファイル列挙。\nそれを「/」で配列結合。\nそれを表示。" +
+//                "";
             cout = "----------";
             cout = "* TOKENS:";
             cout = compiler.Tokens.toTypeString();
@@ -40,10 +40,10 @@ namespace DemoCNako2
             runner.Run();
             Console.WriteLine("LOG=" + runner.PrintLog);
             cout = "----------";
-
-            // Wait
-            cout = "ok.";
-            Console.ReadLine();
+//
+//            // Wait
+//            cout = "ok.";
+//            Console.ReadLine();
         }
 
         static void _w(string s)

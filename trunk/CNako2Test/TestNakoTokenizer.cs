@@ -57,7 +57,7 @@ namespace NakoPluginTest
   PRINT A
 違えば
   PRINT A
-",　tokenDic)
+", tokenDic)
                 .CheckTokenType(new NakoTokenType[]{
                     NakoTokenType.IF,
                     NakoTokenType.WORD,
