@@ -21,6 +21,7 @@ namespace NakoPluginADO
     public class NakoPluginADO : INakoPlugin
     {
         //TODO:グループみたいに使いたい。ネイティブドライバの時でも同じメソッドを使える感じで
+		//TODO:今のままだと2回SELECTすると先に登録した結果セットが上書きされる。そこらへんを修正したい。
         string _description = "ODBCドライバによるＤＢ処理を行うプラグイン";
         Version _version = new Version(1, 0);
         //--- プラグイン共通の部分 ---
@@ -54,25 +55,44 @@ namespace NakoPluginADO
         public object _open(INakoFuncCallInfo info)
         {
         	string s = info.StackPopAsString();
-        	ADODB.Connection con = new ADODB.Connection();
-        	con.Open(s,null,null,0);
-        	
-        	return con;
+			SqlConnection connection = new SqlConnection(s);
+			connection.Open();
+			return connection;
+        	//ADODB.Connection con = new ADODB.Connection();
+        	//con.Open(s,null,null,0);
+        	//return con;
         }
         public object _close(INakoFuncCallInfo info)
         {
             object c = info.StackPop();
-            if(!(c is ADODB.Connection)){
+            if(!(c is SqlConnection)){
+                throw new NakoPluginArgmentException("connection not found");
+            }
+            SqlConnection con = (SqlConnection)c;
+            con.Close();
+            return null;
+/*            if(!(c is ADODB.Connection)){
                 throw new NakoPluginArgmentException("connection not found");
             }
             ADODB.Connection con = (ADODB.Connection)c;
             con.Close();
-            return null;
+            return null;*/
         }
-        ADODB.Recordset _rs = new ADODB.Recordset();
+		SqlDataReader _rs = null;//TODO:Listにして、コネクションに応じて返却するデータを変えればいけるか？
+        /*ADODB.Recordset _rs = new ADODB.Recordset();*/
         public object _execute(INakoFuncCallInfo info)
         {
             object c = info.StackPop();
+            if(!(c is SqlConnection)){
+                throw new NakoPluginArgmentException("connection not found");
+            }
+            string q = info.StackPopAsString();
+            SqlConnection con = (SqlConnection)c;
+			SqlCommand cmd = new SqlCommand(q,con);
+            _rs = cmd.ExecuteReader();
+			cmd.Dispose();
+            return _rs.RecordsAffected;
+            /*object c = info.StackPop();
             if(!(c is ADODB.Connection)){
                 throw new NakoPluginArgmentException("connection not found");
             }
@@ -80,28 +100,35 @@ namespace NakoPluginADO
             ADODB.Connection con = (ADODB.Connection)c;
             object affectedrows;
             _rs = con.Execute(q,out affectedrows,(int)ADODB.CommandTypeEnum.adCmdText);
-            return affectedrows;
+            return affectedrows;*/
         }
         public object _getField(INakoFuncCallInfo info)
         {
             object c = info.StackPop();
             string s = info.StackPopAsString();
-            return _rs.Fields[s].Value;
+            return _rs[s].ToString();
             
+/*            object c = info.StackPop();
+            string s = info.StackPopAsString();
+            return _rs.Fields[s].Value;*/
         }
-        public object _next(INakoFuncCallInfo info)
+        public object _next(INakoFuncCallInfo info)//TODO:booleanにする？
         {
-            _rs.MoveNext();
+            is_end = _rs.Read();
+			if(is_end) _rs.Close();
             return null;
             
         }
+		protected bool is_end = false;
         public object _isEnd(INakoFuncCallInfo info)
         {
-            return _rs.EOF;
+            //return _rs.EOF;
+			return is_end;
         }
         public object _isExist(INakoFuncCallInfo info)
         {
-            return !_rs.EOF;
+			return !is_end;
+            //return !_rs.EOF;
         }
 
         

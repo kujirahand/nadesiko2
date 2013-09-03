@@ -83,5 +83,16 @@ namespace NakoPluginTest
             runner.Run(com.Codes);
             Assert.AreEqual("si",runner.PrintLog);
         }
+        [Test]
+        public void TestLink()
+        {
+            com.DirectSource = 
+                "S=「<html><body><a href='http://nadesi.com'>な</a><a href='http://www.eznavi.net'>で</a><a href='http://d.aoikujira.com/blog/'>し</a><h2 class='ko'>こ</h2></body></html>」\n" +
+                "LINKS=SからHTMLリンク抽出\n" +
+                "LINKS[0]を表示\n" +
+                "LINKS[2]を表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual("http://nadesi.comhttp://d.aoikujira.com/blog/",runner.PrintLog);
+        }
     }
 }

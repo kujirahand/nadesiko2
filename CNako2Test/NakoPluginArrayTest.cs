@@ -132,6 +132,23 @@ namespace NakoPluginTest
             Assert.AreEqual("む", runner.PrintLog);
         }
         [Test]
+        public void TestPop()
+        {
+            com.DirectSource =
+                "A=「」;\n" +
+                "A[0]=「な」\n" +
+                "A[1]=「で」\n" +
+                "A[2]=「し」\n" +
+                "A[3]=「こ」\n" +
+                "Aに「む」を配列追加\n" +
+                "B=Aを配列ポップ\n" +
+                "Bを継続表示。\n" +
+                "B=Aを配列ポップ\n" +
+                "Bを継続表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual("むこ", runner.PrintLog);
+        }
+        [Test]
         public void TestHashKeys()
         {
             com.DirectSource =

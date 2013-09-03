@@ -190,6 +190,22 @@ namespace NakoPluginTest
             runner.Run(com.Codes);
             Assert.AreEqual("ｱｲｳｴｵ0123456789abcABC", runner.PrintLog);
         }
+        public void TestToUpper()
+        {
+            com.DirectSource =
+                "S=「アイウエオ０１２３４５６７８９ａｂｃＡＢＣabcABC」\n" +
+                "S=Sを小文字変換して継続表示";
+            runner.Run(com.Codes);
+            Assert.AreEqual("アイウエオ０１２３４５６７８９ａｂｃａｂｃabcabc", runner.PrintLog);
+        }
+        public void TestToLower()
+        {
+            com.DirectSource =
+                "S=「アイウエオ０１２３４５６７８９ａｂｃＡＢＣabcABC」\n" +
+                "S=Sを大文字変換して継続表示";
+            runner.Run(com.Codes);
+            Assert.AreEqual("アイウエオ０１２３４５６７８９ＡＢＣＡＢＣABCABC", runner.PrintLog);
+        }
         [Test]
         public void TestZerofill()
         {
