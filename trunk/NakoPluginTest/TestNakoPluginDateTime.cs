@@ -57,5 +57,12 @@ namespace NakoPluginTest
             TimeSpan diff = d1.Subtract(d2);
             Assert.AreEqual(runner.PrintLog, diff.TotalHours.ToString());
         }
+        [Test, Timeout(2500)]
+        public void TestSleep()
+        {
+            com.DirectSource = 
+                "2秒待つ。";
+            runner.Run(com.Codes);
+        }
     }
 }
