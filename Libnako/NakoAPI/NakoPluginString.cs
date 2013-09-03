@@ -262,7 +262,7 @@ namespace Libnako.NakoAPI
         private object _zeroFill(INakoFuncCallInfo info){
         	long s = info.StackPopAsInt();
         	string l = info.StackPopAsInt().ToString();
-        	return　string.Format(@"{0:D"+l+"}",s);
+        	return String.Format(@"{0:D"+l+"}",s);
         }
         
         private object _toEn(INakoFuncCallInfo info){

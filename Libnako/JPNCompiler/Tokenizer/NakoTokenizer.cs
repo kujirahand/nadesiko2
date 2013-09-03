@@ -500,7 +500,7 @@ namespace Libnako.JPNCompiler.Tokenizer
                     if (token.Type == NakoTokenType.UNKNOWN)
                     {
                         char ch = CurrentChar;
-                        string msg = "未定義の文字列: " + (ch < 0x20 ? string.Format("0x{0,0:X2}", (int)ch) : "`" + ch + "`");
+                        string msg = "未定義の文字列: " + (ch < 0x20 ? String.Format("0x{0,0:X2}", (int)ch) : "`" + ch + "`");
                         throw new NakoTokenizerException(msg, token);
                     }
                     return token;

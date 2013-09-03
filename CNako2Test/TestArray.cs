@@ -166,5 +166,58 @@ namespace NakoPluginTest
             Assert.AreEqual("566", ni.PrintLog);
         }
 
+        [Test]
+        public void Test_array_array5()
+        {
+            NakoCompiler nc = new NakoCompiler();
+            NakoInterpreter ni = new NakoInterpreter();
+            nc.DirectSource =
+                "A[45]=222\n" +
+                "B[3]=A\n" +
+                "PRINT B[3][45]\n" +
+                "";
+            ni.Run(nc.Codes);
+            Assert.AreEqual("222",ni.PrintLog);
+        }
+        [Test]
+        public void Test_array_array6()
+        {
+            NakoCompiler nc = new NakoCompiler();
+            NakoInterpreter ni = new NakoInterpreter();
+            nc.DirectSource =
+                "A[3][45]=222\n" +
+                "B[20]=A\n" +
+                "PRINT B[20][3][45]\n" +
+                "";
+            ni.Run(nc.Codes);
+            Assert.AreEqual("222",ni.PrintLog);
+        }
+        [Test]
+        public void Test_array_array7()
+        {
+            NakoCompiler nc = new NakoCompiler();
+            NakoInterpreter ni = new NakoInterpreter();
+            nc.DirectSource =
+                "A[`a`]=222\n" +
+                "B[`b`]=A\n" +
+                "PRINT B[`b`][`a`]\n" +
+                "";
+            ni.Run(nc.Codes);
+            Assert.AreEqual("222",ni.PrintLog);
+        }
+        [Test]
+        public void Test_array_array8()
+        {
+            NakoCompiler nc = new NakoCompiler();
+            NakoInterpreter ni = new NakoInterpreter();
+            nc.DirectSource =
+                "A[3][`a`]=222\n" +
+                "B[`b`]=A\n" +
+                "PRINT B[`b`][3][`a`]\n" +
+                "";
+            ni.Run(nc.Codes);
+            Assert.AreEqual("222",ni.PrintLog);
+        }
+
     }
 }

@@ -32,18 +32,18 @@ namespace NakoPluginCtrl
         
         private StringBuilder result;
         
-        public String GetWindowTitle()
+        public string GetWindowTitle()
         {
             result = new StringBuilder();
             _EnumWindows(new EnumWindowsCallback(_EnumWindowsProc), 0);
-            String s = result.ToString();
+            string s = result.ToString();
             if (s.Length > 0) {
                 s = s.Substring(0, s.Length - 1); // chomp
             }
             return s;
         }
         
-        public static String GetTitle()
+        public static string GetTitle()
         {
             EnumWindows e = new EnumWindows();
             return e.GetWindowTitle();
@@ -74,7 +74,7 @@ namespace NakoPluginCtrl
             return 1; // CONTINUE
         }
         
-        private String Keyword = "";
+        private string Keyword = "";
         private IntPtr FindWindowResult = IntPtr.Zero;
         
         private int _FindWindowProc(IntPtr hWnd, int lParam)
@@ -82,7 +82,7 @@ namespace NakoPluginCtrl
             // Get title
             StringBuilder sb = new StringBuilder(0x1000);
             GetWindowText(hWnd, sb, sb.Capacity);
-            String title = sb.ToString();
+            string title = sb.ToString();
             
             // Check pattern
             if (Regex.IsMatch(title, Keyword)) {
@@ -93,7 +93,7 @@ namespace NakoPluginCtrl
             }
         }
         
-        public IntPtr FindRE(String title)
+        public IntPtr FindRE(string title)
         {
             FindWindowResult = IntPtr.Zero;
             Keyword = title;
@@ -101,13 +101,13 @@ namespace NakoPluginCtrl
             return FindWindowResult;
         }
         
-        public static IntPtr FindWindowRE(String Title)
+        public static IntPtr FindWindowRE(string Title)
         {
             EnumWindows e = new EnumWindows();
             return e.FindRE(Title);
         }
         
-        public static void ActivateWindow(String title)
+        public static void ActivateWindow(string title)
         {
             IntPtr h = IntPtr.Zero;
             h = FindWindow(null, title);

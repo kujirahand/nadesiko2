@@ -30,13 +30,13 @@ namespace Libnako.NakoAPI
         /// <param name="f">実際に処理を行うC#のdelegate</param>
         /// <param name="desc">関数の説明</param>
         /// <param name="kana">命令のよみがな</param>
-        protected void addFunc(String name, String argdef, NakoVarType resultType, SysCallDelegate f, String desc, String kana)
+        protected void addFunc(string name, string argdef, NakoVarType resultType, SysCallDelegate f, string desc, string kana)
         {
             name = NakoToken.TrimOkurigana(name);
             NakoAPIFunc s = new NakoAPIFunc(name, argdef, resultType, f);
             NakoAPIFuncBank.Instance.AddFunc(s);
         }
-        protected void addVar(String name, Object value, String desc, String kane)
+        protected void addVar(string name, Object value, string desc, string kana)
         {
             name = NakoToken.TrimOkurigana(name);
             NakoAPIFuncBank.Instance.AddVar(name, value);

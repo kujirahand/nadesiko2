@@ -53,8 +53,8 @@ namespace NakoPluginTag
         }
         public Object _extract(INakoFuncCallInfo info)
         {
-        	String s = info.StackPopAsString();
-        	String a = info.StackPopAsString();
+        	string s = info.StackPopAsString();
+        	string a = info.StackPopAsString();
         	HtmlDocument doc = new HtmlDocument();
         	doc.LoadHtml(s);
         	HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes(String.Format(@"//{0}",a));
@@ -69,8 +69,8 @@ namespace NakoPluginTag
         }
          public Object _hirextract(INakoFuncCallInfo info)
         {
-        	String s = info.StackPopAsString();
-        	String a = info.StackPopAsString();
+        	string s = info.StackPopAsString();
+        	string a = info.StackPopAsString();
         	HtmlDocument doc = new HtmlDocument();
         	doc.LoadHtml(s);
         	HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes(String.Format(@"//{0}",a));
@@ -85,9 +85,9 @@ namespace NakoPluginTag
         }
        public Object _attr(INakoFuncCallInfo info)
         {
-        	String s = info.StackPopAsString();
-        	String a = info.StackPopAsString();
-        	String b = info.StackPopAsString();
+        	string s = info.StackPopAsString();
+        	string a = info.StackPopAsString();
+        	string b = info.StackPopAsString();
         	HtmlDocument doc = new HtmlDocument();
         	doc.LoadHtml(s);
         	HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes(String.Format(@"//{0}",a));
@@ -102,8 +102,8 @@ namespace NakoPluginTag
         }
        public Object _attrlist(INakoFuncCallInfo info)
         {
-        	String s = info.StackPopAsString();
-        	String a = info.StackPopAsString();
+        	string s = info.StackPopAsString();
+        	string a = info.StackPopAsString();
         	HtmlDocument doc = new HtmlDocument();
         	doc.LoadHtml(s);
         	HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes(String.Format(@"//{0}",a));
@@ -119,7 +119,7 @@ namespace NakoPluginTag
         }
         public Object _link(INakoFuncCallInfo info)
         {
-        	String s = info.StackPopAsString();
+        	string s = info.StackPopAsString();
         	HtmlDocument doc = new HtmlDocument();
         	doc.LoadHtml(s);
         	HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes(@"//a");
@@ -134,7 +134,7 @@ namespace NakoPluginTag
         }
         public Object _remove(INakoFuncCallInfo info)
         {
-        	String s = info.StackPopAsString();
+        	string s = info.StackPopAsString();
         	HtmlDocument doc = new HtmlDocument();
          	doc.LoadHtml(s);
             StringWriter sw = new StringWriter();

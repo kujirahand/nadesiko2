@@ -45,12 +45,12 @@ namespace NakoPluginHttp
         
         public Object _urlDecode(INakoFuncCallInfo info)
         {
-        	String s = info.StackPopAsString();
+        	string s = info.StackPopAsString();
         	return Uri.UnescapeDataString(s);
         }
         public Object _urlEncode(INakoFuncCallInfo info)
         {
-        	String s = info.StackPopAsString();
+        	string s = info.StackPopAsString();
         	return Uri.EscapeDataString(s);
         }
         

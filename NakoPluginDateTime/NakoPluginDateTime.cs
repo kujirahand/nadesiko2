@@ -82,8 +82,8 @@ namespace NakoPluginDateTime
         
         public Object _diffhours(INakoFuncCallInfo info)
         {
-         	String atime = info.StackPopAsString();
-         	String btime = info.StackPopAsString();
+         	string atime = info.StackPopAsString();
+         	string btime = info.StackPopAsString();
          	DateTime adatetime = DateTime.Parse(atime);
          	DateTime bdatetime = DateTime.Parse(btime);
          	return adatetime.Subtract(bdatetime).TotalHours;

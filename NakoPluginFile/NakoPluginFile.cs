@@ -77,22 +77,22 @@ namespace NakoPluginFile
         // Define Method
         public Object _openFile(INakoFuncCallInfo info)
         {
-            String fileName = info.StackPopAsString();
+            string fileName = info.StackPopAsString();
             // Exists?
             if (!System.IO.File.Exists(fileName))
             {
                 throw new NakoPluginRuntimeException("ファイル『" + fileName + "』は存在しません。");
             }
             // Load
-            //String src = File.ReadAllText(fileName);
-            String src = StrUnit.LoadFromFileAutoEnc(fileName);
+            //string src = File.ReadAllText(fileName);
+            string src = StrUnit.LoadFromFileAutoEnc(fileName);
             return src;
         }
         
         public Object _saveFile(INakoFuncCallInfo info)
         {
-            String s = info.StackPopAsString();
-            String fileName = info.StackPopAsString();
+            string s = info.StackPopAsString();
+            string fileName = info.StackPopAsString();
 
             System.Text.Encoding enc = new System.Text.UTF8Encoding(false);
             System.IO.File.WriteAllText(fileName, s, enc);
