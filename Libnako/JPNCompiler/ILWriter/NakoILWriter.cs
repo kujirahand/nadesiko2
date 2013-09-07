@@ -638,7 +638,7 @@ namespace Libnako.JPNCompiler.ILWriter
             NakoILCode code = new NakoILCode();
             if (node.func.funcType == Function.NakoFuncType.SysCall)
             {
-                NakoAPIFunc f = (NakoAPIFunc)node.func;
+                // NakoAPIFunc f = (NakoAPIFunc)node.func;
                 code.type = NakoILType.SYSCALL;
                 code.value = node.func.varNo;
                 result.Add(code);
