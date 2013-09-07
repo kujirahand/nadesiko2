@@ -169,6 +169,7 @@ namespace Libnako.JPNCompiler.Tokenizer
                 var token = GetToken();
                 if (token == null)
                 {
+                    lastTokenType = NakoTokenType.EOL;
                     continue;
                 }
                 lastTokenType = token.Type;

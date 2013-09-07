@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-using NUnit.Framework;
-using Libnako.JPNCompiler;
 using Libnako.Interpreter;
+using Libnako.JPNCompiler;
+using NUnit.Framework;
 
 using cnako2;
 

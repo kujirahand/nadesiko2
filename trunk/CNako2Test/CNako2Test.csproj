@@ -33,7 +33,9 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=2.5.9.10348, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL" />
+    <Reference Include="nunit.framework, Version=2.5.9.10348, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -60,10 +62,6 @@
     <Compile Include="TestTokenString.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\cnako2\CNako2.csproj">
-      <Project>{6A22E146-C2AC-473B-9F3C-0D88DE3FDF3E}</Project>
-      <Name>CNako2</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Libnako\Libnako.csproj">
       <Project>{F9297385-ACE0-43AD-AD66-819C5A60FE80}</Project>
       <Name>Libnako</Name>
@@ -71,6 +69,10 @@
     <ProjectReference Include="..\NakoPlugin\NakoPlugin.csproj">
       <Project>{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}</Project>
       <Name>NakoPlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\cnako2\cnako2.csproj">
+      <Project>{6A22E146-C2AC-473B-9F3C-0D88DE3FDF3E}</Project>
+      <Name>cnako2</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

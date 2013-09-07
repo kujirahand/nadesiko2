@@ -74,6 +74,21 @@ namespace NakoPluginTest
             Assert.AreEqual(runner.PrintLog, "16");
         }
         [Test]
+        public void TestUserFunc_Add3()
+        {
+            codes = ns.Publish(
+                "\n\n●AにBを加算\n" +
+                "　　それ=A+B\n" +
+                "\n" +
+				"●AにBをKAKERU\n" +
+				"　　それ=A*B\n" +
+				"\n" +
+                "3に5をKAKERU;PRINT それ\n" +
+                "\n");
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "15");
+        }
+        [Test]
         public void TestSysFunc_sub()
         {
             codes = ns.Publish(
