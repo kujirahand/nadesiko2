@@ -30,6 +30,10 @@ namespace NakoPluginDateTime
             bank.AddFunc("今", "", NakoVarType.String, _now, "今の時間を取得して返す", "いま");
             bank.AddFunc("システム時間", "", NakoVarType.Int, _systime, "(擬似的な)システム時間をミリ秒単位で取得して返す", "しすてむじかん");
             bank.AddFunc("時間差", "ATIMEとBTIMEの", NakoVarType.Int, _diffhours, "時間AとBの時間の差を求めて返す", "じかんさ");
+            bank.AddFunc("UNIXTIME_日時変換", "Iを", NakoVarType.String, _unixtime_to_datetime, "Unix TimeであるIをなでしこ日時形式に変換する", "ゆにっくすたいむにちじへんかん");
+            bank.AddFunc("日付加算", "SにAを", NakoVarType.String, _add, "日付SにAを加えて返す。Aには「(+|-)yyyy/mm/dd」で指定する。", "ひづけかさん");
+//NakoPluginDateTime	{=?}Iを　UNIXTIME_日時変換　ｰｰ　Unix TimeであるIをなでしこ日時形式に変換する
+//NakoPluginDateTime	{=?}SにAを　日付加算　ｰｰ　日付SにAを加えて返す。Aには「(+|-)yyyy/mm/dd」で指定する。
         }
         
         // プラグインの初期化処理
@@ -89,6 +93,20 @@ namespace NakoPluginDateTime
          	return adatetime.Subtract(bdatetime).TotalHours;
            
         }
+		static readonly DateTime UnixEpoch = new DateTime(1970,1,1,0,0,0,0,DateTimeKind.Utc);
+        public object _unixtime_to_datetime(INakoFuncCallInfo info){
+			long unixtime = info.StackPopAsInt();
+			return UnixEpoch.AddSeconds(unixtime).ToLocalTime();
+		}
+        public object _add(INakoFuncCallInfo info){
+			string s = info.StackPopAsString();
+         	string addDate = info.StackPopAsString();
+			string addOrDel = addDate.Substring(0,1);
+			string[] span = addDate.Substring(1).Replace('-','/').Split('/');
+			if(span.Length!=3) throw new ArgumentException();
+			DateTime current = DateTime.Parse(s);//TODO:ParseExactを使うか？
+			return current.AddYears(int.Parse (addOrDel+span[0])).AddMonths(int.Parse (addOrDel+span[1])).AddDays (int.Parse (addOrDel+span[2])).ToString();
+		}
         
     }
 }

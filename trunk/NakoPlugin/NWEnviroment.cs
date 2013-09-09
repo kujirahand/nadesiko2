@@ -75,6 +75,10 @@ namespace NakoPlugin
             }
             return res;
         }
+		public static bool isWindows(){
+			string osVersion = osVersionStr();
+			return (osVersion.Contains("Windows"))? true : false;
+		}
         /// <summary>
         /// 実行ファイルのパス
         /// </summary>
