@@ -178,5 +178,73 @@ namespace NakoPluginTest
             runner.Run(com.Codes);
             Assert.AreEqual(ConvertPath("/tmp/hoge/fuga#/tmp/hoge/piyo"), runner.PrintLog);
         }
+
+        [Test]
+        public void Test_fileSize()
+        {
+            string tmp = System.IO.Path.GetTempPath();
+            com.DirectSource = 
+                "F=「"+tmp+"hoge.txt」\n" +
+				"Fに「」を保存\n" +
+                "Fのファイルサイズを継続表示" +
+                "";
+            runner.Run(com.Codes);
+            Assert.AreEqual("0", runner.PrintLog);
+            com.DirectSource = 
+                "F=「"+tmp+"hoge.txt」\n" +
+				"Fに「abcdefg」を保存\n" +
+                "Fのファイルサイズを継続表示" +
+                "";
+            runner.Run(com.Codes);
+            Assert.AreEqual("abcdefg".Length.ToString(), runner.PrintLog);
+        }
+
+        [Test]
+        public void Test_append()
+        {
+            string tmp = System.IO.Path.GetTempPath();
+            com.DirectSource = 
+                "F=「"+tmp+"hoge.txt」\n" +
+				"Fに「」を保存\n" +
+				"「ほげほげ」をFに追加保存\n" +
+                "Fを開く\n" +
+                "それを継続表示" +
+                "";
+            runner.Run(com.Codes);
+            Assert.AreEqual("ほげほげ", runner.PrintLog);
+        }
+
+        [Test]
+        public void Test_currentDir()
+        {
+            string currentDir = System.IO.Directory.GetCurrentDirectory();
+            com.DirectSource = 
+                "F=作業フォルダ取得\n" +
+                "Fを継続表示\n" +
+                "";
+            runner.Run(com.Codes);
+            Assert.AreEqual(NWEnviroment.AppendLastPathFlag(currentDir), runner.PrintLog);
+            currentDir = System.IO.Path.GetTempPath();
+            com.DirectSource = 
+                "「"+currentDir+"」に作業フォルダ変更\n" +
+                "F=作業フォルダ取得\n" +
+                "Fを継続表示\n" +
+                "";
+            runner.Run(com.Codes);
+            Assert.AreEqual(NWEnviroment.AppendLastPathFlag(currentDir), runner.PrintLog);
+            
+        }
+
+        [Test]
+        public void Test_command()
+        {
+            com.DirectSource = 
+                "S=「echo 'hoge'」をコマンド実行\n" +
+                "Sを継続表示\n" +
+                "";
+            runner.Run(com.Codes);
+            Assert.AreEqual("hoge\n", runner.PrintLog);
+            
+        }
     }
 }

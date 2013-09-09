@@ -64,5 +64,24 @@ namespace NakoPluginTest
                 "2秒待つ。";
             runner.Run(com.Codes);
         }
-    }
+
+		[Test]
+        public void TestAdd()
+        {
+            com.DirectSource = 
+                "「2001-11-11 01:00:00」に「+0001/01/01」を日付加算を表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual("2002/12/12 1:00:00",runner.PrintLog);
+        }
+
+		[Test]
+        public void TestUnixtimeToDatetime()
+        {
+            com.DirectSource = 
+                "1378652400をUNIXTIME_日時変換を表示。";
+            runner.Run(com.Codes);
+			DateTime hoge = new DateTime(2013,9,9,0,0,0,DateTimeKind.Local);
+            Assert.AreEqual(hoge.ToString(),runner.PrintLog);
+        }
+     }
 }

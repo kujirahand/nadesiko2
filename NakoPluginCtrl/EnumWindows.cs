@@ -19,9 +19,9 @@ namespace NakoPluginCtrl
         public extern static int GetWindowText(IntPtr hWnd, StringBuilder text, int length);
         [DllImport("user32.dll")]
         public extern static int GetWindowThreadProcessId(IntPtr hWnd, out int lpdwProcessId);
-        [DllImport("user32", EntryPoint = "EnumWindows")]
+        [DllImport("user32.dll", EntryPoint = "EnumWindows")]
         public extern static int _EnumWindows(EnumWindowsCallback lpEnumFunc, int lParam);
-        [DllImport("user32", EntryPoint = "IsWindowVisible")]
+        [DllImport("user32.dll", EntryPoint = "IsWindowVisible")]
         public extern static int IsWindowVisible(IntPtr hWnd);
         [DllImport("user32.dll",CharSet = System.Runtime.InteropServices.CharSet.Auto)]
         public extern static IntPtr FindWindow(string lpClassName, string lpWindowName);
@@ -111,7 +111,7 @@ namespace NakoPluginCtrl
         {
             IntPtr h = IntPtr.Zero;
             h = FindWindow(null, title);
-            if (h == null) {
+            if (h == (IntPtr)null) {
                 h = EnumWindows.FindWindowRE(title);
             }
             if (h != IntPtr.Zero) {
