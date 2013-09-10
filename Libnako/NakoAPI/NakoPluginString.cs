@@ -275,9 +275,11 @@ namespace Libnako.NakoAPI
         {
         	string s = info.StackPopAsString();
         	return Regex.Replace(s,@"[０-９Ａ-Ｚａ-ｚ：－　]+",delegate(Match m){ 
-			//TODO: Windowsならば
+			if(NWEnviroment.isWindows()){
 				return Strings.StrConv(m.Value, VbStrConv.Narrow, 0); 
-			//TODO: Linuxならばnkf -Zを実行
+			}else{
+				return LinuxCommand.execute("echo '"+m.Value+"' | nkf -Z3").Replace("\n","");
+			}
 			});
         }
         /// <summary>
@@ -293,9 +295,11 @@ namespace Libnako.NakoAPI
         
         private object _toEn(INakoFuncCallInfo info){
         	string s = info.StackPopAsString();
- 			//TODO: Windowsならば
-            return Strings.StrConv(s, VbStrConv.Narrow, 0);
-			//TODO: Linuxならばnkf -Z4を実行
+			if(NWEnviroment.isWindows()){
+	            return Strings.StrConv(s, VbStrConv.Narrow, 0);
+			}else{
+				return LinuxCommand.execute("echo '"+s+"' | nkf -Z4").Replace("\n","");
+			}
         }
         private int NadesikoPositionToCSPosition(int nadesiko_pos){
             return nadesiko_pos - 1;
@@ -332,8 +336,13 @@ namespace Libnako.NakoAPI
 		
 		private object _to_utf8(INakoFuncCallInfo info){
             string s = info.StackPopAsString();
-			return s;
-			//return checkEncoding(s);
+            string encode = checkEncoding(s);
+            if(encode=="UTF-8") return s;
+			System.Text.Encoding src = System.Text.Encoding.GetEncoding(encode);
+			System.Text.Encoding dest = System.Text.Encoding.UTF8;
+			byte [] temp = src.GetBytes(s);
+			byte[] s_temp = System.Text.Encoding.Convert(src, dest, temp);
+			return dest.GetString(s_temp);
 		}
 		
 		private object _from_sjis_to_utf8(INakoFuncCallInfo info){
@@ -349,7 +358,7 @@ namespace Libnako.NakoAPI
 			if(NWEnviroment.isWindows()){
 				throw new NotSupportedException();
 			}else{
-				return LinuxCommand.execute("echo '"+s+"' | nkf -g");
+				return LinuxCommand.execute("echo '"+s+"' | nkf -g").Replace("\n","");
 			}
 			//return "CP932";
 		}
