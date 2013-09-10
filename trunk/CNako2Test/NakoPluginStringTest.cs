@@ -131,6 +131,16 @@ namespace NakoPluginTest
             Assert.AreEqual("なしこ", runner.PrintLog);
         }
         [Test]
+        public void TestRemoveRight()
+        {
+            com.DirectSource =
+                "S=「なでしこ」\n" +
+                "Sから1文字右端削除\n" +
+                "Sを継続表示。";
+            runner.Run(com.Codes);
+            Assert.AreEqual("なでし", runner.PrintLog);
+        }
+        [Test]
         public void TestInsert()
         {
             com.DirectSource =
@@ -168,7 +178,9 @@ namespace NakoPluginTest
         public void TestAppend()
         {
             com.DirectSource =
-                "「なでし」に「こ」を追加して継続表示。";
+                "S=「なでし」\n"+
+				"Sに「こ」を追加\n" +
+				"Sを継続表示。";
             runner.Run(com.Codes);
             Assert.AreEqual("なでしこ", runner.PrintLog);
         }
@@ -253,6 +265,67 @@ namespace NakoPluginTest
                 "";
             ni.Run(nc.Codes);
             Assert.AreEqual("4", ni.PrintLog);
+        }
+        [Test]
+        public void Test_occurrence()
+        {
+            NakoCompiler nc = new NakoCompiler();
+            NakoInterpreter ni = new NakoInterpreter();
+            nc.DirectSource =
+                "`abcdabcabdcab`で`ab`の出現回数\n" +
+                "それを継続表示\n" +
+                "";
+            ni.Run(nc.Codes);
+            Assert.AreEqual("4", ni.PrintLog);
+            nc.DirectSource =
+                "`ほげふがほbcaふがげふがほふげがふがほ`で`ふが`の出現回数\n" +
+                "それを継続表示\n" +
+                "";
+            ni.Run(nc.Codes);
+            Assert.AreEqual("4", ni.PrintLog);
+        }
+		
+		[Test]
+        public void TestKanaToRoman()
+        {
+			//TODO:なでしこ1の実装では英数が消えてしまうんだけどどうしようかな
+			//Linuxでは失敗
+            com.DirectSource =
+                "S=「アイウエオ０１２３４５６７８９ａｂｃＡＢＣ」\n" +
+                "Sをカナローマ字変換して継続表示";
+            runner.Run(com.Codes);
+            Assert.AreEqual("aiueo０１２３４５６７８９ａｂｃＡＢＣ", runner.PrintLog);
+        }
+		
+		[Test]
+        public void TestSjisToUtf8()
+        {//このテスト、ちゃんとSJISで関数に送られていないような気がする。
+			string s = @"ほげほげふがふが埋め込み";
+			System.Text.Encoding src = System.Text.Encoding.UTF8;
+			System.Text.Encoding dest = System.Text.Encoding.GetEncoding("CP932");
+			byte [] temp = src.GetBytes(s);
+			byte[] sjis_temp = System.Text.Encoding.Convert(src, dest, temp);
+			string sjis_str = dest.GetString(sjis_temp);
+            com.DirectSource =
+                "S=「"+sjis_str+"」\n" +
+                "SをSJIS_UTF8変換して継続表示";
+            runner.Run(com.Codes);
+            Assert.AreEqual("ほげほげふがふが埋め込み", sjis_str);
+        }
+		[Test]
+        public void TestToUtf8()
+        {//このテスト、ちゃんとSJISで関数に送られていないような気がする。
+			string s = @"ほげほげふがふが埋め込み";
+			System.Text.Encoding src = System.Text.Encoding.Unicode;
+			System.Text.Encoding dest = System.Text.Encoding.GetEncoding("CP932");
+			byte [] temp = src.GetBytes(s);
+			byte[] sjis_temp = System.Text.Encoding.Convert(src, dest, temp);
+			string sjis_str = dest.GetString(sjis_temp);
+            com.DirectSource =
+                "S=「"+sjis_str+"」\n" +
+                "SをUTF8変換して継続表示";
+            runner.Run(com.Codes);
+            Assert.AreEqual("ほげほげふがふが埋め込み", sjis_str);
         }
     }
 }

@@ -170,5 +170,19 @@ namespace NakoPluginTest
             runner.Run(codes);
             Assert.AreEqual(runner.PrintLog, "6");
         }
+        [Test]
+        public void TestUserFunc_Ret()
+        {
+            codes = ns.Publish(
+                "●ほげ\n" +
+                "　　それ＝「ふが」" +
+                "　　戻る" +
+                "　　それ＝「ぴよ」" +
+                "\n" +
+                "PRINT ほげ\n" +
+                "\n");
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "ふが");
+        }
     }
 }
