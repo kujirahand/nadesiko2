@@ -49,6 +49,8 @@ namespace Libnako.JPNCompiler.Tokenizer
         BREAK,
         ///<summary>トークンの種類は "続ける" 文です。</summary>
         CONTINUE,
+        ///<summary>トークンの種類は "戻る" 文です。</summary>
+        RETURN,
         // ---  ---
         ///<summary>トークンの種類は "Then" です。</summary>
         THEN,

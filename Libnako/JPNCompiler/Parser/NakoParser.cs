@@ -131,6 +131,7 @@ namespace Libnako.JPNCompiler.Parser
             if (_def_variable()) return true;
             if (_callfunc_stmt()) return true;
             if (_print()) return true;
+            if (_return()) return true;
             if (Accept(NakoTokenType.CONTINUE))
             {
                 parentNode.AddChild(new NakoNodeContinue());
@@ -401,6 +402,34 @@ namespace Libnako.JPNCompiler.Parser
 
             this.parentNode.AddChild(repnode);
             lastNode = repnode;
+            return true;
+        }
+        private bool _return()
+        {
+            TokenTry();
+            bool is_value = _value();
+            if (!Accept(NakoTokenType.RETURN))
+            {
+                TokenBack();
+                return false;
+            }
+            TokenFinally();
+            if(is_value){
+            	NakoNodeLet node = new NakoNodeLet();
+				NakoNodeVariable sore = new NakoNodeVariable();
+				sore.varNo = (int)0;
+				sore.scope = NakoVariableScope.Global;
+            	node.VarNode = sore;
+            	NakoNodeLetValue valuenode = new NakoNodeLetValue();
+            	while (calcStack.Count > 0) 
+            	{
+            	    valuenode.AddChild(calcStack.Shift());
+            	}
+            	node.ValueNode = (NakoNode)valuenode;
+            	parentNode.AddChild(node);
+			}
+            parentNode.AddChild(new NakoNodeReturn());
+            tok.MoveNext();
             return true;
         }
 

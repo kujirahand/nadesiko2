@@ -27,6 +27,7 @@ namespace Libnako.JPNCompiler.Tokenizer
             dic.AddWord("条件分岐", NakoTokenType.SWITCH);
             dic.AddWord("抜ける", NakoTokenType.BREAK);
             dic.AddWord("続ける", NakoTokenType.CONTINUE);
+            dic.AddWord("戻る", NakoTokenType.RETURN);
             // デバッグ用の特殊構文
             dic.AddWord("PRINT", NakoTokenType.PRINT);
             // システムの優先予約語
