@@ -116,6 +116,9 @@ namespace Libnako.JPNCompiler.ILWriter
                 case NakoNodeType.CONTINUE:
                     addNewILCode(NakoILType.NOP, "CONTINUE");
                     return;
+                case NakoNodeType.RETURN:
+                    addNewILCode(NakoILType.NOP, "RETURN");
+                    return;
                 case NakoNodeType.REPEAT_TIMES:
                     _repeat_times((NakoNodeRepeatTimes)node);
                     return;
@@ -363,6 +366,42 @@ namespace Libnako.JPNCompiler.ILWriter
                         if (item.hasChildren())
                         {
                             _loop_check_break_continue(item, break_label, continue_label);
+                        }
+                        break;
+                }
+            }
+        }
+
+        // RETURN文を解決する
+        private void _func_check_return(NakoNode block, NakoILCode return_label)
+        {
+            if (block == null) return;
+            if (!block.hasChildren()) return;
+            for (int i = 0; i < block.Children.Count; i++)
+            {
+                NakoNode item = block.Children[i];
+
+                switch (item.type)
+                {
+                    case NakoNodeType.RETURN:
+                       item.type = NakoNodeType.JUMP;
+                        ((NakoNodeReturn)item).label = return_label;
+                        break;
+
+                    // ジャンプポイントが変わる構文があれば、その下層ブロックは処理しない
+                    case NakoNodeType.FOR: break;
+                    case NakoNodeType.WHILE: break;
+                    case NakoNodeType.REPEAT_TIMES: break;
+                    case NakoNodeType.FOREACH: break;
+                    case NakoNodeType.IF:
+                        NakoNodeIf ifnode = (NakoNodeIf)item;
+                        _func_check_return(ifnode.nodeTrue, return_label);
+                        _func_check_return(ifnode.nodeFalse, return_label);
+                        break;
+                    default:
+                        if (item.hasChildren())
+                        {
+                            _func_check_return(item, return_label);
                         }
                         break;
                 }
@@ -656,6 +695,7 @@ namespace Libnako.JPNCompiler.ILWriter
         {
             // 必要なラベルを定義
 			NakoILCode end_of_def_func = createLABEL("END_OF_DEF_FUNC_" + node.func.name);
+			NakoILCode ret_of_def_func = createLABEL("RETURN_OF_DEF_FUNC_" + node.func.name);
             NakoILCode begin_def_func = createLABEL("FUNC_" + node.func.name);
             node.defLabel = begin_def_func;
             
@@ -672,8 +712,10 @@ namespace Libnako.JPNCompiler.ILWriter
                 result.Add(c);
             }
             // 本文を定義
+            _func_check_return(node.funcBody, ret_of_def_func);
             Write_r(node.funcBody);
             // 戻り値(変数「それ」)をスタックに載せる
+            result.Add(ret_of_def_func);
             result.Add(new NakoILCode(NakoILType.LD_GLOBAL, (int)0));
 			result.Add(new NakoILCode(NakoILType.RET, func.updateSore));
             // 関数の終わりを定義

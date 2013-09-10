@@ -137,5 +137,7 @@ namespace Libnako.Interpreter.ILCode
         _BREAK      = 0xF1, // { args:0, push:0, pop:0 }
         ///<summary>_CONTINUE</summary>
         _CONTINUE = 0xF2, // { args:0, push:0, pop:0 }
+        ///<summary>_RETURN</summary>
+        _RETURN = 0xF3, // { args:0, push:0, pop:0 }
     }
 }

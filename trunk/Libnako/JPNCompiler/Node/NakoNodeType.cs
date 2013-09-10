@@ -35,6 +35,8 @@ namespace Libnako.JPNCompiler.Node
         BREAK,
         ///<summary>CONTINUE</summary>
         CONTINUE,
+        ///<summary>RETURN</summary>
+        RETURN,
 
         // --- Const ---
         ///<summary>INT</summary>

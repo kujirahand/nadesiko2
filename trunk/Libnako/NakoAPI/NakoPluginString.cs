@@ -50,11 +50,12 @@ namespace Libnako.NakoAPI
             bank.AddFunc("文字抜き出す", "SのAからCNT", NakoVarType.String, _extract, "文字列SでAからCNT文字分を抜き出して返す", "もじぬきだす");
             bank.AddFunc("全角か判定", "Sが|Sの|Sを", NakoVarType.Int, _Em, "文字列Sの一文字目が全角かどうか判定して返す。", "ぜんかくかはんてい");
             bank.AddFunc("文字削除", "{参照渡し}SのAからB|Sで", NakoVarType.Void, _remove, "文字列SのA文字目からB文字だけ削除する。Sに変数を指定した場合はSの内容も変更する", "もじさくじょ");
+            bank.AddFunc("文字右端削除", "{参照渡し}SのB|Sで", NakoVarType.Void, _removeright, "文字列SからB文字だけ右側を削除する。Sに変数を指定した場合はSの内容も変更する", "もじみぎはしさくじょ");//未実装
             bank.AddFunc("文字挿入", "SのCNTにAを", NakoVarType.String, _insert, "文字列SのCNT文字目に文字列Aを挿入して返す。", "もじそうにゅう");
             bank.AddFunc("文字列分解", "Sを|Sの|Sで", NakoVarType.Array, _degrade, "文字列Sを1文字ずつ配列変数に分解する。", "もじれつぶんかい");
             bank.AddFunc("区切る", "SをAで", NakoVarType.Array, _explode, "文字列Sを区切り文字Aで区切って配列として返す。", "くぎる");
             bank.AddFunc("数字か判定", "Sが|Sの|Sを", NakoVarType.Int, _num, "文字列Sの一文字目が数字か判定して返す", "すうじかはんてい");
-            bank.AddFunc("追加", "AにBを|Aへ", NakoVarType.String, _append, "変数AにBの内容を追加する", "ついか");
+            bank.AddFunc("追加", "{参照渡し}AにBを|Aへ", NakoVarType.Void, _append, "変数AにBの内容を追加する", "ついか");
 
             bank.AddFunc("英数半角変換", "Sを", NakoVarType.String, _alnumToEn, "文字列Sを英数文字だけを半角に変換して返す", "えいすうはんかくへんかん");
             bank.AddFunc("ゼロ埋め", "SをAで", NakoVarType.String, _zeroFill, "データSをA桁のゼロで埋めて出力する", "ぜろうめ");
@@ -63,6 +64,10 @@ namespace Libnako.NakoAPI
             bank.AddFunc("大文字変換", "Sを", NakoVarType.String, _uppercase, "文字列Sを大文字変換して返す", "へんかん");
 
             bank.AddFunc("何文字目", "SでSSが|Sの", NakoVarType.String, _strpos, "文字列Sで文字列SSが何文字目にあるか調べて返す", "なんもじめ");
+            bank.AddFunc("出現回数", "SでAの", NakoVarType.Int, _occurrence, "文字列SでAの出てくる回数を返す。", "しゅつげんかいすう");
+            bank.AddFunc("カナローマ字変換", "Sを|Sから", NakoVarType.String, _convert_kana_to_roman, "文字列Sにあるカタカナをローマ字に変換する。", "かなろーまじへんかん");//未実装
+            bank.AddFunc("UTF8変換", "Sを", NakoVarType.String, _to_utf8, "文字列SをUTF8に変換して返す。", "ゆーてぃーえふはちへんかん");//未実装
+            bank.AddFunc("SJIS_UTF8変換", "Sを", NakoVarType.String, _from_sjis_to_utf8, "SJISの文字列SをUTF8に変換して返す。", "えすじすゆーてぃーえふはちへんかん");//未実装
         }
                 
         // Define Method
@@ -204,6 +209,20 @@ namespace Libnako.NakoAPI
             ((NakoVariable)sr).SetBodyAutoType(ret);
             return null;
         }
+        private object _removeright(INakoFuncCallInfo info){
+            object sr = info.StackPop();
+            int a = (int)info.StackPopAsInt();
+            object s = ((NakoVariable)sr).Body;
+            object ret;
+            if(s is string){
+				string _tmp = (string)s;
+                ret = _tmp.Remove(_tmp.Length - a);
+            }else{
+                ret = null;
+            }
+            ((NakoVariable)sr).SetBodyAutoType(ret);
+            return null;
+		}
         private object _insert(INakoFuncCallInfo info){
             StringBuilder s = new StringBuilder(info.StackPopAsString());
             int cnt = NadesikoPositionToCSPosition((int)info.StackPopAsInt());
@@ -245,14 +264,21 @@ namespace Libnako.NakoAPI
         /// <param name="info"></param>
         /// <returns></returns>
         private object _append(INakoFuncCallInfo info){
-            StringBuilder s = new StringBuilder(info.StackPopAsString());
+            object sr = info.StackPop();
+            object s = ((NakoVariable)sr).Body;
             string a = info.StackPopAsString();
-            return s.Append(a).ToString();
-        }
+            string ret = (string)s + a;
+             ((NakoVariable)sr).SetBodyAutoType(ret);
+            return null;
+       }
         private object _alnumToEn(INakoFuncCallInfo info)
         {
         	string s = info.StackPopAsString();
-        	return Regex.Replace(s,@"[０-９Ａ-Ｚａ-ｚ：－　]+",delegate(Match m){ return Strings.StrConv(m.Value, VbStrConv.Narrow, 0); });
+        	return Regex.Replace(s,@"[０-９Ａ-Ｚａ-ｚ：－　]+",delegate(Match m){ 
+			//TODO: Windowsならば
+				return Strings.StrConv(m.Value, VbStrConv.Narrow, 0); 
+			//TODO: Linuxならばnkf -Zを実行
+			});
         }
         /// <summary>
         /// ゼロ埋め
@@ -267,7 +293,9 @@ namespace Libnako.NakoAPI
         
         private object _toEn(INakoFuncCallInfo info){
         	string s = info.StackPopAsString();
+ 			//TODO: Windowsならば
             return Strings.StrConv(s, VbStrConv.Narrow, 0);
+			//TODO: Linuxならばnkf -Z4を実行
         }
         private int NadesikoPositionToCSPosition(int nadesiko_pos){
             return nadesiko_pos - 1;
@@ -290,5 +318,40 @@ namespace Libnako.NakoAPI
             int i = s.IndexOf(ss);
             return (i + 1); // 1からはじまるので
         }
+		
+		private object _occurrence(INakoFuncCallInfo info){
+            string s = info.StackPopAsString();
+            string search = info.StackPopAsString();
+			return (int)((s.Length - s.Replace(search,"").Length)/search.Length);
+		}
+		private object _convert_kana_to_roman(INakoFuncCallInfo info){
+            string s = info.StackPopAsString();
+			//TODO: 手動実装（めんどー）キャキュキョから始まって最後に1文字カナを変換
+			return s;
+		}
+		
+		private object _to_utf8(INakoFuncCallInfo info){
+            string s = info.StackPopAsString();
+			return s;
+			//return checkEncoding(s);
+		}
+		
+		private object _from_sjis_to_utf8(INakoFuncCallInfo info){
+            string s = info.StackPopAsString();
+			System.Text.Encoding dest = System.Text.Encoding.UTF8;
+			System.Text.Encoding src = System.Text.Encoding.GetEncoding("CP932");
+			byte [] temp = src.GetBytes(s);
+			byte[] s_temp = System.Text.Encoding.Convert(src, dest, temp);
+			return dest.GetString(s_temp);
+		}
+		
+		private string checkEncoding(string s){
+			if(NWEnviroment.isWindows()){
+				throw new NotSupportedException();
+			}else{
+				return LinuxCommand.execute("echo '"+s+"' | nkf -g");
+			}
+			//return "CP932";
+		}
     }
 }
