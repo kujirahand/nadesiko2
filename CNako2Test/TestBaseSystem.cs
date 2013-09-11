@@ -16,7 +16,7 @@ namespace NakoPluginTest
         [Test]
         public void NakoVersion()
         {
-            com.DirectSource = "PRINT(ナデシコバージョン)";
+            com.WriteIL("PRINT(ナデシコバージョン)");
             runner.Run(com.Codes);
             Assert.AreNotEqual("", runner.PrintLog);
         }
@@ -24,24 +24,24 @@ namespace NakoPluginTest
         [Test]
         public void Test_Abs()
         {
-            com.DirectSource =
+            com.WriteIL(
                 "-3.14の絶対値\n" +
                 "それを継続表示\n" +
-                "";
+                "");
             runner.Run(com.Codes);
             Assert.AreEqual("3.14", runner.PrintLog);
             //
-            com.DirectSource =
+            com.WriteIL(
                 "-10の絶対値\n" +
                 "それを継続表示\n" +
-                "";
+                "");
             runner.Run(com.Codes);
             Assert.AreEqual("10", runner.PrintLog);
             //
-            com.DirectSource =
+            com.WriteIL(
                 "A=-3\n" +
                 "Aの絶対値を継続表示\n" +
-                "";
+                "");
             runner.Run(com.Codes);
             Assert.AreEqual("3", runner.PrintLog);
         }

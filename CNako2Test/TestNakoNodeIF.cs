@@ -21,19 +21,19 @@ namespace NakoPluginTest
             NakoILCodeList codes = null;
 
             // (1) 
-            codes = ns.Publish("もし、1=1ならば、PRINT 3");
+            codes = ns.WriteIL("もし、1=1ならば、PRINT 3");
             runner.Run(codes);
             Assert.AreEqual(runner.PrintLog, "3");
 
             // (2)
             runner.Reset();
-            codes = ns.Publish("もし、1=2ならば、PRINT 3、違えば、PRINT 5");
+            codes = ns.WriteIL("もし、1=2ならば、PRINT 3、違えば、PRINT 5");
             runner.Run(codes);
             Assert.AreEqual(runner.PrintLog, "5");
 
             // (3)
             runner.Reset();
-            codes = ns.Publish("A=1,B=2。もし,A=Bならば、PRINT`NG`。違えば、PRINT`OK`");
+            codes = ns.WriteIL("A=1,B=2。もし,A=Bならば、PRINT`NG`。違えば、PRINT`OK`");
             runner.Run(codes);
             Assert.AreEqual(runner.PrintLog, "OK");
         }
@@ -45,7 +45,7 @@ namespace NakoPluginTest
             NakoILCodeList codes = null;
 
             // (1) 
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "A=1\n" +
                 "B=2\n" +
                 "もし、A=Bならば\n" +
@@ -57,7 +57,7 @@ namespace NakoPluginTest
 
 
             // (2)
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "A=2\n" +
                 "もし、A=1ならば\n" +
                 "  PRINT 1\n" +
@@ -70,7 +70,7 @@ namespace NakoPluginTest
             Assert.AreEqual(runner.PrintLog, "2");
 
             // (3)
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "A=1\n" +
                 "もし、A=1ならば\n" +
                 "  PRINT 1\n" +
@@ -83,7 +83,7 @@ namespace NakoPluginTest
             Assert.AreEqual(runner.PrintLog, "1");
 
             // (4)
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "A=3\n" +
                 "もし、A=1ならば\n" +
                 "  PRINT 1\n" +
@@ -100,7 +100,7 @@ namespace NakoPluginTest
             Assert.AreEqual(runner.PrintLog, "3");
 
             // (5)
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "A=8\n" +
                 "もし、A=1ならば\n" +
                 "  PRINT 1\n" +
@@ -125,7 +125,7 @@ namespace NakoPluginTest
             NakoILCodeList codes = null;
 
             // (1) 
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "A=1\n" +
                 "B=2\n" +
                 "もし、A=1ならば\n" +
@@ -144,7 +144,7 @@ namespace NakoPluginTest
 
 
             // (2) 
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "A=1\n" +
                 "B=1\n" +
                 "もし、A=1ならば\n" +
@@ -162,7 +162,7 @@ namespace NakoPluginTest
             Assert.AreEqual(runner.PrintLog, "11");
 
             // (3) 
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "A=2\n" +
                 "B=2\n" +
                 "もし、A=1ならば\n" +

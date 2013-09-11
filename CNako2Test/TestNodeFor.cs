@@ -20,7 +20,7 @@ namespace NakoPluginTest
         public void Test1_Normal()
         {
             // (1) 
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "Iを１から３まで繰り返す\n"+
                 "  PRINT I\n" + 
                 ""
@@ -29,7 +29,7 @@ namespace NakoPluginTest
             Assert.AreEqual(runner.PrintLog, "123");
 
             // (2) 
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "FROM=2;TO=5"+
                 "IをFROMからTOまで繰り返す\n" +
                 "  PRINT I\n" +
@@ -42,7 +42,7 @@ namespace NakoPluginTest
         [Test]
         public void Test2_Nest()
         {
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "Ｉを１から２まで繰り返す\n" +
                 "　　PRINT `[`&I&`:`\n" +
                 "　　Ｊを１から3まで繰り返す\n" +
@@ -56,7 +56,7 @@ namespace NakoPluginTest
         [Test]
         public void Test3_RepeatTimes()
         {
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "3回\n" +
                 "　　PRINT `a`\n" +
                 "\n"
@@ -67,7 +67,7 @@ namespace NakoPluginTest
         [Test]
         public void TestFOR1()
         {
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "Iを1から5まで繰り返す\n" +
                 "　　PRINT I\n" +
                 "\n"
@@ -78,7 +78,7 @@ namespace NakoPluginTest
         [Test]
         public void TestFOR2_BREAK()
         {
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "Iを1から5まで繰り返す\n" +
                 "　　PRINT I\n" +
                 "    もし、I=3ならば、抜ける。\n" +

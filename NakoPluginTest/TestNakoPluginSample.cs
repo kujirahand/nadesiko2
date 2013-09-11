@@ -30,22 +30,20 @@ namespace NakoPluginTest
         [Test]
         public void TestSetVariable()
         {
-            com.DirectSource = 
+            runner.Run(com.WriteIL(
                 "HOGE=「ふが」\n" +
                 "「はげ」へ変数HOGE書換\n" +
-                "HOGEを表示";
-            runner.Run(com.Codes);
+                "HOGEを表示"));
             Assert.AreEqual("はげ", runner.PrintLog );
         }
 
         [Test]
         public void TestAddEx()
         {
-            com.DirectSource = 
+            runner.Run(com.WriteIL(
                 "A=「ほげ」\n"+
                 "Aに「ほげ」を接続!\n" +
-                "Aを表示";
-            runner.Run(com.Codes);
+                "Aを表示"));
             Assert.AreEqual("ほげほげ", runner.PrintLog );
         }
 

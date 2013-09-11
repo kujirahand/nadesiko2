@@ -5,7 +5,7 @@ using System.Text;
 namespace Libnako.JPNCompiler.Tokenizer
 {
     /// <summary>
-    /// トークンを解析するクラスです。
+    /// ソースコードからトークンを解析するクラスです。
     /// </summary>
     public class NakoTokenizer
     {
@@ -51,7 +51,6 @@ namespace Libnako.JPNCompiler.Tokenizer
         public NakoTokenizer()
         {
             tokens = new NakoTokenList();
-            tokenDic = new NakoTokenDic();
             indentStack = new Stack<int>();
         }
         /// <summary>
@@ -68,12 +67,15 @@ namespace Libnako.JPNCompiler.Tokenizer
             indentStack.Push(indentCount); // デフォルトであるインデント、0 をプッシュします。
         }
         /// <summary>
-        /// ソースが終端かどうかを示す値を取得します。
+        /// ソースコードが終端かどうかを示す値を取得します。
         /// </summary>
         /// <returns></returns>
-        private bool IsEOF()
+        private bool IsEOF
         {
-            return position >= source.Length;
+            get
+            {
+                return position >= source.Length;
+            }
         }
         /// <summary>
         /// 現在の文字を半角整形して取得します。
@@ -92,7 +94,7 @@ namespace Libnako.JPNCompiler.Tokenizer
         {
             get
             {
-                if (IsEOF())
+                if (IsEOF)
                 {
                     return '\0';
                 }
@@ -114,28 +116,28 @@ namespace Libnako.JPNCompiler.Tokenizer
             }
         }
         /// <summary>
-        /// トークン解析を行う
+        /// 指定したソースコードからトークンを解析します。
         /// </summary>
+        /// <param name="source">解析するソースコード。</param>
+        /// <param name="tokenDic">解析に使用する、トークン辞書。</param>
+        /// <returns>指定したソースコードから解析した、トークン一覧。</returns>
         public NakoTokenList Tokenize(string source, NakoTokenDic tokenDic)
         {
             Initialization();
             this.source = source;
             this.tokenDic = tokenDic;
-            // 1回目の解析 --- トークンをひたすら区切る
-            TokenizeFirst();
-            // 2回目の解析 --- 関数宣言など辞書登録を行う
-            TokenizeAnalize();
-            // 3回目の解析 --- WORDを置き換える
-            TokenizeCheckWord();
+            SplitToToken();
+            DefineFunction();
+            CheckWord();
             return tokens;
         }
         /// <summary>
-        /// トークンを区切るのみで、文法を一切考慮しません。
+        /// 指定したソースコードからトークンに区切るだけの解析をします。文法を一切考慮しません。
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="indentLevel"></param>
-        /// <param name="lineNo"></param>
-        /// <returns></returns>
+        /// <param name="source">解析するソースコード。</param>
+        /// <param name="lineNo">開始する行番号。</param>
+        /// <param name="indentLevel">開始するインデントレベル。</param>
+        /// <returns>指定したソースコードから解析した、トークン一覧。</returns>
         public NakoTokenList TokenizeSplitOnly(string source, int lineNo, int indentLevel)
         {
             Initialization();
@@ -143,7 +145,7 @@ namespace Libnako.JPNCompiler.Tokenizer
             this.indentLevel = indentLevel;
             this.lineNo = lineNo;
             // 繰り返しトークンを取得する
-            while (!IsEOF())
+            while (!IsEOF)
             {
                 var token = GetToken();
                 if (token == null)
@@ -156,15 +158,15 @@ namespace Libnako.JPNCompiler.Tokenizer
             return tokens;
         }
         /// <summary>
-        /// トークンをひたすらぶった切る！
+        /// トークンに区切ります。
         /// </summary>
-        private void TokenizeFirst()
+        private void SplitToToken()
         {
             // 最初にインデントを数える
             indentCount = CountIndent();
             indentLevel = 0;
             // 繰り返しトークンを取得する
-            while (!IsEOF())
+            while (!IsEOF)
             {
                 var token = GetToken();
                 if (token == null)
@@ -183,33 +185,55 @@ namespace Libnako.JPNCompiler.Tokenizer
                 }
                 else tokens.Add(token);
             }
-            // レベルが合うまで SCOPE_END を差し込む
+            // レベルが合うまで SCOPE_END を追加する
             CheckScope();
         }
         /// <summary>
-        /// 関数宣言など辞書登録を行います。
+        /// 関数宣言を辞書に登録します。
         /// </summary>
-        private void TokenizeAnalize()
+        private void DefineFunction()
         {
             tokens.MoveTop();
-            while (!tokens.IsEOF())
+            for (; !tokens.IsEOF(); tokens.MoveNext())
             {
                 if (tokens.CurrentTokenType == NakoTokenType.DEF_FUNCTION)
                 {
-                    DefineFunction();
-                    continue;
+                    var firstToken = tokens.CurrentToken;
+                    // DEF_FUNCTION をスキップ
+                    tokens.MoveNext();
+                    // 関数名のトークン
+                    NakoToken funcNameToken = null;
+                    for (; !tokens.IsEOF(); tokens.MoveNext())
+                    {
+                        // 関数名
+                        if (tokens.Accept(NakoTokenType.WORD))
+                        {
+                            funcNameToken = tokens.CurrentToken;
+                        }
+                        // 改行ならば関数宣言の終了
+                        else if (tokens.Accept(NakoTokenType.SCOPE_BEGIN))
+                        {
+                            if (funcNameToken == null)
+                            {
+                                throw new NakoTokenizerException("関数宣言で関数名がありません。", firstToken);
+                            }
+                            // 関数名を辞書に登録
+                            tokenDic[funcNameToken.GetValueAsName()] = NakoTokenType.FUNCTION_NAME;
+                            funcNameToken.Type = NakoTokenType.FUNCTION_NAME;
+                            break;
+                        }
+                    }
                 }
-                tokens.MoveNext();
             }
         }
         /// <summary>
-        /// 予約後のチェックや代入文への変換作業などを行う
+        /// 予約後のチェックと代入文への変換作業を行います。
         /// </summary>
-        private void TokenizeCheckWord()
+        private void CheckWord()
         {
             // 予約語句のチェックなど
             tokens.MoveTop();
-            while (!tokens.IsEOF())
+            for (; !tokens.IsEOF(); tokens.MoveNext())
             {
                 // 予約語句の置き換え
                 if (tokens.CurrentTokenType == NakoTokenType.WORD)
@@ -233,58 +257,6 @@ namespace Libnako.JPNCompiler.Tokenizer
                     tokens.RemoveCurrentToken();
                     continue;
                 }
-                tokens.MoveNext();
-            }
-        }
-        /// <summary>
-        /// 関数の定義
-        /// </summary>
-        private void DefineFunction()
-        {
-            NakoToken firstToken = tokens.CurrentToken;
-            tokens.MoveNext(); // skip '*' (DEF_FUNCTION)
-
-            // 関数宣言を軽く舐めて、関数名を特定する
-            NakoToken fnameToken = null;
-            bool argMode = false;
-            while (!tokens.IsEOF())
-            {
-                // 引数宣言に ( ... ) がある場合を考慮
-                if (argMode)
-                {
-                    if (tokens.Accept(NakoTokenType.PARENTHESES_R))
-                    {
-                        tokens.MoveNext();
-                        argMode = false;
-                        continue;
-                    }
-                    tokens.MoveNext();
-                    continue;
-                }
-                if (tokens.Accept(NakoTokenType.PARENTHESES_L))
-                {
-                    argMode = true;
-                    tokens.MoveNext();
-                    continue;
-                }
-                if (tokens.Accept(NakoTokenType.SCOPE_BEGIN))
-                {
-                    // 改行なら関数宣言の終了
-                    if (fnameToken == null)
-                    {
-                        throw new NakoTokenizerException("関数宣言で関数名がありません。", firstToken);
-                    }
-                    // 関数名を辞書に登録する
-                    tokenDic[fnameToken.GetValueAsName()] = NakoTokenType.FUNCTION_NAME;
-                    fnameToken.Type = NakoTokenType.FUNCTION_NAME;
-                    break;
-                }
-                // 関数名の可能性
-                if (tokens.Accept(NakoTokenType.WORD))
-                {
-                    fnameToken = tokens.CurrentToken;
-                }
-                tokens.MoveNext();
             }
         }
         /// <summary>
@@ -296,7 +268,7 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// </remarks>
         private NakoToken GetToken()
         {
-            if (IsEOF())
+            if (IsEOF)
             {
                 return null;
             }
@@ -530,7 +502,7 @@ namespace Libnako.JPNCompiler.Tokenizer
             }
             // 行末までスキップ
             string comment = "";
-            while (!IsEOF())
+            while (!IsEOF)
             {
                 char ch = CurrentCharRaw;
                 if (ch == '\r' || ch == '\n') break;
@@ -556,7 +528,7 @@ namespace Libnako.JPNCompiler.Tokenizer
             position += 2;
             // コメントの最後までを取得
             string comment = "";
-            while (!IsEOF())
+            while (!IsEOF)
             {
                 char ch = CurrentChar;
                 if (ch == '\n')
@@ -585,7 +557,7 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// </remarks>
         private NakoToken GetStringToken()
         {
-            if (IsEOF()) return null;
+            if (IsEOF) return null;
             var token = new NakoToken(NakoTokenType.STRING, lineNo, indentLevel);
             char start = CurrentChar;
             string stringEnd;
@@ -607,7 +579,7 @@ namespace Libnako.JPNCompiler.Tokenizer
             {
                 position--;
                 stringEnd = "";
-                while (!IsEOF())
+                while (!IsEOF)
                 {
                     if (CurrentChar == '「')
                     {
@@ -627,7 +599,7 @@ namespace Libnako.JPNCompiler.Tokenizer
             // 文字列の終端まで取得
             var builder = new StringBuilder();
             bool isSkipBlank = false; // 空白のスキップを行うかどうか
-            while (!IsEOF())
+            while (!IsEOF)
             {
                 if (Equals(stringEnd))
                 {
@@ -688,7 +660,7 @@ namespace Libnako.JPNCompiler.Tokenizer
         {
             var token = new NakoToken(NakoTokenType.INT, lineNo, indentLevel);
             string str = "";
-            for (; !IsEOF(); position++)
+            for (; !IsEOF; position++)
             {
                 char ch = CurrentChar;
                 if (!NakoUtility.IsNumber(ch)) break;
@@ -699,7 +671,7 @@ namespace Libnako.JPNCompiler.Tokenizer
                 str += CurrentChar;
                 token.Type = NakoTokenType.NUMBER;
                 position++;
-                for (; !IsEOF(); position++)
+                for (; !IsEOF; position++)
                 {
                     char ch = CurrentChar;
                     if (!NakoUtility.IsNumber(ch)) break;
@@ -722,7 +694,7 @@ namespace Libnako.JPNCompiler.Tokenizer
         {
             var token = new NakoToken(NakoTokenType.WORD, lineNo, indentLevel);
             var builder = new StringBuilder();
-            while (!IsEOF())
+            while (!IsEOF)
             {
                 char c = CurrentChar;
                 if (NakoUtility.IsAlpha(c) || NakoUtility.IsNumber(c) || c == '_' || c == '!' || c == '?')
@@ -895,7 +867,7 @@ namespace Libnako.JPNCompiler.Tokenizer
         private int CountIndent()
         {
             int indent = 0;
-            for (; !IsEOF(); position++)
+            for (; !IsEOF; position++)
             {
                 switch (CurrentCharRaw)
                 {
@@ -961,7 +933,7 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// </remarks>
         private bool CheckJosi(NakoToken token)
         {
-            if (IsEOF())
+            if (IsEOF)
             {
                 return false;
             }

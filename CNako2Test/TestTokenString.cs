@@ -18,7 +18,7 @@ namespace NakoPluginTest
         [Test]
         public void Test_StringSimple()
         {
-            ns.Publish(
+            ns.WriteIL(
                 "PRINT 「123」&『456』\n"+
                 ""
                 );
@@ -29,7 +29,7 @@ namespace NakoPluginTest
         [Test]
         public void Test_StrExtract1()
         {
-            ns.Publish(
+            ns.WriteIL(
         		"a=30"+
                 "PRINT 「**{a}**」\n"+
                 ""
@@ -41,7 +41,7 @@ namespace NakoPluginTest
         [Test]
         public void Test_StrExtract2()
         {
-            ns.Publish(
+            ns.WriteIL(
         		"a=30"+
                 "PRINT 「**{a*3}**」\n"+
                 ""
@@ -53,7 +53,7 @@ namespace NakoPluginTest
         [Test]
         public void Test_StrExtract3()
         {
-            ns.Publish(
+            ns.WriteIL(
         		"a=`abc`;b=`def`;"+
                 "PRINT 「**{a}**{b}**」\n"+
                 ""
@@ -65,7 +65,7 @@ namespace NakoPluginTest
         [Test]
         public void Test_StrExtract4()
         {
-            ns.Publish(
+            ns.WriteIL(
                 "PRINT  「ab{\\t}cd」\n"+
                 ""
                 );
@@ -76,7 +76,7 @@ namespace NakoPluginTest
         [Test]
         public void Test_StrExtractRET()
         {
-            ns.Publish(
+            ns.WriteIL(
                 "PRINT  「ab{~}cd」"+
                 ""
                 );
@@ -87,7 +87,7 @@ namespace NakoPluginTest
         [Test]
         public void Test_String_NotHalfnize()
         {
-            ns.Publish(
+            ns.WriteIL(
                 @"PRINT 「本日は、晴天なり。」&『本日は、晴天なり。』"+
                 ""
                 );
