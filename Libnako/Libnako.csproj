@@ -88,6 +88,7 @@
     <Compile Include="JPNCompiler\Node\NakoNodeList.cs" />
     <Compile Include="JPNCompiler\Node\NakoNodePop.cs" />
     <Compile Include="JPNCompiler\Node\NakoNodeRepeatTimes.cs" />
+    <Compile Include="JPNCompiler\Node\NakoNodeReturn.cs" />
     <Compile Include="JPNCompiler\Node\NakoNodeType.cs" />
     <Compile Include="JPNCompiler\Node\NakoNodeVariable.cs" />
     <Compile Include="JPNCompiler\Node\NakoNodeWhile.cs" />
