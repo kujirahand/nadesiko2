@@ -21,7 +21,7 @@ namespace NakoPluginTest
             NakoILCodeList codes = null;
 
             // (1) 
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "N=3;(N>=0)の間\n"+
                 "  PRINT N\n" + 
                 "  N=N-1\n;"
@@ -30,7 +30,7 @@ namespace NakoPluginTest
             Assert.AreEqual(runner.PrintLog, "3210");
 
             // (2) 
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "N=1;(N<5)の間\n" +
                 "  PRINT N\n" +
                 "  N=N+1\n;"
@@ -39,7 +39,7 @@ namespace NakoPluginTest
             Assert.AreEqual(runner.PrintLog, "1234");
 
             // (3) 
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "A=1;B=3\n"+
                 "(A <= B)の間\n" +
                 "  PRINT A; PRINT B;\n" +
@@ -48,7 +48,7 @@ namespace NakoPluginTest
             runner.Run(codes);
             Assert.AreEqual(runner.PrintLog, "1322");
 
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "A=1\n" +
                 "(A <= 2)の間\n" +
                 "  PRINT `A`&A;\n" +
@@ -69,7 +69,7 @@ namespace NakoPluginTest
             NakoInterpreter runner = new NakoInterpreter();
             NakoILCodeList codes = null;
 
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "A=1\n" +
                 "(A <= 2)の間\n" +
                 "  PRINT `A`&A;\n" +

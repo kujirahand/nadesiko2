@@ -6,14 +6,12 @@ namespace cnako2
 {
     class Program
     {
-        static CNako2Executor exec = new CNako2Executor();
-
         [STAThread]
         static void Main(string[] args)
         {
-            // 実行時オプションをセット
-            bool r = exec.setOptions(args);
-            if (r == false)
+            var exec = new CNako2Executor();
+            // 実行時オプションを設定
+            if (!exec.SetOptions(args))
             {
                 exec.ShowHelp();
                 return;

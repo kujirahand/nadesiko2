@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+using cnako2;
 using Libnako.Interpreter;
 using Libnako.JPNCompiler;
 using NUnit.Framework;
-
-using cnako2;
 
 namespace CNako2Test
 {
@@ -16,75 +14,87 @@ namespace CNako2Test
         [Test]
         public void Test_setOptions()
         {
-            CNako2Executor e = new CNako2Executor();
+            var exec = new CNako2Executor()
+            {
+                UseLog = true
+            };
             string line = "「あ」と継続表示";
             string[] args = {"-e", line};
-            e.UseLog = true;
-            e.setOptions(args);
-            Assert.AreEqual(false, e.DescriptMode);
-            Assert.AreEqual(false, e.DebugMode);
-            Assert.AreEqual(line, e.source);
+            exec.SetOptions(args);
+            Assert.AreEqual(false, exec.DescriptMode);
+            Assert.AreEqual(false, exec.DebugMode);
+            Assert.AreEqual(line, exec.source);
         }
         [Test]
         public void Test_Run_Oneliner()
         {
-            CNako2Executor e = new CNako2Executor();
+            var exec = new CNako2Executor()
+            {
+                UseLog = true
+            };
             string line = "「あ」と継続表示";
             string[] args = { "-e", line };
-            e.UseLog = true;
-            e.setOptions(args);
-            e.Run();
-            Assert.AreEqual("あ", e.PrintLog);
+            exec.SetOptions(args);
+            exec.Run();
+            Assert.AreEqual("あ", exec.PrintLog);
         }
         [Test]
         public void Test_Run_Oneliner_Calc()
         {
-            CNako2Executor e = new CNako2Executor();
+            var exec = new CNako2Executor()
+            {
+                UseLog = true
+            };
             string line = "3+5*2と継続表示";
             string[] args = { "-e", line };
-            e.UseLog = true;
-            e.setOptions(args);
-            e.Run();
-            Assert.AreEqual("13", e.PrintLog);
+            exec.SetOptions(args);
+            exec.Run();
+            Assert.AreEqual("13", exec.PrintLog);
         }
         [Test]
         public void Test_Run_Oneliner_Calc2()
         {
-            CNako2Executor e = new CNako2Executor();
+            var exec = new CNako2Executor()
+            {
+                UseLog = true
+            };
             string line = "PRINT ((1+2)*4)";
             string[] args = { "-e", line };
-            e.UseLog = true;
-            e.setOptions(args);
-            e.Run();
-            Assert.AreEqual("12", e.PrintLog);
+            exec.SetOptions(args);
+            exec.Run();
+            Assert.AreEqual("12", exec.PrintLog);
         }
         [Test]
         public void Test_Run_Oneliner_Comment()
         {
-            CNako2Executor e = new CNako2Executor();
+            var exec = new CNako2Executor()
+            {
+                UseLog = true
+            };
             string line = "`abc`を継続表示。\n" +
                 "# comment\n" +
                 "`cde`を継続表示。\n" +
                 "";
             string[] args = { "-e", line };
-            e.UseLog = true;
-            e.setOptions(args);
-            e.Run();
-            Assert.AreEqual("abccde", e.PrintLog);
+            exec.SetOptions(args);
+            exec.Run();
+            Assert.AreEqual("abccde", exec.PrintLog);
         }
         [Test]
         public void Test_Run_Oneliner_Comment2()
         {
-            CNako2Executor e = new CNako2Executor();
+            var exec = new CNako2Executor()
+            {
+                UseLog = true
+            };
             string line = "`abc`を表示。\n" +
                 "/* comment test\n --- abc def \nghi 333 222 */\n" +
                 "`cde`を表示。\n" +
                 "";
             string[] args = { "-e", line };
-            e.UseLog = true;
-            e.setOptions(args);
-            e.Run();
-            Assert.AreEqual("abc\r\ncde\r\n", e.PrintLog);
+            exec.SetOptions(args);
+            exec.Run();
+            Assert.AreEqual("abc\r\ncde\r\n", exec.PrintLog);
         }
     }
 }

@@ -56,12 +56,12 @@ namespace cnako2
         /// </summary>
         public void ShowHelp()
         {
-            _w("# [CNAKO2]");
-            _w("# USAGE:");
-            _w("# >cnako2 [-desc][-debug][-wait][-e (code)]|[(sourcefile)]");
-            _w("# Example:");
-            _w("# >cnako2 (sourcefile)");
-            _w("# >cnako2 -e (one liner code)");
+            Console.WriteLine("# [CNAKO2]");
+            Console.WriteLine("# USAGE:");
+            Console.WriteLine("# >cnako2 [-desc][-debug][-wait][-e (code)]|[(sourcefile)]");
+            Console.WriteLine("# Example:");
+            Console.WriteLine("# >cnako2 (sourcefile)");
+            Console.WriteLine("# >cnako2 -e (one liner code)");
         }
 
         /// <summary>
@@ -69,56 +69,42 @@ namespace cnako2
         /// </summary>
         /// <param name="args"></param>
         /// <returns></returns>
-        public bool setOptions(string[] args)
+        public bool SetOptions(string[] args)
         {
             // オプションなしなら失敗
             if (args.Length == 0) return false;
+
             this.args = args;
             source = null;
             runMode = NakoConsoleMode.RunFile;
             
-            int i = 0;
-            while (i < args.Length)
+            foreach (var arg in args)
             {
-                string arg = args[i];
-                // eval
-                if (arg == "-e" || arg == "-eval")
+                switch (arg)
                 {
-                    runMode = NakoConsoleMode.OneLiner;
-                    i++;
-                    continue;
+                    case "-e":
+                    case "-eval":
+                        runMode = NakoConsoleMode.OneLiner;
+                        break;
+                    case "-desc":
+                    case "-descript":
+                        DescriptMode = true;
+                        UseLog = true;
+                        break;
+                    case "-debug":
+                        DebugMode = true;
+                        break;
+                    case "-wait":
+                        WaitMode = true;
+                        break;
+                    default:
+                        source = arg;
+                        break;
                 }
-                if (arg == "-desc" || arg == "-descript")
-                {
-                    DescriptMode = true;
-                    UseLog = true;
-                    i++;
-                    continue;
-                }
-                if (arg == "-debug")
-                {
-                    DebugMode = true;
-                    i++;
-                    continue;
-                }
-                if (arg == "-wait")
-                {
-                    WaitMode = true;
-                    i++;
-                    continue;
-                }
-                // other
-                if (source == null)
-                {
-                    source = args[i];
-                    i++;
-                    continue;
-                }
-                i++;
             }
+
             // ソースファイルが指定されてなければエラー
             if (runMode == NakoConsoleMode.RunFile && source == null) return false;
-            
             return true;
         }
 
@@ -143,7 +129,6 @@ namespace cnako2
             {
                 Console.WriteLine("[SystemError]" + e.Message);
             }
-            //
             if (WaitMode)
             {
                 Console.ReadLine();
@@ -153,12 +138,12 @@ namespace cnako2
         NakoCompilerLoaderInfo GetLoaderInfo()
         {
             //TODO: CNAKO2 LOADER INFO
-            NakoCompilerLoaderInfo loaderInfo = new NakoCompilerLoaderInfo();
+            var loaderInfo = new NakoCompilerLoaderInfo();
             
             // 設定によって Console.Write() メソッドを使わないように指示する(テストで使用)
-            NakoPluginConsole.NakoPluginConsole oNakoPluginConsole = new NakoPluginConsole.NakoPluginConsole();
+            var oNakoPluginConsole = new NakoPluginConsole.NakoPluginConsole();
             oNakoPluginConsole.UsePrintLog = UseLog;
-
+            
             loaderInfo.Init();
             loaderInfo.ImportantModules = new NakoPlugin.INakoPlugin[] {
                 oNakoPluginConsole
@@ -168,30 +153,32 @@ namespace cnako2
 
         void OneLinerMode(string code)
         {
-            NakoCompiler compiler = new NakoCompiler(GetLoaderInfo());
-            compiler.DebugMode = DebugMode;
-            compiler.DirectSource = code;
-            NakoInterpreter runner = new NakoInterpreter(compiler.Codes);
+            var compiler = new NakoCompiler(GetLoaderInfo())
+            {
+                DebugMode = DebugMode, 
+            };
+            
+            var runner = new NakoInterpreter(compiler.WriteIL(code));
             SetCommandLine(runner);
             
             if (DescriptMode)
             {
-                cout = "----------";
-                cout = "* TOKENS:";
-                cout = compiler.Tokens.toTypeString();
-                cout = "----------";
-                cout = "* NODES:";
-                cout = compiler.TopNode.Children.toTypeString();
-                cout = "----------";
-                cout = "* CODES:";
-                cout = compiler.Codes.ToAddressString();
-                cout = "----------";
-                cout = "* RUN";
+                Console.WriteLine("----------");
+                Console.WriteLine("* TOKENS:");
+                Console.WriteLine(compiler.Tokens.toTypeString());
+                Console.WriteLine("----------");
+                Console.WriteLine("* NODES:");
+                Console.WriteLine(compiler.TopNode.Children.toTypeString());
+                Console.WriteLine("----------");
+                Console.WriteLine("* CODES:");
+                Console.WriteLine(compiler.Codes.ToAddressString());
+                Console.WriteLine("----------");
+                Console.WriteLine("* RUN");
                 runner.debugMode = DebugMode;
                 runner.Run();
                 Console.WriteLine("LOG=" + runner.PrintLog);
-                cout = "----------";
-                cout = "ok.";
+                Console.WriteLine("----------");
+                Console.WriteLine("ok.");
             }
             else
             {
@@ -204,12 +191,12 @@ namespace cnako2
 
         void RunFileMode(string sourcefile)
         {
-            NakoLoader loader = NakoLoader.Instance;
+            var loader = NakoLoader.Instance;
             loader.LoaderInfo = GetLoaderInfo();
             if (DebugMode)
             {
-                cout = "----------";
-                cout = "* TOKENIZE";
+                Console.WriteLine("----------");
+                Console.WriteLine("* TOKENIZE");
             }
             loader.DebugMode = DebugMode;
             try
@@ -218,12 +205,12 @@ namespace cnako2
             }
             catch (NakoParserException e)
             {
-                cout = "[ParseError]" + e.Message;
+                Console.WriteLine("[ParseError]" + e.Message);
                 return;
             }
             catch (Exception e)
             {
-                cout = "[ERROR] " + e.Message + "";
+                Console.WriteLine("[ERROR] " + e.Message);
                 return;
             }
             NakoCompiler compiler = loader.cur;
@@ -234,22 +221,22 @@ namespace cnako2
             
             if (DescriptMode)
             {
-                cout = "";
-                cout = "----------";
-                cout = "* TOKENS:";
-                cout = compiler.Tokens.toTypeString();
-                cout = "----------";
-                cout = "* NODES:";
-                cout = compiler.TopNode.Children.toTypeString();
-                cout = "----------";
-                cout = "* CODES:";
-                cout = compiler.Codes.ToAddressString();
-                cout = "----------";
-                cout = "* RUN";
+                Console.WriteLine();
+                Console.WriteLine("----------");
+                Console.WriteLine("* TOKENS:");
+                Console.WriteLine(compiler.Tokens.toTypeString());
+                Console.WriteLine("----------");
+                Console.WriteLine("* NODES:");
+                Console.WriteLine(compiler.TopNode.Children.toTypeString());
+                Console.WriteLine("----------");
+                Console.WriteLine("* CODES:");
+                Console.WriteLine(compiler.Codes.ToAddressString());
+                Console.WriteLine("----------");
+                Console.WriteLine("* RUN");
                 runner.Run();
                 Console.WriteLine("LOG=" + runner.PrintLog);
-                cout = "----------";
-                cout = "ok.";
+                Console.WriteLine("----------");
+                Console.WriteLine("ok.");
             }
             else
             {
@@ -264,16 +251,6 @@ namespace cnako2
             a.SetValuesFromStrings(this.args);
             int i = runner.globalVar.GetIndex("コマンドライン");
             runner.globalVar.SetValue(i, a);
-        }
-
-        static void _w(string s)
-        {
-            Console.WriteLine(s);
-        }
-
-        static string cout
-        {
-            set { Console.WriteLine(value); }
         }
     }
 

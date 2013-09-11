@@ -19,7 +19,7 @@ namespace Libnako.JPNCompiler
         /// <summary>
         /// 読み込み情報
         /// </summary>
-        public NakoCompilerLoaderInfo LoaderInfo { get; set; }
+        private readonly NakoCompilerLoaderInfo LoaderInfo;
         /// <summary>
         /// 名前
         /// </summary>
@@ -106,7 +106,6 @@ namespace Libnako.JPNCompiler
             }
             RegisterSysCall();
         }
-
         /// <summary>
         /// 字句解析(トークンの分割)を行う
         /// 結果は Tokens で得られる
@@ -115,7 +114,6 @@ namespace Libnako.JPNCompiler
         {
             tokens = NakoTokenization.Tokenize(source, TokenDic);
         }
-
         /// <summary>
         /// トークンの分割が行われた Tokens に対して、構文解析を行う
         /// 結果は TopNode に得られる
@@ -128,24 +126,46 @@ namespace Libnako.JPNCompiler
             parser.Parse();
             this.topNode = parser.topNode;
         }
-
+        public NakoNode Parse(string source)
+        {
+            this.source = source;
+            Tokenize();
+            Parse();
+            return TopNode;
+        }
+        /// <summary>
+        /// パース
+        /// </summary>
+        public void ParseOnlyValue()
+        {
+            var paser = new NakoParser(tokens);
+            paser.ParseOnlyValue();
+            this.topNode = paser.topNode;
+        }
+        public NakoNode ParseOnlyValue(string source)
+        {
+            this.source = source;
+            Tokenize();
+            ParseOnlyValue();
+            return TopNode;
+        }
         /// <summary>
         /// 構文解析の行われた TopNode に対して、ILコードの発行を行う
         /// 結果は、Codes に得られる
         /// </summary>
-        public void WriteIL()
+        public NakoILCodeList WriteIL()
         {
-            NakoILWriter w = new NakoILWriter();
-            w.Write(this.topNode);
-            codes = w.Result;
+            var writer = new NakoILWriter();
+            writer.Write(this.topNode);
+            codes = writer.Result;
             codes.globalVar = this.GlobalVar;
+            return Codes;
         }
-
         /// <summary>
         /// 字句解析と構文解析を一気に行う
         /// </summary>
         /// <param name="source">必要なら新たにソースを指定</param>
-        public NakoILCodeList Publish(string source)
+        public NakoILCodeList WriteIL(string source)
         {
             if (source != null)
             {
@@ -157,25 +177,6 @@ namespace Libnako.JPNCompiler
             WriteIL();
             return Codes;
         }
-
-        /// <summary>
-        /// Publish メソッドを変数風に呼ぶセッター
-        /// </summary>
-        public string DirectSource
-        {
-            set { this.Publish(value); }
-        }
-
-        /// <summary>
-        /// パース
-        /// </summary>
-        public void ParseOnlyValue()
-        {
-            NakoParser paser = new NakoParser(tokens);
-            paser.ParseOnlyValue();
-            this.topNode = paser.topNode;
-        }
-
         /// <summary>
         /// システム関数を登録する
         /// </summary>

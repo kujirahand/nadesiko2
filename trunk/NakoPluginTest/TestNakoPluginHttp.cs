@@ -31,17 +31,15 @@ namespace NakoPluginTest
         [Test]
         public void TestUrlDecode()
         {
-            com.DirectSource = 
-                "「%e3%81%aa%e3%81%a7%e3%81%97%e3%81%93」をURLデコードして表示。";
-            runner.Run(com.Codes);
+            runner.Run(com.WriteIL(
+                "「%e3%81%aa%e3%81%a7%e3%81%97%e3%81%93」をURLデコードして表示。"));
             Assert.AreEqual("なでしこ", runner.PrintLog );
         }
         [Test]
         public void TestUrlEncode()
         {
-            com.DirectSource = 
-                "「なでしこ」をURLエンコードして小文字変換して表示。";
-            runner.Run(com.Codes);
+            runner.Run(com.WriteIL(
+                "「なでしこ」をURLエンコードして小文字変換して表示。"));
             Assert.AreEqual("%e3%81%aa%e3%81%a7%e3%81%97%e3%81%93", runner.PrintLog );
         }
 

@@ -38,27 +38,24 @@ namespace NakoPluginTest
         [Test][STAThreadAttribute]
         public void TestClipboad()
         {
-            com.DirectSource = 
+            runner.Run(com.WriteIL(
                 "「abc」をコピー。\n" +
-                "クリップボードを表示。";
-            runner.Run(com.Codes);
+                "クリップボードを表示。"));
             Assert.AreEqual("abc", runner.PrintLog);
         }
         [Test][STAThreadAttribute]
         public void TestClipboad2()
         {
-            com.DirectSource = 
+            runner.Run(com.WriteIL(
                 "10をコピー。\n" +
-                "クリップボードを表示。";
-            runner.Run(com.Codes);
+                "クリップボードを表示。"));
             Assert.AreEqual("10", runner.PrintLog);
         }
         [Test][STAThreadAttribute]
         public void TestEnumWindows()
         {
-            com.DirectSource = 
-                "窓列挙して表示。\n";
-            runner.Run(com.Codes);
+            runner.Run(com.WriteIL(
+                "窓列挙して表示。\n"));
             Assert.AreNotEqual("", runner.PrintLog);
         }
     }

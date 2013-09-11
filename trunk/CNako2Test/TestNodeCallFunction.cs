@@ -19,7 +19,7 @@ namespace NakoPluginTest
         [Test]
         public void TestSysFunc_AddAndLet()
         {
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "A=10に2を足す\n"+
                 "PRINT A\n" + 
                 ""
@@ -30,7 +30,7 @@ namespace NakoPluginTest
         [Test]
         public void TestSysFunc_Add1()
         {
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "A=10;A=Aに2を足す\n" +
                 "PRINT A\n" +
                 ""
@@ -41,7 +41,7 @@ namespace NakoPluginTest
         [Test]
         public void TestSysFunc_AddEx_ByRef()
         {
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "A=10;Aに2を足す!\n" +
                 "PRINT A\n" +
                 ""
@@ -52,7 +52,7 @@ namespace NakoPluginTest
         [Test]
         public void TestUserFunc_Add()
         {
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "●AにBを加算\n" +
                 "　　それ=A+B\n" +
                 "\n" +
@@ -64,7 +64,7 @@ namespace NakoPluginTest
         [Test]
         public void TestUserFunc_Add2()
         {
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "●AにBを加算\n" +
                 "　　それ=A+B\n" +
                 "\n" +
@@ -76,7 +76,7 @@ namespace NakoPluginTest
         [Test]
         public void TestUserFunc_Add3()
         {
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "\n\n●AにBを加算\n" +
                 "　　それ=A+B\n" +
                 "\n" +
@@ -91,7 +91,7 @@ namespace NakoPluginTest
         [Test]
         public void TestSysFunc_sub()
         {
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "PRINT 5から3を引く\n" +
                 "\n");
             runner.Run(codes);
@@ -100,7 +100,7 @@ namespace NakoPluginTest
         [Test]
         public void TestSysFunc_subEx()
         {
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "A=10;B=3;" +
                 "AからBを引く!\n" +
                 "PRINT A");
@@ -112,7 +112,7 @@ namespace NakoPluginTest
         {
             NakoCompiler nc = new NakoCompiler();
             NakoInterpreter ni = new NakoInterpreter();
-            nc.Publish(
+            nc.WriteIL(
                 "3を10から引く。\n" +
                 "PRINT それ\n" +
                 "\n");
@@ -124,7 +124,7 @@ namespace NakoPluginTest
         {
             // memo:
             // 敢えて、FORTH っぽく、助詞がなくても動くようにしたい!!
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "100,10,5,引く,足す,継続表示\n" +
                 "\n");
             runner.Run(codes);
@@ -134,7 +134,7 @@ namespace NakoPluginTest
         public void TestCall_likeBASIC1()
         {
             // memo: BASICの関数のように関数をコール
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "PRINT 引く(10,4)\n" +
                 "\n");
             runner.Run(codes);
@@ -144,7 +144,7 @@ namespace NakoPluginTest
         public void TestCall_likeBASIC2()
         {
             // memo: BASICの関数のように関数をコール
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "引く(10,4)を継続表示\n" +
                 "\n");
             runner.Run(codes);
@@ -154,7 +154,7 @@ namespace NakoPluginTest
         public void TestCall_likeBASIC3()
         {
             // memo: BASICの関数のように関数をコール
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "引く(足す(3,8),4)を継続表示\n" +
                 "\n");
             runner.Run(codes);
@@ -164,7 +164,7 @@ namespace NakoPluginTest
         public void TestCall_likeBASIC4()
         {
             // memo: BASICの関数のように関数をコール
-            codes = ns.Publish(
+            codes = ns.WriteIL(
                 "1+2に3を足して継続表示\n" +
                 "\n");
             runner.Run(codes);
@@ -173,15 +173,14 @@ namespace NakoPluginTest
         [Test]
         public void TestUserFunc_Ret()
         {
-            codes = ns.Publish(
+            runner.Run(ns.WriteIL(
                 "●ほげ\n" +
                 "　　それ＝「ふが」" +
                 "　　戻る" +
                 "　　それ＝「ぴよ」" +
                 "\n" +
                 "PRINT ほげ\n" +
-                "\n");
-            runner.Run(codes);
+                "\n"));
             Assert.AreEqual(runner.PrintLog, "ふが");
         }
     }
