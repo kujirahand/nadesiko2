@@ -15,6 +15,11 @@ namespace NakoPlugin
         /// </summary>
         protected List<NakoVariable> list = new List<NakoVariable>();
 
+        public IEnumerator<NakoVariable> GetEnumerator(){
+            string[] keys = this.GetKeys();
+            for(int i=0;i<this.Count;i++)
+                yield return this.GetVarFromKey(keys[i]);
+        }
         /// <summary>
         /// 配列変数を作成する(コンストラクタ)
         /// </summary>
