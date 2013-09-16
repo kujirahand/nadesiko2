@@ -178,6 +178,13 @@ namespace Libnako.JPNCompiler
             return Codes;
         }
         /// <summary>
+        /// Publish メソッドを変数風に呼ぶセッター
+        /// </summary>
+        public string DirectSource
+        {
+            set { this.WriteIL(value); }
+        }
+        /// <summary>
         /// システム関数を登録する
         /// </summary>
         protected void RegisterSysCall()
