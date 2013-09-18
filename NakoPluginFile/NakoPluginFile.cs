@@ -25,7 +25,9 @@ namespace NakoPluginFile
         {
             //+ テキストファイルの読み書き
             bank.AddFunc("開く", "FILEを|FILEから", NakoVarType.String, _openFile, "ファイル名FILEのテキストを全部読み込んで返す。この時、自動的に文字コードを判定して読み込む。", "ひらく");
+            bank.AddFunc("読む", "FILEを|FILEから", NakoVarType.String, _openFile, "ファイル名FILEのテキストを全部読み込んで返す。この時、自動的に文字コードを判定して読み込む。", "ひらく");
             bank.AddFunc("保存", "SをFILEに|FILEへ", NakoVarType.Void, _saveFile, "文字列Sをファイル名FILEへ保存する。(文字コードUTF-8で保存される)", "ほぞん");
+            bank.AddFunc("毎行読む", "Fを|Fから", NakoVarType.String, _readLine, "一行ずつ読むためにファイル名Fを開いてハンドルを返す。反復と組み合わせて使う。", "まいぎょうよむ");
             //+ ファイル処理
             //-起動
             bank.AddFunc("起動", "CMDを", NakoVarType.Void, _execCommand, "コマンドCMDを起動する", "きどう");//TODO:To NakoPluginShell
@@ -65,10 +67,14 @@ namespace NakoPluginFile
             bank.AddFunc("フォルダ列挙", "PATHの", NakoVarType.Array, _enumDirs, "PATHにあるフォルダを列挙する", "ふぉるだれっきょ");
             //-パス操作
             bank.AddFunc("パス抽出", "PATHの", NakoVarType.String, _dirname, "PATHからパスを抽出して返す", "ぱすちゅうしゅつ");
+            bank.AddFunc("相対パス展開", "AをBで", NakoVarType.String, _relativePath, "相対パスAを基本パスBで展開して返す。", "そうたいぱすてんかい");
             bank.AddFunc("ファイル名抽出", "PATHの", NakoVarType.String, _basename, "PATHからパスを抽出して返す", "ふぁいるめいちゅうしゅつ");
             bank.AddFunc("拡張子抽出", "PATHの", NakoVarType.String, _extname, "PATHから拡張子を抽出して返す", "かくちょうしちゅうしゅつ");
             bank.AddFunc("ファイルサイズ", "Fの", NakoVarType.Int, _sizeof, "ファイルFのサイズを返す", "ふぁいるさいず");
             bank.AddFunc("追加保存", "SをFに|Fへ", NakoVarType.Void, _append, "文字列Sの内容をファイル名Fへ追加保存する。", "ついかほぞん");
+            bank.AddFunc("ファイル更新日時", "Fの", NakoVarType.String, _updateDate, "ファイルFの更新日時を返す。", "ふぁいるこうしんにちじ");
+            //-ドライブ情報（別ファイルにするか）
+            bank.AddFunc("ドライブ種類", "Fの", NakoVarType.String, _driveType, "ルートドライブAの種類（不明|存在しない｜取り外し可能｜固定｜ネットワーク｜CD-ROM｜RAM）を返す。", "どらいぶしゅるい");
 /*
 NakoPluginFile	作業フォルダ取得　ｰｰ　カレントディレクトリを取得して返す。
 NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレントディレクトリをSに変更する
@@ -269,9 +275,15 @@ NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレ
         }
         public Object _removeFile(INakoFuncCallInfo info)
         {
-        	string f = info.StackPopAsString();
-        	File.Delete(f);
-        	return null;
+            string f = info.StackPopAsString();
+            FileInfo finfo = new FileInfo(f);
+            if(finfo.Exists){
+                if((finfo.Attributes & FileAttributes.ReadOnly) == FileAttributes.ReadOnly){
+                    finfo.Attributes = FileAttributes.Normal;
+                }
+                File.Delete(f);
+            }
+            return null;
         }
         public Object _removeDir(INakoFuncCallInfo info)
         {
@@ -343,6 +355,33 @@ NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレ
             System.IO.File.AppendAllText(fileName, s, enc);
             return null;
 		}
-		
+        public object _relativePath(INakoFuncCallInfo info){
+            string s = info.StackPopAsString();
+            return System.IO.Path.GetFullPath(s);
+        }
+        public object _updateDate(INakoFuncCallInfo info){
+            string s = info.StackPopAsString();
+            return File.GetLastWriteTime(s).ToShortDateString();
+        }
+        public object _driveType(INakoFuncCallInfo info){
+            string s = info.StackPopAsString();
+            foreach(DriveInfo drive in DriveInfo.GetDrives()){
+                if(drive.Name == s){
+                    return drive.DriveType;
+                }
+            }
+            return null;
+        }
+        public IEnumerable<object> _readLine(INakoFuncCallInfo info){//TODO:反復の今の実装では全行一旦読み込まないといけないんだけど、どうしようかな
+        //TODO:それにiteratorを文字しても、ちゃんと変数に反映してくれないから、それも考えないと・・・
+//            string s = info.StackPopAsString();
+//            string line = "";
+//            using(StreamReader sr = new StreamReader(File.OpenRead(s))){
+//                while((line=sr.ReadLine())!=null){
+//                    yield return line;
+//                }
+//            }
+            return null;
+        }
     }
 }
