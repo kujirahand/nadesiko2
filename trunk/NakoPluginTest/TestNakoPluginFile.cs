@@ -229,5 +229,72 @@ namespace NakoPluginTest
             Assert.AreEqual("hoge\n", runner.PrintLog);
             
         }
+
+        [Test]
+        public void Test_readLine()
+        {
+            string tmp = System.IO.Path.GetTempPath();
+            runner.Run(com.WriteIL(
+                "「ほげ\r\nふが」を「"+tmp+"hoge.txt」に保存\n" +
+                "「"+tmp+"hoge.txt」から毎行読んで反復\n" +
+                "   対象を継続表示\n" +
+                ""));
+            Assert.AreEqual("ほげふが", runner.PrintLog);
+        }
+
+        [Test]
+        public void Test_driveType()
+        {
+            string driveName = @"C:\";
+            if(!NWEnviroment.isWindows()){
+                driveName = @"/";
+            }
+            runner.Run(com.WriteIL(
+                "S=「"+driveName+"」のドライブ種類\n" +
+                "Sを継続表示\n" +
+                ""));
+            Assert.AreEqual("Fixed", runner.PrintLog);
+        }
+
+        [Test]
+        public void Test_updateDate()
+        {
+            string tmp = System.IO.Path.GetTempPath();
+            runner.Run(com.WriteIL(
+                "「ほげ\r\nふが」を「"+tmp+"hoge.txt」に保存\n" +
+                "S=「"+tmp+"hoge.txt」のファイル更新日時\n" +
+                "Sを継続表示\n" +
+                ""));
+            Assert.AreEqual(DateTime.Today.ToShortDateString(),runner.PrintLog);
+        }
+
+        [Test]
+        public void Test_relativePath()
+        {
+            string relativePath = ConvertPath(@"..\hoge\fuga");
+            string absolutePath = System.IO.Path.GetFullPath(relativePath);
+            runner.Run(com.WriteIL(
+                "F=「"+relativePath+"」を作業フォルダ取得で相対パス展開\n" +
+                "Fを継続表示\n" +
+                ""));
+            Assert.AreEqual(absolutePath, runner.PrintLog);
+        }
+
+        [Test]
+        public void Test_stream()
+        {
+            string tmp = System.IO.Path.GetTempPath();
+            runner.Run(com.WriteIL(
+                "「"+tmp+"hoge.txt」をファイル削除\n" +
+                "F=「"+tmp+"hoge.txt」を「書」でファイルストリーム開く\n" +
+                "「Stream」をFにファイルストリーム一行書く\n" +
+                "Fをファイルストリーム閉じる\n" +
+                "F=「"+tmp+"hoge.txt」を「読」でファイルストリーム開く\n" +
+                "S=Fのファイルストリーム一行読む\n" +
+                "Fをファイルストリーム閉じる\n" +
+                "Sを継続表示\n" +
+                ""));
+            Assert.AreEqual("Stream", runner.PrintLog);
+        }
     }
 }
