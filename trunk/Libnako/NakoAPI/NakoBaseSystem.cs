@@ -63,11 +63,23 @@ namespace Libnako.NakoAPI
             bank.AddFunc("余り", "AをBで", NakoVarType.Object, _mod, "値Aを値Bで割ったあまり返す", "あまり");
             bank.AddFunc("割った余り", "AをBで", NakoVarType.Object, _mod, "変数Aを値Bで割った余りを返す", "わったあまり");
             //-計算関数
+            bank.AddFunc("乗", "AのB", NakoVarType.Object, _power, "Aを底としてBの累乗を返す", "じょう");
             bank.AddFunc("乱数", "Nの", NakoVarType.Int, _random, "0から(N-1)までの範囲の乱数を返す", "らんすう");
             bank.AddFunc("絶対値", "Vの", NakoVarType.Int, _abs, "値Vの絶対値を返す", "ぜったいち");
             bank.AddFunc("ABS", "V", NakoVarType.Int, _abs, "値Vの絶対値を返す", "ABS");
             //+サウンド
             bank.AddFunc("BEEP", "", NakoVarType.Void, _beep, "BEEP音を鳴らす", "BEEP");
+
+            bank.AddFunc("整数部分", "Vの", NakoVarType.Int, _intVal, "値Vの整数部分を返す", "せいすうぶぶん");
+            bank.AddFunc("小数部分", "Vの", NakoVarType.Double, _floatVal, "値Vの小数部分を返す", "しょうすうぶぶん");
+            bank.AddFunc("四捨五入", "AをBで", NakoVarType.Object, _round, "AをBの精度で四捨五入する", "ししゃごにゅう");
+            bank.AddFunc("切り下げ", "AをBで", NakoVarType.Object, _ceil, "AをBの精度で切り下げする", "きりさげ");
+            bank.AddFunc("代入", "Aを{参照渡し}Bに", NakoVarType.Void, _substitute, "AをBに代入する", "だいにゅう");
+//後回し　整数部分
+//後回し　小数点四捨五入→Aを「0.001」に四捨五入　と変更したいなー。指定がなければ一桁目
+//後回し　小数点切り下げ→Aを「0.001」に四捨五入　と変更したいなー。指定がなければ一桁目
+//後回し　代入
+//後回し　小数部分
         }
 
         /*
@@ -81,6 +93,91 @@ namespace Libnako.NakoAPI
             return null;
         }
          */
+
+        private object _substitute(INakoFuncCallInfo info)
+        {
+            object a = info.StackPop();
+            object br = info.StackPop();
+            if (!(br is NakoVariable))
+            {
+                throw new ApplicationException("『代入』の引数が変数ではありません");
+            }
+            ((NakoVariable)br).SetBodyAutoType(a);
+            return null;
+        }
+
+        private object _intVal(INakoFuncCallInfo info)
+        {
+            return info.StackPopAsInt();
+        }
+
+        private object _floatVal(INakoFuncCallInfo info)
+        {
+            string s = info.StackPopAsString();
+            int index = s.IndexOf('.');
+            if(index==-1){
+                return 0;
+            }
+            string ds = "0"+s.Substring(index);
+            return double.Parse(ds);
+        }
+
+        private object _round(INakoFuncCallInfo info)
+        {
+            object a = info.StackPop();
+            object b = info.StackPop();
+            int ib=0;
+            if(b is string){
+                string sb = (string)b;
+                if(sb.Contains(".")){
+                    ib = GetDigitOfDecimal(sb);
+                }else{
+                    ib = int.Parse(sb);
+                }
+            }else{
+                ib = NakoValueConveter.ToInt(b);
+            }
+            double da = NakoValueConveter.ToDouble(a);
+            return __round(da,ib);
+        }
+
+        private object _ceil(INakoFuncCallInfo info)
+        {
+            object a = info.StackPop();
+            object b = info.StackPop();
+            int ib = 0;
+            if(b is string){
+                string sb = (string)b;
+                if(sb.Contains(".")){
+                    ib = GetDigitOfDecimal(sb);
+                }else{
+                    ib = int.Parse(sb);
+                }
+            }else{
+                ib = NakoValueConveter.ToInt(b);
+            }
+            double da = NakoValueConveter.ToDouble(a);
+            return __ceil(da,ib);
+        }
+
+        public static int GetDigitOfDecimal(string s){
+            int index = s.IndexOf('.');
+            if(index==-1){
+                return 0;
+            }
+            return -1*s.Substring(index+1).Length;
+        }
+
+        private static double __round(double variable, int digit){
+            double base_value = Math.Pow(10,-digit);
+            return variable>0 ? Math.Floor((variable*base_value)+0.5)/base_value :
+                Math.Ceiling((variable*base_value)-0.5)/base_value;
+        }
+        private static double __ceil(double variable, int digit){
+            double base_value = Math.Pow(10,-digit);
+            return variable>0 ? Math.Floor(variable*base_value)/base_value :
+                Math.Ceiling(variable*base_value)/base_value;
+        }
 
         private object _nakoVersion(INakoFuncCallInfo info)
         {
@@ -319,6 +416,14 @@ namespace Libnako.NakoAPI
                 double db = NakoValueConveter.ToDouble(b);
                 return (da % db);
             }
+        }
+
+        private object _power(INakoFuncCallInfo info)
+        {
+            double a = info.StackPopAsDouble();
+            double b = info.StackPopAsDouble();
+            a = Math.Pow(a,b);
+            return a;
         }
 
     }
