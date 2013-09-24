@@ -139,5 +139,11 @@ namespace Libnako.Interpreter.ILCode
         _CONTINUE = 0xF2, // { args:0, push:0, pop:0 }
         ///<summary>_RETURN</summary>
         _RETURN = 0xF3, // { args:0, push:0, pop:0 }
+
+        // --- 反復用 ---
+        ///<summary>Iterator</summary>
+        TRY = 0x85,
+        CATCH = 0x86,
+        FINALLY = 0x87,
     }
 }
