@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -27,7 +28,7 @@ namespace NakoPluginFile
             bank.AddFunc("開く", "FILEを|FILEから", NakoVarType.String, _openFile, "ファイル名FILEのテキストを全部読み込んで返す。この時、自動的に文字コードを判定して読み込む。", "ひらく");
             bank.AddFunc("読む", "FILEを|FILEから", NakoVarType.String, _openFile, "ファイル名FILEのテキストを全部読み込んで返す。この時、自動的に文字コードを判定して読み込む。", "ひらく");
             bank.AddFunc("保存", "SをFILEに|FILEへ", NakoVarType.Void, _saveFile, "文字列Sをファイル名FILEへ保存する。(文字コードUTF-8で保存される)", "ほぞん");
-            bank.AddFunc("毎行読む", "Fを|Fから", NakoVarType.String, _readLine, "一行ずつ読むためにファイル名Fを開いてハンドルを返す。反復と組み合わせて使う。", "まいぎょうよむ");
+            bank.AddFunc("毎行読む", "Fを|Fから", NakoVarType.Object, _readLine, "一行ずつ読むためにファイル名Fを開いてハンドルを返す。反復と組み合わせて使う。", "まいぎょうよむ");
             //+ ファイル処理
             //-起動
             bank.AddFunc("起動", "CMDを", NakoVarType.Void, _execCommand, "コマンドCMDを起動する", "きどう");//TODO:To NakoPluginShell
@@ -372,16 +373,26 @@ NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレ
             }
             return null;
         }
-        public IEnumerable<object> _readLine(INakoFuncCallInfo info){//TODO:反復の今の実装では全行一旦読み込まないといけないんだけど、どうしようかな
+        public object _readLine(INakoFuncCallInfo info){//TODO:反復の今の実装では全行一旦読み込まないといけないんだけど、どうしようかな
         //TODO:それにiteratorを文字しても、ちゃんと変数に反映してくれないから、それも考えないと・・・
-//            string s = info.StackPopAsString();
-//            string line = "";
-//            using(StreamReader sr = new StreamReader(File.OpenRead(s))){
-//                while((line=sr.ReadLine())!=null){
-//                    yield return line;
-//                }
-//            }
-            return null;
+            string s = info.StackPopAsString();
+            LineReader lr =  new LineReader(s);
+            return lr;
+        }
+    }
+    public class LineReader
+    {
+        private string path;
+        public LineReader(string path){
+            this.path = path;
+        }
+        public IEnumerator GetEnumerator(){
+            string line = "";
+            using(StreamReader sr = new StreamReader(File.OpenRead(path))){
+                while((line=sr.ReadLine())!=null){
+                    yield return line;
+                }
+            }
         }
     }
 }

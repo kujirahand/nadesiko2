@@ -123,7 +123,8 @@ namespace Libnako.JPNCompiler.ILWriter
                     _repeat_times((NakoNodeRepeatTimes)node);
                     return;
                 case NakoNodeType.FOREACH:
-                    _foreach((NakoNodeForeach)node);
+                    _foreachUseIterator((NakoNodeForeach)node);
+                    //_foreach((NakoNodeForeach)node);
                     return;
                 case NakoNodeType.CALL_FUNCTION:
                     _call_function((NakoNodeCallFunction)node);
@@ -239,15 +240,37 @@ namespace Libnako.JPNCompiler.ILWriter
             addNewILCode(type);
         }
 
+//TODO:まだ実装できてない
+        private void _try(NakoNodeTry node)
+        {
+            // (0) Tryを埋め込む
+            addNewILCode(NakoILType.TRY);
+            // (1) 通常実行をコードにする
+            Write_r(node.nodeTry);
+            // (2) 例外処理
+            addNewILCode(NakoILType.CATCH);
+            if (node.nodeCatch != null)
+            {
+                //TODO:catchコードが無かったらExceptionかな？
+                Write_r(node.nodeCatch);
+            }
+            // (3) 最後に必ず実行する処理
+            addNewILCode(NakoILType.FINALLY);
+            if (node.nodeFinally != null)
+            {
+                Write_r(node.nodeFinally);
+            }
+        }
+
         private void _if(NakoNodeIf node)
         {
-			int labelId = GetLableId();
+         int labelId = GetLableId();
             // (1) 条件文をコードにする
             Write_r(node.nodeCond);
             // (2) コードの結果により分岐する
             // 分岐先をラベルとして作成
-			NakoILCode label_endif = createLABEL("ENDIF" + labelId.ToString());
-			NakoILCode label_else = createLABEL("ELSE" + labelId.ToString());
+         NakoILCode label_endif = createLABEL("ENDIF" + labelId.ToString());
+         NakoILCode label_else = createLABEL("ELSE" + labelId.ToString());
             result.Add(new NakoILCode(NakoILType.BRANCH_FALSE, label_else));
             // (3) TRUE
             if (node.nodeTrue != null)
@@ -280,6 +303,82 @@ namespace Libnako.JPNCompiler.ILWriter
             Write_r(node.nodeBlocks);
             result.Add(createJUMP(label_while_begin));
             result.Add(label_while_end);
+        }
+
+//Iterator実装テスト
+//TODO:try finallyを入れる必要がある
+        private void _foreachUseIterator(NakoNodeForeach node)
+        {
+            int labelId = GetLableId();
+            int loopVarNo = node.loopVarNo;
+            int valueVarNo = node.valueVarNo;
+            int taisyouVarNo = node.taisyouVarNo;
+            int kaisuVarNo = node.kaisuVarNo;
+            int enumeratorVarNo = node.enumeratorVarNo;
+            int enumeratorFuncNo = node.enumeratorFuncNo;
+            int moveresultFuncNo = node.moveresultFuncNo;
+            int getcurrentFuncNo = node.getcurrentFuncNo;
+            int getdisposeFuncNo = node.getdisposeFuncNo;
+
+            // (0)
+            NakoILCode label_for_begin = createLABEL("ITERATOR_BEGIN" + labelId.ToString());
+            NakoILCode label_for_end = createLABEL("ITERATOR_END" + labelId.ToString());
+
+            // (1) 変数を初期化する
+            result.Add(label_for_begin);
+            // カウンタ変数を初期化
+            addNewILCode(NakoILType.LD_CONST_INT, 0L);
+            addNewILCode(NakoILType.ST_LOCAL, loopVarNo);
+            // 反復要素の評価
+            //TODO:反復要素のGetEnumerator()を評価
+            //GetEnumerator(); addNewILCode(NakoILType.CALL,"GetEnumerator")?
+            //addNewILCode(NakoILType.ST_LOCAL, valueVarNo);
+            Write_r(node.nodeValue); // 値を評価
+            addNewILCode(NakoILType.ST_LOCAL, valueVarNo);
+            addNewILCode(NakoILType.LD_LOCAL_REF, valueVarNo);
+            addNewILCode(NakoILType.SYSCALL, enumeratorFuncNo);
+            addNewILCode(NakoILType.ST_LOCAL, enumeratorVarNo);
+
+            // (2) 条件をコードにする
+            //TODO: MoveNext()=true
+            NakoILCode label_for_cond = createLABEL("ITERATOR_COND" + labelId.ToString());
+            result.Add(label_for_cond);
+            // L
+            //MoveNext()に変更
+            addNewILCode(NakoILType.LD_LOCAL_REF, enumeratorVarNo);
+            addNewILCode(NakoILType.SYSCALL, moveresultFuncNo);
+            // R
+            addNewILCode(NakoILType.LD_CONST_INT, true);//TODO:実際にコンパイルする時にこれはまずいはずなので、何か考える
+            // LT
+            addNewILCode(NakoILType.EQ);
+            // IF BRANCH FALSE
+            addNewILCode(NakoILType.BRANCH_FALSE, label_for_end);
+            // 反復する値を変数「対象」にセット
+            // ** 対象=値\(ループカウンタ)
+            //TODO:対象＝オブジェクト.Currentに変更
+            addNewILCode(NakoILType.LD_LOCAL_REF, enumeratorVarNo);
+            addNewILCode(NakoILType.SYSCALL,getcurrentFuncNo);
+            //addNewILCode(NakoILType.NOP, "let-taisyou"); // for DEBUG
+            addNewILCode(NakoILType.ST_LOCAL, taisyouVarNo);
+            //TODO:key
+            // ** 回数=ループカウンタ+1
+            addNewILCode(NakoILType.LD_LOCAL, loopVarNo);
+            addNewILCode(NakoILType.INC);
+            addNewILCode(NakoILType.ST_LOCAL, kaisuVarNo);
+
+            // (3) 繰り返し文を実行する
+            _loop_check_break_continue(node.nodeBlocks, label_for_end, label_for_begin);
+            Write_r(node.nodeBlocks);
+
+            // (4) 変数を加算する
+            addNewILCode(NakoILType.INC_LOCAL, loopVarNo);
+
+            // (5) 手順2に戻る
+            result.Add(createJUMP(label_for_cond));
+            result.Add(label_for_end);
+            addNewILCode(NakoILType.LD_LOCAL_REF, enumeratorVarNo);
+            addNewILCode(NakoILType.SYSCALL,getdisposeFuncNo);
+            //TODO: EnumeratorをDisposeする
         }
 
         private void addNewILCode(NakoILType type, object value)
@@ -455,6 +554,7 @@ namespace Libnako.JPNCompiler.ILWriter
             result.Add(label_for_end);
         }
 
+//TODO:_foreachUseIteratorがOKならば消す
         private void _foreach(NakoNodeForeach node)
         {
             int labelId = GetLableId();

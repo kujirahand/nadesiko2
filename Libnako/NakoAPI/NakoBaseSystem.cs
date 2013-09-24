@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Reflection;
 
 using NakoPlugin;
 
@@ -26,6 +28,12 @@ namespace Libnako.NakoAPI
         /// <param name="bank"></param>
         new public void DefineFunction(INakoPluginBank bank)
         {
+            //TODO:本当はprivateにしたい
+            //-Iterator 実装
+            bank.AddFunc("GetEnumerator", "Oの", NakoVarType.Object, __getEnumerator, "反復子を返す(内部用)", "GetEnumerator");
+            bank.AddFunc("MoveNext", "Eを", NakoVarType.Int, __moveNext, "反復子の移動結果を返す(内部用)", "MoveNext");
+            bank.AddFunc("Current", "Eの", NakoVarType.Object, __current, "反復子の現在値を返す(内部用)", "Current");
+            bank.AddFunc("Dispose", "Oの", NakoVarType.Void, __dispose, "オブジェクトを廃棄する(内部用)", "Dispose");
             //+システム
             //-バージョン情報
             bank.AddFunc("ナデシコバージョン", "", NakoVarType.Double, _nakoVersion, "なでしこのバージョン番号を返す", "なでしこばーじょん");
@@ -94,6 +102,57 @@ namespace Libnako.NakoAPI
         }
          */
 
+//private use
+        private object __getEnumerator(INakoFuncCallInfo info)
+        {
+            var a = info.StackPop();
+            if(a is NakoVariable){
+                a = ((NakoVariable)a).Body;
+            }
+            Type t = a.GetType();
+            MethodInfo mi = t.GetMethod("GetEnumerator",new Type[0]);
+            return mi.Invoke(a,null);
+        }
+
+        private object __moveNext(INakoFuncCallInfo info)
+        {
+            object e = info.StackPop();
+            if(e is NakoVariable){
+                e = ((NakoVariable)e).Body;
+            }
+            Type t = e.GetType();
+            MethodInfo mi = t.GetMethod("MoveNext",new Type[0]);
+            return mi.Invoke(e,null);
+        }
+
+        private object __current(INakoFuncCallInfo info)
+        {
+            object e = info.StackPop();
+            if(e is NakoVariable){
+                e = ((NakoVariable)e).Body;
+            }
+            Type t = e.GetType();
+            if(e is IEnumerator){
+                IEnumerator ie = (IEnumerator)e;
+                return ie.Current;
+            }
+            PropertyInfo pi = t.GetProperty("Current");
+            return pi.GetValue(e,null);
+        }
+
+        private object __dispose(INakoFuncCallInfo info)
+        {
+            object e = info.StackPop();
+            if(e is NakoVariable){
+                e = ((NakoVariable)e).Body;
+            }
+            if(e is IDisposable){
+                ((IDisposable)e).Dispose();
+            }
+            return null;
+        }
+
+//public use
         private object _substitute(INakoFuncCallInfo info)
         {
             object a = info.StackPop();
