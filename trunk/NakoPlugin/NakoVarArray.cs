@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 
@@ -13,13 +13,13 @@ namespace NakoPlugin
         /// <summary>
         /// 配列の要素を保持するためのリスト
         /// </summary>
-        protected List<NakoVariable> list = new List<NakoVariable>();
+        protected System.Collections.Generic.List<NakoVariable> list = new System.Collections.Generic.List<NakoVariable>();
 
-        public IEnumerator<NakoVariable> GetEnumerator(){
-            string[] keys = this.GetKeys();
+        public IEnumerator GetEnumerator(){
             for(int i=0;i<this.Count;i++)
-                yield return this.GetVarFromKey(keys[i]);
+                yield return this.GetVar(i);
         }
+
         /// <summary>
         /// 配列変数を作成する(コンストラクタ)
         /// </summary>
@@ -59,7 +59,7 @@ namespace NakoPlugin
         /// </summary>
         public void Clear()
         {
-            list = new List<NakoVariable>();
+            list = new System.Collections.Generic.List<NakoPlugin.NakoVariable>();
         }
 
         /// <summary>
