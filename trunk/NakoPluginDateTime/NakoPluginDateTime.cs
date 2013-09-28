@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Globalization;
 
 using NakoPlugin;
 
@@ -32,13 +33,34 @@ namespace NakoPluginDateTime
             bank.AddFunc("時間差", "ATIMEとBTIMEの", NakoVarType.Int, _diffhours, "時間AとBの時間の差を求めて返す", "じかんさ");
             bank.AddFunc("UNIXTIME_日時変換", "Iを", NakoVarType.String, _unixtime_to_datetime, "Unix TimeであるIをなでしこ日時形式に変換する", "ゆにっくすたいむにちじへんかん");
             bank.AddFunc("日付加算", "SにAを", NakoVarType.String, _add, "日付SにAを加えて返す。Aには「(+|-)yyyy/mm/dd」で指定する。", "ひづけかさん");
-//NakoPluginDateTime	{=?}Iを　UNIXTIME_日時変換　ｰｰ　Unix TimeであるIをなでしこ日時形式に変換する
-//NakoPluginDateTime	{=?}SにAを　日付加算　ｰｰ　日付SにAを加えて返す。Aには「(+|-)yyyy/mm/dd」で指定する。
+            bank.AddFunc("日時形式変換", "DATEをFORMATに|DATEから|FORMATで|FORMATへ", NakoVarType.String, _format, "日時(DATE)を指定形式(FORMAT)に変換する。フォーマットには「RSS形式」や「yyyy/mm/dd hh:nn:ss」を指定する。", "にちじけいしきへんかん");
+            bank.AddFunc("日数差", "AとBの|AからBまでの", NakoVarType.Int, _daysDifference, "日付AとBの差を日数で求めて返す", "にっすうさ");
+            bank.AddFunc("和暦変換", "Sを", NakoVarType.String, _toJapanese, "Sを和暦に変換する。Sは明治以降の日付が有効", "われきへんかん");
+        }
+        public object _format(INakoFuncCallInfo info){
+            string a= info.StackPopAsString();
+            string format = info.StackPopAsString();
+            DateTime aDate = DateTime.Parse(a);
+            return aDate.ToString(format);
+        }
+        public object _daysDifference(INakoFuncCallInfo info){
+            string a= info.StackPopAsString();
+            string b= info.StackPopAsString();
+            DateTime aDate = DateTime.Parse(a);
+            DateTime bDate = DateTime.Parse(b);
+            return bDate.Subtract(aDate).TotalDays;
+        }
+        CultureInfo culture = new CultureInfo("ja-JP",true);
+        public object _toJapanese(INakoFuncCallInfo info){
+            string a= info.StackPopAsString();
+            DateTime aDate = DateTime.Parse(a);
+            return aDate.ToString("ggyy年M月d日",culture).Replace("Heisei","平成").Replace("Showa","昭和").Replace("Taisho","大正").Replace("Meiji","明治");//TODO:monoだとHeiseiとか出てくるので何とかならないか？
         }
         
         // プラグインの初期化処理
         public void PluginInit(INakoInterpreter runner)
         {
+            culture.DateTimeFormat.Calendar = new JapaneseCalendar();
         }
         // プラグインの終了処理
         public void PluginFin(INakoInterpreter runner)
