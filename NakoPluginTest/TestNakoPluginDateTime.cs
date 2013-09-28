@@ -69,13 +69,37 @@ namespace NakoPluginTest
             Assert.AreEqual("2002/12/12 1:00:00",runner.PrintLog);
         }
 
-		[Test]
+        [Test]
         public void TestUnixtimeToDatetime()
         {
             runner.Run(com.WriteIL(
                 "1378652400をUNIXTIME_日時変換を表示。"));
-			DateTime hoge = new DateTime(2013,9,9,0,0,0,DateTimeKind.Local);
+         DateTime hoge = new DateTime(2013,9,9,0,0,0,DateTimeKind.Local);
             Assert.AreEqual(hoge.ToString(),runner.PrintLog);
+        }
+
+        [Test]
+        public void TestDaysDifference()
+        {
+            runner.Run(com.WriteIL(
+                "「2013/1/1」と「2013/2/1」の日数差を表示。"));
+            Assert.AreEqual("31",runner.PrintLog);
+        }
+
+        [Test]
+        public void TestToJapanese()
+        {
+            runner.Run(com.WriteIL(
+                "「2013/1/1」を和暦変換して表示。"));
+            Assert.AreEqual("平成25年1月1日",runner.PrintLog);
+        }
+
+        [Test]
+        public void TestFormat()
+        {
+            runner.Run(com.WriteIL(
+                "「2013/1/1」を「gyyyy年MM月dd日(dddd)」に日時形式変換して表示。"));
+            Assert.AreEqual("A.D.2013年01月01日(火曜日)",runner.PrintLog);
         }
      }
 }
