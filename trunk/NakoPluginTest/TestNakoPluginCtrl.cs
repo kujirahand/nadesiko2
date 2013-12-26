@@ -13,6 +13,7 @@ using Libnako.Interpreter;
 using Libnako.NakoAPI;
 
 using NakoPluginCtrl;
+using NakoPlugin;
 
 namespace NakoPluginTest
 {
@@ -57,6 +58,48 @@ namespace NakoPluginTest
             runner.Run(com.WriteIL(
                 "窓列挙して表示。\n"));
             Assert.AreNotEqual("", runner.PrintLog);
+        }
+        [Test]
+        public void TestGuid()//TODO:Success test
+        {
+            runner.Run(com.WriteIL(
+                "GUID取得して表示。\n"));
+            Assert.AreEqual("", runner.PrintLog);
+        }
+        [Test]
+        public void TestPs()//TODO:Success test
+        {
+            runner.Run(com.WriteIL(
+                "プロセス列挙して表示。\n"));
+            Assert.AreEqual(true, runner.PrintLog.Contains((NWEnviroment.isWindows())? "svchost" : "init"));
+        }
+        public void TestAbort()//TODO:プロセス強制終了はどうやってテストしようか。ダミーのプロセスが要るか？ test
+        {
+            runner.Run(com.WriteIL(
+                "。\n"));
+            Assert.AreEqual("", runner.PrintLog);
+        }
+        [Test]
+        public void TestTotalMemory()//TODO:Success test
+        {
+            runner.Run(com.WriteIL(
+                "メモリ総容量取得して表示。\n"));
+            Assert.Greater(int.Parse (runner.PrintLog),0);
+        }
+        [Test]
+        public void TestAvailableMemory()//TODO:Success test
+        {
+            runner.Run(com.WriteIL(
+                "メモリ空き容量取得して表示。\n"));
+            Assert.Greater(int.Parse (runner.PrintLog),0);
+        }
+        [Test]
+        public void TestUsagePercentageOfMemory()//TODO:Success test
+        {
+            runner.Run(com.WriteIL(
+                "メモリ使用率取得して表示。\n"));
+            Assert.Greater(int.Parse (runner.PrintLog),0);
+            Assert.Less(int.Parse (runner.PrintLog),100);
         }
     }
 }
