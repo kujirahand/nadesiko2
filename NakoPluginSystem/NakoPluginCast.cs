@@ -19,8 +19,8 @@ namespace NakoPluginSystem
         {
             bank.AddFunc("整数変換", "Sを", NakoVarType.Int, _to_int,"変数Sを整数に変換して返す", "せいすうへんかん");
             bank.AddFunc("文字列変換", "Sを", NakoVarType.String, _to_string,"変数Sを文字列に変換して", "もじれつへんかん");
+            bank.AddFunc("実数変換", "Sを", NakoVarType.Double, _toDouble,"変数Sを実数に変換して返す", "じっすうへんかん");
         }
-        
         // プラグインの初期化処理
         public void PluginInit(INakoInterpreter runner)
         {
@@ -29,12 +29,16 @@ namespace NakoPluginSystem
         public void PluginFin(INakoInterpreter runner)
         {
         }
-       public object _to_int(INakoFuncCallInfo info){
+        public object _to_int(INakoFuncCallInfo info){
             return info.StackPopAsInt();
         }
         
         public Object _to_string(INakoFuncCallInfo info){
             return info.StackPopAsString();
+        }
+
+        public object _toDouble(INakoFuncCallInfo info){
+            return info.StackPopAsDouble();
         }
     }
 }
