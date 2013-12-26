@@ -34,24 +34,22 @@ namespace NakoPluginTest
         [Test]
         public void TestConnect()
         {
-            com.DirectSource = 
+            runner.Run(com.WriteIL(
                 "A=「Dsn=announce;」でADO開く\n" +
                 "AをDB閉じる\n" +
-                "Aを表示";
-            runner.Run(com.Codes);
+                "Aを表示"));
             Assert.AreEqual("System.Data.Odbc.OdbcConnection", runner.PrintLog );
         }
         [Test]
         public void TestCount()
         {
-            com.DirectSource = 
+            runner.Run(com.WriteIL(
                 "A=「Dsn=announce;」でADO開く\n" +
                 "B=Aに『select id,name from admin』をSQL実行\n" +
                 "(AのDB次移動)==1の間\n" +
                 "  C=Aへ『name』のDBフィールド取得\n" +
  				"  Cを表示\n" + 
-                "AをDB閉じる";
-            runner.Run(com.Codes);
+                "AをDB閉じる"));
             Assert.AreEqual("System.Data.Odbc.OdbcConnection", runner.PrintLog );
         }
 
