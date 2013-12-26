@@ -20,7 +20,7 @@ namespace NakoPluginTest
         public void Test1_Normal()
         {
             // (1) 
-            codes = ns.Publish(
+            codes = ns.WriteIL(
 				"A[0] = `aaa`\n"+
 				"A[1] = `bbb`\n"+
 				"A[2] = `ccc`\n"+
