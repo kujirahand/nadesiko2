@@ -272,5 +272,37 @@ namespace NakoPluginTest
                 "SをUTF8変換して継続表示"));
             Assert.AreEqual("ほげほげふがふが埋め込み", sjis_str);
         }
+        [Test]
+        public void TestGetEncode()
+        {//StrUnit.GetEncodeがASCIIを返すのでエラーが出ています。StrUnit内の変数notJapaneseがtrueになっているようです。
+         string s = @"撫子";
+         System.Text.Encoding src = System.Text.Encoding.Unicode;
+         System.Text.Encoding dest = System.Text.Encoding.UTF8;
+         byte [] temp_s = src.GetBytes(s);
+         byte[] temp_d = System.Text.Encoding.Convert(src, dest, temp_s);
+         string str = dest.GetString(temp_d);
+            interpreter.Run(compiler.WriteIL(
+                "S=「"+str+"」\n" +
+                "Sの文字コード調査して継続表示"));
+            Assert.AreEqual("UTF-8", interpreter.PrintLog);
+        }
+        [Test]
+        public void TestToKana()
+        {
+         string s = @"ホゲホゲﾌｶﾞﾌｶﾞ埋め込み";
+            interpreter.Run(compiler.WriteIL(
+                "S=「"+s+"」\n" +
+                "Sをかな変換して継続表示"));
+            Assert.AreEqual("ほげほげふがふが埋め込み", interpreter.PrintLog);
+        }
+        [Test]
+        public void TestCutRange()
+        {
+            interpreter.Run(compiler.WriteIL(
+                "S=「なでしこなでなで」\n" +
+                "A=Sの「で」から「で」を範囲切り取る\n" +
+                "Sを継続表示。\nAを継続表示"));
+            Assert.AreEqual("ななでしこな", interpreter.PrintLog);
+        }
     }
 }
