@@ -182,6 +182,31 @@ namespace NakoPluginTest
                 "PRINT ほげ\n" +
                 "\n"));
             Assert.AreEqual(runner.PrintLog, "ふが");
+            codes = ns.WriteIL(
+                "●ほげ\n" +
+                "　　それ＝「ふが」" +
+                "　　「bar」で戻る" +
+                "　　それ＝「ぴよ」" +
+                "\n" +
+                "PRINT ほげ\n" +
+                "\n");
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "bar");
+        }
+        [Test]
+        public void TestUserFunc_Multi()
+        {
+            codes = ns.WriteIL(
+                "●ほげ\n" +
+                "　　それ＝「ふが」\n" +
+                "●ほぎゃ\n" +
+                "　　それ＝「bar」" +
+                "\n" +
+                "PRINT ほげ\n" +
+                "PRINT ほぎゃ\n" +
+                "\n");
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "ふがbar");
         }
     }
 }
