@@ -40,8 +40,29 @@ namespace NakoPluginHttp
             bank.AddFunc("HTTPヘッダハッシュ取得", "URLから|URLの|URLを", NakoVarType.Array, _getHeaderHash, "URLからヘッダを取得してハッシュに変換して返す。", "HTTPへっだはっしゅしゅとく");
             bank.AddFunc("HTTPポスト", "URLへVALUESを|URLに", NakoVarType.String, _post, "ポストしたい値（ハッシュ形式）VALUESをURLへポストしその結果を返す。", "HTTPぽすと");
             bank.AddFunc("HTTPゲット", "HEADをURLへ|HEADで", NakoVarType.String, _get, "送信ヘッダHEADを指定してURLへGETコマンドを発行し、その結果を返す。", "HTTPげっと");
+            bank.AddFunc("URL展開", "AをBで", NakoVarType.String, _relativeUrl, "相対パスAを基本パスBでURLを展開する。", "URLてんかい");
+            bank.AddFunc("URL基本パス抽出", "URLから|URLの|URLで", NakoVarType.String, _baseOfUrl, "URLから基本パスを抽出して返す。", "URLきほんぱすちゅうしゅつ");
+            bank.AddFunc("URLファイル名抽出", "URLから|URLの|URLで", NakoVarType.String, _filenameOfUrl, "URLからファイル名部分を抽出して返す。", "URLふぁいるめいちゅうしゅつ");
+            bank.AddFunc("URLドメイン名抽出", "URLから|URLの|URLで", NakoVarType.String, _domainOfUrl, "URLからドメイン名部分を抽出して返す。", "URLどめいんめいちゅうしゅつ");
         }
-        
+
+        public object _relativeUrl(INakoFuncCallInfo info){
+            string a = info.StackPopAsString();
+            string b = info.StackPopAsString();
+            return new Uri(new Uri(b),a).AbsoluteUri;
+        }
+        public object _baseOfUrl(INakoFuncCallInfo info){
+            string url = info.StackPopAsString();
+            return url.Replace(Path.GetFileName(url),"");
+        }
+        public object _filenameOfUrl(INakoFuncCallInfo info){
+            string url = info.StackPopAsString();
+            return Path.GetFileName(url);
+        }
+        public object _domainOfUrl(INakoFuncCallInfo info){
+            string url = info.StackPopAsString();
+            return new Uri(url).Host;
+        }
         // プラグインの初期化処理
         public void PluginInit(INakoInterpreter runner)
         {
