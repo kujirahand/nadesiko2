@@ -53,12 +53,50 @@ namespace NakoPluginTest
         }
 
         [Test]
+        public void TestJsonEncode()
+        {
+            runner.Run(com.WriteIL(
+                "J[`href`]=「/account/login.aspx」\n"+
+                "J[`target`]=「_blank」\n"+
+                "S=JをJSONエンコード\n"+
+                "Sを表示。"));
+            Assert.AreEqual("{\"href\":\"/account/login.aspx\",\"target\":\"_blank\"}",runner.PrintLog);
+//            runner.Run(com.WriteIL(
+//                "A[`href`]=「/account/login.aspx」\n"+
+//                "A[`target`]=「_blank」\n"+
+//                "S=AをJSONエンコード\n"+
+//                "Sを表示。"));
+//            Assert.AreEqual("{\"href\":\"/account/login.aspx\",\"target\":\"_blank\"}",runner.PrintLog);
+//            runner.Run(com.WriteIL(
+//                "B[`href`][`hoge`]=「/acc/login.aspx」\n"+
+//                "B[`href`][`fuga`]=「/account/」\n"+
+//                "B[`href`][`fuga`]を表示。"));
+//                "B[`target`]=「_blank」\n"+
+//                "S=BをJSONエンコード\n"+
+//                "Sを表示。"));
+//            Assert.AreEqual("{\"href\":\"/account/login.aspx\",\"target\":\"_blank\"}",runner.PrintLog);
+//            runner.Run(com.WriteIL(
+//                "B=「/account/login.aspx」\n"+
+//                "C[0]=「/account/login.aspx」\n"+
+//                "C[1]=「_blank」\n"+
+//                "S=CをJSONエンコード\n"+
+//                "Sを表示。"));
+//            Assert.AreEqual("{\"href\":\"/account/login.aspx\",\"target\":\"_blank\"}",runner.PrintLog);
+        }
+
+        [Test]
         public void TestJsonDecode()
         {
             runner.Run(com.WriteIL(
-                "S=『{'href':'/account/login.aspx','target':'_blank'}』\n"+
+                "S=『[1,2,{\"href\":\"/account/login.aspx\",\"target\":[1,\"hoge\",3]}]』\n"+
+//            「{\"href\":\"/account/login.aspx\",\"target\":\"_blank\"}」\n"+
 				"A=SをJSONデコード\n"+
-				"A[`target`]を表示。"));
+				"A[2][`target`][1]を表示。"));
+            Assert.AreEqual("hoge",runner.PrintLog);
+            runner.Run(com.WriteIL(
+                "S=『{\"href\":\"/account/login.aspx\",\"target\":\"_blank\"}』\n"+
+                "A=SをJSONデコード\n"+
+                "A[`target`]を表示。"));
             Assert.AreEqual("_blank",runner.PrintLog);
         }
 
@@ -99,6 +137,43 @@ namespace NakoPluginTest
                 "UserAgent:Mozilla/5.0 (iPhone; U; CPU iPhone OS 4_0_1 like Mac OS X; ja-jp) AppleWebKit/532.9 (KHTML, like Gecko) Version/4.0.5 Mobile/8A306 Safari/6531.22.7」を「http://mpw.jp/requestheader/」へHTTPゲット。" +
                 "Aを表示。"));
             Assert.AreEqual(true,runner.PrintLog.Contains("http://localhost/nadesiko2/"));
+        }
+
+        [Test]
+        public void TestRelativeUrl()//TODO:外部サービスを使ってるので、後々簡易WEBサーバをテスト時に構築し、そこにアクセスするように変更したい
+        {
+            runner.Run(com.WriteIL(
+                "A=「../index.html」\n"+
+                "B=「http://hoge.com/fuga/foo/」\n"+
+                "AをBでURL展開を表示。"));
+            Assert.AreEqual("http://hoge.com/fuga/index.html",runner.PrintLog);
+        }
+
+        [Test]
+        public void TestBaseOfUrl()//TODO:外部サービスを使ってるので、後々簡易WEBサーバをテスト時に構築し、そこにアクセスするように変更したい
+        {
+            runner.Run(com.WriteIL(
+                "A=「http://hoge.com/fuga/foo/index.html」\n"+
+                "AのURL基本パス抽出を表示。"));
+            Assert.AreEqual("http://hoge.com/fuga/foo/",runner.PrintLog);
+        }
+
+        [Test]
+        public void TestFilenameOfUrl()//TODO:外部サービスを使ってるので、後々簡易WEBサーバをテスト時に構築し、そこにアクセスするように変更したい
+        {
+            runner.Run(com.WriteIL(
+                "A=「http://hoge.com/fuga/foo/index.html」\n"+
+                "AのURLファイル名抽出を表示。"));
+            Assert.AreEqual("index.html",runner.PrintLog);
+        }
+
+        [Test]
+        public void TestDomainOfUrl()//TODO:外部サービスを使ってるので、後々簡易WEBサーバをテスト時に構築し、そこにアクセスするように変更したい
+        {
+            runner.Run(com.WriteIL(
+                "A=「http://hoge.com/fuga/foo/」\n"+
+                "AのURLドメイン名抽出を表示。"));
+            Assert.AreEqual("hoge.com",runner.PrintLog);
         }
      }
 }
