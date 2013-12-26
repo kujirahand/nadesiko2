@@ -68,8 +68,79 @@ namespace Libnako.NakoAPI
             bank.AddFunc("カナローマ字変換", "Sを|Sから", NakoVarType.String, _convert_kana_to_roman, "文字列Sにあるカタカナをローマ字に変換する。", "かなろーまじへんかん");//未実装
             bank.AddFunc("UTF8変換", "Sを", NakoVarType.String, _to_utf8, "文字列SをUTF8に変換して返す。", "ゆーてぃーえふはちへんかん");//未実装
             bank.AddFunc("SJIS_UTF8変換", "Sを", NakoVarType.String, _from_sjis_to_utf8, "SJISの文字列SをUTF8に変換して返す。", "えすじすゆーてぃーえふはちへんかん");//未実装
+            bank.AddFunc("かな変換", "Sを", NakoVarType.String, _toKana, "文字列Sをひらがなに変換して返す。", "かなへんかん");//未実装
+            bank.AddFunc("範囲切り取る", "{参照渡し}SのAからBを|Bまでを", NakoVarType.String, _cutRange, "文字列Sの区切り文字Aから区切り文字Bまでを切り取って返す。Sに変数を指定した場合はSの内容が切り取られる。SにBが存在しないとき、Sの最後まで切り取る。Aが存在しないときは切り取らない。", "はんいきりとる");
+            bank.AddFunc("文字コード調査", "Sから|Sの|Sを", NakoVarType.String, _getEncode, "文字列Sの文字コードを調べて返す。", "もじこーどちょうさ");
+//文字コード調査
         }
-                
+        private object _toKana(INakoFuncCallInfo info){
+            string s = info.StackPopAsString();
+         if(NWEnviroment.isWindows()){
+             return Strings.StrConv(s, VbStrConv.Hiragana, 0);
+         }else{
+             return LinuxCommand.execute("echo '"+s+"' | nkf --hiragana").Replace("\n","");
+         }
+        }
+        private object _cutRange(INakoFuncCallInfo info){
+            object sr = info.StackPop();
+            string a = info.StackPopAsString();
+            string b = info.StackPopAsString();
+            string[] predelim = {a};
+            string[] postdelim = {b};
+            if(!(sr is NakoVariable)){
+                throw new ApplicationException("『範囲切り取る』に変数が設定されていません");
+            }
+            object s = ((NakoVariable)sr).Body;
+            string ret;
+            if(s is string){
+                string[] split_s = ((string)s).Split(predelim,2,StringSplitOptions.None);
+                if(split_s.Length==2){
+                   ret = split_s[1];
+                   string[] post_split_s = ret.Split(postdelim,2,StringSplitOptions.None);
+                   if(post_split_s.Length==2){
+                   ((NakoVariable)sr).SetBodyAutoType(split_s[0] + post_split_s[1]);
+                    return post_split_s[0];
+                    }
+                }
+            }
+            return null;
+        }
+        private object _getEncode(INakoFuncCallInfo info){
+            string s = info.StackPopAsString();
+            byte[] b = Encoding.Unicode.GetBytes(s);//new byte[s.ToCharArray().Length*sizeof(char)];
+            System.Text.Encoding enc = StrUnit.GetCode(b);
+
+            // UTF-8
+            if (enc == Encoding.UTF8)
+            {
+                return "UTF-8";
+            }
+            // UNICODE
+            else if (enc == Encoding.Unicode)
+            {
+                return "Unicode";
+            }
+            // Shift_JIS
+            else if (enc == System.Text.Encoding.GetEncoding(932))
+            {
+                return "Shift_JIS";
+            }
+            // JIS
+            else if (enc == Encoding.GetEncoding(50220))
+            {
+                return "ISO-2022-JP";
+            }
+            // EUC-JP
+            else if (enc == Encoding.GetEncoding(51932))
+            {
+                return "EUC-JP";
+            }
+            else
+            {
+                throw new ApplicationException("Encoding Error: " + s);
+            }
+        }
+
         // Define Method
         /// <summary>
         /// 文字列の長さを調べる
