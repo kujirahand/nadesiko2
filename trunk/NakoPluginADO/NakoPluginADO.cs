@@ -118,7 +118,6 @@ namespace NakoPluginADO
             }
             string s = info.StackPopAsString();
             OdbcConnection con = (OdbcConnection)c;
-			string ret = "";
 			OdbcDataReader rs = _rs[con.GetHashCode()];
             return rs[s].ToString();
             
