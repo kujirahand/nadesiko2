@@ -40,5 +40,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NakoPluginCast.cs" />
+    <Compile Include="NakoPluginCheck.cs" />
   </ItemGroup>
 </Project>
