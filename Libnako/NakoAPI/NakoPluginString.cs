@@ -76,7 +76,7 @@ namespace Libnako.NakoAPI
         private object _toKana(INakoFuncCallInfo info){
             string s = info.StackPopAsString();
          if(NWEnviroment.isWindows()){
-             return Strings.StrConv(s, VbStrConv.Hiragana, 0);
+				return Strings.StrConv(s, VbStrConv.Hiragana, 0);
          }else{
              return LinuxCommand.execute("echo '"+s+"' | nkf --hiragana").Replace("\n","");
          }
@@ -347,7 +347,7 @@ namespace Libnako.NakoAPI
         	string s = info.StackPopAsString();
         	return Regex.Replace(s,@"[０-９Ａ-Ｚａ-ｚ：－　]+",delegate(Match m){ 
 			if(NWEnviroment.isWindows()){
-				return Strings.StrConv(m.Value, VbStrConv.Narrow, 0); 
+					return Strings.StrConv(m.Value, VbStrConv.Narrow, 0); 
 			}else{
 				return LinuxCommand.execute("echo '"+m.Value+"' | nkf -Z3").Replace("\n","");
 			}
@@ -367,7 +367,7 @@ namespace Libnako.NakoAPI
         private object _toEn(INakoFuncCallInfo info){
         	string s = info.StackPopAsString();
 			if(NWEnviroment.isWindows()){
-	            return Strings.StrConv(s, VbStrConv.Narrow, 0);
+				return Strings.StrConv(s, VbStrConv.Narrow, 0);
 			}else{
 				return LinuxCommand.execute("echo '"+s+"' | nkf -Z4").Replace("\n","");
 			}

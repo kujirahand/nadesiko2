@@ -241,7 +241,7 @@ namespace Libnako.JPNCompiler.ILWriter
         }
 
 //TODO:まだ実装できてない
-        private void _try(NakoNodeTry node)
+        /*private void _try(NakoNodeTry node)
         {
             // (0) Tryを埋め込む
             addNewILCode(NakoILType.TRY);
@@ -260,7 +260,7 @@ namespace Libnako.JPNCompiler.ILWriter
             {
                 Write_r(node.nodeFinally);
             }
-        }
+        }*/
 
         private void _if(NakoNodeIf node)
         {
