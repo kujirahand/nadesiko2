@@ -23,8 +23,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakoPluginTag", "NakoPlugin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakoPluginADO", "NakoPluginADO\NakoPluginADO.csproj", "{4BB5810E-D382-4DEA-BFE7-0CBEC5A34667}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Snippet", "Snippet\Snippet.csproj", "{A3FB02E4-0069-44D3-886B-CBC9B62E1727}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakoPluginSystem", "NakoPluginSystem\NakoPluginSystem.csproj", "{1F11520A-6979-4D07-9BA0-CBB378496E93}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Libnako", "Libnako\Libnako.csproj", "{F9297385-ACE0-43AD-AD66-819C5A60FE80}"
@@ -119,18 +117,6 @@ Global
 		{A184B322-315A-415A-81DC-6F6B8AB68356}.Release|Mixed Platforms.Build.0 = Release|x86
 		{A184B322-315A-415A-81DC-6F6B8AB68356}.Release|x86.ActiveCfg = Release|x86
 		{A184B322-315A-415A-81DC-6F6B8AB68356}.Release|x86.Build.0 = Release|x86
-		{A3FB02E4-0069-44D3-886B-CBC9B62E1727}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A3FB02E4-0069-44D3-886B-CBC9B62E1727}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A3FB02E4-0069-44D3-886B-CBC9B62E1727}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{A3FB02E4-0069-44D3-886B-CBC9B62E1727}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{A3FB02E4-0069-44D3-886B-CBC9B62E1727}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{A3FB02E4-0069-44D3-886B-CBC9B62E1727}.Debug|x86.Build.0 = Debug|Any CPU
-		{A3FB02E4-0069-44D3-886B-CBC9B62E1727}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A3FB02E4-0069-44D3-886B-CBC9B62E1727}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A3FB02E4-0069-44D3-886B-CBC9B62E1727}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{A3FB02E4-0069-44D3-886B-CBC9B62E1727}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{A3FB02E4-0069-44D3-886B-CBC9B62E1727}.Release|x86.ActiveCfg = Release|Any CPU
-		{A3FB02E4-0069-44D3-886B-CBC9B62E1727}.Release|x86.Build.0 = Release|Any CPU
 		{B991E428-E0FE-4957-90F7-CD88C4937573}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B991E428-E0FE-4957-90F7-CD88C4937573}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B991E428-E0FE-4957-90F7-CD88C4937573}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
