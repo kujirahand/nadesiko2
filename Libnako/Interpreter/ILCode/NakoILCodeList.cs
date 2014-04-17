@@ -17,6 +17,11 @@ namespace Libnako.Interpreter.ILCode
         /// </summary>
 		public NakoVariableManager globalVar = null;
 
+		/// <summary>
+		/// The exception table.
+		/// </summary>
+		public NakoExceptionTable exceptionTable = null;
+
         /// <summary>
         /// タイプをチェックする
         /// </summary>

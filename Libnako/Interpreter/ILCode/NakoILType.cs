@@ -142,8 +142,7 @@ namespace Libnako.Interpreter.ILCode
 
         // --- 反復用 ---
         ///<summary>Iterator</summary>
-        TRY = 0x85,
-        CATCH = 0x86,
-        FINALLY = 0x87,
+		EXCEPTIONTABLE = 0x85,
+		THROW = 0x88
     }
 }

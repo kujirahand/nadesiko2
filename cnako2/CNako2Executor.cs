@@ -127,7 +127,7 @@ namespace cnako2
             }
             catch (Exception e)
             {
-                Console.WriteLine("[SystemError]" + e.Message);
+				Console.WriteLine("[SystemError]" + e.Message + e.StackTrace);
             }
             if (WaitMode)
             {

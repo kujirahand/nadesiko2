@@ -35,6 +35,7 @@ namespace Libnako.JPNCompiler.ILWriter
         /// ラベル一覧
         /// </summary>
         protected Dictionary<NakoILCode, long> labels = null;
+		protected Dictionary<String,NakoILCode> exceptions = null;
 		private int _labelId = 0;
 		private int GetLableId() { ++_labelId; return _labelId; }
         
@@ -61,6 +62,7 @@ namespace Libnako.JPNCompiler.ILWriter
         {
             this.result = new NakoILCodeList();
             this.labels = new Dictionary<NakoILCode, long>();
+			this.exceptions = new Dictionary<String,NakoILCode>();
         }
         /// <summary>
         /// 中間コードを書き出す
@@ -139,6 +141,12 @@ namespace Libnako.JPNCompiler.ILWriter
                 case NakoNodeType.LET_VALUE:
                     addNewILCode(NakoILType.NOP, "LET_VALUE");
                     break;
+				case NakoNodeType.TRY:
+					_try((NakoNodeTry)node);
+					return;
+				case NakoNodeType.THROW:
+					_throw((NakoNodeThrow)node);
+					return;
                 default:
                     throw new NakoCompilerException("未定義のノードタイプ: " + node.type.ToString());
             }
@@ -155,6 +163,7 @@ namespace Libnako.JPNCompiler.ILWriter
             if (topNode != null) { this.topNode = topNode; }
             Write_r(this.topNode);
             FixLabel();
+			SetExceptionTables ();
         }
         /// <summary>
         /// ラベルを解決する
@@ -198,6 +207,32 @@ namespace Libnako.JPNCompiler.ILWriter
             }
             
         }
+		/// <summary>
+		/// Sets the exception tables.
+		/// </summary>
+		public void SetExceptionTables()
+		{
+			for (int i = 0; i < result.Count; i++)
+			{
+				NakoILCode code = result[i];
+				if (code.type != NakoILType.EXCEPTIONTABLE)
+					continue;
+				if (!(code.value is NakoException)) continue;
+				if (code.value is NakoException)
+				{
+					NakoException e = (NakoException)code.value;
+					if (labels.ContainsKey( e.fromLabel) )
+					{
+						e.from = (int)labels[e.fromLabel];
+						e.to = (int)labels[e.targetLabel]-1;//endTry?
+						e.target = (int)labels [e.targetLabel];
+						continue;
+					}
+					throw new NakoILWriterException("ExceptionTableが解決できません");
+				}
+			}
+
+		}
 
         /// <summary>
         /// 指定したリストを書く
@@ -241,26 +276,46 @@ namespace Libnako.JPNCompiler.ILWriter
         }
 
 //TODO:まだ実装できてない
-        /*private void _try(NakoNodeTry node)
+        private void _try(NakoNodeTry node)
         {
+			int labelId = GetLableId();
+			NakoILCode label_try = createLABEL("TRY" + labelId.ToString());
+			NakoILCode label_catch = createLABEL("CATCH" + labelId.ToString());
+			NakoILCode label_finally = createLABEL("FINALLY" + labelId.ToString());
             // (0) Tryを埋め込む
-            addNewILCode(NakoILType.TRY);
+			result.Add(label_try);
             // (1) 通常実行をコードにする
             Write_r(node.nodeTry);
+			result.Add(createJUMP(label_finally));
             // (2) 例外処理
-            addNewILCode(NakoILType.CATCH);
-            if (node.nodeCatch != null)
+			result.Add(label_catch);
+			//TODO ○○のエラーならば〜☆☆のエラーならば〜への対応
+			//TODO ○○や☆☆のエラーならばへの対応
+           if (node.nodeCatch != null)
             {
-                //TODO:catchコードが無かったらExceptionかな？
                 Write_r(node.nodeCatch);
-            }
+				result.Add(createJUMP(label_finally));
+				NakoILCode c = new NakoILCode ();
+				c.type = NakoILType.EXCEPTIONTABLE;
+				c.value = new NakoException (label_try,label_catch,new Exception());
+				result.Insert (0, c);
+           }
             // (3) 最後に必ず実行する処理
-            addNewILCode(NakoILType.FINALLY);
+			result.Add(label_finally);
             if (node.nodeFinally != null)
             {
                 Write_r(node.nodeFinally);
             }
-        }*/
+        }
+
+		private void _throw(NakoNodeThrow node){
+			//int errorVarNo = node.errorVarNo;
+			//Write_r(node.exceptionNode);
+			//addNewILCode(NakoILType.LD_LOCAL_REF, node.exceptionNode.value);
+			//addNewILCode(NakoILType.ST_LOCAL, errorVarNo);
+			//addNewILCode(NakoILType.LD_LOCAL_REF, errorVarNo);
+			addNewILCode (NakoILType.THROW,node.exceptionNode.value);
+		}
 
         private void _if(NakoNodeIf node)
         {

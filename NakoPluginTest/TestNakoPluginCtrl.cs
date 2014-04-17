@@ -71,7 +71,7 @@ namespace NakoPluginTest
         {
             runner.Run(com.WriteIL(
                 "プロセス列挙して表示。\n"));
-            Assert.AreEqual(true, runner.PrintLog.Contains((NWEnviroment.isWindows())? "svchost" : "init"));
+			Assert.AreEqual(true, runner.PrintLog.Contains((NWEnviroment.isWindows())? "svchost" : "mono"));
         }
         public void TestAbort()//TODO:プロセス強制終了はどうやってテストしようか。ダミーのプロセスが要るか？ test
         {
