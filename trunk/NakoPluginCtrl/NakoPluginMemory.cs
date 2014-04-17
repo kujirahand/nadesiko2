@@ -37,7 +37,7 @@ namespace NakoPluginCtrl
         // Define Method
         public object _usagePercentage(INakoFuncCallInfo info)
         {
-            return (int)(100 - (100*__available()/__total()));
+			return (__total()>0)? (int)(100 - (100*__available()/__total())) : -1;
         }
 
         public object _available(INakoFuncCallInfo info)

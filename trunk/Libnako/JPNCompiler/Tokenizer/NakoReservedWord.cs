@@ -42,6 +42,10 @@ namespace Libnako.JPNCompiler.Tokenizer
             dic.AddWord("それ", NakoTokenType.WORD); // SORE
             dic.AddWord("対象", NakoTokenType.WORD); // TAISYOU
             dic.AddWord("回数", NakoTokenType.WORD); // KAISU
+			dic.AddWord("エラー監視", NakoTokenType.TRY);
+			dic.AddWord("エラーならば", NakoTokenType.CATCH);
+			dic.AddWord("エラー発生", NakoTokenType.THROW);
+			dic.AddWord("エラー値", NakoTokenType.WORD); // ERROR
         }
 
         // システム予約変数名対象
@@ -57,5 +61,9 @@ namespace Libnako.JPNCompiler.Tokenizer
         /// 変数「回数」を文字列として定義したもの
         /// </summary>
         public const string KAISU = "回数";
+		/// <summary>
+		/// 発生した例外の内容を表す変数「エラー値」を文字列として定義したもの
+		/// </summary>
+		public const string ERROR = "エラー値";
     }
 }

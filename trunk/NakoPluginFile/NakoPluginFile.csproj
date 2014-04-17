@@ -33,7 +33,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <ErrorReport>prompt</ErrorReport>
-    <Optimize>True</Optimize>
+    <Optimize>true</Optimize>
     <DefineConstants>TRACE</DefineConstants>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>

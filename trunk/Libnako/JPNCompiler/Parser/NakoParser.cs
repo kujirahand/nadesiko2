@@ -132,7 +132,9 @@ namespace Libnako.JPNCompiler.Parser
             if (_def_variable()) return true;
             if (_callfunc_stmt()) return true;
             if (_print()) return true;
-            if (_return()) return true;
+			if (_return()) return true;
+			if (_try_stmt()) return true;
+			if (_throw()) return true;
             if (Accept(NakoTokenType.CONTINUE))
             {
                 parentNode.AddChild(new NakoNodeContinue());
@@ -441,7 +443,67 @@ namespace Libnako.JPNCompiler.Parser
             lastNode = repnode;
             return true;
         }
-        private bool _return()
+		private bool _try_stmt()
+		{
+			if (!Accept(NakoTokenType.TRY)) return false;
+			tok.MoveNext(); // skip IF
+
+			NakoNodeTry trynode = new NakoNodeTry();
+
+			NakoToken t = tok.CurrentToken;
+
+			while (Accept(NakoTokenType.EOL)) tok.MoveNext();
+
+			// TRY
+			trynode.nodeTry = _scope_or_statement();
+			while (Accept(NakoTokenType.EOL)) tok.MoveNext();
+
+			// CATCH
+			//TODO ○○のエラーならば〜☆☆のエラーならば〜への対応
+			//TODO ○○や☆☆のエラーならばへの対応
+			while (Accept(NakoTokenType.CATCH))
+			{
+				//TODO:catchの例外種別を取得
+				tok.MoveNext();//skip catch
+				while (Accept(NakoTokenType.EOL)) tok.MoveNext();
+				//while (calcStack.Count > 0) {
+				//	calcStack.Pop ();
+				//}
+				NakoNode nodeCatch = _scope_or_statement();//TODO Add
+				trynode.nodeCatch = nodeCatch;
+			}
+			//TODO set finally
+			this.parentNode.AddChild(trynode);
+			this.lastNode = trynode;
+			return true;
+		}
+		private bool _throw()
+		{
+			//○○で|のエラー発生
+			TokenTry();
+			bool is_value = _value();
+			if (!Accept(NakoTokenType.THROW))
+			{
+				TokenBack();
+				return false;
+			}
+			TokenFinally();
+			NakoNodeThrow nt = new NakoNodeThrow ();
+			nt.errorVarNo = localVar.GetIndex(NakoReservedWord.ERROR, true); // 変数「エラー値」の変数番号を取得
+			NakoNodeVariable v = new NakoNodeVariable ();
+			v.varType = NakoVarType.Object;
+			if (is_value) {
+				v.value = new InvalidOperationException ();//TODO:set exception from value
+			} else {
+				v.value = new Exception ();
+			}
+			nt.exceptionNode = v;
+			parentNode.AddChild(nt);
+			tok.MoveNext();
+			return true;
+		}
+
+		private bool _return()
         {
             TokenTry();
             bool is_value = _value();

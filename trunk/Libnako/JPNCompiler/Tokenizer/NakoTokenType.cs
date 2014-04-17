@@ -131,6 +131,11 @@ namespace Libnako.JPNCompiler.Tokenizer
         DIM_ARRAY,
         // --- デバック (DEBUG) ---
         ///<summary>トークンの種類は PRINT </summary>
-        PRINT
+		PRINT,
+		// --- exception ---
+		TRY,
+		CATCH,
+		FINALLY,
+		THROW
     }
 }

@@ -45,7 +45,10 @@ namespace NakoPluginCtrl
         {
             NakoVarArray result = new NakoVarArray();
             foreach(System.Diagnostics.Process p in System.Diagnostics.Process.GetProcesses()){
+				try{
                 result.SetValue(result.Count,p.ProcessName);
+				}catch(Exception e){
+				}
             }
             return result;
         }

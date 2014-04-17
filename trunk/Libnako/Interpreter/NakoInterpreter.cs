@@ -36,6 +36,11 @@ namespace Libnako.Interpreter
         /// グローバル変数
         /// </summary>
         public NakoVariableManager globalVar { get; set; }
+		/// <summary>
+		/// the exception table.
+		/// </summary>
+		/// <value>The exception table.</value>
+		public NakoExceptionTable exceptionTable { get; set; }
         /// <summary>
         /// ローカル変数
         /// </summary>
@@ -97,6 +102,7 @@ namespace Libnako.Interpreter
             if (list.globalVar != null) {
             	this.globalVar = list.globalVar;
             }
+			this.exceptionTable = new NakoExceptionTable ();
         }
         /// <summary>
         /// constructor
@@ -162,6 +168,7 @@ namespace Libnako.Interpreter
                 if (list.globalVar != null) {
                 	this.globalVar = list.globalVar;
                 }
+				this.exceptionTable = new NakoExceptionTable ();
             }
             runpos = 0;
             bool result = _run();
@@ -306,6 +313,10 @@ namespace Libnako.Interpreter
                 case NakoILType.INC_LOCAL: inc_local(code); break;
                 case NakoILType.DEC_LOCAL: dec_local(code); break;
                 case NakoILType.DUP: dup(); break;
+				//exception
+				case NakoILType.THROW:            _throw(code); break;
+				//exceptionTable
+			case NakoILType.EXCEPTIONTABLE:		_exceptionTable(code); break;
                 //
                 default:
                     throw new NakoInterpreterException("未実装のILコード");
@@ -351,6 +362,19 @@ namespace Libnako.Interpreter
 			if (((bool)code.value) == false)
 				globalVar.SetValue(0, c.sore);// "それ"を関数実行前に戻す
         }
+
+		private void _exceptionTable(NakoILCode code){
+			exceptionTable.Add ((NakoException)code.value);
+		}
+
+		private void _throw(NakoILCode code){
+			//TODO:check exception table which include runpos and jump if not throw NakoException
+			//Object o = (calcStack.Count > 0)? StackPop () : new Exception();
+			this.runpos = (exceptionTable==null)? -1 : exceptionTable.GetCatchLine (runpos, code.value);
+			if (this.runpos == -1) {
+				throw new NakoInterpreterException ("例外");
+			}
+		}
 
         private void _branch_true(NakoILCode code)
         {
