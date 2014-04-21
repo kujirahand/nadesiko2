@@ -34,7 +34,7 @@ namespace Libnako.NakoAPI
                 CheckDllFiles(appdir);
             }
             // プラグイン専用ディレクトリ
-            string plugdir = appdir + "\\plug-ins";
+			string plugdir = appdir + System.IO.Path.DirectorySeparatorChar + "plug-ins";
             if (System.IO.Directory.Exists(plugdir))
             {
                 CheckDllFiles(plugdir);
