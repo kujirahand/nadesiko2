@@ -2,7 +2,8 @@
 ＃なでしこ２リリース用バッチ (なでしこ1)
 ＃＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 BASE=母艦パス
-OUT＝「{母艦パス}release\」
+OUT＝「{母艦パス}nako2-release-beta\」
+ZIP=「{母艦パス}nako2-release-beta.zip」
 OUTへフォルダ作成。
 「{OUT}plug-ins\」へフォルダ作成。
 ###
@@ -19,6 +20,9 @@ OUTへフォルダ作成。
 　　FN=対象からファイル名抽出
 　　母艦＝FN
 　　対象から「{OUT}plug-ins\{FN}」へファイルコピー。
+###
+OUTをZIPへ圧縮。
+###
 「OK」と言う。
 終わる。
 
