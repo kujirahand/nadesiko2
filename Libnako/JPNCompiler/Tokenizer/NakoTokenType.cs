@@ -136,6 +136,7 @@ namespace Libnako.JPNCompiler.Tokenizer
 		TRY,
 		CATCH,
 		FINALLY,
-		THROW
+		THROW,
+		DEF_CLASS
     }
 }
