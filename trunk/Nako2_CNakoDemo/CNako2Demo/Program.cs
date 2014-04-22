@@ -18,7 +18,18 @@ namespace DemoCNako2
             // --------------------------------------------------
             // Compile
             NakoCompiler compiler = new NakoCompiler();
-			compiler.DirectSource = "エラー監視\n  A=「あ」。\n  エラー発生。\n  Aと継続表示。\nエラーならば\n  「ほげ」と表示。";
+			compiler.DirectSource = 
+@"
+●B
+  エラー発生
+
+エラー監視
+  A=「あ」。
+  B。
+  Aと継続表示。
+エラーならば
+  「ほげ」と表示。
+";
 //                "デスクトップ。\nそれのファイル列挙。\nそれを「/」で配列結合。\nそれを表示。" +
 //                "";
             cout = "----------";

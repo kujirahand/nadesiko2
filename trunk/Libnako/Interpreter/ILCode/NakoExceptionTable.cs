@@ -26,11 +26,17 @@ namespace Libnako
 		/// <param name="pos">Position.</param>
 		/// <param name="e">E.</param>
 		public int GetCatchLine(int pos,Object e){
-			NakoException re = _list.Find (delegate(NakoException ne) {
-				Type t = ne.Type;
-				return (e.GetType()==t && pos>ne.from && pos<ne.to) ? true : false;
+			List<NakoException> res = _list.FindAll (delegate(NakoException ne) {
+				//Type t = ne.Type;
+				return (/*e.GetType()==t &&*/ pos>ne.from && pos<ne.to) ? true : false;
 			});
-			return (re==null)? -1 : re.target;
+			if (res.Count == 0)
+				return pos;
+			foreach (NakoException ne in res) {
+				if (ne.Type == e.GetType())
+					return ne.target;
+			}
+			return -1;
 		}
 		/// <summary>
 		/// Add the specified from, to, target, e and message.

@@ -702,6 +702,7 @@ namespace Libnako.JPNCompiler.Parser
 
             return true;
         }
+			
 
         //> _def_function : DEF_FUNCTION _def_function_args _scope
         //>               ;
@@ -787,10 +788,13 @@ namespace Libnako.JPNCompiler.Parser
                 tok.MoveNext();
             }
             if (funcName == null) { throw new NakoParserException("関数名がありません。", firstT); }
-            func.name = funcName.GetValueAsName();
+			func.name = funcName.GetValueAsName();//TODO: check namespace and class name
             func.args.analizeArgTokens(argTokens);
             return true;
         }
+		private bool _def_class(){
+			return false;
+		}
 
 
         //> _print : PRINT _value

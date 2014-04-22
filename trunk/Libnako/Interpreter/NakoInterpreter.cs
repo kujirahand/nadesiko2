@@ -57,6 +57,10 @@ namespace Libnako.Interpreter
         /// 自動的に runpos を進めるかどうか
         /// </summary>
         protected bool autoIncPos = true;
+		/// <summary>
+		/// The thrown code.
+		/// </summary>
+		private NakoILCode thrownCode = null;
         /// <summary>
         /// デバッグ用のログ記録用変数
         /// </summary>
@@ -256,6 +260,19 @@ namespace Libnako.Interpreter
                 Console.WriteLine(s);
             }
 
+			if (thrownCode != null) {
+				if (code.type == NakoILType.JUMP) {
+					_jump (code);
+					_throw (thrownCode);
+				} else if (code.type == NakoILType.RET) {
+					exec_ret (code);
+					_throw (thrownCode);
+				} else if (code.type == NakoILType.LD_GLOBAL) {
+					ld_global((int)code.value);
+				}
+				return;
+			}
+
             switch (code.type)
             {
                 case NakoILType.NOP:
@@ -316,7 +333,7 @@ namespace Libnako.Interpreter
 				//exception
 				case NakoILType.THROW:            _throw(code); break;
 				//exceptionTable
-			case NakoILType.EXCEPTIONTABLE:		_exceptionTable(code); break;
+				case NakoILType.EXCEPTIONTABLE:		_exceptionTable(code); break;
                 //
                 default:
                     throw new NakoInterpreterException("未実装のILコード");
@@ -369,8 +386,13 @@ namespace Libnako.Interpreter
 
 		private void _throw(NakoILCode code){
 			//TODO:check exception table which include runpos and jump if not throw NakoException
-			//Object o = (calcStack.Count > 0)? StackPop () : new Exception();
-			this.runpos = (exceptionTable==null)? -1 : exceptionTable.GetCatchLine (runpos, code.value);
+			int catchpos = (exceptionTable==null)? -1 : exceptionTable.GetCatchLine (runpos, code.value);
+			if (catchpos == this.runpos) {
+				thrownCode = code;
+			} else {
+				thrownCode = null;
+				this.runpos = catchpos;
+			}
 			if (this.runpos == -1) {
 				throw new NakoInterpreterException ("例外");
 			}
