@@ -211,7 +211,7 @@ namespace Libnako.JPNCompiler.Tokenizer
                             funcNameToken = tokens.CurrentToken;
                         }
                         // 改行ならば関数宣言の終了
-                        else if (tokens.Accept(NakoTokenType.SCOPE_BEGIN))
+						else if (tokens.Accept(NakoTokenType.SCOPE_BEGIN) || tokens.Accept(NakoTokenType.PARENTHESES_L))
                         {
                             if (funcNameToken == null)
                             {
