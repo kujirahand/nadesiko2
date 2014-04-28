@@ -75,6 +75,10 @@ namespace NakoPlugin
             }
             return res;
         }
+        /// <summary>
+        /// is Windows?
+        /// </summary>
+        /// <returns></returns>
 		public static bool isWindows(){
 			string osVersion = osVersionStr();
 			return (osVersion.Contains("Windows"))? true : false;
