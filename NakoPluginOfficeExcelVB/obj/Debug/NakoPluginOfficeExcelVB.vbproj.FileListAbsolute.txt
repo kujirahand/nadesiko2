@@ -1,0 +1,12 @@
+\\psf\Home\repos\nadesiko2\NakoPluginOfficeExcelVB\obj\Debug\NakoPluginOfficeExcelVB.vbprojResolveAssemblyReference.cache
+\\psf\Home\repos\nadesiko2\NakoPluginOfficeExcelVB\obj\Debug\NakoPluginOfficeExcelVB.Resources.resources
+\\psf\Home\repos\nadesiko2\NakoPluginOfficeExcelVB\obj\Debug\NakoPluginOfficeExcelVB.vbproj.GenerateResource.Cache
+\\psf\Home\repos\nadesiko2\NakoPluginOfficeExcelVB\bin\Debug\NakoPluginOfficeExcelVB.dll
+\\psf\Home\repos\nadesiko2\NakoPluginOfficeExcelVB\bin\Debug\NakoPluginOfficeExcelVB.pdb
+\\psf\Home\repos\nadesiko2\NakoPluginOfficeExcelVB\bin\Debug\NakoPluginOfficeExcelVB.xml
+\\psf\Home\repos\nadesiko2\NakoPluginOfficeExcelVB\bin\Debug\NakoPlugin.dll
+\\psf\Home\repos\nadesiko2\NakoPluginOfficeExcelVB\bin\Debug\NakoPlugin.pdb
+\\psf\Home\repos\nadesiko2\NakoPluginOfficeExcelVB\bin\Debug\NakoPlugin.xml
+\\psf\Home\repos\nadesiko2\NakoPluginOfficeExcelVB\obj\Debug\NakoPluginOfficeExcelVB.dll
+\\psf\Home\repos\nadesiko2\NakoPluginOfficeExcelVB\obj\Debug\NakoPluginOfficeExcelVB.xml
+\\psf\Home\repos\nadesiko2\NakoPluginOfficeExcelVB\obj\Debug\NakoPluginOfficeExcelVB.pdb
