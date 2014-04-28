@@ -219,6 +219,11 @@ namespace Libnako.NakoAPI
             return __ceil(da,ib);
         }
 
+		/// <summary>
+		/// Gets the digit of decimal.
+		/// </summary>
+		/// <returns>The digit of decimal.</returns>
+		/// <param name="s">String of number</param>
         public static int GetDigitOfDecimal(string s){
             int index = s.IndexOf('.');
             if(index==-1){

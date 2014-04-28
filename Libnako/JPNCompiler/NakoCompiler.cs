@@ -126,6 +126,10 @@ namespace Libnako.JPNCompiler
             parser.Parse();
             this.topNode = parser.topNode;
         }
+		/// <summary>
+		/// Parse the specified source.
+		/// </summary>
+		/// <param name="source">Source.</param>
         public NakoNode Parse(string source)
         {
             this.source = source;
@@ -142,6 +146,11 @@ namespace Libnako.JPNCompiler
             paser.ParseOnlyValue();
             this.topNode = paser.topNode;
         }
+		/// <summary>
+		/// Parses the only value.
+		/// </summary>
+		/// <returns>The only value.</returns>
+		/// <param name="source">Source.</param>
         public NakoNode ParseOnlyValue(string source)
         {
             this.source = source;

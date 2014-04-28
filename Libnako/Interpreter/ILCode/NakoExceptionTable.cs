@@ -16,6 +16,10 @@ namespace Libnako
 	public class NakoExceptionTable : IList<NakoException>
 	{
 		private List<NakoException> _list = new List<NakoException>();//TODO:from,to,target,type
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Libnako.NakoExceptionTable"/> class.
+		/// </summary>
 		public NakoExceptionTable ()
 		{
 		}
@@ -45,7 +49,6 @@ namespace Libnako
 		/// <param name="to">To.</param>
 		/// <param name="target">Target.</param>
 		/// <param name="e">E.</param>
-		/// <param name="message">Message.</param>
 		public void Add(int from, int to, int target, Exception e){
 			_list.Add (new NakoException (from, to, target, e));
 		}
@@ -182,12 +185,19 @@ namespace Libnako
 	/// </summary>
 	public class NakoException : Exception
 	{
+		/// <summary> From </summary>
 		public int from;
+		/// <summary> fromLabel </summary>
 		public NakoILCode fromLabel { get; set; }
+		/// <summary> to </summary>
 		public int to;
+		/// <summary> target </summary>
 		public int target;
+		/// <summary> targetLabel </summary>
 		public NakoILCode targetLabel { get; set; }
+		/// <summary> Type </summary>
 		public Type Type;
+		/// <summary> message </summary>
 		public string message;
 		/// <summary>
 		/// インタプリタクラスの例外を出す
