@@ -3,11 +3,22 @@ using System.Diagnostics;
 
 namespace NakoPlugin
 {
+    /// <summary>
+    /// Linux Command
+    /// </summary>
 	public class LinuxCommand
 	{
+        /// <summary>
+        /// LinuxCommand Initializer
+        /// </summary>
 		public LinuxCommand ()
 		{
 		}
+        /// <summary>
+        /// execute
+        /// </summary>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
 		public static string execute(string cmd){
         ProcessStartInfo oInfo = new ProcessStartInfo();
         oInfo.UseShellExecute = false;
@@ -25,11 +36,22 @@ namespace NakoPlugin
 			
 		}
 	}
+    /// <summary>
+    /// WindowsCommand
+    /// </summary>
 	public class WindowsCommand
 	{
+        /// <summary>
+        /// Initializer
+        /// </summary>
 		public WindowsCommand ()
 		{
 		}
+        /// <summary>
+        /// execute
+        /// </summary>
+        /// <param name="cmd"></param>
+        /// <returns></returns>
 		public static string execute(string cmd){
         ProcessStartInfo oInfo = new ProcessStartInfo();
         oInfo.UseShellExecute = false;

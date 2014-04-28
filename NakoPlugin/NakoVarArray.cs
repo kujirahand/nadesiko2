@@ -15,6 +15,10 @@ namespace NakoPlugin
         /// </summary>
         protected System.Collections.Generic.List<NakoVariable> list = new System.Collections.Generic.List<NakoVariable>();
 
+        /// <summary>
+        /// Get Enumerator
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator GetEnumerator(){
             for(int i=0;i<this.Count;i++)
                 yield return this.GetVar(i);
