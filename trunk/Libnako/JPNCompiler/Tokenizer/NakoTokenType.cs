@@ -133,10 +133,15 @@ namespace Libnako.JPNCompiler.Tokenizer
         ///<summary>トークンの種類は PRINT </summary>
 		PRINT,
 		// --- exception ---
+		/// <summary>TRY</summary>
 		TRY,
+		/// <summary>CATCH</summary>
 		CATCH,
+		/// <summary>FINALLY</summary>
 		FINALLY,
+		/// <summary>THROW</summary>
 		THROW,
+		/// <summary>DEF_CLASS</summary>
 		DEF_CLASS
     }
 }

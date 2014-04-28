@@ -121,6 +121,10 @@ namespace Libnako.Interpreter.ILCode
         // --- DEBUG用 ---
         ///<summary>PRINT</summary>
         PRINT            = 0x80, // { args:0, push:0, pop:1 }
+		/// <summary>Exception table</summary>
+		EXCEPTIONTABLE   = 0x85, // 
+		/// <summary>Throw Exception</summary>
+		THROW            = 0x88, //
 
         // --- ローカル変数に対する操作 ---
         ///<summary>ローカル変数の値を1増やす</summary>
@@ -142,7 +146,6 @@ namespace Libnako.Interpreter.ILCode
 
         // --- 反復用 ---
         ///<summary>Iterator</summary>
-		EXCEPTIONTABLE = 0x85,
-		THROW = 0x88
+		ITERATOR = 0xF4
     }
 }

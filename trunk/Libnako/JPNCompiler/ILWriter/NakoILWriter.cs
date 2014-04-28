@@ -35,6 +35,7 @@ namespace Libnako.JPNCompiler.ILWriter
         /// ラベル一覧
         /// </summary>
         protected Dictionary<NakoILCode, long> labels = null;
+		/// <summary>The exceptions </summary>
 		protected Dictionary<String,NakoILCode> exceptions = null;
 		private int _labelId = 0;
 		private int GetLableId() { ++_labelId; return _labelId; }

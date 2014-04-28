@@ -77,10 +77,9 @@ namespace Libnako.JPNCompiler.Node
         // --- OTHER ---
         ///<summary>JUMP</summary>
 		JUMP,
+		/// <summary>TRY</summary>
 		TRY,
-		/// <summary>
-		/// THROW.
-		/// </summary>
+		/// <summary>THROW</summary>
 		THROW
     }
 }
