@@ -60,6 +60,7 @@
     <Compile Include="TestNakoADO.cs" />
     <Compile Include="TestNakoPluginSystem.cs" />
     <Compile Include="TestNakoPluginCtrl.cs" />
+    <Compile Include="TestNakoPluginEval.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -119,6 +120,10 @@
     <ProjectReference Include="..\Libnako\Libnako.csproj">
       <Project>{F9297385-ACE0-43AD-AD66-819C5A60FE80}</Project>
       <Name>Libnako</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NakoPluginEval\NakoPluginEval.csproj">
+      <Project>{81FD7FE3-0317-421E-B99C-D10BBD58F623}</Project>
+      <Name>NakoPluginEval</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>
