@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakoPluginSystem", "NakoPlu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Libnako", "Libnako\Libnako.csproj", "{F9297385-ACE0-43AD-AD66-819C5A60FE80}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NakoPluginEval", "NakoPluginEval\NakoPluginEval.csproj", "{81FD7FE3-0317-421E-B99C-D10BBD58F623}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,18 @@ Global
 		{7ADCC16D-4463-4238-A947-CB5CBF04A409}.Release|Mixed Platforms.Build.0 = Release|x86
 		{7ADCC16D-4463-4238-A947-CB5CBF04A409}.Release|x86.ActiveCfg = Release|x86
 		{7ADCC16D-4463-4238-A947-CB5CBF04A409}.Release|x86.Build.0 = Release|x86
+		{81FD7FE3-0317-421E-B99C-D10BBD58F623}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81FD7FE3-0317-421E-B99C-D10BBD58F623}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81FD7FE3-0317-421E-B99C-D10BBD58F623}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{81FD7FE3-0317-421E-B99C-D10BBD58F623}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{81FD7FE3-0317-421E-B99C-D10BBD58F623}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{81FD7FE3-0317-421E-B99C-D10BBD58F623}.Debug|x86.Build.0 = Debug|Any CPU
+		{81FD7FE3-0317-421E-B99C-D10BBD58F623}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81FD7FE3-0317-421E-B99C-D10BBD58F623}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81FD7FE3-0317-421E-B99C-D10BBD58F623}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{81FD7FE3-0317-421E-B99C-D10BBD58F623}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{81FD7FE3-0317-421E-B99C-D10BBD58F623}.Release|x86.ActiveCfg = Release|Any CPU
+		{81FD7FE3-0317-421E-B99C-D10BBD58F623}.Release|x86.Build.0 = Release|Any CPU
 		{A184B322-315A-415A-81DC-6F6B8AB68356}.Debug|Any CPU.ActiveCfg = Debug|x86
 		{A184B322-315A-415A-81DC-6F6B8AB68356}.Debug|Any CPU.Build.0 = Debug|x86
 		{A184B322-315A-415A-81DC-6F6B8AB68356}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
