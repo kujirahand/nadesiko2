@@ -64,9 +64,10 @@ namespace NakoPluginTest
                 "d[`de`]=「で」\n" +
                 "d[`si`]=「し」\n" +
                 "d[`ko`]=「こ」\n" +
+                "d[`mu`]=「む」\n" +
                 "dの要素数を継続表示。";
             runner.Run(com.Codes);
-            Assert.AreEqual("4", runner.PrintLog);
+            Assert.AreEqual("5", runner.PrintLog);
         }
         [Test]
         public void TestSearch()
@@ -179,6 +180,19 @@ namespace NakoPluginTest
                 "");
             ni.Run(nc.Codes);
             Assert.AreEqual("5:333",ni.PrintLog);
+        }
+        [Test]
+        public void TestHashKeysLoopAndAcessToValues()
+        {
+            runner.Run(com.WriteIL(
+                "Aとは変数;\n"+
+                "A[`a`]=30;\n"+
+                "A[`b`]=31;\n"+
+                "Aの配列ハッシュキー列挙して反復\n"+
+                "   b=それ\n"+
+                "   A[b]を継続表示。\n"+
+                ""));
+            Assert.AreEqual("3031", runner.PrintLog);
         }
     }
 }
