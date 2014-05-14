@@ -182,6 +182,15 @@ namespace NakoPluginTest
             Assert.AreEqual("5:333",ni.PrintLog);
         }
         [Test]
+        public void TestAppendToEmptyArray()
+        {
+            runner.Run(com.WriteIL(
+                "A=「」;\n" +
+                "Aに「む」を配列追加\n" +
+                "A[0]を継続表示。"));
+            Assert.AreEqual("む", runner.PrintLog);
+        }
+        [Test]
         public void TestHashKeysLoopAndAcessToValues()
         {
             runner.Run(com.WriteIL(
