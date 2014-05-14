@@ -621,8 +621,8 @@ namespace Libnako.Interpreter
             if (var is NakoVariable)
             {
                 NakoVariable var2 = (NakoVariable)var;
-                // null なら NakoArray として生成
-                if (var2.Body == null)
+                // null か空の文字列なら NakoArray として生成
+                if (var2.Body == null || (var2.Type==NakoVarType.String && (string)var2.Body==""))
                 {
                     var2.SetBody(new NakoVarArray(), NakoVarType.Array);
                 }
