@@ -143,6 +143,14 @@ namespace NakoPlugin
             {
                 return GetVarFromKey((string)key);
             }
+            else if(key is NakoVariable){
+                NakoVariable v = (NakoVariable)key;
+                if(v.key!=null){
+                    return GetVarFromObj(v.key);
+                }else{
+                    return GetVarFromObj(v.Body);
+                }
+            }
             else
             {
                 int index = Convert.ToInt32(key);

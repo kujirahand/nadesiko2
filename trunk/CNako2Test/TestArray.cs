@@ -217,6 +217,53 @@ namespace NakoPluginTest
             ni.Run(nc.Codes);
             Assert.AreEqual("222",ni.PrintLog);
         }
+        [Test]
+        public void Test_Hash_Access_By_String()
+        {
+            NakoCompiler nc = new NakoCompiler();
+            NakoInterpreter ni = new NakoInterpreter();
+            nc.WriteIL(
+                "A[`a`]=566\n" +
+                "A[`b c d`]=566\n" +
+                "c=「b c d」\n" +
+                "A[c]を継続表示\n" +
+                "");
+            ni.Run(nc.Codes);
+            Assert.AreEqual("566", ni.PrintLog);
+        }
+        [Test]
+        public void TestForeachLoopAccessToHash()
+        {
+            NakoCompiler nc = new NakoCompiler();
+            NakoInterpreter ni = new NakoInterpreter();
+            nc.WriteIL(
+                "A[`a`]=566\n" +
+                "A[`b`]=666\n" +
+                "B[0]=「a」\n" +
+                "B[1]=「b」\n" +
+                "Bで反復\n" +
+                "  A[対象]を継続表示\n" +
+                "");
+            ni.Run(nc.Codes);
+            Assert.AreEqual("566666", ni.PrintLog);
+        }
+        [Test]
+        public void TestForLoopAccessToHash()
+        {
+            NakoCompiler nc = new NakoCompiler();
+            NakoInterpreter ni = new NakoInterpreter();
+            nc.WriteIL(
+                "A[`a`]=566\n" +
+                "A[`b`]=666\n" +
+                "B[0]=「a」\n" +
+                "B[1]=「b」\n" +
+                "Iを0から1まで繰り返す\n" +
+                "  C=B[I]\n" +
+                "  A[C]を継続表示\n" +
+                "");
+            ni.Run(nc.Codes);
+            Assert.AreEqual("566666", ni.PrintLog);
+        }
 
     }
 }
