@@ -92,10 +92,14 @@ namespace NakoPluginADO
             string q = info.StackPopAsString();
             OdbcConnection con = (OdbcConnection)c;
 			OdbcCommand cmd = new OdbcCommand(q,con);
-			if(_rs.ContainsKey(con.GetHashCode())==false){
+			if(_rs.ContainsKey(con.GetHashCode())==true){
+              _rs[con.GetHashCode()] = cmd.ExecuteReader();
+            }else{
             _rs.Add(con.GetHashCode(),cmd.ExecuteReader());
 			}
-			if(_cmd.ContainsKey(con.GetHashCode())==false){
+			if(_cmd.ContainsKey(con.GetHashCode())==true){
+              _cmd[con.GetHashCode()] = cmd; 
+            }else{
             _cmd.Add(con.GetHashCode(),cmd);
 			}
 			//cmd.Dispose();
