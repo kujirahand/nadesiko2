@@ -66,6 +66,7 @@ namespace NakoPluginFile
             //-ファイル列挙
             bank.AddFunc("ファイル列挙", "PATHの", NakoVarType.Array, _enumFiles, "PATHにあるファイルを列挙する", "ふぁいるれっきょ");
             bank.AddFunc("フォルダ列挙", "PATHの", NakoVarType.Array, _enumDirs, "PATHにあるフォルダを列挙する", "ふぉるだれっきょ");
+			bank.AddFunc("全ファイル列挙", "PATHの", NakoVarType.Array, _enumAllFiles, "PATH以下にあるファイルを全て列挙する", "ぜんふぁいるれっきょ");
             //-パス操作
             bank.AddFunc("パス抽出", "PATHの", NakoVarType.String, _dirname, "PATHからパスを抽出して返す", "ぱすちゅうしゅつ");
             bank.AddFunc("相対パス展開", "AをBで", NakoVarType.String, _relativePath, "相対パスAを基本パスBで展開して返す。", "そうたいぱすてんかい");
@@ -323,6 +324,20 @@ NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレ
             }
             return res;
         }
+
+		public Object _enumAllFiles(INakoFuncCallInfo info)
+		{
+			string path = info.StackPopAsString();
+			string[] files = Directory.GetFiles(path,"*",System.IO.SearchOption.AllDirectories);
+			NakoVarArray res = info.CreateArray();
+			for (int i = 0; i < files.Length; i++)
+			{
+				//string f = Path.GetFileName(files[i]);
+				string f = files[i];
+				res.SetValue(i, f);
+			}
+			return res;
+		}
         //------------------------------------------------------------------
         // パス操作
         public Object _dirname(INakoFuncCallInfo info)
