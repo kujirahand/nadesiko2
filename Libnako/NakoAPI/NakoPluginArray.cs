@@ -111,14 +111,13 @@ namespace Libnako.NakoAPI
                 throw new NakoPluginRuntimeException("『追加』の引数がvariableではありません");
             }
             NakoVariable ary_link = (NakoVariable)ary;
-            Console.WriteLine (ary_link.Body);
             if (ary_link.Body is NakoVarArray)
             {
                 NakoVarArray arr = (NakoVarArray)ary_link.Body;
                 NakoVariable new_item = new NakoVariable();
                 new_item.SetBodyAutoType(s);
                 arr.Add(new_item);
-            }else if(ary_link.Body==""){
+			}else if(ary_link.Body is string && (string)ary_link.Body==""){
                 NakoVarArray arr = new NakoVarArray();
                 NakoVariable new_item = new NakoVariable();
                 new_item.SetBodyAutoType(s);
