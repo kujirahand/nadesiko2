@@ -684,7 +684,20 @@ namespace Libnako.JPNCompiler.Parser
             for (int i = 0; i < func.ArgCount; i++)
             {
                 NakoFuncArg arg = func.args[func.ArgCount - i - 1];
-                NakoNode argNode = calcStack.Pop(arg);
+				NakoNode argNode;
+				if (arg.defaultValue != null && calcStack.Count < (func.ArgCount - i)) {//初期値があって引数が無い場合に引数に初期値を与える
+					argNode = new NakoNodeConst();
+					argNode.value = arg.defaultValue;
+					if (arg.defaultValue is int) {
+						argNode.type = NakoNodeType.INT;
+						argNode.Token = new NakoToken (NakoTokenType.INT);
+					} else if (arg.defaultValue is string) {
+						argNode.type = NakoNodeType.STRING;
+						argNode.Token = new NakoToken (NakoTokenType.STRING);
+					}
+				} else {
+					argNode = calcStack.Pop (arg);
+				}
                 if (arg.varBy == VarByType.ByRef)
                 {
                     if (argNode.type == NakoNodeType.LD_VARIABLE)

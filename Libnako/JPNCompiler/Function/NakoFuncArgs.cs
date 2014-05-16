@@ -42,6 +42,24 @@ namespace Libnako.JPNCompiler.Function
                     {
                         string opt = (string)tok.Value;
                         if (opt == "参照渡し") argOpt.varBy = VarByType.ByRef;
+						if (opt == "整数") {//TODO:数値
+							NakoToken checkToken = tokens [i + 1];
+							if (checkToken.Type == NakoTokenType.EQ) {
+								checkToken = tokens [i + 2];
+								if (checkToken.Type == NakoTokenType.INT) {
+									argOpt.defaultValue = int.Parse(checkToken.Value);
+								}
+							}
+						}
+						if (opt == "文字列") {
+							NakoToken checkToken = tokens [i + 1];
+							if (checkToken.Type == NakoTokenType.EQ) {
+								checkToken = tokens [i + 2];
+								if (checkToken.Type == NakoTokenType.STRING || checkToken.Type==NakoTokenType.STRING_EX || checkToken.Type==NakoTokenType.WORD) {
+									argOpt.defaultValue = (string)checkToken.Value;
+								}
+							}
+						}
                     }
                     continue;
                 }
@@ -55,6 +73,7 @@ namespace Libnako.JPNCompiler.Function
                         arg = new NakoFuncArg();
                         arg.name = tok.Value;
                         arg.varBy = argOpt.varBy;
+						arg.defaultValue = argOpt.defaultValue;
                         arg.AddJosi(tok.Josi);
                         this.Add(arg);
                         argOpt.Init();

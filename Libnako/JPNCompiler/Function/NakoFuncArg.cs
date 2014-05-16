@@ -36,6 +36,10 @@ namespace Libnako.JPNCompiler.Function
         /// 値渡しか参照渡しか
         /// </summary>
 		public VarByType varBy { get; set; }
+		/// <summary>
+		/// 初期値
+		/// </summary>
+		public object defaultValue { get; set; }
         /// <summary>
         /// constructor
         /// </summary>
