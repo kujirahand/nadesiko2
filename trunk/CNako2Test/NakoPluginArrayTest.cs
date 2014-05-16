@@ -80,7 +80,15 @@ namespace NakoPluginTest
                 "A[3]=「こ」\n" +
                 "Aの0から「し」を配列検索を継続表示。"));
             Assert.AreEqual("2", runner.PrintLog);
-        }
+			runner.Run(com.WriteIL(
+				"A=「」;\n" +
+				"A[0]=「な」\n" +
+				"A[1]=「で」\n" +
+				"A[2]=「し」\n" +
+				"A[3]=「こ」\n" +
+				"Aの「で」を配列検索を継続表示。"));
+			Assert.AreEqual("1", runner.PrintLog);
+			       }
         [Test]
         public void TestReverse()
         {
