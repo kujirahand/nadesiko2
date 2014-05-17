@@ -129,4 +129,7 @@
       <Name>NakoPluginEval</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SJISTEST.txt" />
+  </ItemGroup>
 </Project>
