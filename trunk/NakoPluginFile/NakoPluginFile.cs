@@ -25,10 +25,10 @@ namespace NakoPluginFile
         public void DefineFunction(INakoPluginBank bank)
         {
             //+ テキストファイルの読み書き
-            bank.AddFunc("開く", "FILEを|FILEから", NakoVarType.String, _openFile, "ファイル名FILEのテキストを全部読み込んで返す。この時、自動的に文字コードを判定して読み込む。", "ひらく");
-            bank.AddFunc("読む", "FILEを|FILEから", NakoVarType.String, _openFile, "ファイル名FILEのテキストを全部読み込んで返す。この時、自動的に文字コードを判定して読み込む。", "ひらく");
+			bank.AddFunc("開く", "FILEを{文字列=「Auto」}ENCODEで|FILEから", NakoVarType.String, _openFile, "ファイル名FILEのテキストを全部読み込んで返す。この時、自動的に文字コードを判定して読み込む。", "ひらく");
+			bank.AddFunc("読む", "FILEを{文字列=「Auto」}ENCODEで|FILEから", NakoVarType.String, _openFile, "ファイル名FILEのテキストを全部読み込んで返す。この時、自動的に文字コードを判定して読み込む。", "ひらく");
             bank.AddFunc("保存", "SをFILEに|FILEへ", NakoVarType.Void, _saveFile, "文字列Sをファイル名FILEへ保存する。(文字コードUTF-8で保存される)", "ほぞん");
-            bank.AddFunc("毎行読む", "Fを|Fから", NakoVarType.Object, _readLine, "一行ずつ読むためにファイル名Fを開いてハンドルを返す。反復と組み合わせて使う。", "まいぎょうよむ");
+			bank.AddFunc("毎行読む", "Fを{文字列=「Auto」}ENCODEで|Fから", NakoVarType.Object, _readLine, "一行ずつ読むためにファイル名Fを開いてハンドルを返す。反復と組み合わせて使う。", "まいぎょうよむ");
             //+ ファイル処理
             //-起動
             bank.AddFunc("起動", "CMDを", NakoVarType.Void, _execCommand, "コマンドCMDを起動する", "きどう");//TODO:To NakoPluginShell
@@ -95,6 +95,7 @@ NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレ
         public Object _openFile(INakoFuncCallInfo info)
         {
             string fileName = info.StackPopAsString();
+			string e = info.StackPopAsString();
             // Exists?
             if (!System.IO.File.Exists(fileName))
             {
@@ -102,7 +103,12 @@ NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレ
             }
             // Load
             //string src = File.ReadAllText(fileName);
-            string src = StrUnit.LoadFromFileAutoEnc(fileName);
+			string src;
+			if (e == "Auto") {
+				src = StrUnit.LoadFromFileAutoEnc (fileName);
+			} else {
+				src = File.ReadAllText (fileName, Encoding.GetEncoding (e));
+			}
             return src;
         }
         
@@ -388,22 +394,46 @@ NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレ
             }
             return null;
         }
-        public object _readLine(INakoFuncCallInfo info){//TODO:反復の今の実装では全行一旦読み込まないといけないんだけど、どうしようかな
-        //TODO:それにiteratorを文字しても、ちゃんと変数に反映してくれないから、それも考えないと・・・
+		public object _readLine(INakoFuncCallInfo info){
             string s = info.StackPopAsString();
-            LineReader lr =  new LineReader(s);
+			string e = info.StackPopAsString();
+			LineReader lr;
+			if (e == "Auto") {
+				lr = new LineReader (s);
+			} else {
+				lr = new LineReader (s, e);
+			}
             return lr;
         }
     }
     public class LineReader
     {
         private string path;
+		private System.Text.Encoding code;
         public LineReader(string path){
             this.path = path;
+			this.code = GetCode ();
         }
-        public IEnumerator GetEnumerator(){
+		public LineReader(string path, string code){
+			this.path = path;
+			this.code = Encoding.GetEncoding (code);
+		}
+		private System.Text.Encoding GetCode(){
+			using(System.IO.FileStream fr = new FileStream(path,FileMode.Open,FileAccess.Read)){
+				byte[] bs = new byte[Math.Min(fr.Length,100)];
+				Console.WriteLine (bs.Length);
+				Console.WriteLine (fr.Length);
+				int read = fr.Read (bs,0,bs.Length);
+				if (read == 0)
+					return Encoding.UTF8;
+				Encoding e = StrUnit.GetCode (bs);
+				Console.WriteLine(e.ToString ());
+				return e;
+			}
+		}
+		public IEnumerator GetEnumerator(){//TODO:文字コードの自動判別
             string line = "";
-            using(StreamReader sr = new StreamReader(File.OpenRead(path))){
+			using(StreamReader sr = new StreamReader(File.OpenRead(path),this.code)){
                 while((line=sr.ReadLine())!=null){
                     yield return line;
                 }

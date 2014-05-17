@@ -16,6 +16,7 @@ namespace NakoPluginTest
     {
         NakoCompiler com;
         NakoInterpreter runner = new NakoInterpreter();
+		string sjisFilePath = "";
         public TestNakoPluginFile()
         {
             NakoCompilerLoaderInfo info = new NakoCompilerLoaderInfo();
@@ -26,6 +27,9 @@ namespace NakoPluginTest
                 new NakoPluginFile.NakoPluginFile()
             };
             com = new NakoCompiler(info);
+			string assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+			string assemblyDirectory = System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(assemblyPath)));
+			this.sjisFilePath = System.IO.Path.Combine(assemblyDirectory, "SJISTEST.txt");
         }
 		
 		private string ConvertPath(string s){
@@ -230,6 +234,32 @@ namespace NakoPluginTest
             
         }
 
+		[Test]
+		public void Test_read()
+		{
+			string tmp = System.IO.Path.GetTempPath();
+			runner.Run(com.WriteIL(
+				"「ほげ\r\nふが」を「"+tmp+"hoge.txt」に保存\n" +
+				"「"+tmp+"hoge.txt」を読んで表示\n" +
+				""));
+			Assert.AreEqual("ほげ\r\nふが", runner.PrintLog);
+			//read sjis file automatically
+			runner.Run(com.WriteIL(
+				"「"+sjisFilePath+"」を読んで表示\n" +
+				""));
+			Assert.AreEqual("あいえお\n", runner.PrintLog);
+			//read sjis file with utf-8 encode
+			runner.Run(com.WriteIL(
+				"「"+sjisFilePath+"」から「UTF-8」で読んで表示\n" +
+				""));
+			Assert.AreNotEqual("あいえお\n", runner.PrintLog);
+			//read sjis file with sjis encode
+			runner.Run(com.WriteIL(
+				"「"+sjisFilePath+"」から「CP932」で読んで表示\n" +
+				""));
+			Assert.AreEqual("あいえお\n", runner.PrintLog);
+		}
+
         [Test]
         public void Test_readLine()
         {
@@ -239,7 +269,25 @@ namespace NakoPluginTest
                 "「"+tmp+"hoge.txt」から毎行読んで反復\n" +
                 "   対象を継続表示\n" +
                 ""));
-            Assert.AreEqual("ほげふが", runner.PrintLog);
+			Assert.AreEqual("ほげふが", runner.PrintLog);
+			//read sjis file automatically
+			runner.Run(com.WriteIL(
+				"「"+sjisFilePath+"」から毎行読んで反復\n" +
+				"   対象を継続表示\n" +
+				""));
+			Assert.AreEqual("あいえお", runner.PrintLog);
+			//read sjis file with utf-8 encode
+			runner.Run(com.WriteIL(
+				"「"+sjisFilePath+"」から「UTF-8」で毎行読んで反復\n" +
+				"   対象を継続表示\n" +
+				""));
+			Assert.AreNotEqual("あいえお", runner.PrintLog);
+			//read sjis file with sjis encode
+			runner.Run(com.WriteIL(
+				"「"+sjisFilePath+"」から「CP932」で毎行読んで反復\n" +
+				"   対象を継続表示\n" +
+				""));
+			Assert.AreEqual("あいえお", runner.PrintLog);
         }
 
         [Test]
