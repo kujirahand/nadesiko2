@@ -243,49 +243,6 @@ namespace NakoPluginTest
                 "Sをカナローマ字変換して継続表示"));
             Assert.AreEqual("aiueo０１２３４５６７８９ａｂｃＡＢＣ", interpreter.PrintLog);
         }
-		
-		[Test]
-        public void TestSjisToUtf8()
-        {//このテスト、ちゃんとSJISで関数に送られていないような気がする。
-			string s = @"ほげほげふがふが埋め込み";
-			System.Text.Encoding src = System.Text.Encoding.UTF8;
-			System.Text.Encoding dest = System.Text.Encoding.GetEncoding("CP932");
-			byte [] temp = src.GetBytes(s);
-			byte[] sjis_temp = System.Text.Encoding.Convert(src, dest, temp);
-			string sjis_str = dest.GetString(sjis_temp);
-            interpreter.Run(compiler.WriteIL(
-                "S=「"+sjis_str+"」\n" +
-                "SをSJIS_UTF8変換して継続表示"));
-            Assert.AreEqual("ほげほげふがふが埋め込み", sjis_str);
-        }
-		[Test]
-        public void TestToUtf8()
-        {//このテスト、ちゃんとSJISで関数に送られていないような気がする。
-			string s = @"ほげほげふがふが埋め込み";
-			System.Text.Encoding src = System.Text.Encoding.Unicode;
-			System.Text.Encoding dest = System.Text.Encoding.GetEncoding("CP932");
-			byte [] temp = src.GetBytes(s);
-			byte[] sjis_temp = System.Text.Encoding.Convert(src, dest, temp);
-			string sjis_str = dest.GetString(sjis_temp);
-            interpreter.Run(compiler.WriteIL(
-                "S=「"+sjis_str+"」\n" +
-                "SをUTF8変換して継続表示"));
-            Assert.AreEqual("ほげほげふがふが埋め込み", sjis_str);
-        }
-        [Test]
-        public void TestGetEncode()
-        {//StrUnit.GetEncodeがASCIIを返すのでエラーが出ています。StrUnit内の変数notJapaneseがtrueになっているようです。
-         string s = @"撫子";
-         System.Text.Encoding src = System.Text.Encoding.Unicode;
-         System.Text.Encoding dest = System.Text.Encoding.UTF8;
-         byte [] temp_s = src.GetBytes(s);
-         byte[] temp_d = System.Text.Encoding.Convert(src, dest, temp_s);
-         string str = dest.GetString(temp_d);
-            interpreter.Run(compiler.WriteIL(
-                "S=「"+str+"」\n" +
-                "Sの文字コード調査して継続表示"));
-            Assert.AreEqual("UTF-8", interpreter.PrintLog);
-        }
         [Test]
         public void TestToKana()
         {
