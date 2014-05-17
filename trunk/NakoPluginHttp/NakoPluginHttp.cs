@@ -32,14 +32,14 @@ namespace NakoPluginHttp
         //--- 関数の定義 ---
         public void DefineFunction(INakoPluginBank bank)
         {
-            bank.AddFunc("URLデコード", "Sを", NakoVarType.String, _urlDecode, "SをURLデコードして返す", "URLでこーど");
-            bank.AddFunc("URLエンコード", "Sを", NakoVarType.String, _urlEncode, "SをURLエンコードして返す", "URLえんこーど");
-            bank.AddFunc("HTTPデータ取得", "URLから|URLの|URLを", NakoVarType.String, _dataGet, "URLからデータをダウンロードして内容を返す。", "HTTPでーたしゅとく");
-            bank.AddFunc("HTTPダウンロード", "URLをFILEへ|URLからFILEに", NakoVarType.Void, _downloadGet, "URLをローカルFILEへダウンロードする。", "HTTPだうんろーど");
+			bank.AddFunc("URLデコード", "Sを{文字列=「UTF-8」}ENCODEで", NakoVarType.String, _urlDecode, "SをURLデコードして返す", "URLでこーど");
+			bank.AddFunc("URLエンコード", "Sを{文字列=「UTF-8」}ENCODEで", NakoVarType.String, _urlEncode, "SをURLエンコードして返す", "URLえんこーど");
+			bank.AddFunc("HTTPデータ取得", "URLから{文字列=「Auto」}ENCODEで|URLの|URLを", NakoVarType.String, _dataGet, "URLからデータをダウンロードして内容を返す。", "HTTPでーたしゅとく");
+			bank.AddFunc("HTTPダウンロード", "URLをFILEへ|URLからFILEに", NakoVarType.Void, _downloadGet, "URLをローカルFILEへダウンロードする。", "HTTPだうんろーど");
             bank.AddFunc("HTTPヘッダ取得", "URLから|URLの|URLを", NakoVarType.String, _getHeader, "URLからヘッダを取得して内容を返す。", "HTTPへっだしゅとく");
             bank.AddFunc("HTTPヘッダハッシュ取得", "URLから|URLの|URLを", NakoVarType.Array, _getHeaderHash, "URLからヘッダを取得してハッシュに変換して返す。", "HTTPへっだはっしゅしゅとく");
-            bank.AddFunc("HTTPポスト", "URLへVALUESを|URLに", NakoVarType.String, _post, "ポストしたい値（ハッシュ形式）VALUESをURLへポストしその結果を返す。", "HTTPぽすと");
-            bank.AddFunc("HTTPゲット", "HEADをURLへ|HEADで", NakoVarType.String, _get, "送信ヘッダHEADを指定してURLへGETコマンドを発行し、その結果を返す。", "HTTPげっと");
+			bank.AddFunc("HTTPポスト", "URLへVALUESを{文字列=「Auto」}ENCODEで|URLに", NakoVarType.String, _post, "ポストしたい値（ハッシュ形式）VALUESをURLへポストしその結果を返す。", "HTTPぽすと");
+			bank.AddFunc("HTTPゲット", "HEADをURLへ|HEADで", NakoVarType.String, _get, "送信ヘッダHEADを指定してURLへGETコマンドを発行し、その結果を返す。", "HTTPげっと");
             bank.AddFunc("URL展開", "AをBで", NakoVarType.String, _relativeUrl, "相対パスAを基本パスBでURLを展開する。", "URLてんかい");
             bank.AddFunc("URL基本パス抽出", "URLから|URLの|URLで", NakoVarType.String, _baseOfUrl, "URLから基本パスを抽出して返す。", "URLきほんぱすちゅうしゅつ");
             bank.AddFunc("URLファイル名抽出", "URLから|URLの|URLで", NakoVarType.String, _filenameOfUrl, "URLからファイル名部分を抽出して返す。", "URLふぁいるめいちゅうしゅつ");
@@ -75,18 +75,28 @@ namespace NakoPluginHttp
         public Object _urlDecode(INakoFuncCallInfo info)
         {
         	string s = info.StackPopAsString();
-        	return Uri.UnescapeDataString(s);
+			string e = info.StackPopAsString();
+			return HttpUtility.UrlDecode (s, Encoding.GetEncoding (e));
         }
         public Object _urlEncode(INakoFuncCallInfo info)
         {
         	string s = info.StackPopAsString();
-        	return Uri.EscapeDataString(s);
+			string e = info.StackPopAsString();
+			return HttpUtility.UrlEncode (s, Encoding.GetEncoding (e));
         }
         public Object _dataGet(INakoFuncCallInfo info)
 		{
         	string s = info.StackPopAsString();
+			string e = info.StackPopAsString();
+			string ret;
 			WebClient client = new WebClient();
-			string ret = client.DownloadString(s);
+			if (e == "Auto") {
+				byte[] bytes = client.DownloadData (s);
+				ret = StrUnit.ToStringAutoEnc (bytes);
+			} else {
+				client.Encoding = Encoding.GetEncoding (e);
+				ret = client.DownloadString (s);
+			}
             client.Dispose();
             return ret;
 		}
@@ -94,7 +104,7 @@ namespace NakoPluginHttp
         public object _downloadGet(INakoFuncCallInfo info){
             string url = info.StackPopAsString();
             string file = info.StackPopAsString();
-            WebClient client = new WebClient();
+			WebClient client = new WebClient();
             client.DownloadFile(url,file);
             client.Dispose();
             return null;
@@ -105,14 +115,7 @@ namespace NakoPluginHttp
             WebRequest req = WebRequest.Create(url);
             req.Method = "HEAD";
             HttpWebResponse response = (HttpWebResponse)req.GetResponse();
-//            StringBuilder ret = new StringBuilder();
-//            foreach(string key in response.Headers.Keys){
-//                ret.AppendFormat("{0}:{1}",key,String.Join(",",response.Headers.GetValues(key)));
-//                ret.AppendLine();
-//            }
-//            return ret.ToString();
             return String.Format(@"HTTP/{0} {1} {2}\r\n{3}",response.ProtocolVersion,response.StatusCode.GetHashCode(),response.StatusDescription,response.Headers.ToString());
-            //return response.Headers.ToString();
             }catch(WebException e){
                 HttpWebResponse response = (HttpWebResponse)e.Response;
                 return String.Format(@"HTTP/{0} {1} {2}\r\n{3}",response.ProtocolVersion,response.StatusCode.GetHashCode(),response.StatusDescription,response.Headers.ToString());
@@ -137,6 +140,7 @@ namespace NakoPluginHttp
         public object _post(INakoFuncCallInfo info){
             string url = info.StackPopAsString();
             object val = info.StackPop();//TODO:Array
+			string e = info.StackPopAsString();
             string query = "";
             if(val is string){
                query = (string)val;
@@ -144,7 +148,7 @@ namespace NakoPluginHttp
                 List<string> qp = new List<string>();
                 NakoVarArray arr = (NakoVarArray)val;
                 foreach(NakoVariable kv in arr){
-                    qp.Add(String.Format("{0}={1}",HttpUtility.UrlEncode(kv.key),HttpUtility.UrlEncode((string)kv.Body)));
+					qp.Add(String.Format("{0}={1}",HttpUtility.UrlEncode(kv.key,Encoding.GetEncoding(e)),HttpUtility.UrlEncode((string)kv.Body,Encoding.GetEncoding(e))));
                 }
                 query = String.Join ("&",qp.ToArray());
             }else{
@@ -161,16 +165,34 @@ namespace NakoPluginHttp
             }
             WebResponse response = req.GetResponse();
             string ret = "";
-            using(StreamReader sr = new StreamReader(response.GetResponseStream())){
-                ret = sr.ReadToEnd();
-            }
+			if (e == "Auto") {
+				using (Stream sr = response.GetResponseStream ()) {
+					byte[] buf = new byte[32768];
+					int read = 0;
+					using(MemoryStream ms = new MemoryStream()){
+						do {
+							read = sr.Read (buf, 0, buf.Length);
+							if (read > 0) {
+								ms.Write (buf, 0, read);
+							}
+						} while(read > 0);
+						if (ms.Length > 0) {
+							ret = StrUnit.ToStringAutoEnc (ms.ToArray());
+						}
+					}
+				}
+			} else {
+				using (StreamReader sr = new StreamReader (response.GetResponseStream (), Encoding.GetEncoding (e))) {
+					ret = sr.ReadToEnd ();
+				}
+			}
             return ret;
         }
         public object _get(INakoFuncCallInfo info){
             WebClient client = new WebClient();
             string head = info.StackPopAsString();
             string url = info.StackPopAsString();
-            using(StringReader rs = new StringReader(head))
+			using(StringReader rs = new StringReader(head))
             {
                 string line;
                 while((line = rs.ReadLine())!=null){

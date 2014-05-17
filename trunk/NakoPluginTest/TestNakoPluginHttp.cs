@@ -47,9 +47,42 @@ namespace NakoPluginTest
         [Test]
         public void TestHttpGetData()
         {
+			//auto encode (utf-8 page)
             runner.Run(com.WriteIL(
-                "「http://www.nadesi.com/」をHTTPデータ取得して表示。"));
+				"「http://www.shigepon.com/test/utf8/」をHTTPデータ取得して表示。"));
             Assert.AreEqual(true,runner.PrintLog.Contains("なでしこ"));
+			//auto encode (sjis page)
+			runner.Run(com.WriteIL(
+				"「http://www.shigepon.com/test/sjis/」をHTTPデータ取得して表示。"));
+			Assert.AreEqual(true,runner.PrintLog.Contains("なでしこ"));
+			//auto encode (euc-jp page)
+			runner.Run(com.WriteIL(
+				"「http://www.shigepon.com/test/eucjp/」をHTTPデータ取得して表示。"));
+			Assert.AreEqual(true,runner.PrintLog.Contains("なでしこ"));
+			//set encode to sjis (utf-8 page) 文字化けする
+			runner.Run(com.WriteIL(
+				"「http://www.shigepon.com/test/utf8/」を「CP932」HTTPデータ取得して表示。"));
+			Assert.AreNotEqual(true,runner.PrintLog.Contains("なでしこ"));
+			//set encode to utf-8 (utf-8 page)
+			runner.Run(com.WriteIL(
+				"「http://www.shigepon.com/test/utf8/」を「UTF-8」HTTPデータ取得して表示。"));
+			Assert.AreEqual(true,runner.PrintLog.Contains("なでしこ"));
+			//set encode to euc-jp (sjis page) 文字化けする
+			runner.Run(com.WriteIL(
+				"「http://www.shigepon.com/test/sjis/」を「EUC-JP」HTTPデータ取得して表示。"));
+			Assert.AreNotEqual(true,runner.PrintLog.Contains("なでしこ"));
+			//set encode to sjis (sjis page)
+			runner.Run(com.WriteIL(
+				"「http://www.shigepon.com/test/sjis/」を「CP932」HTTPデータ取得して表示。"));
+			Assert.AreEqual(true,runner.PrintLog.Contains("なでしこ"));
+			//set encode to utf-8 (euc-jp page) 文字化けする
+			runner.Run(com.WriteIL(
+				"「http://www.shigepon.com/test/eucjp/」を「UTF-8」HTTPデータ取得して表示。"));
+			Assert.AreNotEqual(true,runner.PrintLog.Contains("なでしこ"));
+			//set encode to euc-jp (euc-jp page)
+			runner.Run(com.WriteIL(
+				"「http://www.shigepon.com/test/eucjp/」を「EUC-JP」HTTPデータ取得して表示。"));
+			Assert.AreEqual(true,runner.PrintLog.Contains("なでしこ"));
         }
 
         [Test]
@@ -123,10 +156,25 @@ namespace NakoPluginTest
         [Test]
         public void TestHttpPost()//TODO:外部サービスを使ってるので、後々簡易WEBサーバをテスト時に構築し、そこにアクセスするように変更したい
         {
+			//auto encode
+			runner.Run(com.WriteIL(
+				"A=「http://www.muryou-tools.com/test/aaaa.php」へ「hoge=fuga&hage=1」をHTTPポスト。" +
+				"Aを表示。"));
+			Assert.AreEqual(true,runner.PrintLog.Contains("hoge=fuga"));
+			Assert.AreEqual(true,runner.PrintLog.Contains("テスト"));
+			//set encode to sjis
+			runner.Run(com.WriteIL(
+				"A=「http://www.muryou-tools.com/test/aaaa.php」へ「hoge=fuga&hage=1」を「CP932」でHTTPポスト。" +
+				"Aを表示。"));
+			Assert.AreEqual(true,runner.PrintLog.Contains("hoge=fuga"));
+			Assert.AreEqual(true,runner.PrintLog.Contains("テスト"));
+			//set encode to utf-8 (文字化けする)
             runner.Run(com.WriteIL(
-                "A=「http://www.muryou-tools.com/test/aaaa.php」へ「hoge=fuga&hage=1」をHTTPポスト。" +
+				"A=「http://www.muryou-tools.com/test/aaaa.php」へ「hoge=fuga&hage=1」を「UTF-8」でHTTPポスト。" +
                 "Aを表示。"));
-            Assert.AreEqual(true,runner.PrintLog.Contains("hoge=fuga"));
+			Console.WriteLine (runner.PrintLog);
+			Assert.AreEqual(true,runner.PrintLog.Contains("hoge=fuga"));
+			Assert.AreNotEqual(true,runner.PrintLog.Contains("テスト"));
         }
 
         [Test]
