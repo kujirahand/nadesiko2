@@ -66,12 +66,8 @@ namespace Libnako.NakoAPI
             bank.AddFunc("何文字目", "SでSSが|Sの", NakoVarType.String, _strpos, "文字列Sで文字列SSが何文字目にあるか調べて返す", "なんもじめ");
             bank.AddFunc("出現回数", "SでAの", NakoVarType.Int, _occurrence, "文字列SでAの出てくる回数を返す。", "しゅつげんかいすう");
             bank.AddFunc("カナローマ字変換", "Sを|Sから", NakoVarType.String, _convert_kana_to_roman, "文字列Sにあるカタカナをローマ字に変換する。", "かなろーまじへんかん");//未実装
-            bank.AddFunc("UTF8変換", "Sを", NakoVarType.String, _to_utf8, "文字列SをUTF8に変換して返す。", "ゆーてぃーえふはちへんかん");//未実装
-            bank.AddFunc("SJIS_UTF8変換", "Sを", NakoVarType.String, _from_sjis_to_utf8, "SJISの文字列SをUTF8に変換して返す。", "えすじすゆーてぃーえふはちへんかん");//未実装
             bank.AddFunc("かな変換", "Sを", NakoVarType.String, _toKana, "文字列Sをひらがなに変換して返す。", "かなへんかん");//未実装
             bank.AddFunc("範囲切り取る", "{参照渡し}SのAからBを|Bまでを", NakoVarType.String, _cutRange, "文字列Sの区切り文字Aから区切り文字Bまでを切り取って返す。Sに変数を指定した場合はSの内容が切り取られる。SにBが存在しないとき、Sの最後まで切り取る。Aが存在しないときは切り取らない。", "はんいきりとる");
-            bank.AddFunc("文字コード調査", "Sから|Sの|Sを", NakoVarType.String, _getEncode, "文字列Sの文字コードを調べて返す。", "もじこーどちょうさ");
-//文字コード調査
         }
         private object _toKana(INakoFuncCallInfo info){
             string s = info.StackPopAsString();
@@ -104,41 +100,6 @@ namespace Libnako.NakoAPI
                 }
             }
             return null;
-        }
-        private object _getEncode(INakoFuncCallInfo info){
-            string s = info.StackPopAsString();
-            byte[] b = Encoding.Unicode.GetBytes(s);//new byte[s.ToCharArray().Length*sizeof(char)];
-            System.Text.Encoding enc = StrUnit.GetCode(b);
-
-            // UTF-8
-            if (enc == Encoding.UTF8)
-            {
-                return "UTF-8";
-            }
-            // UNICODE
-            else if (enc == Encoding.Unicode)
-            {
-                return "Unicode";
-            }
-            // Shift_JIS
-            else if (enc == System.Text.Encoding.GetEncoding(932))
-            {
-                return "Shift_JIS";
-            }
-            // JIS
-            else if (enc == Encoding.GetEncoding(50220))
-            {
-                return "ISO-2022-JP";
-            }
-            // EUC-JP
-            else if (enc == Encoding.GetEncoding(51932))
-            {
-                return "EUC-JP";
-            }
-            else
-            {
-                throw new ApplicationException("Encoding Error: " + s);
-            }
         }
 
         // Define Method
@@ -403,35 +364,6 @@ namespace Libnako.NakoAPI
             string s = info.StackPopAsString();
 			//TODO: 手動実装（めんどー）キャキュキョから始まって最後に1文字カナを変換
 			return s;
-		}
-		
-		private object _to_utf8(INakoFuncCallInfo info){
-            string s = info.StackPopAsString();
-            string encode = checkEncoding(s);
-            if(encode=="UTF-8") return s;
-			System.Text.Encoding src = System.Text.Encoding.GetEncoding(encode);
-			System.Text.Encoding dest = System.Text.Encoding.UTF8;
-			byte [] temp = src.GetBytes(s);
-			byte[] s_temp = System.Text.Encoding.Convert(src, dest, temp);
-			return dest.GetString(s_temp);
-		}
-		
-		private object _from_sjis_to_utf8(INakoFuncCallInfo info){
-            string s = info.StackPopAsString();
-			System.Text.Encoding dest = System.Text.Encoding.UTF8;
-			System.Text.Encoding src = System.Text.Encoding.GetEncoding("CP932");
-			byte [] temp = src.GetBytes(s);
-			byte[] s_temp = System.Text.Encoding.Convert(src, dest, temp);
-			return dest.GetString(s_temp);
-		}
-		
-		private string checkEncoding(string s){
-			if(NWEnviroment.isWindows()){
-				throw new NotSupportedException();
-			}else{
-				return LinuxCommand.execute("echo '"+s+"' | nkf -g").Replace("\n","");
-			}
-			//return "CP932";
 		}
     }
 }
