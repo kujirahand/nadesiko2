@@ -87,5 +87,17 @@ namespace NakoPluginTest
             runner.Run(codes);
             Assert.AreEqual(runner.PrintLog, "123");
         }
+		[Test]
+		public void TestForContinue()
+		{
+			codes = ns.WriteIL(
+				"Iを1から5まで繰り返す\n" +
+				"  もし、I=3ならば、続ける。\n" +
+				"  PRINT I\n" +
+				"\n"
+			);
+			runner.Run(codes);
+			Assert.AreEqual(runner.PrintLog, "1245");
+		}
     }
 }
