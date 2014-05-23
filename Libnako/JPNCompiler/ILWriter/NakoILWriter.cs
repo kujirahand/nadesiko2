@@ -454,6 +454,7 @@ namespace Libnako.JPNCompiler.ILWriter
             // (0)
 			NakoILCode label_for_begin = createLABEL("FOR_BEGIN" + labelId.ToString());
 			NakoILCode label_for_end = createLABEL("FOR_END" + labelId.ToString());
+			NakoILCode label_for_continue = createLABEL("FOR_CONTINUE" + labelId.ToString());
 
             // (1) 変数を初期化する
             result.Add(label_for_begin);
@@ -474,8 +475,10 @@ namespace Libnako.JPNCompiler.ILWriter
             addNewILCode(NakoILType.BRANCH_FALSE, label_for_end);
 
             // (3) 繰り返し文を実行する
-            _loop_check_break_continue(node.nodeBlocks, label_for_end, label_for_cond);
+			_loop_check_break_continue(node.nodeBlocks, label_for_end, label_for_continue);
             Write_r(node.nodeBlocks);
+			//continue時には変数の加算が必要なので、ここに飛ばす必要がある
+			result.Add(label_for_continue);
 
             // (4) 変数を加算する (ここ最適化できそう)
             addNewILCode(NakoILType.LD_LOCAL, loopVarNo);
@@ -504,7 +507,7 @@ namespace Libnako.JPNCompiler.ILWriter
                         break;
                     case NakoNodeType.CONTINUE:
                         item.type = NakoNodeType.JUMP;
-                        ((NakoNodeBreak)item).label = continue_label;
+						((NakoNodeContinue)item).label = continue_label;
                         break;
 
                     // ジャンプポイントが変わる構文があれば、その下層ブロックは処理しない
