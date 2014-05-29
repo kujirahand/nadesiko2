@@ -122,18 +122,20 @@ NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレ
             
             return null;
         }
-        
+
         public Object _execCommand(INakoFuncCallInfo info)
         {
             string cmd = info.StackPopAsString();
-            System.Diagnostics.Process.Start(cmd);
+			string[] cmdAndArgument = cmd.Split (" ".ToCharArray(), 2);
+			Process proc = (cmdAndArgument.Length==1)? System.Diagnostics.Process.Start(cmd) : System.Diagnostics.Process.Start(cmdAndArgument[0],cmdAndArgument[1]);
             return null;
         }
         
         public Object _execCommandWait(INakoFuncCallInfo info)
         {
             string cmd = info.StackPopAsString();
-        	Process proc = System.Diagnostics.Process.Start(cmd);
+			string[] cmdAndArgument = cmd.Split (" ".ToCharArray(), 2);
+			Process proc = (cmdAndArgument.Length==1)? System.Diagnostics.Process.Start(cmd) : System.Diagnostics.Process.Start(cmdAndArgument[0],cmdAndArgument[1]);
         	proc.WaitForExit();
         	return null;
         }
@@ -141,8 +143,12 @@ NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレ
         public Object _execCommandHidden(INakoFuncCallInfo info)
         {
             string cmd = info.StackPopAsString();
+			string[] cmdAndArgument = cmd.Split (" ".ToCharArray(), 2);
             Process proc = new Process();
             proc.StartInfo.FileName = cmd;
+			if (cmdAndArgument.Length > 1) {
+				proc.StartInfo.Arguments = cmdAndArgument [1];
+			}
             proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             proc.Start();
         	return null;
@@ -151,8 +157,12 @@ NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレ
         public Object _execCommandHiddenWait(INakoFuncCallInfo info)
         {
             string cmd = info.StackPopAsString();
+			string[] cmdAndArgument = cmd.Split (" ".ToCharArray(), 2);
             Process proc = new Process();
             proc.StartInfo.FileName = cmd;
+			if (cmdAndArgument.Length > 1) {
+				proc.StartInfo.Arguments = cmdAndArgument [1];
+			}
             proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             proc.Start();
             proc.WaitForExit();

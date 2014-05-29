@@ -20,15 +20,12 @@ namespace DemoCNako2
             NakoCompiler compiler = new NakoCompiler();
 			compiler.DirectSource = 
 @"
-●B
-  エラー発生
+A[`a`]=`aaa`
+A[`b`]=`bbb`
+A[`c`]=`ccc`
+(Aの配列ハッシュキー列挙)で反復
+  「***:{対象}」を継続表示
 
-エラー監視
-  A=「あ」。
-  B。
-  Aと継続表示。
-エラーならば
-  「ほげ」と表示。
 ";
 //                "デスクトップ。\nそれのファイル列挙。\nそれを「/」で配列結合。\nそれを表示。" +
 //                "";

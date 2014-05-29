@@ -31,5 +31,21 @@ namespace NakoPluginTest
             Assert.AreEqual(runner.PrintLog, "***1:aaa***2:bbb***3:ccc");
 
         }
+		[Test]
+		public void TestHash()
+		{
+			// (1) 
+			codes = ns.WriteIL(
+				"A[`a`]=`aaa`\n"+
+				"A[`b`]=`bbb`\n"+
+				"A[`c`]=`ccc`\n"+
+				"(Aの配列ハッシュキー列挙)で反復\n"+
+				"  「***:{対象}」を継続表示\n"+
+				""
+			);
+			runner.Run(codes);
+			Assert.AreEqual(runner.PrintLog, "***1:a***2:b***3:c");
+
+		}
     }
 }
