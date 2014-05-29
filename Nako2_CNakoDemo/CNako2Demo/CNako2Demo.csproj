@@ -60,6 +60,10 @@
       <Project>{29BCC59A-E35E-4096-B417-16335E41CF93}</Project>
       <Name>NakoPluginFile</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\NakoPluginHttp\NakoPluginHttp.csproj">
+      <Project>{E6657194-A701-4796-B8FE-8DD7FCE17FF3}</Project>
+      <Name>NakoPluginHttp</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

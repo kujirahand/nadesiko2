@@ -211,5 +211,17 @@ namespace NakoPluginTest
                 ""));
             Assert.AreEqual("3031", runner.PrintLog);
         }
+		[Test]
+		public void TestHasKey()
+		{
+			runner.Run(com.WriteIL(
+				"Aとは変数;\n"+
+				"A[`a`]=30;\n"+
+				"A[`b`]=31;\n"+
+				"(Aの`b`を配列キー存在?)を継続表示\n"+
+				"(Aの`c`を配列キー存在?)を継続表示\n"+
+				""));
+			Assert.AreEqual("10", runner.PrintLog);
+		}
     }
 }

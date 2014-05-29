@@ -8,7 +8,7 @@
     <RootNamespace>NakoPluginADO</RootNamespace>
     <AssemblyName>NakoPluginADO</AssemblyName>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <ProductVersion>10.0.0</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
@@ -44,21 +44,21 @@
     <DebugSymbols>false</DebugSymbols>
     <DebugType>none</DebugType>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants />
+    <DefineConstants>
+    </DefineConstants>
     <WarningLevel>4</WarningLevel>
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>false</Optimize>
     <OutputPath>bin\Release</OutputPath>
-    <DefineConstants />
+    <DefineConstants>
+    </DefineConstants>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="Npgsql" />
   </ItemGroup>
