@@ -106,5 +106,13 @@ namespace NakoPluginTest
             Assert.AreEqual("1", runner.PrintLog );
         }
 
+		[Test]
+		public void TestQuit()
+		{
+			runner.Run(com.WriteIL(
+				"「タモリ」を表示。終わる。「倶楽部」を表示。"));
+			Assert.AreEqual("タモリ", runner.PrintLog );
+		}
+
      }
 }

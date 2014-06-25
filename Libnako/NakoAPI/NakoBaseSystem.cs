@@ -83,6 +83,8 @@ namespace Libnako.NakoAPI
             bank.AddFunc("四捨五入", "AをBで", NakoVarType.Object, _round, "AをBの精度で四捨五入する", "ししゃごにゅう");
             bank.AddFunc("切り下げ", "AをBで", NakoVarType.Object, _ceil, "AをBの精度で切り下げする", "きりさげ");
             bank.AddFunc("代入", "Aを{参照渡し}Bに", NakoVarType.Void, _substitute, "AをBに代入する", "だいにゅう");
+			//終わり
+			bank.AddFunc("終わり", "", NakoVarType.Void, _quit, "プログラムを終了する", "おわり");
 //後回し　整数部分
 //後回し　小数点四捨五入→Aを「0.001」に四捨五入　と変更したいなー。指定がなければ一桁目
 //後回し　小数点切り下げ→Aを「0.001」に四捨五入　と変更したいなー。指定がなければ一桁目
@@ -489,6 +491,12 @@ namespace Libnako.NakoAPI
             a = Math.Pow(a,b);
             return a;
         }
+
+		private object _quit(INakoFuncCallInfo info)
+		{
+			Environment.Exit (0);
+			return null;
+		}
 
     }
 }
