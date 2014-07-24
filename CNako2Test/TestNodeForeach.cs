@@ -29,6 +29,16 @@ namespace NakoPluginTest
                 );
             runner.Run(codes);
             Assert.AreEqual(runner.PrintLog, "***1:aaa***2:bbb***3:ccc");
+			codes = ns.WriteIL(
+				"A[0] = `aaa`\n"+
+				"A[1] = `bbb`\n"+
+				"A[2] = `ccc`\n"+
+				"Aを反復\n"+
+				"　　PRINT 「***{回数}:{対象}」" +
+				"　　続ける"
+			);
+			runner.Run(codes);
+			Assert.AreEqual(runner.PrintLog, "***1:aaa***2:bbb***3:ccc");
 
         }
 		[Test]
@@ -36,6 +46,25 @@ namespace NakoPluginTest
 		{
 			// (1) 
 			codes = ns.WriteIL(
+				"A=``\n"+
+				"A[`a`]=`aaa`\n"+
+				"A[`b`]=`bbb`\n"+
+				"A[`c`]=`ccc`\n"+
+				"Aで反復\n"+
+				"  「***{回数}:{対象}」を継続表示\n"+
+				""
+			);
+			runner.Run(codes);
+			Assert.AreEqual(runner.PrintLog, "***1:aaa***2:bbb***3:ccc");
+
+		}
+		[Test]
+		public void TestArraykeys()
+		{
+			// (1) 
+			// (1) 
+			codes = ns.WriteIL(
+				"A=``\n"+
 				"A[`a`]=`aaa`\n"+
 				"A[`b`]=`bbb`\n"+
 				"A[`c`]=`ccc`\n"+
@@ -45,6 +74,34 @@ namespace NakoPluginTest
 			);
 			runner.Run(codes);
 			Assert.AreEqual(runner.PrintLog, "***1:a***2:b***3:c");
+			codes = ns.WriteIL(
+				"A=``\n"+
+				"A[10]=`aaa`\n"+
+				"A[1]=`bbb`\n"+
+				"A[2]=`ccc`\n"+
+				"(Aの配列ハッシュキー列挙)で反復\n"+
+				"  「***:{対象}」を継続表示\n"+
+				""
+			);
+			runner.Run(codes);
+			Assert.AreEqual(runner.PrintLog, "***1:a***2:b***3:c");
+
+		}
+		[Test]
+		public void TestCompareInsideLoop()
+		{
+			// (1) 
+			codes = ns.WriteIL(
+				"A=``\n"+
+				"A[0] = `aaa`\n"+
+				"A[1] = `bbb`\n"+
+				"A[2] = `ccc`\n"+
+				"Aを反復\n"+
+				"  もし(対象 == `aaa`)なら\n"+
+				"    PRINT 「***{回数}:{対象}」"
+			);
+			runner.Run(codes);
+			Assert.AreEqual(runner.PrintLog, "***1:aaa");
 
 		}
     }

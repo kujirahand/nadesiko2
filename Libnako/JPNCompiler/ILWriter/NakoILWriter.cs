@@ -379,6 +379,7 @@ namespace Libnako.JPNCompiler.ILWriter
             // (0)
             NakoILCode label_for_begin = createLABEL("ITERATOR_BEGIN" + labelId.ToString());
             NakoILCode label_for_end = createLABEL("ITERATOR_END" + labelId.ToString());
+			NakoILCode label_for_continue = createLABEL("ITERATOR_CONTINUE" + labelId.ToString());
 
             // (1) 変数を初期化する
             result.Add(label_for_begin);
@@ -423,9 +424,11 @@ namespace Libnako.JPNCompiler.ILWriter
             addNewILCode(NakoILType.ST_LOCAL, kaisuVarNo);
 
             // (3) 繰り返し文を実行する
-            _loop_check_break_continue(node.nodeBlocks, label_for_end, label_for_begin);
+            _loop_check_break_continue(node.nodeBlocks, label_for_end, label_for_continue);
             Write_r(node.nodeBlocks);
 
+			//continue時には変数の加算が必要なので、ここに飛ばす必要がある
+			result.Add(label_for_continue);
             // (4) 変数を加算する
             addNewILCode(NakoILType.INC_LOCAL, loopVarNo);
 
