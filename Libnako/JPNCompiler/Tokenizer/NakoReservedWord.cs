@@ -32,6 +32,7 @@ namespace Libnako.JPNCompiler.Tokenizer
             dic.AddWord("PRINT", NakoTokenType.PRINT);
             // システムの優先予約語
             dic.AddWord("ナデシコ", NakoTokenType.RESERVED);
+			dic.AddWord("取り込む", NakoTokenType.INCLUDE);
             // 変数定義など
             dic.AddWord("数値", NakoTokenType.DIM_NUMBER);
             dic.AddWord("整数", NakoTokenType.DIM_INT);

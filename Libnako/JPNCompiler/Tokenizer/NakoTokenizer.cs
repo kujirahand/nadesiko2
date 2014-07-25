@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace Libnako.JPNCompiler.Tokenizer
 {
@@ -129,6 +130,7 @@ namespace Libnako.JPNCompiler.Tokenizer
             SplitToToken();
             DefineFunction();
             CheckWord();
+			Include ();
             return tokens;
         }
         /// <summary>
@@ -259,6 +261,35 @@ namespace Libnako.JPNCompiler.Tokenizer
                 }
             }
         }
+		/// <summary>
+		/// INCLUDEのチェックとINCLUDEの実行。
+		/// </summary>
+		private void Include()
+		{
+			// INCLUDEのチェック
+			tokens.MoveTop();
+			NakoToken previousToken = tokens.CurrentToken;
+			for (; !tokens.IsEOF(); tokens.MoveNext())
+			{
+				// TOKENを挿入
+				if (tokens.CurrentTokenType == NakoTokenType.INCLUDE)
+				{
+					string filename = previousToken.Value;
+					string source = File.ReadAllText (filename);
+					NakoToken currentToken = tokens.CurrentToken;
+					int index = tokens.IndexOf (currentToken);
+					NakoTokenList includedTokens = new NakoTokenizer().Tokenize (source, this.tokenDic);
+					int insertIndex = index;
+					foreach (NakoToken tok in includedTokens) {
+						insertIndex++;
+						tokens.Insert (insertIndex, tok);
+					}
+					tokens.Remove (previousToken);
+					tokens.Remove (currentToken);
+				}
+				previousToken = tokens.CurrentToken;
+			}
+		}
         /// <summary>
         /// 現在の位置からトークンを 1 つ取得します。
         /// </summary>
