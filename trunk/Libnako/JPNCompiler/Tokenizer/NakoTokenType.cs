@@ -141,6 +141,8 @@ namespace Libnako.JPNCompiler.Tokenizer
 		FINALLY,
 		/// <summary>THROW</summary>
 		THROW,
+		/// <summary>INCLUDE</summary>
+		INCLUDE,
 		/// <summary>DEF_CLASS</summary>
 		DEF_CLASS
     }
