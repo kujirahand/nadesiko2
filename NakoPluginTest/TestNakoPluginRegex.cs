@@ -60,5 +60,16 @@ namespace NakoPluginTest
                 "「なでしここ」の「^.*?こ」を「ら」に正規表現置換を表示。"));
             Assert.AreEqual("らこ", runner.PrintLog);
         }
+
+		[Test]
+		public void TestSplit()
+		{
+			runner.Run(com.WriteIL(
+@"A =「なでしこなでたい」を「[こで]」で正規表現区切る。
+Aで反復
+  「***{回数}:{対象}」を継続表示
+"));
+			Assert.AreEqual("***1:な***2:し***3:な***4:たい", runner.PrintLog);
+		}
     }
 }
