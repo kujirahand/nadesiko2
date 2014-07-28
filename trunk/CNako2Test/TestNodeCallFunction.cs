@@ -208,5 +208,19 @@ namespace NakoPluginTest
             runner.Run(codes);
             Assert.AreEqual(runner.PrintLog, "ふがbar");
         }
+		[Test]
+		public void TestCallUserFuncInUserFunc()
+		{
+			codes = ns.WriteIL(
+				"●ほげ\n" +
+				"  それ＝「ふが」\n" +
+				"●ふが\n" +
+				"  ほげ" +
+				"\n" +
+				"PRINT ふが\n" +
+				"\n");
+			runner.Run(codes);
+			Assert.AreEqual(runner.PrintLog, "ふが");
+		}
     }
 }
