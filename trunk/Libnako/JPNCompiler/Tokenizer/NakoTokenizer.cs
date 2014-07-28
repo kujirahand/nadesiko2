@@ -131,6 +131,7 @@ namespace Libnako.JPNCompiler.Tokenizer
             DefineFunction();
             CheckWord();
 			Include ();
+			CheckWord();//includeした後に関数が追加された可能性があるので、再チェック
             return tokens;
         }
         /// <summary>
