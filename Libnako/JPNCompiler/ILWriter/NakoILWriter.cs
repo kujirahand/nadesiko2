@@ -195,6 +195,11 @@ namespace Libnako.JPNCompiler.ILWriter
                     default:
                         continue;
                 }
+				if (code.type==NakoILType.USRCALL && code.value is NakoNodeDefFunction) {
+					//一旦ラベルを設定出来なかったユーザー関数呼び出しコードには定義のオブジェクトそのものを入れたので、ラベルを張り替える
+					NakoNodeDefFunction def = (NakoNodeDefFunction)code.value;
+					code.value = def.defLabel;
+				}
                 if (!(code.value is NakoILCode)) continue;
                 if (code.value is NakoILCode)
                 {
@@ -849,6 +854,10 @@ namespace Libnako.JPNCompiler.ILWriter
                 NakoILCode defLabel = ((NakoNodeDefFunction)node.value).defLabel;
                 code.type = NakoILType.USRCALL;
                 code.value = defLabel;
+				if (code.value == null) {
+					//一旦ラベルを設定出来なかったユーザー関数には定義のオブジェクトそのものを入れて、FixLabel内で設定しなおす
+					code.value = node.value;
+				}
                 result.Add(code);
             }
         }
