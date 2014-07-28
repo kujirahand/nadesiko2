@@ -33,6 +33,7 @@ namespace NakoPluginRegex
             bank.AddFunc("正規表現マッチ", "SをPATTERNで", NakoVarType.String, _match, ".Netの正規表現。文字列AをパターンBで最初にマッチした結果を返す。", "せいきひょうげんまっち");
             bank.AddFunc("正規表現全マッチ", "SをPATTERNで", NakoVarType.String, _matchAll, ".Netの正規表現。文字列AをパターンBでマッチした結果を全て返す。", "せいきひょうげんすべてまっち");
             bank.AddFunc("正規表現置換", "SのPATTERNをREPLACEに", NakoVarType.String, _replace, ".Netの正規表現。文字列SのパターンAをBで置換して結果を返す。", "せいきひょうげんちかん");
+			bank.AddFunc("正規表現区切る", "SをPATTERNで", NakoVarType.String, _split, ".Netの正規表現。文字列SをPATTERNで区切って結果を返す。", "せいきひょうげんくぎる");
         }
         
         // プラグインの初期化処理
@@ -108,5 +109,16 @@ namespace NakoPluginRegex
         	return Regex.Replace(s,pattern,replace);
         }
         
+		public Object _split(INakoFuncCallInfo info)
+		{
+			string s = info.StackPopAsString();
+			string pattern = info.StackPopAsString();
+			string[] splitted = Regex.Split(s,pattern);
+			NakoVarArray arr = info.CreateArray();
+			for(int i=0;i<splitted.Length;i++){
+				arr.SetValue(i,splitted[i]);
+			}
+			return arr;
+		}
     }
 }
