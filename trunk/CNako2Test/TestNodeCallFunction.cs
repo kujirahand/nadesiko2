@@ -221,6 +221,18 @@ namespace NakoPluginTest
 				"\n");
 			runner.Run(codes);
 			Assert.AreEqual(runner.PrintLog, "ふが");
+			//ユーザー関数内でユーザー関数を呼び出すと、それまでに定義したローカル変数をリセットしてしまうバグがあったのでテスト追加
+			codes = ns.WriteIL(
+				"●ほげ(Sで)\n" +
+				"  それ＝「ほげ」\n" +
+				"●ふが(Sで)\n" +
+				"  T=Sでほげ\n" +
+				"  それ=S\n" +
+				"\n" +
+				"PRINT `ふが`でふが\n" +
+				"\n");
+			runner.Run(codes);
+			Assert.AreEqual(runner.PrintLog, "ふが");
 		}
     }
 }

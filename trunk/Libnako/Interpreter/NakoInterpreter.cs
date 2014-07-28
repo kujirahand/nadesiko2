@@ -378,6 +378,7 @@ namespace Libnako.Interpreter
             this.runpos = c.nextpos;
 			if (((bool)code.value) == false)
 				globalVar.SetValue(0, c.sore);// "それ"を関数実行前に戻す
+			this.localVar = c.localVar;
         }
 
 		private void _exceptionTable(NakoILCode code){
