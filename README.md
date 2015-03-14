@@ -1,4 +1,4 @@
-# nadesiko2 - なでしこ2 for C#
+# nadesiko2 - なでしこ2 for CSharp
 
 - Nadesiko is Japanese programming language.
 - (WebSite) http://nadesi.com
