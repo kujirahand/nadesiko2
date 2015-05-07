@@ -6,7 +6,6 @@ using Libnako.JPNCompiler;
 using Libnako.JPNCompiler.ILWriter;
 using Libnako.NakoAPI;
 using NakoPlugin;
-using NUnit;
 using NUnit.Framework;
 
 namespace NakoPluginTest
@@ -148,12 +147,6 @@ namespace NakoPluginTest
                 "Aに「む」を配列追加\n" +
                 "A[4]を継続表示。"));
             Assert.AreEqual("む", runner.PrintLog);
-			runner.Run(com.WriteIL(
-				"APPEND=「」;\n" +
-				"APPENDに「な」を配列追加\n" +
-				"APPENDに「で」を配列追加\n" +
-				"APPEND[1]を継続表示。"));
-			Assert.AreEqual("で", runner.PrintLog);
         }
         [Test]
         public void TestPop()
