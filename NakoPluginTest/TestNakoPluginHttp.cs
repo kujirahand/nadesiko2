@@ -49,39 +49,39 @@ namespace NakoPluginTest
         {
 			//auto encode (utf-8 page)
             runner.Run(com.WriteIL(
-				"「http://www.shigepon.com/test/utf8/」をHTTPデータ取得して表示。"));
+                "「http://www.shigepon.info/test/utf8/」をHTTPデータ取得して表示。"));
             Assert.AreEqual(true,runner.PrintLog.Contains("なでしこ"));
 			//auto encode (sjis page)
 			runner.Run(com.WriteIL(
-				"「http://www.shigepon.com/test/sjis/」をHTTPデータ取得して表示。"));
+                "「http://www.shigepon.info/test/sjis/」をHTTPデータ取得して表示。"));
 			Assert.AreEqual(true,runner.PrintLog.Contains("なでしこ"));
 			//auto encode (euc-jp page)
 			runner.Run(com.WriteIL(
-				"「http://www.shigepon.com/test/eucjp/」をHTTPデータ取得して表示。"));
+                "「http://www.shigepon.info/test/eucjp/」をHTTPデータ取得して表示。"));
 			Assert.AreEqual(true,runner.PrintLog.Contains("なでしこ"));
 			//set encode to sjis (utf-8 page) 文字化けする
 			runner.Run(com.WriteIL(
-				"「http://www.shigepon.com/test/utf8/」を「CP932」HTTPデータ取得して表示。"));
+                "「http://www.shigepon.info/test/utf8/」を「CP932」HTTPデータ取得して表示。"));
 			Assert.AreNotEqual(true,runner.PrintLog.Contains("なでしこ"));
 			//set encode to utf-8 (utf-8 page)
 			runner.Run(com.WriteIL(
-				"「http://www.shigepon.com/test/utf8/」を「UTF-8」HTTPデータ取得して表示。"));
+                "「http://www.shigepon.info/test/utf8/」を「UTF-8」HTTPデータ取得して表示。"));
 			Assert.AreEqual(true,runner.PrintLog.Contains("なでしこ"));
 			//set encode to euc-jp (sjis page) 文字化けする
 			runner.Run(com.WriteIL(
-				"「http://www.shigepon.com/test/sjis/」を「EUC-JP」HTTPデータ取得して表示。"));
+                "「http://www.shigepon.info/test/sjis/」を「EUC-JP」HTTPデータ取得して表示。"));
 			Assert.AreNotEqual(true,runner.PrintLog.Contains("なでしこ"));
 			//set encode to sjis (sjis page)
 			runner.Run(com.WriteIL(
-				"「http://www.shigepon.com/test/sjis/」を「CP932」HTTPデータ取得して表示。"));
+                "「http://www.shigepon.info/test/sjis/」を「CP932」HTTPデータ取得して表示。"));
 			Assert.AreEqual(true,runner.PrintLog.Contains("なでしこ"));
 			//set encode to utf-8 (euc-jp page) 文字化けする
 			runner.Run(com.WriteIL(
-				"「http://www.shigepon.com/test/eucjp/」を「UTF-8」HTTPデータ取得して表示。"));
+                "「http://www.shigepon.info/test/eucjp/」を「UTF-8」HTTPデータ取得して表示。"));
 			Assert.AreNotEqual(true,runner.PrintLog.Contains("なでしこ"));
 			//set encode to euc-jp (euc-jp page)
 			runner.Run(com.WriteIL(
-				"「http://www.shigepon.com/test/eucjp/」を「EUC-JP」HTTPデータ取得して表示。"));
+                "「http://www.shigepon.info/test/eucjp/」を「EUC-JP」HTTPデータ取得して表示。"));
 			Assert.AreEqual(true,runner.PrintLog.Contains("なでしこ"));
         }
 
@@ -94,27 +94,13 @@ namespace NakoPluginTest
                 "S=JをJSONエンコード\n"+
                 "Sを表示。"));
             Assert.AreEqual("{\"href\":\"/account/login.aspx\",\"target\":\"_blank\"}",runner.PrintLog);
-//            runner.Run(com.WriteIL(
-//                "A[`href`]=「/account/login.aspx」\n"+
-//                "A[`target`]=「_blank」\n"+
-//                "S=AをJSONエンコード\n"+
-//                "Sを表示。"));
-//            Assert.AreEqual("{\"href\":\"/account/login.aspx\",\"target\":\"_blank\"}",runner.PrintLog);
-//            runner.Run(com.WriteIL(
-//                "B[`href`][`hoge`]=「/acc/login.aspx」\n"+
-//                "B[`href`][`fuga`]=「/account/」\n"+
-//                "B[`href`][`fuga`]を表示。"));
-//                "B[`target`]=「_blank」\n"+
-//                "S=BをJSONエンコード\n"+
-//                "Sを表示。"));
-//            Assert.AreEqual("{\"href\":\"/account/login.aspx\",\"target\":\"_blank\"}",runner.PrintLog);
-//            runner.Run(com.WriteIL(
-//                "B=「/account/login.aspx」\n"+
-//                "C[0]=「/account/login.aspx」\n"+
-//                "C[1]=「_blank」\n"+
-//                "S=CをJSONエンコード\n"+
-//                "Sを表示。"));
-//            Assert.AreEqual("{\"href\":\"/account/login.aspx\",\"target\":\"_blank\"}",runner.PrintLog);
+            runner.Run(com.WriteIL(
+                "A[`href`]=「ほげ」\n"+
+                "A[`target`]=「ふが」\n"+
+                "S=AをJSONエンコード\n"+
+                "Sを表示。"));
+            Console.WriteLine(runner.PrintLog);
+            Assert.AreEqual("{\"href\":\"ほげ\",\"target\":\"ふが\"}",runner.PrintLog);
         }
 
         [Test]
@@ -150,7 +136,7 @@ namespace NakoPluginTest
             runner.Run(com.WriteIL(
                 "A=「http://www.yahoo.co.jp/」をHTTPヘッダハッシュ取得。" +
                 "A[`Content-Type`]を表示。"));
-            Assert.AreEqual("text/html; charset=utf-8",runner.PrintLog);
+            Assert.AreEqual("text/html; charset=utf-8",runner.PrintLog.ToLower());
         }
 
         [Test]
@@ -172,7 +158,6 @@ namespace NakoPluginTest
             runner.Run(com.WriteIL(
 				"A=「http://www.muryou-tools.com/test/aaaa.php」へ「hoge=fuga&hage=1」を「UTF-8」でHTTPポスト。" +
                 "Aを表示。"));
-			Console.WriteLine (runner.PrintLog);
 			Assert.AreEqual(true,runner.PrintLog.Contains("hoge=fuga"));
 			Assert.AreNotEqual(true,runner.PrintLog.Contains("テスト"));
         }
