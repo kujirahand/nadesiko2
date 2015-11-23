@@ -174,7 +174,7 @@ namespace Libnako.JPNCompiler.Tokenizer
                 var token = GetToken();
                 if (token == null)
                 {
-                    lastTokenType = NakoTokenType.EOL;
+                    //lastTokenType = NakoTokenType.EOL;
                     continue;
                 }
                 lastTokenType = token.Type;
@@ -316,8 +316,9 @@ namespace Libnako.JPNCompiler.Tokenizer
                 case '\r':
                     position++;
                     return null;
-                case '\n':
-                    token.Type = NakoTokenType.EOL;
+				case '\n':
+					token.Type = NakoTokenType.EOL;
+					lastTokenType = NakoTokenType.EOL;
                     position++;
                     lineNo++;
                     tokens.Add(token);
@@ -331,6 +332,7 @@ namespace Libnako.JPNCompiler.Tokenizer
                 // 句読点かどうか確認
                 case ';':
                     token.Type = NakoTokenType.EOL; // 明確な区切り
+					lastTokenType = NakoTokenType.EOL;
                     position++;
                     return token;
                 case ',':
