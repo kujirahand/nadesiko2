@@ -902,7 +902,10 @@ namespace Libnako.Interpreter
             {
                 return NakoValueConveter.ToLong(a) & NakoValueConveter.ToLong(b);
             }
-            throw new NakoInterpreterException("オブジェクトは論理演算できません");
+			if (a is bool && b is bool) {
+				return (bool)a && (bool)b;
+			}
+			throw new NakoInterpreterException("オブジェクトは論理演算できません");
         }
         private object calc_method_or(object a, object b)
         {
@@ -914,6 +917,9 @@ namespace Libnako.Interpreter
             {
                 return NakoValueConveter.ToLong(a) | NakoValueConveter.ToLong(b);
             }
+			if (a is bool && b is bool) {
+				return (bool)a || (bool)b;
+			}
             throw new NakoInterpreterException("オブジェクトは論理演算できません");
         }
         private object calc_method_xor(object a, object b)
@@ -926,6 +932,9 @@ namespace Libnako.Interpreter
             {
                 return NakoValueConveter.ToLong(a) ^ NakoValueConveter.ToLong(b);
             }
+			if (a is bool && b is bool) {
+				return (bool)a ^ (bool)b;
+			}
             throw new NakoInterpreterException("オブジェクトは論理演算できません");
         }
         
