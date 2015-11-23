@@ -141,6 +141,12 @@ namespace NakoPluginTest
                 "Aを「0.1」で切り下げして継続表示\n" +
                 ""));
             Assert.AreEqual("10", runner.PrintLog);
+            runner.Run (com.WriteIL(
+                "A=10.000001\n" +
+                "B=(Aを「0.000001」で切り下げ)+0.000001\n" +
+                "Bを継続表示\n" +
+                ""));
+            Assert.AreEqual("10.000002", runner.PrintLog);
 
 //            runner.Run (com.WriteIL(
 //                "0.162をAに代入\n" +
