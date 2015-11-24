@@ -160,7 +160,7 @@ namespace Libnako.JPNCompiler.Parser
             return false;
         }
 
-        //> _def_variable : WORD (DIM_VARIABLE|DIM_NUMBER|DIM_INT|DIM_STRING|DIM_ARRAY) [=_value]
+        //> _def_variable : WORD (DIM_VARIABLE|DIM_NUMBER|DIM_INT|DIM_STRING|DIM_ARRAY|LOCAL) [=_value]
         //>               ;
         private bool _def_variable()
         {
@@ -1326,15 +1326,43 @@ namespace Libnako.JPNCompiler.Parser
         }
 
 
-        //> _calc_fact : _calc_comp
+        //> _calc_fact : _calc_comp { (AND_AND|OR_OR) _calc_comp }
         //>            ;
         private bool _calc_fact()
         {
-            if (_calc_comp())
+            if (!_calc_comp())
             {
-                return true;
+                return false;
             }
-            return false;
+
+            while
+                (
+                    Accept(NakoTokenType.AND_AND)    ||
+                    Accept(NakoTokenType.OR_OR)
+                )
+            {
+                NakoNodeCalc node = new NakoNodeCalc();
+                switch (tok.CurrentToken.Type)
+                {
+                case NakoTokenType.AND_AND: node.calc_type = CalcType.AND; break;
+                case NakoTokenType.OR_OR: node.calc_type = CalcType.OR; break;
+                default:
+                    throw new ApplicationException("[Nako System Error] Operator not set.");
+                }
+                TokenTry();
+                tok.MoveNext();
+                if (!_calc_comp())
+                {
+                    TokenBack();
+                    return false;
+                }
+                TokenFinally();
+                node.nodeR = calcStack.Pop();
+                node.nodeL = calcStack.Pop();
+                calcStack.Push(node);
+                lastNode = node;
+            }
+            return true;
         }
         
         //> _const : INT | NUMBER | STRING ;

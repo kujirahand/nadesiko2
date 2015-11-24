@@ -180,5 +180,40 @@ namespace NakoPluginTest
             Assert.AreEqual(runner.PrintLog, "22");
 
         }
+
+		[Test]
+		public void TestAndOr()
+		{
+			NakoCompiler ns = new NakoCompiler();
+			NakoInterpreter runner = new NakoInterpreter();
+			NakoILCodeList codes = null;
+
+			// AND 
+			codes = ns.WriteIL(
+				"A=1\n" +
+				"B=2\n" +
+				"C=3\n" +
+				"もし、A==1 && B==1ならば\n" +
+				"  PRINT `11`\n" +
+				"もし、A==1 && C==3ならば\n" +
+				"  PRINT `13`\n"
+			);
+			runner.Run(codes);
+			Assert.AreEqual(runner.PrintLog, "13");
+
+			// or
+			codes = ns.WriteIL(
+				"A=1\n" +
+				"B=2\n" +
+				"C=3\n" +
+				"もし、A==1 || B==1ならば\n" +
+				"  PRINT `11`\n" +
+				"もし、A==2 || C==1ならば\n" +
+				"  PRINT `13`\n"
+			);
+			runner.Run(codes);
+			Assert.AreEqual(runner.PrintLog, "11");
+
+		}
     }
 }
