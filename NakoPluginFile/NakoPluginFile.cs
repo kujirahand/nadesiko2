@@ -402,7 +402,7 @@ NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレ
                     return drive.DriveType;
                 }
             }
-            return null;
+            return "不明";
         }
 		public object _readLine(INakoFuncCallInfo info){
             string s = info.StackPopAsString();
@@ -431,13 +431,10 @@ NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレ
 		private System.Text.Encoding GetCode(){
 			using(System.IO.FileStream fr = new FileStream(path,FileMode.Open,FileAccess.Read)){
 				byte[] bs = new byte[Math.Min(fr.Length,100)];
-				Console.WriteLine (bs.Length);
-				Console.WriteLine (fr.Length);
 				int read = fr.Read (bs,0,bs.Length);
 				if (read == 0)
 					return Encoding.UTF8;
 				Encoding e = StrUnit.GetCode (bs);
-				Console.WriteLine(e.ToString ());
 				return e;
 			}
 		}
