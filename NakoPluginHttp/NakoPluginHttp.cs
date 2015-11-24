@@ -38,7 +38,7 @@ namespace NakoPluginHttp
 			bank.AddFunc("HTTPダウンロード", "URLをFILEへ|URLからFILEに", NakoVarType.Void, _downloadGet, "URLをローカルFILEへダウンロードする。", "HTTPだうんろーど");
             bank.AddFunc("HTTPヘッダ取得", "URLから|URLの|URLを", NakoVarType.String, _getHeader, "URLからヘッダを取得して内容を返す。", "HTTPへっだしゅとく");
             bank.AddFunc("HTTPヘッダハッシュ取得", "URLから|URLの|URLを", NakoVarType.Array, _getHeaderHash, "URLからヘッダを取得してハッシュに変換して返す。", "HTTPへっだはっしゅしゅとく");
-			bank.AddFunc("HTTPポスト", "URLへVALUESを{文字列=「Auto」}ENCODEで|URLに", NakoVarType.String, _post, "ポストしたい値（ハッシュ形式）VALUESをURLへポストしその結果を返す。", "HTTPぽすと");
+			bank.AddFunc("HTTPポスト", "URLへVALUESを{文字列=「」}HEADの{文字列=「Auto」}ENCODEで|URLに", NakoVarType.String, _post, "ポストしたい値（ハッシュ形式）VALUESをURLへポストしその結果を返す。", "HTTPぽすと");
 			bank.AddFunc("HTTPゲット", "HEADをURLへ|HEADで", NakoVarType.String, _get, "送信ヘッダHEADを指定してURLへGETコマンドを発行し、その結果を返す。", "HTTPげっと");
             bank.AddFunc("URL展開", "AをBで", NakoVarType.String, _relativeUrl, "相対パスAを基本パスBでURLを展開する。", "URLてんかい");
             bank.AddFunc("URL基本パス抽出", "URLから|URLの|URLで", NakoVarType.String, _baseOfUrl, "URLから基本パスを抽出して返す。", "URLきほんぱすちゅうしゅつ");
@@ -140,6 +140,7 @@ namespace NakoPluginHttp
         public object _post(INakoFuncCallInfo info){
             string url = info.StackPopAsString();
             object val = info.StackPop();//TODO:Array
+            string head = info.StackPopAsString();
 			string e = info.StackPopAsString();
             string query = "";
             if(val is string){
@@ -159,6 +160,14 @@ namespace NakoPluginHttp
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
             req.Method="POST";
             req.ContentType = "application/x-www-form-urlencoded";
+            using(StringReader rs = new StringReader(head))
+            {
+                string line;
+                while((line = rs.ReadLine())!=null){
+                    string[] heads = line.Split(new string[]{":"},2,StringSplitOptions.None);
+                    req.Headers.Add(heads[0],heads[1]);
+                }
+            }
             using(Stream str = req.GetRequestStream())
             {
                 str.Write(queryBytes,0,queryBytes.Length);
