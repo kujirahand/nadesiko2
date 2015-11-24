@@ -39,25 +39,37 @@ namespace NakoPluginTest
         [Test][STAThreadAttribute]
         public void TestClipboad()
         {
+            if(NWEnviroment.isWindows()){
             runner.Run(com.WriteIL(
                 "「abc」をコピー。\n" +
                 "クリップボードを表示。"));
             Assert.AreEqual("abc", runner.PrintLog);
+            }else{
+                Assert.Pass("Windows環境でないのでスキップ");
+            }
         }
         [Test][STAThreadAttribute]
         public void TestClipboad2()
         {
+            if(NWEnviroment.isWindows()){
             runner.Run(com.WriteIL(
                 "10をコピー。\n" +
                 "クリップボードを表示。"));
             Assert.AreEqual("10", runner.PrintLog);
+            }else{
+                Assert.Pass("Windows環境でないのでスキップ");
+            }
         }
         [Test][STAThreadAttribute]
         public void TestEnumWindows()
         {
+            if(NWEnviroment.isWindows()){
             runner.Run(com.WriteIL(
                 "窓列挙して表示。\n"));
             Assert.AreNotEqual("", runner.PrintLog);
+            }else{
+                Assert.Pass("Windows環境でないのでスキップ");
+            }
         }
         [Test]
         public void TestGuid()//TODO:Success test

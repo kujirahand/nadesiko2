@@ -74,12 +74,13 @@ namespace NakoPluginTest
         [Test]
         public void TestSelectDate()
         {
+            //TODO:64bit linuxではエラーが出ることがある。monoのパッチを当てると良いらしいが・・・
             runner.Run(com.WriteIL(
                 "A="+this.connection+"でADO開く\n" +
                 "B=Aに『select cast('2014-01-01' as date)』をSQL実行\n" +
                 "(AのDB次移動)==1の間\n" +
                 "  C=Aへ『date』のDBフィールド取得\n" +
-                 "  Cを表示\n" +
+                "  Cを表示\n" +
                 "AをDB閉じる"));
             Assert.AreEqual("2014/01/01 0:00:00", runner.PrintLog );
         }
