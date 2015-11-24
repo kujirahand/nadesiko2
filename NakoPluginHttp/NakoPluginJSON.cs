@@ -40,9 +40,7 @@ namespace NakoPluginFormat
             if(v is NakoVarArray){
                 NakoVarArray arr = (NakoVarArray)v;
                 object objects = NakoVarArrayToArray(arr);
-                return fastJSON.JSON.Instance.ToJSON(objects);
-//                JavaScriptSerializer serializer = new JavaScriptSerializer();
-//                string s = serializer.Serialize(objects);
+                return fastJSON.JSON.Instance.ToJSON(objects,new JSONParameters{UseEscapedUnicode=false});
 
             }
             return null;
