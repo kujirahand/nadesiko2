@@ -46,6 +46,27 @@ namespace NakoPluginTest
                 "TAG=Sから「で」のタグ切り出し\n" +
                 "TAG[0]を表示。"));
             Assert.AreEqual("で",runner.PrintLog);
+            runner.Run(com.WriteIL(
+                "S=「<な>な</な><で>で</で><し>し</し><こ>こ</こ>」\n" +
+                "TAG=Sから「で」のタグ切り出し\n" +
+                "TAGで反復\n" +
+                "  (対象 == 「で」)を表示。"));
+            Assert.AreEqual("True",runner.PrintLog);
+            runner.Run(com.WriteIL(
+                "S=「<td><p align='right'></p></td>」\n" +
+                "TAG=Sから「td」のタグ切り出し\n" +
+                "TAG[0]を表示。"));
+            Assert.AreEqual("<p align='right' />",runner.PrintLog);
+        }
+
+        [Test]
+        public void TestNest()
+        {
+            runner.Run(com.WriteIL( 
+                "S=「<html><body><div>なで<div>しこ</div></div></body></html>」\n" +
+                "TAG=Sから「div」のタグ切り出し\n" +
+                "(TAGの要素数)を表示。"));
+            Assert.AreEqual("1",runner.PrintLog);
         }
 
         [Test]

@@ -56,13 +56,19 @@ namespace NakoPluginTag
         	string s = info.StackPopAsString();
         	string a = info.StackPopAsString();
         	HtmlDocument doc = new HtmlDocument();
+            doc.OptionFixNestedTags = true;
+            doc.OptionOutputAsXml = true;
         	doc.LoadHtml(s);
+            string html = doc.DocumentNode.OuterHtml;
         	HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes(String.Format(@"//{0}",a));
         	NakoVarArray res = info.CreateArray();
         	if(nodes!=null){
             	for(int i=0;i<nodes.Count;i++){
-            	    HtmlNode node = nodes[i];
-            	    res.SetValue(i,node.InnerHtml);
+                    HtmlNode node = nodes[i];
+                    if(html.Contains(node.OuterHtml)){
+                        res.SetValue(i,node.InnerHtml);
+                        html = html.Remove(html.IndexOf(node.OuterHtml), node.OuterHtml.Length);
+                    }
             	}
         	}
             return res;
