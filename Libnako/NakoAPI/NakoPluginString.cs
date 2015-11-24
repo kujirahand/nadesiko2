@@ -99,7 +99,7 @@ namespace Libnako.NakoAPI
                     }
                 }
             }
-            return null;
+            return "";
         }
 
         // Define Method
@@ -147,9 +147,12 @@ namespace Libnako.NakoAPI
         	string search = info.StackPopAsString();
         	string replace = info.StackPopAsString();
         	int index = s.IndexOf(search);
-        	string pre = s.Substring(0,index);
-        	string post = s.Substring(index+search.Length);
-        	return pre + replace + post;
+            if (index >= 0) {
+                string pre = s.Substring (0, index);
+                string post = s.Substring (index + search.Length);
+                return pre + replace + post;
+            }
+            return s;
         }
         /// <summary>
         /// 左からN文字の部分文字列
@@ -160,7 +163,7 @@ namespace Libnako.NakoAPI
         {
         	string s = info.StackPopAsString();
         	int len = (int)info.StackPopAsInt();
-        	return s.Substring(0,len);
+            return (s.Length > len)? s.Substring(0,len) : s;
         }
         /// <summary>
         /// トリム
@@ -180,7 +183,7 @@ namespace Libnako.NakoAPI
         private object _right(INakoFuncCallInfo info){
         	string s = info.StackPopAsString();
         	int len = (int)info.StackPopAsInt();
-        	return s.Substring(s.Length-len);
+            return (s.Length > len)? s.Substring(s.Length-len) : s;
         }
         /// <summary>
         /// 切り取る
@@ -204,7 +207,7 @@ namespace Libnako.NakoAPI
                     return split_s[0];
                 }
             }
-            return null;
+            return "";
         }
         /// <summary>
         /// 文字抜き出す
@@ -215,7 +218,7 @@ namespace Libnako.NakoAPI
             string s = info.StackPopAsString();
             int a = NadesikoPositionToCSPosition((int)info.StackPopAsInt());
             int cnt = (int)info.StackPopAsInt();
-            return s.Substring(a,cnt);
+            return (cnt <= s.Length)? s.Substring(a,cnt) : s;
         }
         private object _Em(INakoFuncCallInfo info){
             string s = info.StackPopAsString();
@@ -234,12 +237,16 @@ namespace Libnako.NakoAPI
             object s = ((NakoVariable)sr).Body;
             object ret;
             if(s is string){
-                ret = ((string)s).Remove(a,b);
-            }else{
-                ret = null;
+                string str = (string)s;
+                if (a < str.Length) {
+                    if (a + b > str.Length) {
+                        b = str.Length - a;
+                    }
+                    ret = str.Remove (a, b);
+                    ((NakoVariable)sr).SetBodyAutoType (ret);
+                }
             }
-            ((NakoVariable)sr).SetBodyAutoType(ret);
-            return null;
+            return "";
         }
         private object _removeright(INakoFuncCallInfo info){
             object sr = info.StackPop();
@@ -247,14 +254,15 @@ namespace Libnako.NakoAPI
             object s = ((NakoVariable)sr).Body;
             object ret;
             if(s is string){
-				string _tmp = (string)s;
+                string _tmp = (string)s;
+                if (a > _tmp.Length) {
+                    a = _tmp.Length;
+                }
                 ret = _tmp.Remove(_tmp.Length - a);
-            }else{
-                ret = null;
+                ((NakoVariable)sr).SetBodyAutoType(ret);
             }
-            ((NakoVariable)sr).SetBodyAutoType(ret);
-            return null;
-		}
+            return "";
+        }
         private object _insert(INakoFuncCallInfo info){
             StringBuilder s = new StringBuilder(info.StackPopAsString());
             int cnt = NadesikoPositionToCSPosition((int)info.StackPopAsInt());
