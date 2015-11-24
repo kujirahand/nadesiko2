@@ -106,7 +106,6 @@ namespace NakoPluginTest
             Assert.AreEqual("1", runner.PrintLog );
         }
 
-		[Test]
 		public void TestQuit()
 		{
 			runner.Run(com.WriteIL(
