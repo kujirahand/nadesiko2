@@ -16,7 +16,8 @@ namespace NakoPluginTest
     {
         NakoCompiler com;
         NakoInterpreter runner = new NakoInterpreter();
-		string sjisFilePath = "";
+        string sjisFilePath = "";
+        string asciiFilePath = "";
         public TestNakoPluginFile()
         {
             NakoCompilerLoaderInfo info = new NakoCompilerLoaderInfo();
@@ -27,9 +28,10 @@ namespace NakoPluginTest
                 new NakoPluginFile.NakoPluginFile()
             };
             com = new NakoCompiler(info);
-			string assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
-			string assemblyDirectory = System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(assemblyPath)));
-			this.sjisFilePath = System.IO.Path.Combine(assemblyDirectory, "SJISTEST.txt");
+            string assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            string assemblyDirectory = System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(System.IO.Path.GetDirectoryName(assemblyPath)));
+            this.sjisFilePath = System.IO.Path.Combine(assemblyDirectory, "SJISTEST.txt");
+            this.asciiFilePath = System.IO.Path.Combine(assemblyDirectory, "ASCIITEST.txt");
         }
 		
 		private string ConvertPath(string s){
@@ -230,7 +232,7 @@ namespace NakoPluginTest
                 "S=「echo 'hoge'」をコマンド実行\n" +
                 "Sを継続表示\n" +
                 ""));
-            Assert.AreEqual("hoge\n", runner.PrintLog);
+            Assert.AreEqual("hoge\n\n", runner.PrintLog);
             
         }
 
@@ -258,6 +260,10 @@ namespace NakoPluginTest
 				"「"+sjisFilePath+"」から「CP932」で読んで表示\n" +
 				""));
 			Assert.AreEqual("あいえお\n", runner.PrintLog);
+			runner.Run(com.WriteIL(
+				"「"+asciiFilePath+"」を読んで表示\n" +
+				""));
+			Assert.AreEqual(@"1942", runner.PrintLog);
 		}
 
         [Test]
