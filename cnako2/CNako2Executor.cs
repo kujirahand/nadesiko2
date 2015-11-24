@@ -127,7 +127,8 @@ namespace cnako2
             }
             catch (Exception e)
             {
-				Console.WriteLine("[SystemError]" + e.Message + e.StackTrace);
+                Console.WriteLine("[SystemError]" + e.Message);
+                Console.WriteLine("[TRACE]" + e.StackTrace);
             }
             if (WaitMode)
             {
@@ -211,6 +212,7 @@ namespace cnako2
             catch (Exception e)
             {
                 Console.WriteLine("[ERROR] " + e.Message);
+                Console.WriteLine("[TRACE] " + e.StackTrace);
                 return;
             }
             NakoCompiler compiler = loader.cur;
