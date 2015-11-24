@@ -59,7 +59,7 @@ namespace NakoPluginRegex
                 info.SetVariableValue("抽出文字列", groups);
         	    return m.Value;
         	}
-            return null;
+            return "";
         }
         public Object _matchAll(INakoFuncCallInfo info)
         {

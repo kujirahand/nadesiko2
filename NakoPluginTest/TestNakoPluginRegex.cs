@@ -41,6 +41,14 @@ namespace NakoPluginTest
         }
 
         [Test]
+        public void TestNotMatch()
+        {
+            runner.Run(com.WriteIL(
+                "M=「なでしこ」の「^hoge$」を正規表現マッチ。(M == 「」)を表示"));
+            Assert.AreEqual("True", runner.PrintLog);
+        }
+
+        [Test]
         public void TestMatchAll()
         {
             runner.Run(com.WriteIL(
