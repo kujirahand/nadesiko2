@@ -49,13 +49,17 @@ namespace NakoPlugin
         /// <returns></returns>
         public string[] GetKeys()
         {
-            string[] r = new string[list.Count];
+            //string[] r = new string[list.Count];
+			System.Collections.Generic.List<string> r = new System.Collections.Generic.List<string>();
             for (int i = 0; i < list.Count; i++)
             {
                 NakoVariable v = list[i];
-                r[i] = v.key;
+				if (v != null) {
+					//r [i] = v.key;
+					r.Add((v.key==null)? i.ToString() : v.key);
+				}
             }
-            return r;
+			return r.ToArray();
         }
 
         /// <summary>
@@ -85,7 +89,7 @@ namespace NakoPlugin
         public object GetValue(int index)
         {
             NakoVariable v = GetVar(index);
-            if (v == null) return null;
+			if (v == null) return null; 
             return v.Body;
         }
         /// <summary>
