@@ -747,12 +747,12 @@ namespace Libnako.JPNCompiler.Parser
             parentNode = funcNode.funcBody = new NakoNode();
             funcNode.RegistArgsToLocalVar();
             localVar = funcNode.localVar;
-			current_scope = NakoVariableScope.Local;
+            current_scope = NakoVariableScope.Local;
             if (!_scope())
             {
                 throw new NakoParserException("関数定義中のエラー。", t);
             }
-			current_scope = NakoVariableScope.Global;
+            current_scope = NakoVariableScope.Global;
             PopFrame();
             // グローバル変数に登録
             NakoVariable v = new NakoVariable();
@@ -909,7 +909,7 @@ namespace Libnako.JPNCompiler.Parser
             if (!Accept(NakoTokenType.WORD)) return false;
             // 設定用変数の取得
             NakoNodeVariable n = new NakoNodeVariable();
-			n.scope = current_scope;
+            n.scope = current_scope;
             n.type = NakoNodeType.ST_VARIABLE;
             n.Token = tok.CurrentToken;
             // 変数アクセス
