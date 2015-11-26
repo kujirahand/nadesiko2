@@ -685,8 +685,17 @@ namespace Libnako.JPNCompiler.Parser
             {
                 NakoFuncArg arg = func.args[func.ArgCount - i - 1];
 				NakoNode argNode;
+				bool arg_has_default_value = false;
 				if (arg.defaultValue != null && calcStack.Count < (func.ArgCount - i)) {//初期値があって引数が無い場合に引数に初期値を与える
-					argNode = new NakoNodeConst();
+					arg_has_default_value = true;
+					foreach (NakoNode stack in calcStack) {
+						if (arg.josiList.IndexOf (stack.josi) >= 0) {
+							arg_has_default_value = false;
+						}
+					}
+				}
+				if (arg_has_default_value) {
+					argNode = new NakoNodeConst ();
 					argNode.value = arg.defaultValue;
 					if (arg.defaultValue is int) {
 						argNode.type = NakoNodeType.INT;
@@ -738,10 +747,12 @@ namespace Libnako.JPNCompiler.Parser
             parentNode = funcNode.funcBody = new NakoNode();
             funcNode.RegistArgsToLocalVar();
             localVar = funcNode.localVar;
+			current_scope = NakoVariableScope.Local;
             if (!_scope())
             {
                 throw new NakoParserException("関数定義中のエラー。", t);
             }
+			current_scope = NakoVariableScope.Global;
             PopFrame();
             // グローバル変数に登録
             NakoVariable v = new NakoVariable();
@@ -887,7 +898,7 @@ namespace Libnako.JPNCompiler.Parser
                 return;
             }
             // Create variable
-            n.scope = NakoVariableScope.Global;
+            //n.scope = NakoVariableScope.Global;
             n.varNo = globalVar.CreateVar(name);
         }
 
@@ -898,6 +909,7 @@ namespace Libnako.JPNCompiler.Parser
             if (!Accept(NakoTokenType.WORD)) return false;
             // 設定用変数の取得
             NakoNodeVariable n = new NakoNodeVariable();
+			n.scope = current_scope;
             n.type = NakoNodeType.ST_VARIABLE;
             n.Token = tok.CurrentToken;
             // 変数アクセス
