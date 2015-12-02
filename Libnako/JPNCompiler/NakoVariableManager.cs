@@ -19,7 +19,11 @@ namespace Libnako.JPNCompiler
         /// <summary>
         /// ローカル
         /// </summary>
-        Local
+        Local,
+        /// <summary>
+        /// Instance
+        /// </summary>
+        Instance
     }
 
     /// <summary>
@@ -151,7 +155,7 @@ namespace Libnako.JPNCompiler
         /// <returns></returns>
         public int CreateVar(string name)
         {
-        	return CreateVar(name, null);
+            return CreateVar(name, null);
         }
         /// <summary>
         /// 変数を作成
@@ -187,7 +191,7 @@ namespace Libnako.JPNCompiler
         /// <returns></returns>
         public int CreateVarNameless()
         {
-        	return CreateVarNameless(null);
+            return CreateVarNameless(null);
         }
         /// <summary>
         /// 変数に値を設定

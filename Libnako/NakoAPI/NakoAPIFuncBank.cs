@@ -68,6 +68,24 @@ namespace Libnako.NakoAPI
         }
 
         /// <summary>
+        /// 関数を追加 Use instance
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="name"></param>
+        /// <param name="argdef"></param>
+        /// <param name="resultType"></param>
+        /// <param name="f"></param>
+        /// <param name="desc"></param>
+        /// <param name="kana"></param>
+        public void AddInstanceFunc(string name, string argdef, NakoVarType resultType, NakoPlugin.SysCallDelegate f, string desc, string kana)
+        {
+            name = NakoToken.TrimOkurigana(name);
+            NakoAPIFunc s = new NakoAPIFunc(name, NakoFunc.GetFullName(PluginInstance.Name, name), argdef, resultType, f);
+            s.PluginInstance = PluginInstance;
+            this.AddFuncToList(s);
+        }
+
+        /// <summary>
         /// 変数を追加
         /// </summary>
         /// <param name="name"></param>
@@ -110,11 +128,11 @@ namespace Libnako.NakoAPI
                 NakoAPIFunc call = FuncList[i];
                 if (!dic.ContainsKey(call.name))
                 {
-	                dic.Add(call.name, NakoTokenType.FUNCTION_NAME);
+                    dic.Add(call.name, NakoTokenType.FUNCTION_NAME);
                 }
                 else
                 {
-                	dic[call.name] = NakoTokenType.FUNCTION_NAME;
+                    dic[call.name] = NakoTokenType.FUNCTION_NAME;
                 }
             }
 
@@ -124,7 +142,7 @@ namespace Libnako.NakoAPI
                 NakoVariable var = new NakoVariable();
                 var.SetBody(i, NakoVarType.SystemFunc);
                 NakoAPIFunc call = FuncList[i];
-                globalVar.SetVar(call.name, var);
+                globalVar.SetVar(call.fullname, var);
             }
 
             // --- 変数

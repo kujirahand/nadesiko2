@@ -43,6 +43,22 @@ namespace Libnako.NakoAPI
         }
 
         /// <summary>
+        /// なでしこのシステム関数を定義する関数
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="fullname"></param>
+        /// <param name="argdef"></param>
+        /// <param name="resultType"></param>
+        /// <param name="FuncDl"></param>
+        public NakoAPIFunc(string name, string fullname, string argdef, NakoVarType resultType, SysCallDelegate FuncDl)
+            : base(name, fullname, argdef)
+        {
+            this.FuncDl = FuncDl;
+            this.resultType = resultType;
+            this.Used = false;
+        }
+
+        /// <summary>
         /// 初期化
         /// </summary>
         public override void Init()

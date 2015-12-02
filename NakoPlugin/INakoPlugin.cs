@@ -80,6 +80,10 @@ namespace NakoPlugin
         /// </summary>
         Group,
         /// <summary>
+        /// Instance
+        /// </summary>
+        Instance,
+        /// <summary>
         /// ユーザー関数
         /// </summary>
         UserFunc,
@@ -182,6 +186,16 @@ namespace NakoPlugin
         /// <param name="desc">説明</param>
         /// <param name="kana">よみがな(アルファベットはそのままで)</param>
         void AddFunc(string name, string argdef, NakoVarType resultType, SysCallDelegate f, string desc, string kana);
+        /// <summary>
+        /// instance関数を追加する
+        /// </summary>
+        /// <param name="name">関数の名前(日本語)</param>
+        /// <param name="argdef">引数の定義</param>
+        /// <param name="resultType">戻り値の型</param>
+        /// <param name="f">関数本体</param>
+        /// <param name="desc">説明</param>
+        /// <param name="kana">よみがな(アルファベットはそのままで)</param>
+        void AddInstanceFunc(string name, string argdef, NakoVarType resultType, SysCallDelegate f, string desc, string kana);
         /// <summary>
         /// 変数を追加する
         /// </summary>

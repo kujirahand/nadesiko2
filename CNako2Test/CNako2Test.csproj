@@ -84,6 +84,10 @@
       <Project>{6A22E146-C2AC-473B-9F3C-0D88DE3FDF3E}</Project>
       <Name>cnako2</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NakoPluginInstanceDemo\NakoPluginInstanceDemo.csproj">
+        <Project>{E36BB1F9-E379-4E70-BC03-D727B98EF773}</Project>
+        <Name>NakoPluginInstanceDemo</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="CNako2Test.nunit" />
