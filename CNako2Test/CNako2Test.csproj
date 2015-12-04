@@ -70,6 +70,7 @@
     <Compile Include="TestTokenString.cs" />
     <Compile Include="TestNodeForeach.cs" />
     <Compile Include="TestNakoInclude.cs" />
+    <Compile Include="TestInstance.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NakoPlugin\NakoPlugin.csproj">
