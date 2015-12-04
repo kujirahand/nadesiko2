@@ -24,29 +24,33 @@ namespace Libnako.JPNCompiler.Function
     /// </summary>
     public class NakoFuncArg
     {
-		/// <summary>
-		/// 引数の名前
-		/// </summary>
+        /// <summary>
+        /// 引数の名前
+        /// </summary>
         public string name { get; set; }
+        /// <summary>
+        /// type of argument
+        /// </summary>
+        public string type { get; set; }
         /// <summary>
         /// 助詞リスト
         /// </summary>
-		public List<string> josiList { get; set; }
+        public List<string> josiList { get; set; }
         /// <summary>
         /// 値渡しか参照渡しか
         /// </summary>
-		public VarByType varBy { get; set; }
-		/// <summary>
-		/// 初期値
-		/// </summary>
-		public object defaultValue { get; set; }
+        public VarByType varBy { get; set; }
+        /// <summary>
+        /// 初期値
+        /// </summary>
+        public object defaultValue { get; set; }
         /// <summary>
         /// constructor
         /// </summary>
         public NakoFuncArg()
         {
-			varBy = VarByType.ByVal;
-			josiList = new List<string>();    
+            varBy = VarByType.ByVal;
+            josiList = new List<string>();    
         }
         /// <summary>
         /// 助詞を追加

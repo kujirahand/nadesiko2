@@ -10,24 +10,15 @@ namespace NakoPluginInstanceDemo
             return no;
         }
     }
-    public class NakoPluginInstanceDemo : INakoPlugin
+    public class NakoPluginInstanceDemo : NakoPluginTemplate, INakoPlugin
     {
         string _description = "Plugin for instance demo";
         Version _version = new Version(1, 0);
         //--- プラグイン共通の部分 ---
         public Version TargetNakoVersion { get { return new Version(2, 0); } }
-        public bool Used { get; set; }
-        public string Name { get { return this.GetType().FullName; } }
+        public string Name { get { return "カウントダウンタイマー"; } }
         public Version PluginVersion { get { return _version; } }
         public string Description { get { return _description; } }
-        // プラグインの初期化処理
-        public void PluginInit(INakoInterpreter runner)
-        {
-        }
-        // プラグインの終了処理
-        public void PluginFin(INakoInterpreter runner)
-        {
-        }
         //--- 関数の定義 ---
         public void DefineFunction(INakoPluginBank bank)
         {

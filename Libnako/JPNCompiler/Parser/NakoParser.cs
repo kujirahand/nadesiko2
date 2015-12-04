@@ -758,7 +758,7 @@ namespace Libnako.JPNCompiler.Parser
             NakoNodeDefFunction funcNode = new NakoNodeDefFunction();
             funcNode.func = userFunc;
             parentNode = funcNode.funcBody = new NakoNode();
-            funcNode.RegistArgsToLocalVar();
+            funcNode.RegistArgsToLocalVar(globalVar);
             localVar = funcNode.localVar;
             current_scope = NakoVariableScope.Local;
             if (!_scope())
@@ -894,7 +894,8 @@ namespace Libnako.JPNCompiler.Parser
                         //TODO:user defined instanceName
                         //store node info to globalVar to use instance information in function call
                         NakoVariable variable = globalVar.GetVar (node.VarNode.varNo);
-                        variable.SetBody(node.VarNode, NakoVarType.Object);
+                        variable.SetBody(null, NakoVarType.Instance);
+                        variable.InstanceType = node.VarNode.instanceName;
                         globalVar.SetVar (node.VarNode.varNo, variable);
                     }
                 }
@@ -916,6 +917,12 @@ namespace Libnako.JPNCompiler.Parser
             {
                 n.scope = NakoVariableScope.Local;
                 n.varNo = varno;
+                //load instance information
+                NakoVariable variable = localVar.GetVar (name);
+                if (variable.Type == NakoVarType.Instance) {
+                    n.instanceName = variable.InstanceType;
+                    n.varType = variable.Type;
+                }
                 return;
             }
             // global ?
@@ -926,10 +933,9 @@ namespace Libnako.JPNCompiler.Parser
                 n.varNo = varno;
                 //load instance information
                 NakoVariable variable = globalVar.GetVar (name);
-                if (variable.Body != null && variable.Body.GetType()==typeof(NakoNodeVariable)) {
-                    NakoNodeVariable node = (NakoNodeVariable)variable.Body;
-                    n.instanceName = node.instanceName;
-                    n.varType = node.varType;
+                if (variable.Type == NakoVarType.Instance) {
+                    n.instanceName = variable.InstanceType;
+                    n.varType = variable.Type;
                 }
                 return;
             }

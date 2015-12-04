@@ -16,23 +16,23 @@ namespace Libnako.JPNCompiler.Node
         /// <summary>
         /// 関数名
         /// </summary>
-		public string funcName { get; set; }
+        public string funcName { get; set; }
         /// <summary>
         /// 関数オブジェクト
         /// </summary>
-		public NakoFunc func { get; set; }
+        public NakoFunc func { get; set; }
         /// <summary>
         /// ローカル変数
         /// </summary>
-		public NakoVariableManager localVar { get; set; }
+        public NakoVariableManager localVar { get; set; }
         /// <summary>
         /// 関数本体のノード
         /// </summary>
-		public NakoNode funcBody { get; set; }
+        public NakoNode funcBody { get; set; }
         /// <summary>
         /// 定義ラベルへのリンクコード
         /// </summary>
-		public NakoILCode defLabel { get; set; }
+        public NakoILCode defLabel { get; set; }
         
         /// <summary>
         /// コンストラクタ
@@ -46,12 +46,17 @@ namespace Libnako.JPNCompiler.Node
         /// <summary>
         /// 引数をローカル変数として定義する
         /// </summary>
-        public void RegistArgsToLocalVar()
+        public void RegistArgsToLocalVar(NakoVariableManager globalVar)
         {
             for (int i = 0; i < func.args.Count; i++)
             {
                 NakoFuncArg arg = func.args[i];
-                localVar.CreateVar(arg.name);
+                NakoPlugin.NakoVariable var = new NakoPlugin.NakoVariable ();
+                if (arg.type != null) {
+                    var.SetBody(null, NakoPlugin.NakoVarType.Instance);
+                    var.InstanceType = arg.type;
+                }
+                localVar.CreateVar(arg.name, var);
             }
         }
 
@@ -62,138 +67,138 @@ namespace Libnako.JPNCompiler.Node
     /// </summary>
     public class NakoNodeDefFunctionList : IList<NakoNodeDefFunction>
     {
-		private List<NakoNodeDefFunction> _list = new List<NakoNodeDefFunction>();
+        private List<NakoNodeDefFunction> _list = new List<NakoNodeDefFunction>();
 
-		#region IList<NakoNodeDefFunction> メンバー
+        #region IList<NakoNodeDefFunction> メンバー
 
         /// <summary>
         /// 検索
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-		public int IndexOf(NakoNodeDefFunction item)
-		{
-			return _list.IndexOf(item);
-		}
+        public int IndexOf(NakoNodeDefFunction item)
+        {
+            return _list.IndexOf(item);
+        }
 
-		/// <summary>
-		/// 挿入
-		/// </summary>
-		/// <param name="index"></param>
-		/// <param name="item"></param>
+        /// <summary>
+        /// 挿入
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="item"></param>
         public void Insert(int index, NakoNodeDefFunction item)
-		{
-			_list.Insert(index, item);
-		}
+        {
+            _list.Insert(index, item);
+        }
 
         /// <summary>
         /// 削除
         /// </summary>
         /// <param name="index"></param>
-		public void RemoveAt(int index)
-		{
-			_list.RemoveAt(index);
-		}
+        public void RemoveAt(int index)
+        {
+            _list.RemoveAt(index);
+        }
 
         /// <summary>
         /// 要素を得る
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-		public NakoNodeDefFunction this[int index]
-		{
-			get
-			{
-				return _list[index];
-			}
-			set
-			{
-				_list[index] = value;
-			}
-		}
+        public NakoNodeDefFunction this[int index]
+        {
+            get
+            {
+                return _list[index];
+            }
+            set
+            {
+                _list[index] = value;
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region ICollection<NakoNodeDefFunction> メンバー
+        #region ICollection<NakoNodeDefFunction> メンバー
 
         /// <summary>
         /// 追加
         /// </summary>
         /// <param name="item"></param>
-		public void Add(NakoNodeDefFunction item)
-		{
-			_list.Add(item);
-		}
+        public void Add(NakoNodeDefFunction item)
+        {
+            _list.Add(item);
+        }
         /// <summary>
         /// 削除
         /// </summary>
-		public void Clear()
-		{
-			_list.Clear();
-		}
+        public void Clear()
+        {
+            _list.Clear();
+        }
         /// <summary>
         /// 含む
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-		public bool Contains(NakoNodeDefFunction item)
-		{
-			return _list.Contains(item);
-		}
+        public bool Contains(NakoNodeDefFunction item)
+        {
+            return _list.Contains(item);
+        }
         /// <summary>
         /// コピー
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
-		public void CopyTo(NakoNodeDefFunction[] array, int arrayIndex)
-		{
-			_list.CopyTo(array, arrayIndex);
-		}
+        public void CopyTo(NakoNodeDefFunction[] array, int arrayIndex)
+        {
+            _list.CopyTo(array, arrayIndex);
+        }
         /// <summary>
         /// 個数
         /// </summary>
-		public int Count
-		{
-			get { return _list.Count; }
-		}
+        public int Count
+        {
+            get { return _list.Count; }
+        }
 
-		bool ICollection<NakoNodeDefFunction>.IsReadOnly
-		{
-			get { throw new NotImplementedException(); }
-		}
+        bool ICollection<NakoNodeDefFunction>.IsReadOnly
+        {
+            get { throw new NotImplementedException(); }
+        }
         /// <summary>
         /// 削除
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-		public bool Remove(NakoNodeDefFunction item)
-		{
-			return _list.Remove(item);
-		}
+        public bool Remove(NakoNodeDefFunction item)
+        {
+            return _list.Remove(item);
+        }
 
-		#endregion
+        #endregion
 
-		#region IEnumerable<NakoNodeDefFunction> メンバー
+        #region IEnumerable<NakoNodeDefFunction> メンバー
 
         /// <summary>
         /// 列挙
         /// </summary>
         /// <returns></returns>
-		public IEnumerator<NakoNodeDefFunction> GetEnumerator()
-		{
-			return _list.GetEnumerator();
-		}
+        public IEnumerator<NakoNodeDefFunction> GetEnumerator()
+        {
+            return _list.GetEnumerator();
+        }
 
-		#endregion
+        #endregion
 
-		#region IEnumerable メンバー
+        #region IEnumerable メンバー
 
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-		{
-			return _list.GetEnumerator();
-		}
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return _list.GetEnumerator();
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }
 

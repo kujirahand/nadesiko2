@@ -9,10 +9,14 @@ namespace NakoPlugin
     /// </summary>
     public class NakoVariable
     {
-		/// <summary>
-		/// 変数のタイプ
-		/// </summary>
+        /// <summary>
+        /// 変数のタイプ
+        /// </summary>
         public NakoVarType Type { get { return _type; } }
+        /// <summary>
+        /// 変数のタイプ(if instance)
+        /// </summary>
+        public string InstanceType { get; set; }
         /// <summary>
         /// 変数のタイプ(内部で使用する)
         /// </summary>

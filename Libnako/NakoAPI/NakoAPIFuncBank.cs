@@ -142,6 +142,7 @@ namespace Libnako.NakoAPI
                 NakoVariable var = new NakoVariable();
                 var.SetBody(i, NakoVarType.SystemFunc);
                 NakoAPIFunc call = FuncList[i];
+                var.InstanceType = call.PluginInstance.Name;
                 globalVar.SetVar(call.fullname, var);
             }
 

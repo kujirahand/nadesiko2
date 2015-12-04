@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Libnako.JPNCompiler.Tokenizer;
+using Libnako.NakoAPI;
 
 namespace Libnako.JPNCompiler.Function
 {
@@ -38,28 +39,37 @@ namespace Libnako.JPNCompiler.Function
                 }
                 if (optMode)
                 {
-                    if (tok.Type == NakoTokenType.WORD)
-                    {
+                     if (tok.Type == NakoTokenType.WORD) {
                         string opt = (string)tok.Value;
-                        if (opt == "参照渡し") argOpt.varBy = VarByType.ByRef;
-						if (opt == "整数") {//TODO:数値
-							NakoToken checkToken = tokens [i + 1];
-							if (checkToken.Type == NakoTokenType.EQ) {
-								checkToken = tokens [i + 2];
-								if (checkToken.Type == NakoTokenType.INT) {
-									argOpt.defaultValue = int.Parse(checkToken.Value);
-								}
-							}
-						}
-						if (opt == "文字列") {
-							NakoToken checkToken = tokens [i + 1];
-							if (checkToken.Type == NakoTokenType.EQ) {
-								checkToken = tokens [i + 2];
-								if (checkToken.Type == NakoTokenType.STRING || checkToken.Type==NakoTokenType.STRING_EX || checkToken.Type==NakoTokenType.WORD) {
-									argOpt.defaultValue = (string)checkToken.Value;
-								}
-							}
-						}
+                        if (opt == "参照渡し")
+                            argOpt.varBy = VarByType.ByRef;
+                        if (opt == "整数") {//TODO:数値
+                            NakoToken checkToken = tokens [i + 1];
+                            if (checkToken.Type == NakoTokenType.EQ) {
+                                checkToken = tokens [i + 2];
+                                if (checkToken.Type == NakoTokenType.INT) {
+                                    argOpt.defaultValue = int.Parse (checkToken.Value);
+                                }
+                            }
+                        }
+                        if (opt == "文字列") {
+                            NakoToken checkToken = tokens [i + 1];
+                            if (checkToken.Type == NakoTokenType.EQ) {
+                                checkToken = tokens [i + 2];
+                                if (checkToken.Type == NakoTokenType.STRING || checkToken.Type == NakoTokenType.STRING_EX || checkToken.Type == NakoTokenType.WORD) {
+                                    argOpt.defaultValue = (string)checkToken.Value;
+                                }
+                            }
+                        }
+                    } else {
+                        //find type
+                        string type = (string)tok.Value;
+                        int index = NakoAPIFuncBank.Instance.FuncList.FindIndex (delegate(NakoAPIFunc obj) {
+                            return obj.PluginInstance.Name == type;
+                        });
+                        if(index > 0){
+                            argOpt.type = type;
+                        }
                     }
                     continue;
                 }
@@ -73,7 +83,8 @@ namespace Libnako.JPNCompiler.Function
                         arg = new NakoFuncArg();
                         arg.name = tok.Value;
                         arg.varBy = argOpt.varBy;
-						arg.defaultValue = argOpt.defaultValue;
+                        arg.defaultValue = argOpt.defaultValue;
+                        arg.type = argOpt.type;
                         arg.AddJosi(tok.Josi);
                         this.Add(arg);
                         argOpt.Init();
@@ -119,133 +130,133 @@ namespace Libnako.JPNCompiler.Function
             return -1;
         }
 
-		#region IList<NakoFuncArg> メンバー
+        #region IList<NakoFuncArg> メンバー
 
         /// <summary>
         /// 検索
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-		public int IndexOf(NakoFuncArg item)
-		{
-			return _list.IndexOf(item);
-		}
+        public int IndexOf(NakoFuncArg item)
+        {
+            return _list.IndexOf(item);
+        }
         /// <summary>
         /// 挿入
         /// </summary>
         /// <param name="index"></param>
         /// <param name="item"></param>
-		public void Insert(int index, NakoFuncArg item)
-		{
-			_list.Insert(index, item);
-		}
+        public void Insert(int index, NakoFuncArg item)
+        {
+            _list.Insert(index, item);
+        }
         /// <summary>
         /// 削除
         /// </summary>
         /// <param name="index"></param>
-		public void RemoveAt(int index)
-		{
-			_list.RemoveAt(index);
-		}
+        public void RemoveAt(int index)
+        {
+            _list.RemoveAt(index);
+        }
         /// <summary>
         /// 要素を得る
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-		public NakoFuncArg this[int index]
-		{
-			get
-			{
-				return _list[index];
-			}
-			set
-			{
-				_list[index] = value;
-			}
-		}
+        public NakoFuncArg this[int index]
+        {
+            get
+            {
+                return _list[index];
+            }
+            set
+            {
+                _list[index] = value;
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region ICollection<NakoFuncArg> メンバー
+        #region ICollection<NakoFuncArg> メンバー
 
         /// <summary>
         /// 追加
         /// </summary>
         /// <param name="item"></param>
-		public void Add(NakoFuncArg item)
-		{
-			_list.Add(item);
-		}
+        public void Add(NakoFuncArg item)
+        {
+            _list.Add(item);
+        }
         /// <summary>
         /// クリア
         /// </summary>
-		public void Clear()
-		{
-			_list.Clear();
-		}
+        public void Clear()
+        {
+            _list.Clear();
+        }
         /// <summary>
         /// 含む
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-		public bool Contains(NakoFuncArg item)
-		{
-			return _list.Contains(item);
-		}
+        public bool Contains(NakoFuncArg item)
+        {
+            return _list.Contains(item);
+        }
         /// <summary>
         /// コピー
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
-		public void CopyTo(NakoFuncArg[] array, int arrayIndex)
-		{
-			_list.CopyTo(array, arrayIndex);
-		}
+        public void CopyTo(NakoFuncArg[] array, int arrayIndex)
+        {
+            _list.CopyTo(array, arrayIndex);
+        }
         /// <summary>
         /// 個数
         /// </summary>
-		public int Count
-		{
-			get { return _list.Count; }
-		}
+        public int Count
+        {
+            get { return _list.Count; }
+        }
 
-		bool ICollection<NakoFuncArg>.IsReadOnly
-		{
-			get { throw new NotImplementedException(); }
-		}
+        bool ICollection<NakoFuncArg>.IsReadOnly
+        {
+            get { throw new NotImplementedException(); }
+        }
         /// <summary>
         /// 削除
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
-		public bool Remove(NakoFuncArg item)
-		{
-			return _list.Remove(item);
-		}
+        public bool Remove(NakoFuncArg item)
+        {
+            return _list.Remove(item);
+        }
 
-		#endregion
+        #endregion
 
-		#region IEnumerable<NakoFuncArg> メンバー
+        #region IEnumerable<NakoFuncArg> メンバー
         /// <summary>
         /// 列挙
         /// </summary>
         /// <returns></returns>
-		public IEnumerator<NakoFuncArg> GetEnumerator()
-		{
-			return _list.GetEnumerator();
-		}
+        public IEnumerator<NakoFuncArg> GetEnumerator()
+        {
+            return _list.GetEnumerator();
+        }
 
-		#endregion
+        #endregion
 
-		#region IEnumerable メンバー
+        #region IEnumerable メンバー
 
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-		{
-			return _list.GetEnumerator();
-		}
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return _list.GetEnumerator();
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 
     /// <summary>
     /// 引数オプションを表すクラス
@@ -253,10 +264,12 @@ namespace Libnako.JPNCompiler.Function
     internal class ArgOpt
     {
         internal VarByType varBy = VarByType.ByVal;
+        internal string type;
         internal object defaultValue;
         internal void Init()
         {
             varBy = VarByType.ByVal;
+            type = null;
             defaultValue = null;
         }
     }
