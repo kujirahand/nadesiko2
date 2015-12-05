@@ -14,7 +14,7 @@ namespace NakoPluginTest
         NakoCompiler com;
         NakoInterpreter runner;
 
-        public TestInstance()
+		public TestInstance()
         {
             com = new NakoCompiler();
             runner = new NakoInterpreter();
@@ -27,8 +27,8 @@ namespace NakoPluginTest
             NakoCompiler nc = new NakoCompiler();
             NakoInterpreter ni = new NakoInterpreter();
             nc.WriteIL(
-                "A=カウントダウンタイマー\n" +
-                "B=AのNO\n" +
+				"A=カウントダウンタイマー\n" +
+				"B=AのNO\n" +
                 "Bを継続表示\n" +
                 "");
             ni.Run(nc.Codes);
@@ -41,8 +41,23 @@ namespace NakoPluginTest
             NakoCompiler nc = new NakoCompiler();
             NakoInterpreter ni = new NakoInterpreter();
             nc.WriteIL(
+				"A=カウントダウンタイマー\n" +
+				"A=Aを1でカウントダウン\n" +
+				"B=AのNO\n" +
+				"Bを継続表示\n" +
+                "");
+            ni.Run(nc.Codes);
+            Assert.AreEqual("9", ni.PrintLog);
+        }
+
+        [Test]
+        public void Test_instance_method_without_return()
+        {
+            NakoCompiler nc = new NakoCompiler();
+            NakoInterpreter ni = new NakoInterpreter();
+            nc.WriteIL(
                 "A=カウントダウンタイマー\n" +
-                "A=Aを1でカウントダウン\n" +
+                "Aを1でカウントダウン\n" +
                 "B=AのNO\n" +
                 "Bを継続表示\n" +
                 "");
@@ -56,14 +71,14 @@ namespace NakoPluginTest
             NakoCompiler nc = new NakoCompiler();
             NakoInterpreter ni = new NakoInterpreter();
             nc.WriteIL(
-                "A=カウントダウンタイマー\n" +
-                "B=カウントダウンタイマー\n" +
-                "A=Aを1でカウントダウン\n" +
-                "B=Bを3でカウントダウン\n" +
-                "C=AのNO\n" +
-                "D=BのNO\n" +
-                "Cを継続表示\n" +
-                "Dを継続表示\n" +
+				"A=カウントダウンタイマー\n" +
+				"B=カウントダウンタイマー\n" +
+				"A=Aを1でカウントダウン\n" +
+				"B=Bを3でカウントダウン\n" +
+				"C=AのNO\n" +
+				"D=BのNO\n" +
+				"Cを継続表示\n" +
+				"Dを継続表示\n" +
                 "");
             ni.Run(nc.Codes);
             Assert.AreEqual("97", ni.PrintLog);
