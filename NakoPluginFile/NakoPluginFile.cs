@@ -25,10 +25,10 @@ namespace NakoPluginFile
         public void DefineFunction(INakoPluginBank bank)
         {
             //+ テキストファイルの読み書き
-			bank.AddFunc("開く", "FILEを{文字列=「Auto」}ENCODEで|FILEから", NakoVarType.String, _openFile, "ファイル名FILEのテキストを全部読み込んで返す。この時、自動的に文字コードを判定して読み込む。", "ひらく");
-			bank.AddFunc("読む", "FILEを{文字列=「Auto」}ENCODEで|FILEから", NakoVarType.String, _openFile, "ファイル名FILEのテキストを全部読み込んで返す。この時、自動的に文字コードを判定して読み込む。", "ひらく");
+            bank.AddFunc("開く", "FILEを{文字列=「Auto」}ENCODEで|FILEから", NakoVarType.String, _openFile, "ファイル名FILEのテキストを全部読み込んで返す。この時、自動的に文字コードを判定して読み込む。", "ひらく");
+            bank.AddFunc("読む", "FILEを{文字列=「Auto」}ENCODEで|FILEから", NakoVarType.String, _openFile, "ファイル名FILEのテキストを全部読み込んで返す。この時、自動的に文字コードを判定して読み込む。", "ひらく");
             bank.AddFunc("保存", "SをFILEに|FILEへ", NakoVarType.Void, _saveFile, "文字列Sをファイル名FILEへ保存する。(文字コードUTF-8で保存される)", "ほぞん");
-			bank.AddFunc("毎行読む", "Fを{文字列=「Auto」}ENCODEで|Fから", NakoVarType.Object, _readLine, "一行ずつ読むためにファイル名Fを開いてハンドルを返す。反復と組み合わせて使う。", "まいぎょうよむ");
+            bank.AddFunc("毎行読む", "Fを{文字列=「Auto」}ENCODEで|Fから", NakoVarType.Object, _readLine, "一行ずつ読むためにファイル名Fを開いてハンドルを返す。反復と組み合わせて使う。", "まいぎょうよむ");
             //+ ファイル処理
             //-起動
             bank.AddFunc("起動", "CMDを", NakoVarType.Void, _execCommand, "コマンドCMDを起動する", "きどう");//TODO:To NakoPluginShell
@@ -66,7 +66,7 @@ namespace NakoPluginFile
             //-ファイル列挙
             bank.AddFunc("ファイル列挙", "PATHの", NakoVarType.Array, _enumFiles, "PATHにあるファイルを列挙する", "ふぁいるれっきょ");
             bank.AddFunc("フォルダ列挙", "PATHの", NakoVarType.Array, _enumDirs, "PATHにあるフォルダを列挙する", "ふぉるだれっきょ");
-			bank.AddFunc("全ファイル列挙", "PATHの", NakoVarType.Array, _enumAllFiles, "PATH以下にあるファイルを全て列挙する", "ぜんふぁいるれっきょ");
+            bank.AddFunc("全ファイル列挙", "PATHの", NakoVarType.Array, _enumAllFiles, "PATH以下にあるファイルを全て列挙する", "ぜんふぁいるれっきょ");
             //-パス操作
             bank.AddFunc("パス抽出", "PATHの", NakoVarType.String, _dirname, "PATHからパスを抽出して返す", "ぱすちゅうしゅつ");
             bank.AddFunc("相対パス展開", "AをBで", NakoVarType.String, _relativePath, "相対パスAを基本パスBで展開して返す。", "そうたいぱすてんかい");
@@ -78,8 +78,8 @@ namespace NakoPluginFile
             //-ドライブ情報（別ファイルにするか）
             bank.AddFunc("ドライブ種類", "Fの", NakoVarType.String, _driveType, "ルートドライブAの種類（不明|存在しない｜取り外し可能｜固定｜ネットワーク｜CD-ROM｜RAM）を返す。", "どらいぶしゅるい");
 /*
-NakoPluginFile	作業フォルダ取得　ｰｰ　カレントディレクトリを取得して返す。
-NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレントディレクトリをSに変更する
+NakoPluginFile  作業フォルダ取得　ｰｰ　カレントディレクトリを取得して返す。
+NakoPluginFile  {文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレントディレクトリをSに変更する
 */
         }
         // プラグインの初期化処理
@@ -90,12 +90,14 @@ NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレ
         public void PluginFin(INakoInterpreter runner)
         {
         }
+        //文字コード指定でSJISの場合に色んな入力の仕方があり得るので調整の為に:shigepon
+        public static List<string> sjis = new List<string>(){"SJIS","Shift-JIS","Shift_JIS","CP932"};
         
         // Define Method
         public Object _openFile(INakoFuncCallInfo info)
         {
             string fileName = info.StackPopAsString();
-			string e = info.StackPopAsString();
+            string e = info.StackPopAsString();
             // Exists?
             if (!System.IO.File.Exists(fileName))
             {
@@ -103,12 +105,16 @@ NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレ
             }
             // Load
             //string src = File.ReadAllText(fileName);
-			string src;
-			if (e == "Auto") {
-				src = StrUnit.LoadFromFileAutoEnc (fileName);
-			} else {
-				src = File.ReadAllText (fileName, Encoding.GetEncoding (e));
-			}
+            string src;
+            if (e == "Auto") {
+                src = StrUnit.LoadFromFileAutoEnc (fileName);
+            } else {
+                if(sjis.Contains(e)){
+                    src = File.ReadAllText (fileName, Encoding.GetEncoding (932));
+                }else{
+                    src = File.ReadAllText (fileName, Encoding.GetEncoding (e));
+                }
+            }
             return src;
         }
         
@@ -126,59 +132,59 @@ NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレ
         public Object _execCommand(INakoFuncCallInfo info)
         {
             string cmd = info.StackPopAsString();
-			string[] cmdAndArgument = cmd.Split (" ".ToCharArray(), 2);
-			Process proc = (cmdAndArgument.Length==1)? System.Diagnostics.Process.Start(cmd) : System.Diagnostics.Process.Start(cmdAndArgument[0],cmdAndArgument[1]);
+            string[] cmdAndArgument = cmd.Split (" ".ToCharArray(), 2);
+            Process proc = (cmdAndArgument.Length==1)? System.Diagnostics.Process.Start(cmd) : System.Diagnostics.Process.Start(cmdAndArgument[0],cmdAndArgument[1]);
             return null;
         }
         
         public Object _execCommandWait(INakoFuncCallInfo info)
         {
             string cmd = info.StackPopAsString();
-			string[] cmdAndArgument = cmd.Split (" ".ToCharArray(), 2);
-			Process proc = (cmdAndArgument.Length==1)? System.Diagnostics.Process.Start(cmd) : System.Diagnostics.Process.Start(cmdAndArgument[0],cmdAndArgument[1]);
-        	proc.WaitForExit();
-        	return null;
+            string[] cmdAndArgument = cmd.Split (" ".ToCharArray(), 2);
+            Process proc = (cmdAndArgument.Length==1)? System.Diagnostics.Process.Start(cmd) : System.Diagnostics.Process.Start(cmdAndArgument[0],cmdAndArgument[1]);
+            proc.WaitForExit();
+            return null;
         }
 
         public Object _execCommandHidden(INakoFuncCallInfo info)
         {
             string cmd = info.StackPopAsString();
-			string[] cmdAndArgument = cmd.Split (" ".ToCharArray(), 2);
+            string[] cmdAndArgument = cmd.Split (" ".ToCharArray(), 2);
             Process proc = new Process();
             proc.StartInfo.FileName = cmd;
-			if (cmdAndArgument.Length > 1) {
-				proc.StartInfo.Arguments = cmdAndArgument [1];
-			}
+            if (cmdAndArgument.Length > 1) {
+                proc.StartInfo.Arguments = cmdAndArgument [1];
+            }
             proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             proc.Start();
-        	return null;
+            return null;
         }
         
         public Object _execCommandHiddenWait(INakoFuncCallInfo info)
         {
             string cmd = info.StackPopAsString();
-			string[] cmdAndArgument = cmd.Split (" ".ToCharArray(), 2);
+            string[] cmdAndArgument = cmd.Split (" ".ToCharArray(), 2);
             Process proc = new Process();
             proc.StartInfo.FileName = cmd;
-			if (cmdAndArgument.Length > 1) {
-				proc.StartInfo.Arguments = cmdAndArgument [1];
-			}
+            if (cmdAndArgument.Length > 1) {
+                proc.StartInfo.Arguments = cmdAndArgument [1];
+            }
             proc.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             proc.Start();
             proc.WaitForExit();
-        	return null;
+            return null;
         }
         
         public Object _execCommandAndGetResult(INakoFuncCallInfo info)
         {
-			string s = info.StackPopAsString();
-			string ret = "";
-			if(NWEnviroment.isWindows()){
-				ret = WindowsCommand.execute(s);
-			}else{
-				ret = LinuxCommand.execute(s);
-			}
-			return ret;
+            string s = info.StackPopAsString();
+            string ret = "";
+            if(NWEnviroment.isWindows()){
+                ret = WindowsCommand.execute(s);
+            }else{
+                ret = LinuxCommand.execute(s);
+            }
+            return ret;
         }
         
         public Object _exists(INakoFuncCallInfo info)
@@ -197,99 +203,99 @@ NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレ
         
         private string _path(string dir)
         {
-        	return NWEnviroment.AppendLastPathFlag(dir);
+            return NWEnviroment.AppendLastPathFlag(dir);
         }
         
         public Object _getBokanDir(INakoFuncCallInfo info)
         {
-        	//TODO:母艦パスが未実装
-        	return _path(NWEnviroment.AppPath);
+            //TODO:母艦パスが未実装
+            return _path(NWEnviroment.AppPath);
         }
         
         public Object _getRuntimeDir(INakoFuncCallInfo info)
         {
-        	return _path(NWEnviroment.AppPath);
+            return _path(NWEnviroment.AppPath);
         }
         
         public object _getCurrentDir(INakoFuncCallInfo info){
-        	return _path(Directory.GetCurrentDirectory());
-		}
+            return _path(Directory.GetCurrentDirectory());
+        }
         public object _setCurrentDir(INakoFuncCallInfo info){
             string path = info.StackPopAsString();
-        	Directory.SetCurrentDirectory(path);
-        	return null;
-		}
+            Directory.SetCurrentDirectory(path);
+            return null;
+        }
         //------------------------------------------------------------------
         // システムの特殊ディレクトリ
         private string GetSpecialDir(Environment.SpecialFolder dir)
         {
-        	string path = Environment.GetFolderPath(dir);
-        	return _path(path);
+            string path = Environment.GetFolderPath(dir);
+            return _path(path);
         }
         public Object _getMyPicture(INakoFuncCallInfo info)
         {
-        	return GetSpecialDir(Environment.SpecialFolder.MyPictures);
+            return GetSpecialDir(Environment.SpecialFolder.MyPictures);
         }
         public Object _getDesktopDir(INakoFuncCallInfo info)
         {
-        	return GetSpecialDir(Environment.SpecialFolder.DesktopDirectory);
+            return GetSpecialDir(Environment.SpecialFolder.DesktopDirectory);
         }
         public Object _getSendToDir(INakoFuncCallInfo info)
         {
-        	return GetSpecialDir(Environment.SpecialFolder.SendTo);
+            return GetSpecialDir(Environment.SpecialFolder.SendTo);
         }
         public Object _getStartupDir(INakoFuncCallInfo info)
         {
-        	return GetSpecialDir(Environment.SpecialFolder.Startup);
+            return GetSpecialDir(Environment.SpecialFolder.Startup);
         }
         public Object _getStartmenuDir(INakoFuncCallInfo info)
         {
-        	return GetSpecialDir(Environment.SpecialFolder.System);
+            return GetSpecialDir(Environment.SpecialFolder.System);
         }
         public Object _getMyDocument(INakoFuncCallInfo info)
         {
-        	return GetSpecialDir(Environment.SpecialFolder.MyDocuments);
+            return GetSpecialDir(Environment.SpecialFolder.MyDocuments);
         }
         public Object _getMyMusic(INakoFuncCallInfo info)
         {
-        	return GetSpecialDir(Environment.SpecialFolder.MyMusic);
+            return GetSpecialDir(Environment.SpecialFolder.MyMusic);
         }
         public Object _getUserHomeDir(INakoFuncCallInfo info)
         {
-       		string homePath = 
-       			(Environment.OSVersion.Platform == PlatformID.Unix || Environment.OSVersion.Platform == PlatformID.MacOSX)
-    			? Environment.GetEnvironmentVariable("HOME")
-    			: Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
-       		return _path(homePath);
+            string homePath = 
+                (Environment.OSVersion.Platform == PlatformID.Unix || Environment.OSVersion.Platform == PlatformID.MacOSX)
+                ? Environment.GetEnvironmentVariable("HOME")
+                : Environment.ExpandEnvironmentVariables("%HOMEDRIVE%%HOMEPATH%");
+            return _path(homePath);
         }
         public Object _getSystemDir(INakoFuncCallInfo info)
         {
-        	return GetSpecialDir(Environment.SpecialFolder.System);
+            return GetSpecialDir(Environment.SpecialFolder.System);
         }
         public Object _getTempDir(INakoFuncCallInfo info)
         {
-        	return _path(System.IO.Path.GetTempPath());
+            return _path(System.IO.Path.GetTempPath());
         }
         public Object _getAppDataDir(INakoFuncCallInfo info)
         {
-        	return GetSpecialDir(Environment.SpecialFolder.LocalApplicationData);
+            return GetSpecialDir(Environment.SpecialFolder.LocalApplicationData);
         }
         
         //------------------------------------------------------------------
         // 移動コピー削除
         public Object _copyFile(INakoFuncCallInfo info)
         {
-        	string f1 = info.StackPopAsString();
-        	string f2 = info.StackPopAsString();
-        	File.Copy(f1, f2);
-        	return null;
+            string f1 = info.StackPopAsString();
+            string f2 = info.StackPopAsString();
+            File.Copy(f1, f2);
+            return null;
         }
         public Object _moveFile(INakoFuncCallInfo info)
         {
-        	string f1 = info.StackPopAsString();
-        	string f2 = info.StackPopAsString();
-        	File.Move(f1, f2);
-        	return null;
+            string f1 = info.StackPopAsString();
+            string f2 = info.StackPopAsString();
+            File.Move(f1, f2);
+            return null;
         }
         public Object _removeFile(INakoFuncCallInfo info)
         {
@@ -305,15 +311,15 @@ NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレ
         }
         public Object _removeDir(INakoFuncCallInfo info)
         {
-        	string f = info.StackPopAsString();
-        	Directory.Delete(f);
-        	return null;
+            string f = info.StackPopAsString();
+            Directory.Delete(f);
+            return null;
         }
         public Object _makeDir(INakoFuncCallInfo info)
         {
-        	string f = info.StackPopAsString();
-        	Directory.CreateDirectory(f);
-        	return null;
+            string f = info.StackPopAsString();
+            Directory.CreateDirectory(f);
+            return null;
         }
 
         public Object _enumFiles(INakoFuncCallInfo info)
@@ -341,19 +347,19 @@ NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレ
             return res;
         }
 
-		public Object _enumAllFiles(INakoFuncCallInfo info)
-		{
-			string path = info.StackPopAsString();
-			string[] files = Directory.GetFiles(path,"*",System.IO.SearchOption.AllDirectories);
-			NakoVarArray res = info.CreateArray();
-			for (int i = 0; i < files.Length; i++)
-			{
-				//string f = Path.GetFileName(files[i]);
-				string f = files[i];
-				res.SetValue(i, f);
-			}
-			return res;
-		}
+        public Object _enumAllFiles(INakoFuncCallInfo info)
+        {
+            string path = info.StackPopAsString();
+            string[] files = Directory.GetFiles(path,"*",System.IO.SearchOption.AllDirectories);
+            NakoVarArray res = info.CreateArray();
+            for (int i = 0; i < files.Length; i++)
+            {
+                //string f = Path.GetFileName(files[i]);
+                string f = files[i];
+                res.SetValue(i, f);
+            }
+            return res;
+        }
         //------------------------------------------------------------------
         // パス操作
         public Object _dirname(INakoFuncCallInfo info)
@@ -374,19 +380,19 @@ NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレ
             string res = Path.GetExtension(path);
             return res;
         }
-		public object _sizeof(INakoFuncCallInfo info){
+        public object _sizeof(INakoFuncCallInfo info){
             string fp = info.StackPopAsString();
-			FileInfo fi = new FileInfo(fp);
-			return (int)fi.Length;
-		}
-		public object _append(INakoFuncCallInfo info){
+            FileInfo fi = new FileInfo(fp);
+            return (int)fi.Length;
+        }
+        public object _append(INakoFuncCallInfo info){
             string s = info.StackPopAsString();
             string fileName = info.StackPopAsString();
 
             System.Text.Encoding enc = new System.Text.UTF8Encoding(false);
             System.IO.File.AppendAllText(fileName, s, enc);
             return null;
-		}
+        }
         public object _relativePath(INakoFuncCallInfo info){
             string s = info.StackPopAsString();
             return System.IO.Path.GetFullPath(s);
@@ -404,43 +410,47 @@ NakoPluginFile	{文字列}Sに|Sへ　作業フォルダ変更　ｰｰ　カレ
             }
             return "不明";
         }
-		public object _readLine(INakoFuncCallInfo info){
+        public object _readLine(INakoFuncCallInfo info){
             string s = info.StackPopAsString();
-			string e = info.StackPopAsString();
-			LineReader lr;
-			if (e == "Auto") {
-				lr = new LineReader (s);
-			} else {
-				lr = new LineReader (s, e);
-			}
+            string e = info.StackPopAsString();
+            LineReader lr;
+            if (e == "Auto") {
+                lr = new LineReader (s);
+            } else {
+                lr = new LineReader (s, e);
+            }
             return lr;
         }
     }
     public class LineReader
     {
         private string path;
-		private System.Text.Encoding code;
+        private System.Text.Encoding code;
         public LineReader(string path){
             this.path = path;
-			this.code = GetCode ();
+            this.code = GetCode ();
         }
-		public LineReader(string path, string code){
-			this.path = path;
-			this.code = Encoding.GetEncoding (code);
-		}
-		private System.Text.Encoding GetCode(){
-			using(System.IO.FileStream fr = new FileStream(path,FileMode.Open,FileAccess.Read)){
-				byte[] bs = new byte[Math.Min(fr.Length,100)];
-				int read = fr.Read (bs,0,bs.Length);
-				if (read == 0)
-					return Encoding.UTF8;
-				Encoding e = StrUnit.GetCode (bs);
-				return e;
-			}
-		}
-		public IEnumerator GetEnumerator(){//TODO:文字コードの自動判別
+        public LineReader(string path, string code){
+            this.path = path;
+            if(NakoPluginFile.sjis.Contains(code)){
+                this.code = Encoding.GetEncoding (932);
+            }else{
+                this.code = Encoding.GetEncoding (code);
+            }
+        }
+        private System.Text.Encoding GetCode(){
+            using(System.IO.FileStream fr = new FileStream(path,FileMode.Open,FileAccess.Read)){
+                byte[] bs = new byte[Math.Min(fr.Length,100)];
+                int read = fr.Read (bs,0,bs.Length);
+                if (read == 0)
+                    return Encoding.UTF8;
+                Encoding e = StrUnit.GetCode (bs);
+                return e;
+            }
+        }
+        public IEnumerator GetEnumerator(){//TODO:文字コードの自動判別
             string line = "";
-			using(StreamReader sr = new StreamReader(File.OpenRead(path),this.code)){
+            using(StreamReader sr = new StreamReader(File.OpenRead(path),this.code)){
                 while((line=sr.ReadLine())!=null){
                     yield return line;
                 }
