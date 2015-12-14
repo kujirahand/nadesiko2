@@ -33,10 +33,10 @@ namespace NakoPluginTest
             this.sjisFilePath = System.IO.Path.Combine(assemblyDirectory, "SJISTEST.txt");
             this.asciiFilePath = System.IO.Path.Combine(assemblyDirectory, "ASCIITEST.txt");
         }
-		
-		private string ConvertPath(string s){
-			return (NWEnviroment.osVersionStr().Contains("Windows"))? s.Replace("/","\\") : s.Replace ("\\","/");
-		}
+        
+        private string ConvertPath(string s){
+            return (NWEnviroment.osVersionStr().Contains("Windows"))? s.Replace("/","\\") : s.Replace ("\\","/");
+        }
 
         [Test]
         public void Test_mkdir()
@@ -89,7 +89,7 @@ namespace NakoPluginTest
             string tmp = System.IO.Path.GetTempPath();
             runner.Run(com.WriteIL(
                 "F=「"+tmp+"hoge.txt」\n" +
-				"Fに「abc」を保存\n" +
+                "Fに「abc」を保存\n" +
                 "Fをファイル削除。\n" +
                 "(Fが存在?)を表示。\n" +
                 "\n"));
@@ -104,7 +104,7 @@ namespace NakoPluginTest
             runner.Run(com.WriteIL(
                 "F=「"+tmp+"hoge.txt」\n" +
                 "F2=「"+to+"fuga.txt」\n" +
-				"Fに「abc」を保存\n" +
+                "Fに「abc」を保存\n" +
                 "F2をファイル削除。\n" +
                 "FからF2へファイル移動。\n" +
                 "(Fが存在?)を継続表示。\n" +
@@ -122,7 +122,7 @@ namespace NakoPluginTest
                 "デスクトップを表示。\n" +
                 ""));
             Assert.AreEqual(desktop, runner.PrintLog);
-			string path = ConvertPath("/tmp/hoge/fuga/piyo.txt");
+            string path = ConvertPath("/tmp/hoge/fuga/piyo.txt");
             runner.Run(com.WriteIL(
                 "「"+path+"」のパス抽出を表示。\n" +
                 ""));
@@ -135,22 +135,22 @@ namespace NakoPluginTest
                 "「"+path+"」のファイル名抽出を表示。\n" +
                 ""));
             Assert.AreEqual(ConvertPath("piyo.txt"), runner.PrintLog);
-			
+            
         }
 
         [Test]
         public void Test_enumFiles()
         {
-			string tmp_path,a,b;
-			if(NWEnviroment.osVersionStr()=="Unix"){
-				tmp_path = "/hoge/fuga/nyaa";
-				a = "/a.txt";
-				b = "/b.txt";
-			}else{
-				tmp_path = "\\hoge\\fuga\\nyaa" ;
-				a = "\\a.txt";
-				b = "\\b.txt";
-			}
+            string tmp_path,a,b;
+            if(NWEnviroment.osVersionStr()=="Unix"){
+                tmp_path = "/hoge/fuga/nyaa";
+                a = "/a.txt";
+                b = "/b.txt";
+            }else{
+                tmp_path = "\\hoge\\fuga\\nyaa" ;
+                a = "\\a.txt";
+                b = "\\b.txt";
+            }
             string tmp = System.IO.Path.GetTempPath()+tmp_path;
 
             runner.Run(com.WriteIL(
@@ -180,13 +180,13 @@ namespace NakoPluginTest
             string tmp = System.IO.Path.GetTempPath();
             runner.Run(com.WriteIL(
                 "F=「"+tmp+"hoge.txt」\n" +
-				"Fに「」を保存\n" +
+                "Fに「」を保存\n" +
                 "Fのファイルサイズを継続表示" +
                 ""));
             Assert.AreEqual("0", runner.PrintLog);
             runner.Run(com.WriteIL(
                 "F=「"+tmp+"hoge.txt」\n" +
-				"Fに「abcdefg」を保存\n" +
+                "Fに「abcdefg」を保存\n" +
                 "Fのファイルサイズを継続表示" +
                 ""));
             Assert.AreEqual("abcdefg".Length.ToString(), runner.PrintLog);
@@ -198,8 +198,8 @@ namespace NakoPluginTest
             string tmp = System.IO.Path.GetTempPath();
             runner.Run(com.WriteIL(
                 "F=「"+tmp+"hoge.txt」\n" +
-				"Fに「」を保存\n" +
-				"「ほげほげ」をFに追加保存\n" +
+                "Fに「」を保存\n" +
+                "「ほげほげ」をFに追加保存\n" +
                 "Fを開く\n" +
                 "それを継続表示" +
                 ""));
@@ -236,37 +236,45 @@ namespace NakoPluginTest
             
         }
 
-		[Test]
-		public void Test_read()
-		{
-			string tmp = System.IO.Path.GetTempPath();
-			runner.Run(com.WriteIL(
-				"「ほげ\r\nふが」を「"+tmp+"hoge.txt」に保存\n" +
-				"「"+tmp+"hoge.txt」を読んで表示\n" +
-				""));
-			Assert.AreEqual("ほげ\r\nふが", runner.PrintLog);
-			//read sjis file automatically
-			runner.Run(com.WriteIL(
-				"「"+sjisFilePath+"」を読んで表示\n" +
-				""));
-			Assert.AreEqual("あいえお\n", runner.PrintLog);
-			//read sjis file with utf-8 encode
-			runner.Run(com.WriteIL(
-				"「"+sjisFilePath+"」から「UTF-8」で読んで表示\n" +
-				""));
-			Assert.AreNotEqual("あいえお\n", runner.PrintLog);
-			//read sjis file with sjis encode
-			runner.Run(com.WriteIL(
-				"「"+sjisFilePath+"」から「CP932」で読んで表示\n" +
-				""));
-			Assert.AreEqual("あいえお\n", runner.PrintLog);
-			runner.Run(com.WriteIL(
-				"「"+asciiFilePath+"」を読んで表示\n" +
-				""));
-			Assert.AreEqual(@"1942", runner.PrintLog);
-		}
+        [Test]
+        /// <summary>
+        /// Tests the read.
+        /// SJISの自動読み込みには5文字以上必要です
+        /// </summary>
+        public void Test_read()
+        {
+            string tmp = System.IO.Path.GetTempPath();
+            runner.Run(com.WriteIL(
+                "「ほげ\r\nふが」を「"+tmp+"hoge.txt」に保存\n" +
+                "「"+tmp+"hoge.txt」を読んで表示\n" +
+                ""));
+            Assert.AreEqual("ほげ\r\nふが", runner.PrintLog);
+            //read sjis file automatically
+            runner.Run(com.WriteIL(
+                "「"+sjisFilePath+"」を読んで表示\n" +
+                ""));
+            Assert.AreEqual("あいうえお\n", runner.PrintLog);
+            //read sjis file with utf-8 encode
+            runner.Run(com.WriteIL(
+                "「"+sjisFilePath+"」から「UTF-8」で読んで表示\n" +
+                ""));
+            Assert.AreNotEqual("あいうえお\n", runner.PrintLog);
+            //read sjis file with sjis encode
+            runner.Run(com.WriteIL(
+                "「"+sjisFilePath+"」から「SJIS」で読んで表示\n" +
+                ""));
+            Assert.AreEqual("あいうえお\n", runner.PrintLog);
+            runner.Run(com.WriteIL(
+                "「"+asciiFilePath+"」を読んで表示\n" +
+                ""));
+            Assert.AreEqual(@"1942", runner.PrintLog);
+        }
 
         [Test]
+        /// <summary>
+        /// Tests the read line.
+        /// SJISの自動読み込みには5文字以上必要です
+        /// </summary>
         public void Test_readLine()
         {
             string tmp = System.IO.Path.GetTempPath();
@@ -275,25 +283,25 @@ namespace NakoPluginTest
                 "「"+tmp+"hoge.txt」から毎行読んで反復\n" +
                 "   対象を継続表示\n" +
                 ""));
-			Assert.AreEqual("ほげふが", runner.PrintLog);
-			//read sjis file automatically
-			runner.Run(com.WriteIL(
-				"「"+sjisFilePath+"」から毎行読んで反復\n" +
-				"   対象を継続表示\n" +
-				""));
-			Assert.AreEqual("あいえお", runner.PrintLog);
-			//read sjis file with utf-8 encode
-			runner.Run(com.WriteIL(
-				"「"+sjisFilePath+"」から「UTF-8」で毎行読んで反復\n" +
-				"   対象を継続表示\n" +
-				""));
-			Assert.AreNotEqual("あいえお", runner.PrintLog);
-			//read sjis file with sjis encode
-			runner.Run(com.WriteIL(
-				"「"+sjisFilePath+"」から「CP932」で毎行読んで反復\n" +
-				"   対象を継続表示\n" +
-				""));
-			Assert.AreEqual("あいえお", runner.PrintLog);
+            Assert.AreEqual("ほげふが", runner.PrintLog);
+            //read sjis file automatically
+            runner.Run(com.WriteIL(
+                "「"+sjisFilePath+"」から毎行読んで反復\n" +
+                "   対象を継続表示\n" +
+                ""));
+            Assert.AreEqual("あいうえお", runner.PrintLog);
+            //read sjis file with utf-8 encode
+            runner.Run(com.WriteIL(
+                "「"+sjisFilePath+"」から「UTF-8」で毎行読んで反復\n" +
+                "   対象を継続表示\n" +
+                ""));
+            Assert.AreNotEqual("あいうえお", runner.PrintLog);
+            //read sjis file with sjis encode
+            runner.Run(com.WriteIL(
+                "「"+sjisFilePath+"」から「SJIS」で毎行読んで反復\n" +
+                "   対象を継続表示\n" +
+                ""));
+            Assert.AreEqual("あいうえお", runner.PrintLog);
         }
 
         [Test]
