@@ -13,33 +13,37 @@ namespace Libnako.JPNCompiler.Function
         /// <summary>
         /// 関数の番号
         /// </summary>
-		public int varNo { get; set; }
+        public int varNo { get; set; }
         /// <summary>
         /// 関数の名前
         /// </summary>
-		public string name { get; set; }
+        public string name { get; set; }
+        /// <summary>
+        /// 関数のfullname (different from name if function is instance method)
+        /// </summary>
+        public string fullname { get; set; }
         /// <summary>
         /// 引数のリスト
         /// </summary>
-		public NakoFuncArgs args { get; set; }
+        public NakoFuncArgs args { get; set; }
         /// <summary>
         /// 関数のタイプ
         /// </summary>
-		public NakoFuncType funcType { get; set; }
+        public NakoFuncType funcType { get; set; }
         /// <summary>
         /// 結果のタイプ
         /// </summary>
-		public NakoVarType resultType { get; set; }
+        public NakoVarType resultType { get; set; }
         /// <summary>
         /// それを更新するかどうか
         /// </summary>
-		public bool updateSore { get; set; }
+        public bool updateSore { get; set; }
         /// <summary>
         /// constructor
         /// </summary>
         public NakoFunc()
         {
-			Init();
+            Init();
         }
         /// <summary>
         /// constructor
@@ -50,6 +54,20 @@ namespace Libnako.JPNCompiler.Function
         {
             Init();
             this.name = name;
+            this.fullname = name;
+            this.args.analizeArgStr(argdef);
+        }
+        /// <summary>
+        /// constructor (specify fullname)
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="fullname"></param>
+        /// <param name="argdef"></param>
+        public NakoFunc(string name, string fullname, string argdef)
+        {
+            Init();
+            this.name = name;
+            this.fullname = fullname;
             this.args.analizeArgStr(argdef);
         }
         /// <summary>
@@ -57,10 +75,10 @@ namespace Libnako.JPNCompiler.Function
         /// </summary>
         public virtual void Init()
         {
-			funcType = NakoFuncType.UserCall;
-			resultType = NakoVarType.Void;
+            funcType = NakoFuncType.UserCall;
+            resultType = NakoVarType.Void;
             args = new NakoFuncArgs();
-			updateSore = true;
+            updateSore = true;
         }
         /// <summary>
         /// 実行
@@ -75,6 +93,15 @@ namespace Libnako.JPNCompiler.Function
             {
                 return args.Count;
             }
+        }
+
+        /// <summary>
+        /// fullname
+        /// </summary>
+        /// <param name="name_space"></param>
+        /// <param name="name"></param>
+        public static string GetFullName(string name_space, string name){
+            return String.Format (@"{0}_{1}", name_space, name);
         }
 
     }

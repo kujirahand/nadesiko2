@@ -15,10 +15,10 @@ namespace Libnako.JPNCompiler.Node
         /// <summary>
         /// 変数タイプ
         /// </summary>
-		public NakoVarType varType { get; set; }
-		/// <summary>
-		/// 変数番号
-		/// </summary>
+        public NakoVarType varType { get; set; }
+        /// <summary>
+        /// 変数番号
+        /// </summary>
         public int varNo { get; set; }
         /// <summary>
         /// 変数のスコープ
@@ -32,6 +32,10 @@ namespace Libnako.JPNCompiler.Node
         /// a[3] のように配列かプロパティへのアクセスかどうか？
         /// </summary>
         public bool useElement { get { return this.hasChildren(); } }
+        /// <summary>
+        /// instance name 
+        /// </summary>
+        public string instanceName { get; set; }
 
         /// <summary>
         /// 値型かどうか
@@ -47,28 +51,28 @@ namespace Libnako.JPNCompiler.Node
         /// <summary>
         /// コンストラクタ
         /// </summary>
-		public NakoNodeVariable() : base()
-		{
-			Init();
-		}
+        public NakoNodeVariable() : base()
+        {
+            Init();
+        }
         /// <summary>
         /// コンストラクタ
         /// </summary>
         /// <param name="value"></param>
-		public NakoNodeVariable(object value) : base(value)
-		{
-			Init();
-		}
-		/// <summary>
-		/// 初期化
-		/// </summary>
-		public void Init()
-		{
-			this.scope = NakoVariableScope.Global;
-			this.varType = NakoVarType.Int;
-			this.varNo = -1;
-			this.varBy = VarByType.ByVal;
-		}
+        public NakoNodeVariable(object value) : base(value)
+        {
+            Init();
+        }
+        /// <summary>
+        /// 初期化
+        /// </summary>
+        public void Init()
+        {
+            this.scope = NakoVariableScope.Global;
+            this.varType = NakoVarType.Int;
+            this.varNo = -1;
+            this.varBy = VarByType.ByVal;
+        }
 
         /// <summary>
         /// タイプを表す文字列を返す

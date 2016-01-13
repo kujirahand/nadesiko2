@@ -70,6 +70,7 @@
     <Compile Include="TestTokenString.cs" />
     <Compile Include="TestNodeForeach.cs" />
     <Compile Include="TestNakoInclude.cs" />
+    <Compile Include="TestInstance.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NakoPlugin\NakoPlugin.csproj">
@@ -83,6 +84,10 @@
     <ProjectReference Include="..\cnako2\cnako2.csproj">
       <Project>{6A22E146-C2AC-473B-9F3C-0D88DE3FDF3E}</Project>
       <Name>cnako2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NakoPluginInstanceDemo\NakoPluginInstanceDemo.csproj">
+        <Project>{E36BB1F9-E379-4E70-BC03-D727B98EF773}</Project>
+        <Name>NakoPluginInstanceDemo</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
