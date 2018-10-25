@@ -3,8 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{F9297385-ACE0-43AD-AD66-819C5A60FE80}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -12,7 +10,6 @@
     <AssemblyName>Libnako</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>False</SignAssembly>
-    <DelaySign>False</DelaySign>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
     <NoStdLib>False</NoStdLib>
@@ -23,7 +20,9 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -127,12 +126,6 @@
   <ItemGroup>
     <None Include="JPNCompiler\Parser\ParserSyntaxMemo_Creator.nako" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\NakoPlugin\NakoPlugin.csproj">
-      <Project>{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}</Project>
-      <Name>NakoPlugin</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -141,4 +134,10 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <ItemGroup>
+    <ProjectReference Include="..\NakoPlugin\NakoPlugin.csproj">
+      <Project>{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}</Project>
+      <Name>NakoPlugin</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

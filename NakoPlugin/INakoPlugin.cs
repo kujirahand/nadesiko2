@@ -157,6 +157,13 @@ namespace NakoPlugin
         /// </summary>
         /// <returns></returns>
         NakoVarArray CreateArray();
+        /// <summary>
+        /// Gets the callback.
+        /// </summary>
+        /// <returns>The callback.</returns>
+        /// <param name="func_name">Func name.</param>
+        /// <param name="args">Arguments.</param>
+        EventHandler GetCallback(string func_name, params object[] args);
     }
 
     /// <summary>

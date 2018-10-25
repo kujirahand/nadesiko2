@@ -12,6 +12,7 @@ namespace Libnako.JPNCompiler.Node
 		public NakoNode nodeFrom { get; set; }
 		public NakoNode nodeTo { get; set; }
 		public NakoNode nodeBlocks { get; set; }
+        public int kaisuVarNo { get; set; }
 
         public NakoNodeFor()
         {

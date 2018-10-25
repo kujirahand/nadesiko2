@@ -39,6 +39,9 @@ namespace Libnako.JPNCompiler.Function
                 }
                 if (optMode)
                 {
+                     if (tok.Type == NakoTokenType.DIM_INT) {//ユーザー定義関数の「整数」はDIM INTと判定されるので、WORDに直す
+                        tok.Type = NakoTokenType.WORD;
+                     }
                      if (tok.Type == NakoTokenType.WORD) {
                         string opt = (string)tok.Value;
                         if (opt == "参照渡し")
@@ -58,6 +61,21 @@ namespace Libnako.JPNCompiler.Function
                                 checkToken = tokens [i + 2];
                                 if (checkToken.Type == NakoTokenType.STRING || checkToken.Type == NakoTokenType.STRING_EX || checkToken.Type == NakoTokenType.WORD) {
                                     argOpt.defaultValue = (string)checkToken.Value;
+                                }
+                            }
+                        }
+                        if (opt == "関数") {//関数定義が引数の場合。{関数(2)}とか表記(n)はn個引数があるという意味。初期値は無いはずなので、引数の個数をdefaultValueプロパティに入れているが、その点は修正の必要があるかもしれない。
+                            argOpt.defaultValue = 0;
+                            argOpt.type = NakoFuncType.UserCall.ToString();
+                            for (int j = i + 1; j < tokens.Count; j++) {
+                                if (tokens [j].Type == NakoTokenType.PARENTHESES_L) {
+                                    j++;
+                                    NakoToken argCountToken = tokens [j];
+                                    argOpt.defaultValue = int.Parse(argCountToken.Value);
+                                    j++;
+                                }
+                                if (tokens [j].Type == NakoTokenType.BRACES_R) {
+                                    break;
                                 }
                             }
                         }

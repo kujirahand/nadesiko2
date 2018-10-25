@@ -7,6 +7,7 @@ namespace Libnako.JPNCompiler.Function
 {
     /// <summary>
     /// なでしこ関数を定義したもの
+    /// TODO:関数の説明を登録
     /// </summary>
     public class NakoFunc
     {
@@ -22,6 +23,10 @@ namespace Libnako.JPNCompiler.Function
         /// 関数のfullname (different from name if function is instance method)
         /// </summary>
         public string fullname { get; set; }
+        /// <summary>
+        /// 関数の読み（かな）
+        /// </summary>
+        public string kana { get; set; }
         /// <summary>
         /// 引数のリスト
         /// </summary>
@@ -55,6 +60,21 @@ namespace Libnako.JPNCompiler.Function
             Init();
             this.name = name;
             this.fullname = name;
+            this.kana = "";
+            this.args.analizeArgStr(argdef);
+        }
+        /// <summary>
+        /// constructor (specify fullname)
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="kana"></param>
+        /// <param name="argdef"></param>
+        public NakoFunc(string name, string argdef, string kana)
+        {
+            Init();
+            this.name = name;
+            this.fullname = name;
+            this.kana = kana;
             this.args.analizeArgStr(argdef);
         }
         /// <summary>
@@ -63,12 +83,14 @@ namespace Libnako.JPNCompiler.Function
         /// <param name="name"></param>
         /// <param name="fullname"></param>
         /// <param name="argdef"></param>
-        public NakoFunc(string name, string fullname, string argdef)
+        /// <param name="kana"></param>
+        public NakoFunc (string name, string argdef, string kana, string fullname)
         {
-            Init();
-            this.name = name;
-            this.fullname = fullname;
-            this.args.analizeArgStr(argdef);
+        	Init ();
+        	this.name = name;
+        	this.fullname = fullname;
+            this.kana = kana;
+        	this.args.analizeArgStr (argdef);
         }
         /// <summary>
         /// 初期化

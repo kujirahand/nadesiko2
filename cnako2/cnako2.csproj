@@ -25,6 +25,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <ErrorReport>prompt</ErrorReport>
@@ -86,6 +87,10 @@
     <ProjectReference Include="..\NakoPlugin\NakoPlugin.csproj">
       <Project>{50C58F5B-F94B-4F16-B428-F41FEAB0D4D3}</Project>
       <Name>NakoPlugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NakoPluginFile\NakoPluginFile.csproj">
+      <Project>{29BCC59A-E35E-4096-B417-16335E41CF93}</Project>
+      <Name>NakoPluginFile</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -33,6 +33,11 @@ namespace NakoPluginTest
         {
             runner.Run(com.WriteIL( 
                 "S=「<html><body><b>な</b><b>で</b><h1>し</h1><h2>こ</h2></body></html>」\n" +
+                "TAG=Sを「h1」タグで区切る\n" +
+                "TAG[0]を表示。"));
+            Assert.AreEqual("<h1>し</h1>",runner.PrintLog);
+            runner.Run(com.WriteIL( 
+                "S=「<html><body><b>な</b><b>で</b><h1>し</h1><h2>こ</h2></body></html>」\n" +
                 "TAG=Sから「b」のタグ切り出し\n" +
                 "TAG[0]を表示。"));
             Assert.AreEqual("な",runner.PrintLog);

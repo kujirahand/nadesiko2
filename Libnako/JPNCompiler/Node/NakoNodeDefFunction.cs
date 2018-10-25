@@ -53,8 +53,22 @@ namespace Libnako.JPNCompiler.Node
                 NakoFuncArg arg = func.args[i];
                 NakoPlugin.NakoVariable var = new NakoPlugin.NakoVariable ();
                 if (arg.type != null) {
-                    var.SetBody(null, NakoPlugin.NakoVarType.Instance);
-                    var.InstanceType = arg.type;
+                    //引数が関数定義の場合
+                    if (arg.type == NakoFuncType.UserCall.ToString ()) {
+                        NakoFunc userFunc = new NakoFunc ();
+                        userFunc.funcType = NakoFuncType.UserCall;
+                        for (int j = 0; j< (int)arg.defaultValue; j++) {
+                            userFunc.args.Add (new NakoFuncArg ());
+                        }
+                        NakoNodeDefFunction funcNode = new NakoNodeDefFunction ();
+                        funcNode.func = userFunc;
+                        funcNode.funcBody = new NakoNode ();
+                        var.SetBody (funcNode, NakoPlugin.NakoVarType.UserFunc);
+                    } else {
+                        //引数がインスタンスの場合
+                        var.SetBody (null, NakoPlugin.NakoVarType.Instance);
+                        var.InstanceType = arg.type;
+                    }
                 }
                 localVar.CreateVar(arg.name, var);
             }

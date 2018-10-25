@@ -8,9 +8,9 @@
     <RootNamespace>NakoPluginSample</RootNamespace>
     <AssemblyName>NakoPluginSample</AssemblyName>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <ProductVersion>10.0.0</ProductVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -45,21 +45,21 @@
     <DebugSymbols>False</DebugSymbols>
     <DebugType>none</DebugType>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants />
+    <DefineConstants>
+    </DefineConstants>
     <WarningLevel>4</WarningLevel>
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <Optimize>False</Optimize>
     <OutputPath>bin\Release</OutputPath>
-    <DefineConstants />
+    <DefineConstants>
+    </DefineConstants>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Core" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>

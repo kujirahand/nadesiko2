@@ -1,0 +1,51 @@
+＃＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+＃なでしこ２リリース用バッチ (なでしこ2)
+＃ ./cnako.sh nako2-release.utf8.nako 
+＃＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+BASE=「./」
+OUT＝「{BASE}nako2-release-beta/」
+ZIP=「{BASE}nako2-release-beta.zip」
+OUTへフォルダ作成。
+「{OUT}plug-ins/」へフォルダ作成。
+###
+0と表示
+files = 「{BASE}cnako2/bin/Debug」の全ファイル列挙
+filesで反復
+    from = 対象
+　　EXT=fromから拡張子抽出
+　　もしEXT != ".dll" && EXT != ".exe"ならば
+        続ける
+　　FN=fromからファイル名抽出
+    to = 「{OUT}{FN}」
+    fromからtoへファイルコピー。
+files = 「{BASE}ReleaseFiles」の全ファイル列挙
+filesで反復
+    from = 対象
+　　FN=fromからファイル名抽出
+    to = 「{OUT}{FN}」
+    fromからtoへファイルコピー。
+###
+files = BASEの全ファイル列挙
+filesで反復
+    file = 対象
+　　p = fileから「NakoPlugin」を文字列検索　
+　　もしp == 0ならば
+        続ける
+　　p = fileから「release」を文字列検索　
+　　もしp > 0ならば
+        続ける
+　　EXT=fileから拡張子抽出
+　　もしEXT != ".dll"ならば
+        続ける
+　　FN=fileからファイル名抽出
+    b = 「{OUT}plug-ins/{FN}」が存在?
+    もしb == 1ならば
+        続ける
+　　fileから「{OUT}plug-ins/{FN}」へファイルコピー。
+###
+#OUTをZIPへ圧縮。
+「zip {ZIP} -r {OUT}」を起動待機
+###
+「OK」と表示。
+終わる。
+

@@ -134,6 +134,7 @@ namespace Libnako.JPNCompiler
         {
             this.source = source;
             Tokenize();
+            RegisterUserCall ();
             Parse();
             return TopNode;
         }
@@ -155,6 +156,7 @@ namespace Libnako.JPNCompiler
         {
             this.source = source;
             Tokenize();
+            RegisterUserCall ();
             ParseOnlyValue();
             return TopNode;
         }
@@ -167,6 +169,22 @@ namespace Libnako.JPNCompiler
             var writer = new NakoILWriter();
             writer.Write(this.topNode);
             codes = writer.Result;
+            for (int i = 0; i < this.GlobalVar.Count(); i++) {//interpreterで使えるように関数定義が保存されている変数をアドレスに変換
+                NakoVariable v = this.GlobalVar.GetVar (i);
+                if (v.Body is NakoNodeDefFunction) {
+                    NakoVariable setVar = new NakoVariable ();
+                    string label = "FUNC_" + ((NakoNodeDefFunction)v.Body).func.name;
+                    NakoILCodeList cl = writer.Result;
+                    for (int j = 0; j < cl.Count;j++) {
+                        NakoILCode c = cl [j];
+                        if (c.value is string && (string)c.value == label) {
+                            setVar.SetBody (j, NakoVarType.Int);
+                            break;
+                        }
+                    }
+                    this.GlobalVar.SetVar (i, setVar);
+                }
+            }
             codes.globalVar = this.GlobalVar;
             return Codes;
         }
@@ -182,6 +200,7 @@ namespace Libnako.JPNCompiler
             }
             Tokenize();
             // Console.WriteLine(this.Tokens.toTypeString());
+            RegisterUserCall ();
             Parse();
             WriteIL();
             return Codes;
@@ -192,6 +211,36 @@ namespace Libnako.JPNCompiler
         public string DirectSource
         {
             set { this.WriteIL(value); }
+        }
+        /// <summary>
+        /// ユーザー関数を登録する
+        /// </summary>
+        protected void RegisterUserCall ()
+        {
+            // tokenでDEFINE FUNKが見つかったらEOLまでを最上部に追加
+            if (tokens != null) {
+                tokens.MoveTop ();
+                while (!tokens.IsEOF ()) {
+                    NakoToken tok = tokens.CurrentToken;
+                    if (tok.Type == NakoTokenType.DEF_FUNCTION) {
+                        int index = 0;
+                        while (tok.Type != NakoTokenType.SCOPE_BEGIN) {
+                            NakoToken insertToken = new NakoToken (tok.Type, tok.LineNo, tok.IndentLevel, tok.Value);
+                            if (tok.Type == NakoTokenType.DEF_FUNCTION) {
+                                insertToken.Type = NakoTokenType.DEF_FUNCTION_ALIASE;
+                            }
+                            tokens.Insert (index, insertToken);
+                            index++;
+                            tokens.MoveNext ();
+                            tokens.MoveNext ();
+                            tok = tokens.CurrentToken;
+                        }
+                        tokens.Insert (index, tok);
+                    }
+                    tokens.MoveNext ();
+                }
+                tokens.MoveTop ();
+            }
         }
         /// <summary>
         /// システム関数を登録する

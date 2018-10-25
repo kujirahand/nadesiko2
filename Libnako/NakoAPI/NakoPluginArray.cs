@@ -46,8 +46,17 @@ namespace Libnako.NakoAPI
             bank.AddFunc("要素数", "Sの", NakoVarType.Int, _count, "ハッシュ・配列の要素数、文字列の行数を返す。", "ようそすう");
             bank.AddFunc("配列一括挿入", "{参照渡し}AのIにSを|Iから", NakoVarType.Void, _insertArray,"配列AのI番目(0起点)に配列Sの内容を一括挿入する。Aの内容を書き換える。", "はいれついっかつそうにゅう");
 			bank.AddFunc("配列キー存在?", "AのKEYを|Aが", NakoVarType.Int, _hasKey,"配列AからKEYを検索してKEYがあれば1を返す。見つからなければ0を返す。", "はいれつきーそんざい?");
+            bank.AddFunc("配列コピー", "Aを", NakoVarType.Int, _copy,"配列Aをコピーする。", "はいれつこぴー");
         }
-
+        /// <summary>
+        /// Copy the specified info.
+        /// </summary>
+        /// <param name="info">Info.</param>
+        private object _copy(INakoFuncCallInfo info)
+        {
+            NakoVarArray ar = info.StackPop() as NakoVarArray;
+            return ar.Clone();
+        }
 
         private object _insertArray(INakoFuncCallInfo info){
             object obj_base = info.StackPop(); // 参照渡しなので変数への参照が得られる
@@ -271,8 +280,7 @@ namespace Libnako.NakoAPI
 		/// <summary>
 		/// 配列キー存在?
 		/// </summary>
-		/// <param name="array"></param>
-		/// <param name="key"></param>
+		/// <param name="info"></param>
 		/// <returns></returns>
 		private object _hasKey(INakoFuncCallInfo info)
 		{

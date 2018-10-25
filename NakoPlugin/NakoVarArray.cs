@@ -1,14 +1,17 @@
 ﻿using System;
+using System.IO;
 using System.Collections;
 using System.Linq;
 using System.Text;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace NakoPlugin
 {
     /// <summary>
     /// なでしこの配列型(配列とハッシュを扱える)
     /// </summary>
-    public class NakoVarArray : NakoVariable
+    [Serializable]
+    public class NakoVarArray : NakoVariable, ICloneable, IEnumerable
     {
         /// <summary>
         /// 配列の要素を保持するためのリスト
@@ -30,6 +33,22 @@ namespace NakoPlugin
         public NakoVarArray()
         {
             this._type = NakoVarType.Array;
+        }
+
+        public object Clone()
+        {
+            object clone = null;
+            using (MemoryStream stream = new MemoryStream())
+            {
+                //対象オブジェクトをシリアライズ
+                BinaryFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(stream, this);
+                stream.Position = 0;
+
+                //シリアライズデータをデシリアライズ
+                clone = formatter.Deserialize(stream);
+            }
+            return (NakoVarArray)clone;
         }
 
         /// <summary>

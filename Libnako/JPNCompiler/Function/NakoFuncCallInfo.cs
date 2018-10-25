@@ -134,6 +134,17 @@ namespace Libnako.JPNCompiler.Function
             NakoVarArray v = new NakoVarArray();
             return v;
         }
+        /// <summary>
+        /// Gets the callback.
+        /// </summary>
+        /// <returns>The callback.</returns>
+        /// <param name="func_name">Func name.</param>
+        /// <param name="args">Arguments.</param>
+        public EventHandler GetCallback(string func_name, params object[] args){
+            return new EventHandler(delegate(object sender, EventArgs e) {
+                Runner.CallUserFunc(func_name, sender);
+            });
+        }
 
     }
 }

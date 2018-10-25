@@ -117,6 +117,37 @@ namespace Libnako.JPNCompiler.Tokenizer
             return result;
         }
         /// <summary>
+        /// 送り仮名を削除します。
+        /// </summary>
+        /// <param name="name">名前。</param>
+        /// <param name="isTrimAllHiragana">ひらがなを全て消すかどうか。消さない場合は末尾のひらがなを消す</param>
+        /// <returns>送り仮名を削除した名前。</returns>
+        public static string TrimOkurigana (string name, bool isTrimAllHiragana)
+        {
+            if (name == "") return "";
+            if (isTrimAllHiragana == true) {
+                return TrimOkurigana (name);
+            } else {
+                // 1文字目がひらがななら省略を諦める
+                if (NakoUtility.IsHiragana (name [0])) {
+                    return name;
+                }
+                string result = "";
+                // 送りがなを省略する
+                bool trimFlag = false;
+                foreach (char c in name) {
+                    if (!NakoUtility.IsHiragana (c)) {
+                        result += c;
+                        trimFlag = false;
+                    } else if (trimFlag == false) {
+                        result += c;
+                    }
+                        
+                }
+                return result;
+            }
+        }
+        /// <summary>
         /// このインスタンスが演算子のトークンであるかどうかを示しす値を取得します。
         /// </summary>
         /// <returns>このインスタンスが演算子のトークンの場合は true。それ以外の場合は false。</returns>

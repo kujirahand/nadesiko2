@@ -73,6 +73,9 @@ namespace Libnako.JPNCompiler.Parser
             set { _globalVar = value; }
         }
         private NakoVariableManager _globalVar = null;
+        /// <summary>
+        /// 現在のスコープ
+        /// </summary>
         public NakoVariableScope current_scope = NakoVariableScope.Global;
         /// <summary>
         /// コンストラクタ

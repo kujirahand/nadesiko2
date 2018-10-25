@@ -365,6 +365,9 @@ namespace Libnako.Interpreter
             c.nextpos = runpos + 1;
 			c.sore = globalVar.GetValue(0);
             this.localVar = new NakoVariableManager(NakoVariableScope.Local);
+            if (code.value == null) {//引数に関数定義がある場合
+                code.value = StackPop ();
+            }
             callStack.Push(c);
             // JUMP
             autoIncPos = false;
@@ -936,8 +939,49 @@ namespace Libnako.Interpreter
 				return (bool)a ^ (bool)b;
 			}
             throw new NakoInterpreterException("オブジェクトは論理演算できません");
+        } 
+        private NakoILCode currentIL = null;
+        /// <summary>
+        /// Callback the specified sender, func_name and args.
+        /// </summary>
+        /// <param name="sender">Sender.</param>
+        /// <param name="func_name">Func name.</param>
+        /// <param name="args">Arguments.</param>
+        public void CallUserFunc(string func_name, params object[] args){
+            NakoILCode c = null;
+            foreach (NakoILCode tmp in this.list) {
+                if (tmp.type == NakoILType.NOP && (string)tmp.value == "FUNC_" + func_name) {
+                    c = tmp;
+                    break;
+                }
+            }
+            if (c == null)
+                return;// _nop;
+            currentIL = c;
+            //StackPush (sender);
+            foreach (object o in args) {
+                StackPush (o);
+            }
+            NakoCallStack stack = new NakoCallStack();
+            //escape
+            int currentPos = runpos;
+            bool currentAutoIncPos = autoIncPos;
+            object currentSore = globalVar.GetValue(0);
+            stack.localVar = localVar;
+            stack.nextpos = list.Count+1; // ストッパー
+            stack.sore = globalVar.GetValue(0);
+            //prepare
+            this.localVar = new NakoVariableManager(NakoVariableScope.Local);
+            autoIncPos = true;
+            runpos = this.list.IndexOf(currentIL);
+            callStack.Push(stack);
+            //int baseStackCount=callStack.Count;
+            _run ();
+            runpos = currentPos;
+            autoIncPos = currentAutoIncPos;
+            globalVar.SetValue(0, currentSore);
         }
-        
+
     }
     /// <summary>
     /// インタプリタの例外クラス

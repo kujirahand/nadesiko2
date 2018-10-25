@@ -7,11 +7,12 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{AA173FC5-466F-403F-8BFD-1FF5499FF833}</ProjectGuid>
     <OutputType>Exe</OutputType>
+    <OutputPath>bin\Debug\</OutputPath>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CNako2Demo</RootNamespace>
     <AssemblyName>CNako2Demo</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -30,6 +31,17 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Release</OutputPath>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
@@ -60,9 +72,17 @@
       <Project>{29BCC59A-E35E-4096-B417-16335E41CF93}</Project>
       <Name>NakoPluginFile</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\NakoPluginHttp\NakoPluginHttp.csproj">
-      <Project>{E6657194-A701-4796-B8FE-8DD7FCE17FF3}</Project>
-      <Name>NakoPluginHttp</Name>
+    <ProjectReference Include="..\..\NakoPluginInstanceDemo\NakoPluginInstanceDemo.csproj">
+      <Project>{E36BB1F9-E379-4E70-BC03-D727B98EF773}</Project>
+      <Name>NakoPluginInstanceDemo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NakoPluginTag\NakoPluginTag.csproj">
+      <Project>{7ADCC16D-4463-4238-A947-CB5CBF04A409}</Project>
+      <Name>NakoPluginTag</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\NakoPluginSystem\NakoPluginSystem.csproj">
+      <Project>{1F11520A-6979-4D07-9BA0-CBB378496E93}</Project>
+      <Name>NakoPluginSystem</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

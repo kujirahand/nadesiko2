@@ -161,5 +161,136 @@ namespace NakoPluginTest
                 ""));
             Assert.AreEqual("0.1", runner.PrintLog);
         }
+
+[Test]
+public void TestEq()
+{
+    runner.Run (com.WriteIL (
+        "A=10\n" +
+        "B=10\n" +
+        "もしAとBが等しいならば\n" +
+        "  「等しい」と継続表示\n" +
+        ""));
+    Assert.AreEqual ("等しい", runner.PrintLog);
+    runner.Run (com.WriteIL (
+        "A=10\n" +
+        "B=20\n" +
+        "もしAとBが等しいならば\n" +
+        "  「等しい」と継続表示\n" +
+        ""));
+    Assert.AreEqual ("", runner.PrintLog);
+    runner.Run (com.WriteIL (
+        "A=0.1234\n" +
+        "B=0.1234\n" +
+        "もしAとBが等しいならば\n" +
+        "  「等しい」と継続表示\n" +
+        ""));
+    Assert.AreEqual ("等しい", runner.PrintLog);
+    runner.Run (com.WriteIL (
+        "A=0.1234\n" +
+        "B=0.4321\n" +
+        "もしAとBが等しいならば\n" +
+        "  「等しい」と継続表示\n" +
+        ""));
+    Assert.AreEqual ("", runner.PrintLog);
+    runner.Run (com.WriteIL (
+        "A=「なでしこ」\n" +
+        "B=「なでしこ」\n" +
+        "もしAとBが等しいならば\n" +
+        "  「等しい」と継続表示\n" +
+        ""));
+    Assert.AreEqual ("等しい", runner.PrintLog);
+    runner.Run (com.WriteIL (
+        "A=「なでしこ」\n" +
+        "B=「なでしこジャパン」\n" +
+        "もしAとBが等しいならば\n" +
+        "  「等しい」と継続表示\n" +
+        ""));
+    Assert.AreEqual ("", runner.PrintLog);
+    runner.Run (com.WriteIL (
+        "A[0]=1\n" +
+        "B=A\n" +
+        "もしAとBが等しいならば\n" +
+        "  「等しい」と継続表示\n" +
+        ""));
+    Assert.AreEqual ("等しい", runner.PrintLog);
+    runner.Run (com.WriteIL (
+        "C[0]=1\n" +
+        "D[0]=1\n" +
+        "もしCとDが等しいならば\n" +
+        "  「等しい」と継続表示\n" +
+        "違えばえば\n"+
+        "  「違う」と継続表示\n" +
+        ""));
+    Assert.AreEqual ("違う", runner.PrintLog);
+    runner.Run (com.WriteIL (
+        "E[0]=1\n" +
+        "F[0]=2\n" +
+        "もしEとFが等しいならば\n" +
+        "  「等しい」と継続表示\n" +
+        ""));
+    Assert.AreEqual ("", runner.PrintLog);
+    runner.Run (com.WriteIL (
+        "G[0]=1\n" +
+        "H[0]=Gを配列コピー\n" +
+        "もしGとHが等しいならば\n" +
+        "  「等しい」と継続表示\n" +
+        ""));
+    Assert.AreEqual ("", runner.PrintLog);
+}
+
+[Test]
+public void TestOverUnder ()
+{
+    runner.Run (com.WriteIL (
+        "A=20\n" +
+        "B=10\n" +
+        "もしAがBより大きいならば\n" +
+        "  「大きい」と継続表示\n" +
+        ""));
+    Assert.AreEqual ("大きい", runner.PrintLog);
+    runner.Run (com.WriteIL (
+        "A=10\n" +
+        "B=20\n" +
+        "もしAがBより大きいならば\n" +
+        "  「大きい」と継続表示\n" +
+        ""));
+    Assert.AreEqual ("", runner.PrintLog);
+    runner.Run (com.WriteIL (
+        "A=10\n" +
+        "B=20\n" +
+        "もしAがBより小さいならば\n" +
+        "  「小さい」と継続表示\n" +
+        ""));
+    Assert.AreEqual ("小さい", runner.PrintLog);
+    runner.Run (com.WriteIL (
+        "A=20\n" +
+        "B=10\n" +
+        "もしAがBより小さいならば\n" +
+        "  「小さい」と継続表示\n" +
+        ""));
+    Assert.AreEqual ("", runner.PrintLog);
+    runner.Run (com.WriteIL (
+        "A=20\n" +
+        "B=10\n" +
+        "もしAがBより以上ならば\n" +
+        "  「以上」と継続表示\n" +
+        ""));
+    Assert.AreEqual ("以上", runner.PrintLog);
+    runner.Run (com.WriteIL (
+        "A=10\n" +
+        "B=10\n" +
+        "もしAがBより以上ならば\n" +
+        "  「以上」と継続表示\n" +
+        ""));
+    Assert.AreEqual ("以上", runner.PrintLog);
+    runner.Run (com.WriteIL (
+        "A=10\n" +
+        "B=20\n" +
+        "もしAがBより以上ならば\n" +
+        "  「以上」と継続表示\n" +
+        ""));
+	Assert.AreEqual ("", runner.PrintLog);
+}
     }
 }
