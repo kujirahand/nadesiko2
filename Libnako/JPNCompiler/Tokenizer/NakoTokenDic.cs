@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace Libnako.JPNCompiler.Tokenizer
 {
@@ -59,6 +60,28 @@ namespace Libnako.JPNCompiler.Tokenizer
 		{
 			return _dictionary.Remove(key);
 		}
+        /// <summary>
+        /// 値を得る
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public bool IsFunction(string key)
+        {
+            NakoTokenType value;
+            if (_dictionary.TryGetValue (key, out value)) {
+                return value == NakoTokenType.FUNCTION_NAME;
+            }
+            return false;
+        }
+        /// <summary>
+        /// Maies the be function.
+        /// </summary>
+        /// <returns><c>true</c>, if be function was mayed, <c>false</c> otherwise.</returns>
+        /// <param name="key">Key.</param>
+        public bool MayBeFunction(string key)
+        {
+            return _dictionary.Where (elem => elem.Key.StartsWith (key)).Where(elem => elem.Value == NakoTokenType.FUNCTION_NAME).Count()>0;
+        }
         /// <summary>
         /// 値を得る
         /// </summary>

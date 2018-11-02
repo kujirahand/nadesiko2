@@ -61,16 +61,21 @@ namespace Libnako.NakoAPI
         /// <param name="kana"></param>
         public void AddFunc(string name, string argdef, NakoVarType resultType, NakoPlugin.SysCallDelegate f, string desc, string kana)
         {
-            name = NakoToken.TrimOkurigana(name);
-            NakoAPIFunc s = new NakoAPIFunc(name, argdef, resultType, f);
+            name = NakoToken.TrimOkurigana (name, false);
+            NakoAPIFunc s = new NakoAPIFunc(name, argdef, kana, resultType, f);
             s.PluginInstance = PluginInstance;
             this.AddFuncToList(s);
+            string trimedName = NakoToken.TrimOkurigana(name);
+            if (trimedName != name) {
+                s = new NakoAPIFunc (trimedName, argdef, resultType, f);
+                s.PluginInstance = PluginInstance;
+                this.AddFuncToList (s);
+            }
         }
 
         /// <summary>
         /// 関数を追加 Use instance
         /// </summary>
-        /// <param name="obj"></param>
         /// <param name="name"></param>
         /// <param name="argdef"></param>
         /// <param name="resultType"></param>
@@ -80,7 +85,7 @@ namespace Libnako.NakoAPI
         public void AddInstanceFunc(string name, string argdef, NakoVarType resultType, NakoPlugin.SysCallDelegate f, string desc, string kana)
         {
             name = NakoToken.TrimOkurigana(name);
-            NakoAPIFunc s = new NakoAPIFunc(name, NakoFunc.GetFullName(PluginInstance.Name, name), argdef, resultType, f);
+            NakoAPIFunc s = new NakoAPIFunc(name, argdef, kana, NakoFunc.GetFullName(PluginInstance.Name, name), resultType, f);
             s.PluginInstance = PluginInstance;
             this.AddFuncToList(s);
         }

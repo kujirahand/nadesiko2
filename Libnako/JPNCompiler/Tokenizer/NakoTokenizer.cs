@@ -230,7 +230,7 @@ namespace Libnako.JPNCompiler.Tokenizer
             }
         }
         /// <summary>
-        /// 予約後のチェックと代入文への変換作業を行います。
+        /// 予約語のチェックと代入文への変換作業を行います。
         /// </summary>
         private void CheckWord()
         {
@@ -243,9 +243,35 @@ namespace Libnako.JPNCompiler.Tokenizer
                 {
                     var token = tokens.CurrentToken;
                     string key = token.GetValueAsName();
-                    if (tokenDic.ContainsKey(token.GetValueAsName()))
-                    {
-                        token.Type = tokenDic[key];
+                    if (tokenDic.ContainsKey (token.GetValueAsName ())) {
+                        token.Type = tokenDic [key];
+                    } else if (tokenDic.MayBeFunction(token.Value)) {
+                        tokens.Save ();
+                        StringBuilder tmp = new StringBuilder();
+                        int indexFrom = tokens.IndexOf (token);
+                        while (!tokens.IsEOF()) {
+                            token = tokens.CurrentToken;
+                            tmp.Append (token.Value);
+                            if (tokenDic.IsFunction(tmp.ToString())){
+                                NakoToken funcToken = new NakoToken (NakoTokenType.FUNCTION_NAME);
+                                funcToken.Josi = token.Josi;
+                                funcToken.Value = tmp.ToString ();
+                                int indexTo = tokens.IndexOf (token);
+                                for (int i = indexTo; i >= indexFrom; i--) {
+                                    tokens.RemoveAt (i);
+                                }
+                                tokens.Insert (indexFrom, funcToken);
+                                break;
+                            } else if (!tokenDic.MayBeFunction(tmp.ToString())){
+                                tokens.Restore ();
+                                break;
+                            }
+                            tmp.Append (token.Josi);
+                            tokens.MoveNext ();
+                        }
+                        if (tokens.IsEOF ()) {
+                            return;
+                        }
                     }
                 }
                 // 助詞が「は」ならば、代入文に変える

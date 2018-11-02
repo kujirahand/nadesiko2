@@ -7,6 +7,7 @@ namespace NakoPlugin
     /// <summary>
     /// なでしこの変数を表わすクラス
     /// </summary>
+    [Serializable]
     public class NakoVariable
     {
         /// <summary>

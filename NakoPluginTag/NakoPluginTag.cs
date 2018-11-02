@@ -35,7 +35,8 @@ namespace NakoPluginTag
         {
             //+日付時間処理
             //-日付時間
-            bank.AddFunc("タグ切り出し", "SからAの|SでAを", NakoVarType.Array, _extract, "SからAのタグを切り取る。", "たぐきりだし");
+            bank.AddFunc("タグで区切る", "SをA", NakoVarType.Array, _split, "SからAのタグを切り取る。タグは残す", "たぐでくぎる");
+            bank.AddFunc("タグ切り出し", "SからAの|SでAを", NakoVarType.Array, _extract, "SからAのタグを切り取る。タグは残さない", "たぐきりだし");
             bank.AddFunc("階層タグ切り出し", "SからAの|SでAを", NakoVarType.Array, _hirextract, "Sから特定階層下のタグAを切り取る。たとえば『head/title』『item/link』など。", "かいそうたぐきりだし");
             bank.AddFunc("タグ属性取得", "SのAからBを|Sで", NakoVarType.Array, _attr, "SからタグAの属性Bを取り出す。", "たぐぞくせいしゅとく");
             bank.AddFunc("タグで削除", "Sから|Sの", NakoVarType.String, _remove, "Sのタグを削除。", "たぐさくじょ");
@@ -51,27 +52,41 @@ namespace NakoPluginTag
         public void PluginFin(INakoInterpreter runner)
         {
         }
+        public Object __extract(INakoFuncCallInfo info, string s, string a, bool inner)
+        {
+            HtmlDocument doc = new HtmlDocument();
+            doc.OptionFixNestedTags = true;
+            doc.OptionOutputAsXml = true;
+            doc.LoadHtml(s);
+            string html = doc.DocumentNode.OuterHtml;
+            HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes(String.Format(@"//{0}",a));
+            NakoVarArray res = info.CreateArray();
+            if(nodes!=null){
+                for(int i=0;i<nodes.Count;i++){
+                    HtmlNode node = nodes[i];
+                    if(html.Contains(node.OuterHtml)){
+                        if (inner) {
+                            res.SetValue(i,node.InnerHtml);
+                        }else{
+                            res.SetValue(i,node.OuterHtml);
+                        }
+                        html = html.Remove(html.IndexOf(node.OuterHtml), node.OuterHtml.Length);
+                    }
+                }
+            }
+            return res;
+        }
+        public Object _split(INakoFuncCallInfo info)
+        {
+            string s = info.StackPopAsString();
+            string a = info.StackPopAsString();
+            return __extract (info, s, a, false);
+        }
         public Object _extract(INakoFuncCallInfo info)
         {
         	string s = info.StackPopAsString();
         	string a = info.StackPopAsString();
-        	HtmlDocument doc = new HtmlDocument();
-            doc.OptionFixNestedTags = true;
-            doc.OptionOutputAsXml = true;
-        	doc.LoadHtml(s);
-            string html = doc.DocumentNode.OuterHtml;
-        	HtmlNodeCollection nodes = doc.DocumentNode.SelectNodes(String.Format(@"//{0}",a));
-        	NakoVarArray res = info.CreateArray();
-        	if(nodes!=null){
-            	for(int i=0;i<nodes.Count;i++){
-                    HtmlNode node = nodes[i];
-                    if(html.Contains(node.OuterHtml)){
-                        res.SetValue(i,node.InnerHtml);
-                        html = html.Remove(html.IndexOf(node.OuterHtml), node.OuterHtml.Length);
-                    }
-            	}
-        	}
-            return res;
+            return __extract (info, s, a, true);
         }
          public Object _hirextract(INakoFuncCallInfo info)
         {

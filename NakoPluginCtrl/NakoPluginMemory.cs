@@ -51,13 +51,13 @@ namespace NakoPluginCtrl
         }
 
         private int __available(){//MB単位
-            if(NWEnviroment.isWindows()){
+            if (NWEnviroment.isWindows ()) {
                 string mem = "Memory";
                 string countMem = "Available Mbytes";
-                System.Diagnostics.PerformanceCounter pcMem = new System.Diagnostics.PerformanceCounter(mem,countMem);
-                float available = pcMem.NextValue();
-                pcMem.Close();
-                pcMem.Dispose();
+                System.Diagnostics.PerformanceCounter pcMem = new System.Diagnostics.PerformanceCounter (mem, countMem);
+                float available = pcMem.NextValue ();
+                pcMem.Close ();
+                pcMem.Dispose ();
                 return (int)available;
             }else{
                 string free =LinuxCommand.execute("free -m");
@@ -71,6 +71,23 @@ namespace NakoPluginCtrl
                             sr.Dispose();
                             return available;
 //                            Console.WriteLine("rate:{0}",(int)(100*int.Parse(parts[2])/(int.Parse(parts[3])+int.Parse(parts[2]))));
+                        }
+                    }
+                }
+                free = LinuxCommand.execute ("top -l 1 -s 0");
+                    using(StringReader sr = new StringReader (free)){
+                    string line = "";
+                    while((line=sr.ReadLine())!=null){
+                        if(line.Contains("PhysMem")){
+                            string [] parts = Regex.Split (line, @"\s+");
+                            for (int i = 0; i < parts.Length; i++) {
+                                if (parts [i].Contains ("unused")) {
+                                    int available = int.Parse (parts [i-1].Replace ("M",""));
+                                    sr.Close ();
+                                    sr.Dispose ();
+                                    return available;
+                                }
+                            }
                         }
                     }
                 }
@@ -102,6 +119,20 @@ namespace NakoPluginCtrl
                         }
                     }
                 }
+                free = LinuxCommand.execute ("sysctl hw.memsize");
+                    using(StringReader sr = new StringReader (free)){
+                    string line = "";
+                    while((line=sr.ReadLine())!=null){
+                        if(line.Contains("hw.memsize")){
+                            string [] parts = Regex.Split (line, @"\s+");
+                            int total = int.Parse (parts [1].Remove(parts[1].Length-6));
+                            sr.Close();
+                            sr.Dispose();
+                            return total;
+                        }
+                    }
+                }
+
             }
             return 0;//TODO: Exception?
         }

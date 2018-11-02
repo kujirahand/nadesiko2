@@ -38,10 +38,11 @@ namespace NakoPluginDateTime
             bank.AddFunc("和暦変換", "Sを", NakoVarType.String, _toJapanese, "Sを和暦に変換する。Sは明治以降の日付が有効", "われきへんかん");
         }
         public object _format(INakoFuncCallInfo info){
+            CultureInfo culture = new CultureInfo ("ja-JP", true);
             string a= info.StackPopAsString();
             string format = info.StackPopAsString();
             DateTime aDate = DateTime.Parse(a);
-            return aDate.ToString(format);
+            return aDate.ToString(format,culture);
         }
         public object _daysDifference(INakoFuncCallInfo info){
             string a= info.StackPopAsString();
@@ -121,13 +122,14 @@ namespace NakoPluginDateTime
 			return UnixEpoch.AddSeconds(unixtime).ToLocalTime();
 		}
         public object _add(INakoFuncCallInfo info){
+            CultureInfo culture = new CultureInfo ("ja-JP", true);
 			string s = info.StackPopAsString();
          	string addDate = info.StackPopAsString();
 			string addOrDel = addDate.Substring(0,1);
 			string[] span = addDate.Substring(1).Replace('-','/').Split('/');
 			if(span.Length!=3) throw new ArgumentException();
 			DateTime current = DateTime.Parse(s);//TODO:ParseExactを使うか？
-			return current.AddYears(int.Parse (addOrDel+span[0])).AddMonths(int.Parse (addOrDel+span[1])).AddDays (int.Parse (addOrDel+span[2])).ToString();
+			return current.AddYears(int.Parse (addOrDel+span[0])).AddMonths(int.Parse (addOrDel+span[1])).AddDays (int.Parse (addOrDel+span[2])).ToString(culture);
 		}
         
     }

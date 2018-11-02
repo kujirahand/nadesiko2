@@ -264,6 +264,36 @@ namespace NakoPluginTest
             ni.Run(nc.Codes);
             Assert.AreEqual("566666", ni.PrintLog);
         }
+        [Test]
+        public void Test_array_refered_copy()
+        {
+            NakoCompiler nc = new NakoCompiler();
+            NakoInterpreter ni = new NakoInterpreter();
+            nc.WriteIL(
+                "A[0]=1\n" +
+                "A[1]=「A」\n" +
+                "B = A\n" +
+                "B[1] = 「b」\n" +
+                "A[1]を継続表示\n" +
+                "");
+            ni.Run(nc.Codes);
+            Assert.AreEqual("b",ni.PrintLog);
+        }
+        [Test]
+        public void Test_array_copy()
+        {
+            NakoCompiler nc = new NakoCompiler();
+            NakoInterpreter ni = new NakoInterpreter();
+            nc.WriteIL(
+                "A[0]=1\n" +
+                "A[1]=「A」\n" +
+                "B = Aを配列コピー\n" +
+                "B[1] = 「b」\n" +
+                "A[1]を継続表示\n" +
+                "");
+            ni.Run(nc.Codes);
+            Assert.AreEqual("A",ni.PrintLog);
+        }
 
     }
 }

@@ -40,6 +40,8 @@ namespace Libnako.NakoAPI
             bank.AddFunc("OSバージョン", "", NakoVarType.String, _osVersion, "OSのバージョン番号を返す", "OSばーじょん");
             bank.AddFunc("OS", "", NakoVarType.String, _os, "OSの種類を返す", "OS");
             bank.AddFunc("利用中プラグイン列挙", "", NakoVarType.Array, _getPlugins, "現在読み込まれているプラグイン一覧を返す", "りようちゅうぷらぐいんれっきょ");
+            bank.AddFunc("利用中関数列挙", "", NakoVarType.Array, _getFunctionNames, "現在読み込まれている関数一覧を返す", "りようちゅうかんすうれっきょ");
+            bank.AddFunc("関数ルビ取得", "Sの", NakoVarType.String, _getFunctionFurigana, "関数のふりがなを返す", "かんすうるびしゅとく");
             
             //-基本定数
             bank.AddVar("はい", 1, "1", "はい");
@@ -75,6 +77,12 @@ namespace Libnako.NakoAPI
             bank.AddFunc("乱数", "Nの", NakoVarType.Int, _random, "0から(N-1)までの範囲の乱数を返す", "らんすう");
             bank.AddFunc("絶対値", "Vの", NakoVarType.Int, _abs, "値Vの絶対値を返す", "ぜったいち");
             bank.AddFunc("ABS", "V", NakoVarType.Int, _abs, "値Vの絶対値を返す", "ABS");
+            // 等号、不等号など
+            bank.AddFunc("等しい", "AとBが", NakoVarType.Object, _eq, "A=Bを返す", "ひとしい");
+            bank.AddFunc("大きい", "AがBより", NakoVarType.Object, _over, "A>Bを返す", "おおきい");
+            bank.AddFunc("小さい", "AがBより", NakoVarType.Object, _under, "A<Bを返す", "ちいさい");
+            bank.AddFunc("以上", "AがBより", NakoVarType.Object, _over_or_equal, "A>=Bを返す", "いじょう");
+            bank.AddFunc("以下", "AがBより", NakoVarType.Object, _under_or_equal, "A<=Bを返す", "いか");
             //+サウンド
             bank.AddFunc("BEEP", "", NakoVarType.Void, _beep, "BEEP音を鳴らす", "BEEP");
 
@@ -119,12 +127,16 @@ namespace Libnako.NakoAPI
         private object __moveNext(INakoFuncCallInfo info)
         {
             object e = info.StackPop();
-            if(e is NakoVariable){
-                e = ((NakoVariable)e).Body;
+            while (e is IEnumerator == false) {
+                if (e is NakoVariable) {
+                    e = ((NakoVariable)e).Body;
+                }
             }
-            Type t = e.GetType();
-            MethodInfo mi = t.GetMethod("MoveNext",new Type[0]);
-            return mi.Invoke(e,null);
+            return ((IEnumerator)e).MoveNext ();
+            //Type t = e.GetType();
+            //MethodInfo mi = t.GetMethod ("MoveNext");//,new Type[0]);
+
+            //return mi.Invoke(e,null);
         }
 
         private object __current(INakoFuncCallInfo info)
@@ -270,6 +282,26 @@ namespace Libnako.NakoAPI
                 a.Add(v);
             }
             return a;
+        }
+
+        private object _getFunctionNames (INakoFuncCallInfo info)
+        {
+        	NakoVarArray a = info.CreateArray ();
+            foreach (NakoAPIFunc f in NakoAPIFuncBank.Instance.FuncList) {
+                NakoVariable v = new NakoVariable ();
+                v.SetBodyAutoType (f.name);
+                a.Add (v);
+            }
+        	return a;
+        }
+
+        private object _getFunctionFurigana (INakoFuncCallInfo info)
+        {
+            string funcName = info.StackPopAsString ();
+            NakoVariable v = new NakoVariable ();
+            NakoAPIFunc f = NakoAPIFuncBank.Instance.FuncList.Find((obj) => (obj.name == funcName));
+            v.SetBodyAutoType (f.kana);
+        	return v;
         }
 
         private object _beep(INakoFuncCallInfo info)
@@ -490,6 +522,39 @@ namespace Libnako.NakoAPI
             double b = info.StackPopAsDouble();
             a = Math.Pow(a,b);
             return a;
+        }
+
+        private object _eq (INakoFuncCallInfo info)
+        {
+            object a = info.StackPop ();
+            object b = info.StackPop ();
+            return a.Equals(b);
+        }
+
+        private object _over (INakoFuncCallInfo info)
+        {
+            double a = info.StackPopAsDouble ();
+            double b = info.StackPopAsDouble ();
+            return a > b;
+        }
+        private object _under (INakoFuncCallInfo info)
+        {
+            double a = info.StackPopAsDouble ();
+            double b = info.StackPopAsDouble ();
+            return a < b;
+        }
+
+        private object _over_or_equal (INakoFuncCallInfo info)
+        {
+            double a = info.StackPopAsDouble ();
+            double b = info.StackPopAsDouble ();
+            return a >= b;
+        }
+        private object _under_or_equal (INakoFuncCallInfo info)
+        {
+            double a = info.StackPopAsDouble ();
+            double b = info.StackPopAsDouble ();
+            return a <= b;
         }
 
 		private object _quit(INakoFuncCallInfo info)

@@ -99,5 +99,23 @@ namespace NakoPluginTest
 			runner.Run(codes);
 			Assert.AreEqual(runner.PrintLog, "1245");
 		}
+        [Test]
+        public void TestKaisu ()
+        {
+            codes = ns.WriteIL (
+                "Iを2から5まで繰り返す\n" +
+                "  PRINT 回数\n" +
+                "\n"
+                );
+            runner.Run (codes);
+            Assert.AreEqual ("1234", runner.PrintLog);
+            codes = ns.WriteIL (
+                "5回\n" +
+                "  PRINT 回数\n" +
+                "\n"
+                );
+            runner.Run (codes);
+            Assert.AreEqual ("12345", runner.PrintLog);
+        }
     }
 }

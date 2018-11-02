@@ -171,7 +171,8 @@ namespace NakoPluginTest
                 "DIR&「"+ConvertPath("\\fuga")+"」にフォルダ作成。\n" +
                 "DIR&「"+ConvertPath("\\piyo")+"」にフォルダ作成。\n" +
                 "DIRのフォルダ列挙して「#」で配列結合して表示。"));
-            Assert.AreEqual(ConvertPath("/tmp/hoge/fuga#/tmp/hoge/piyo"), runner.PrintLog);
+            Assert.AreEqual(System.IO.Path.GetTempPath()+ConvertPath("hoge/fuga")+"#"+System.IO.Path.GetTempPath()+ConvertPath("hoge/piyo"), runner.PrintLog);
+            //Assert.AreEqual(ConvertPath ("/tmp/hoge/fuga#/tmp/hoge/piyo"), runner.PrintLog);
         }
 
         [Test]

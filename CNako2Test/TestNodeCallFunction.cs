@@ -233,6 +233,28 @@ namespace NakoPluginTest
 				"\n");
 			runner.Run(codes);
 			Assert.AreEqual(runner.PrintLog, "ふが");
+            codes = ns.WriteIL(
+                "37の関数A\n"+
+                "●関数B (Sの)\n"+
+                "  S = S / 2\n"+
+                "  PRINT 「{S},」\n"+
+                "  もしS==1ならば戻る\n"+
+                "  m = Sを2で割った余り\n"+
+                "  もしm == 0ならば\n"+
+                "    Sの関数B\n"+
+                "  違えば\n"+
+                "    Sの関数A\n"+
+                "●関数A (Sの)\n"+
+                "  S=S*3+1\n"+
+                "  PRINT 「{S},」\n"+
+                "  m = Sを2で割った余り\n"+
+                "  もしm == 0ならば\n"+
+                "    Sの関数B\n"+
+                "  違えば\n"+
+                "    Sの関数A\n"+
+                "\n");
+            runner.Run(codes);
+            Assert.AreEqual(runner.PrintLog, "112,56,28,14,7,22,11,34,17,52,26,13,40,20,10,5,16,8,4,2,1,");
 		}
         [Test]
         public void TestCallUserFuncAndCheckGlobalVar()
@@ -247,6 +269,63 @@ namespace NakoPluginTest
                 "\n");
             runner.Run(codes);
             Assert.AreEqual("hoge",runner.PrintLog);
+        }
+        [Test]
+        public void TestCallUserFuncRecursive ()
+        {
+            codes = ns.WriteIL(
+                "●フィボナッチ (Iの)\n"+
+                "  もしI<2ならば\n"+
+                "    Iで戻る\n"+
+                "  違えば\n"+
+                "    F1 = (I-2)のフィボナッチ\n" +
+                "    F2 = (I - 1)のフィボナッチ\n"+
+                "    F1 + F2で戻る\n"+
+                "PRINT 6のフィボナッチ\n"+
+                "\n");
+            runner.Run(codes);
+            Assert.AreEqual("8",runner.PrintLog);
+        }
+        [Test]
+        public void TestSetUserFuncToVariable ()
+        {
+            codes = ns.WriteIL (
+                "●関数A (Sの)\n"+
+                "  S+10で戻る\n"+
+                "B = 関数Aの定義\n"+
+                "A [`a`]= B\n"+
+                "PRINT A [`a`](10)\n"+
+                "\n");
+            runner.Run(codes);
+            Assert.AreEqual("20",runner.PrintLog);
+        }
+        [Test]
+        public void TestCallUserFuncWithUserFuncParameter ()
+        { 
+            codes = ns.WriteIL (
+                "●マップ (Sを{ 関数 (1)}Fで)\n"+
+                "  R = F (S)\n"+
+                "  Rで戻る\n"+
+                "●関数A (Sの)\n"+
+                "  S+10で戻る\n"+
+                "RET = マップ (10, 関数Aの定義)\n"+
+                "PRINT RET\n"+
+                "\n");
+            runner.Run(codes);
+            Assert.AreEqual("20",runner.PrintLog);
+        }
+        [Test]
+        public void TestSetUserFuncWithDefaultValue ()
+        { 
+            codes = ns.WriteIL (
+                "●関数A ({整数=10}Sの)\n"+
+                "  S+10で戻る\n"+
+                "B = 関数Aの定義\n"+
+                "A [`a`]= B\n"+
+                "PRINT A [`a`]()\n"+
+                "\n");
+            runner.Run(codes);
+            Assert.AreEqual("20",runner.PrintLog);
         }
     }
 }

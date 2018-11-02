@@ -458,6 +458,7 @@ namespace Libnako.JPNCompiler.ILWriter
         {
             int loopVarNo = node.loopVar.varNo;
 			int labelId = GetLableId();
+            int kaisuVarNo = node.kaisuVarNo;
 
             // (0)
 			NakoILCode label_for_begin = createLABEL("FOR_BEGIN" + labelId.ToString());
@@ -468,6 +469,8 @@ namespace Libnako.JPNCompiler.ILWriter
             result.Add(label_for_begin);
             Write_r(node.nodeFrom);
             addNewILCode(NakoILType.ST_LOCAL, loopVarNo);
+            addNewILCode (NakoILType.LD_CONST_INT, 0L);
+            addNewILCode (NakoILType.ST_LOCAL, kaisuVarNo);
 
             // (2) 条件をコードにする
             // i <= iTo
@@ -481,6 +484,11 @@ namespace Libnako.JPNCompiler.ILWriter
             addNewILCode(NakoILType.LT_EQ);
             // IF BRANCH FALSE
             addNewILCode(NakoILType.BRANCH_FALSE, label_for_end);
+
+			//回数設定
+            addNewILCode (NakoILType.LD_LOCAL, kaisuVarNo);
+            addNewILCode (NakoILType.INC);
+			addNewILCode (NakoILType.ST_LOCAL, kaisuVarNo);
 
             // (3) 繰り返し文を実行する
 			_loop_check_break_continue(node.nodeBlocks, label_for_end, label_for_continue);
@@ -583,6 +591,7 @@ namespace Libnako.JPNCompiler.ILWriter
         private void _repeat_times(NakoNodeRepeatTimes node)
         {
 			int labelId = GetLableId();
+            int kaisuVarNo = node.kaisuVarNo;
 
             // (0)
 			NakoILCode label_for_begin = createLABEL("TIMES_BEGIN" + labelId.ToString());
@@ -608,6 +617,10 @@ namespace Libnako.JPNCompiler.ILWriter
             addNewILCode(NakoILType.LT_EQ);
             // IF BRANCH FALSE
             addNewILCode(NakoILType.BRANCH_FALSE, label_for_end);
+
+            //回数設定
+            addNewILCode (NakoILType.LD_LOCAL, node.loopVarNo);
+			addNewILCode (NakoILType.ST_LOCAL, kaisuVarNo);
 
             // (3) 繰り返し文を実行する
             _loop_check_break_continue(node.nodeBlocks, label_for_end, label_for_begin);
@@ -855,8 +868,13 @@ namespace Libnako.JPNCompiler.ILWriter
                 code.type = NakoILType.USRCALL;
                 code.value = defLabel;
 				if (code.value == null) {
-					//一旦ラベルを設定出来なかったユーザー関数には定義のオブジェクトそのものを入れて、FixLabel内で設定しなおす
-					code.value = node.value;
+                    //一旦ラベルを設定出来なかったユーザー関数には定義のオブジェクトそのものを入れて、FixLabel内で設定しなおす
+                    if (node.func.name != null) {
+                        code.value = node.value;
+                    } else {
+                    //ユーザー関数名がないもの（引数が関数定義だった場合）は、呼び出し先の情報が入った変数を取り出すILを書く
+                        addNewILCode (NakoILType.LD_LOCAL, node.func.varNo);
+                    }
 				}
                 result.Add(code);
             }

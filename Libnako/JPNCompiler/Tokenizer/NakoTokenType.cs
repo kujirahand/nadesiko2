@@ -65,6 +65,8 @@ namespace Libnako.JPNCompiler.Tokenizer
         // ---  ---
         ///<summary>トークンの種類は関数定義です。</summary>
         DEF_FUNCTION,
+        ///<summary>トークンの種類は関数定義のエイリアスです。</summary>
+        DEF_FUNCTION_ALIASE,
         ///<summary>トークンの種類はグループ定義です。</summary>
         DEF_GROUP,
         // --- Flags ---

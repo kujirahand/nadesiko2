@@ -111,6 +111,7 @@ namespace Libnako.JPNCompiler.Parser
         //>            | _foreach
         //>            | _repeat_times
         //>            | _def_function
+        //>            | _def_function_aliase
         //>            | _def_variable
         //>            | _callfunc_stmt
         //>            | _print
@@ -129,6 +130,7 @@ namespace Libnako.JPNCompiler.Parser
             //if (_foreach()) return true;
             if (_repeat_times()) return true;
             if (_def_function()) return true;
+            if (_def_function_aliase ()) return true;
             if (_def_variable()) return true;
             if (_callfunc_stmt()) return true;
             if (_print()) return true;
@@ -341,6 +343,8 @@ namespace Libnako.JPNCompiler.Parser
             fornode.nodeTo = calcStack.Pop();
             fornode.nodeFrom = calcStack.Pop();
 
+            fornode.kaisuVarNo = localVar.GetIndex(NakoReservedWord.KAISU, true); // カウンタ変数「回数」の変数番号を取得
+
             if (!Accept(NakoTokenType.FOR))
             {
                 TokenBack();
@@ -371,6 +375,7 @@ namespace Libnako.JPNCompiler.Parser
             
             NakoNodeRepeatTimes repnode = new NakoNodeRepeatTimes();
             repnode.nodeTimes = calcStack.Pop();
+            repnode.kaisuVarNo = localVar.GetIndex(NakoReservedWord.KAISU, true); // カウンタ変数「回数」の変数番号を取得
             repnode.nodeBlocks = _scope_or_statement();
             repnode.loopVarNo = localVar.CreateVarNameless();
             repnode.timesVarNo = localVar.CreateVarNameless();
@@ -417,10 +422,10 @@ namespace Libnako.JPNCompiler.Parser
             lastNode = repnode;
             return true;
         }
-//TODO:foreachUseIteratorがOKならば消す
+        //TODO:foreachUseIteratorがOKならば消す
         //> _foreach : _value FOREACH _scope_or_statement
         //>          ;
-        private bool _foreach()
+        /*private bool _foreach()
         {
             TokenTry();
             if (!_value()) return false;
@@ -446,7 +451,7 @@ namespace Libnako.JPNCompiler.Parser
             this.parentNode.AddChild(repnode);
             lastNode = repnode;
             return true;
-        }
+        }*/
 		private bool _try_stmt()
 		{
 			if (!Accept(NakoTokenType.TRY)) return false;
@@ -470,9 +475,6 @@ namespace Libnako.JPNCompiler.Parser
 				//TODO:catchの例外種別を取得
 				tok.MoveNext();//skip catch
 				while (Accept(NakoTokenType.EOL)) tok.MoveNext();
-				//while (calcStack.Count > 0) {
-				//	calcStack.Pop ();
-				//}
 				NakoNode nodeCatch = _scope_or_statement();//TODO Add
 				trynode.nodeCatch = nodeCatch;
 			}
@@ -619,7 +621,38 @@ namespace Libnako.JPNCompiler.Parser
                 {
                     nest++;
                 }
-                par_list.Add(tok.CurrentToken);
+
+                if (_aliase ()) {
+                    var value = calcStack.Shift ();
+                    if (value is NakoNodeDefFunction) {
+                        int varNo;
+                        string header;
+                        if (current_scope == NakoVariableScope.Global) {
+                            varNo = globalVar.CreateVarNameless ();
+                            NakoVariable variable = globalVar.GetVar (varNo);
+                            variable.SetBody (value, NakoVarType.UserFunc);
+                            globalVar.SetVar (varNo, variable);//TODO: add local
+                            header = "__func_var_no_global__";
+                        } else {
+                            varNo = localVar.CreateVarNameless ();
+                            NakoVariable variable = localVar.GetVar (varNo);
+                            variable.SetBody (value, NakoVarType.UserFunc);
+                            localVar.SetVar (varNo, variable);//TODO: add local
+                            header = "__func_var_no_local__";
+                        }
+                        NakoToken curToken = tok.CurrentToken;
+                        NakoToken tmpToken = new NakoToken (NakoTokenType.WORD);
+                        tmpToken.LineNo = curToken.LineNo;
+                        tmpToken.IndentLevel = curToken.IndentLevel;
+                        tmpToken.Value = header+varNo.ToString();
+                        par_list.Add (tmpToken);
+                        continue;
+                    } else {
+                        par_list.Add (tok.CurrentToken);
+                    }
+                } else {
+                    par_list.Add (tok.CurrentToken);
+                }
                 tok.MoveNext();
             }
             // 現在のトークン位置を保存
@@ -691,39 +724,50 @@ namespace Libnako.JPNCompiler.Parser
                 callNode.value = defNode;
             }
 
+            _set_args (func, callNode);
             // ---------------------------------
-            if (Accept(NakoTokenType.PARENTHESES_L))
+            // 計算スタックに関数の呼び出しを追加
+            calcStack.Push(callNode);
+            this.lastNode = callNode;
+
+            return true;
+        }
+        private void _set_args (NakoFunc func, NakoNodeCallFunction callNode)
+        {
+            // ---------------------------------
+            if (Accept (NakoTokenType.PARENTHESES_L))
             {
-                _arglist(callNode);
+
+				_arglist (callNode);
                 // TODO ここで引数の数をチェックする処理
             }
             // 引数の数だけノードを取得
-            for (int i = 0; i < func.ArgCount; i++)
+            for (int i = 0; i<func.ArgCount; i++)
             {
-                NakoFuncArg arg = func.args[func.ArgCount - i - 1];
-				NakoNode argNode;
-				bool arg_has_default_value = false;
-				if (arg.defaultValue != null && calcStack.Count < (func.ArgCount - i)) {//初期値があって引数が無い場合に引数に初期値を与える
-					arg_has_default_value = true;
-					foreach (NakoNode stack in calcStack) {
-						if (arg.josiList.IndexOf (stack.josi) >= 0) {
-							arg_has_default_value = false;
-						}
-					}
-				}
-				if (arg_has_default_value) {
-					argNode = new NakoNodeConst ();
-					argNode.value = arg.defaultValue;
-					if (arg.defaultValue is int) {
-						argNode.type = NakoNodeType.INT;
-						argNode.Token = new NakoToken (NakoTokenType.INT);
-					} else if (arg.defaultValue is string) {
-						argNode.type = NakoNodeType.STRING;
-						argNode.Token = new NakoToken (NakoTokenType.STRING);
-					}
-				} else {
-					argNode = calcStack.Pop (arg);
-				}
+                NakoFuncArg arg = func.args [func.ArgCount - i - 1];
+                NakoNode argNode;
+                bool arg_has_default_value = false;
+                if (arg.type != NakoFuncType.UserCall.ToString() && arg.defaultValue != null && calcStack.Count< (func.ArgCount - i)) {//初期値があって引数が無い場合に引数に初期値を与える。引数に関数定義が入っている場合はスキップ
+                    arg_has_default_value = true;
+                    foreach (NakoNode stack in calcStack) {
+                        if (arg.josiList.IndexOf (stack.josi) >= 0) {
+                            arg_has_default_value = false;
+                        }
+                    }
+                }
+                if (arg_has_default_value) {
+                    argNode = new NakoNodeConst ();
+                    argNode.value = arg.defaultValue;
+                    if (arg.defaultValue is int) {
+                        argNode.type = NakoNodeType.INT;
+                        argNode.Token = new NakoToken (NakoTokenType.INT);
+                    } else if (arg.defaultValue is string) {
+                        argNode.type = NakoNodeType.STRING;
+                        argNode.Token = new NakoToken (NakoTokenType.STRING);
+                    }
+                } else {
+                    argNode = calcStack.Pop (arg);
+                }
                 if (arg.varBy == VarByType.ByRef)
                 {
                     if (argNode.type == NakoNodeType.LD_VARIABLE)
@@ -733,16 +777,37 @@ namespace Libnako.JPNCompiler.Parser
                 }
                 callNode.AddChild(argNode);
             }
+        }
 
-            // ---------------------------------
-            // 計算スタックに関数の呼び出しを追加
-            calcStack.Push(callNode);
-            this.lastNode = callNode;
+        private bool _def_function_aliase ()
+        {
+            //関数名と引数の定義だけ。実装はdef functionで行う。
+            if (!Accept (NakoTokenType.DEF_FUNCTION_ALIASE)) return false;
+            NakoToken t = tok.CurrentToken;
+            tok.MoveNext(); // '*'
 
+            NakoFunc userFunc = new NakoFunc ();
+            userFunc.funcType = NakoFuncType.UserCall;
+
+			// 引数 + 関数名の取得
+			_def_function_args (userFunc);
+            tok.MoveNext ();//scopeトークンを飛ばす
+            PushFrame ();
+            NakoNodeDefFunction funcNode = new NakoNodeDefFunction ();
+            funcNode.func = userFunc;
+            parentNode = funcNode.funcBody = new NakoNode ();
+            NakoVariable v = new NakoVariable ();
+            v.SetBody(funcNode, NakoVarType.UserFunc);
+            PopFrame ();
+            globalVar.CreateVar(userFunc.name, v);
+            // 関数の宣言は、ノードのトップ直下に追加する
+            if (!this.topNode.hasChildren())
+			{
+            	this.topNode.AddChild (new NakoNode ());
+            }
+            this.topNode.Children.Insert(0, funcNode);
             return true;
         }
-			
-
         //> _def_function : DEF_FUNCTION _def_function_args _scope
         //>               ;
         private bool _def_function()
@@ -761,10 +826,19 @@ namespace Libnako.JPNCompiler.Parser
             PushFrame();
             NakoNodeDefFunction funcNode = new NakoNodeDefFunction();
             funcNode.func = userFunc;
-            parentNode = funcNode.funcBody = new NakoNode();
+            foreach (NakoNode n in this.topNode.Children) {
+                if (n is NakoNodeDefFunction) {
+                    NakoNodeDefFunction f = (NakoNodeDefFunction)n;
+                    if (f.func.name == userFunc.name) {
+                        funcNode = f;
+                    }
+                }
+            }
             funcNode.RegistArgsToLocalVar(globalVar);
+            parentNode = funcNode.funcBody;// = new NakoNode ();
             localVar = funcNode.localVar;
 			current_scope = NakoVariableScope.Local;
+            NakoVariable v = globalVar.GetVar (userFunc.name);
             if (!_scope())
             {
                 throw new NakoParserException("関数定義中のエラー。", t);
@@ -772,15 +846,13 @@ namespace Libnako.JPNCompiler.Parser
 			current_scope = NakoVariableScope.Global;
             PopFrame();
             // グローバル変数に登録
-            NakoVariable v = new NakoVariable();
-            v.SetBody(funcNode, NakoVarType.UserFunc);
-            globalVar.CreateVar(userFunc.name, v);
+            globalVar.SetVar(userFunc.name, v);
             // 関数の宣言は、ノードのトップ直下に追加する
-            if (!this.topNode.hasChildren())
+            /*if (!this.topNode.hasChildren())
             {
                 this.topNode.AddChild(new NakoNode());
             }
-            this.topNode.Children.Insert(0, funcNode);
+            this.topNode.Children.Insert(0, funcNode);*/
             return true;
         }
 
@@ -877,6 +949,21 @@ namespace Libnako.JPNCompiler.Parser
             NakoNodeLet node = new NakoNodeLet();
             node.VarNode = (NakoNodeVariable)lastNode; // _setVariable のノード
             tok.MoveNext();
+            if (_aliase()) {
+                var value = calcStack.Shift ();
+                if (value is NakoNodeDefFunction) {
+                    if (node.VarNode.scope == NakoVariableScope.Global) {
+                        NakoVariable variable = globalVar.GetVar (node.VarNode.varNo);
+                        variable.SetBody (value, NakoVarType.UserFunc);
+                        globalVar.SetVar (node.VarNode.varNo, variable);
+                    } else {
+                        NakoVariable variable = localVar.GetVar (node.VarNode.varNo);
+                        variable.SetBody (value, NakoVarType.UserFunc);
+                        localVar.SetVar (node.VarNode.varNo, variable);
+                    }
+                }
+                return true;
+            }
             if (!_value())
             {
                 throw new NakoParserException("代入文で値がありません。", tok.CurrentToken);
@@ -887,22 +974,45 @@ namespace Libnako.JPNCompiler.Parser
             while (calcStack.Count > 0) 
             {
 				var value = calcStack.Shift ();
-				//TODO:let instance
-				if (value is NakoNodeCallFunction) {
-					NakoNodeCallFunction caller = (NakoNodeCallFunction)value;
-					if (caller.func.resultType == NakoVarType.Instance) {
-						node.VarNode.varType = NakoVarType.Instance;
-						if (caller.func is NakoAPIFunc) {
-							node.VarNode.instanceName = ((NakoAPIFunc)caller.func).PluginInstance.Name;
-						}
-						//TODO:user defined instanceName
-						//store node info to globalVar to use instance information in function call
-						NakoVariable variable = globalVar.GetVar (node.VarNode.varNo);
-                        variable.SetBody(null, NakoVarType.Instance);
+                //TODO:let instance
+                if (value is NakoNodeCallFunction) {
+                    NakoNodeCallFunction caller = (NakoNodeCallFunction)value;
+                    if (caller.func.resultType == NakoVarType.Instance) {
+                        node.VarNode.varType = NakoVarType.Instance;
+                        if (caller.func is NakoAPIFunc) {
+                            node.VarNode.instanceName = ((NakoAPIFunc)caller.func).PluginInstance.Name;
+                        }
+                        //TODO:user defined instanceName
+                        //store node info to globalVar to use instance information in function call
+                        NakoVariable variable = globalVar.GetVar (node.VarNode.varNo);
+                        variable.SetBody (null, NakoVarType.Instance);
                         variable.InstanceType = node.VarNode.instanceName;
-						globalVar.SetVar (node.VarNode.varNo, variable);
-					}
-				}
+                        if (node.VarNode.scope == NakoVariableScope.Global) {
+                            globalVar.SetVar (node.VarNode.varNo, variable);
+                        } else {
+                            localVar.SetVar (node.VarNode.varNo, variable);
+                        }
+                    }
+                } else if (value is NakoNodeVariable) {
+                    NakoNodeVariable nodevar = (NakoNodeVariable)value;
+                    if (nodevar.varType == NakoVarType.UserFunc) {
+                        NakoVariable nodevariable = (NakoVariable)nodevar.value;
+                        if (nodevariable.Body is NakoNodeDefFunction) {//関数定義の代入はノードを作らない
+                            NakoNodeDefFunction defNode = (NakoNodeDefFunction)nodevariable.Body;
+                            NakoVariable variable;
+                            if (node.VarNode.scope == NakoVariableScope.Global) {
+                                variable = globalVar.GetVar (node.VarNode.varNo);//TODO: add local
+                                variable.SetBody (defNode, NakoVarType.UserFunc);
+                                globalVar.SetVar (node.VarNode.varNo, variable);
+                            } else {
+                                variable = localVar.GetVar (node.VarNode.varNo);//TODO: add local
+                                variable.SetBody (defNode, NakoVarType.UserFunc);
+                                localVar.SetVar (node.VarNode.varNo, variable);
+                            }
+                            return true;
+                        }
+                   }
+                }
                 valuenode.AddChild(value);
             }
             node.ValueNode = (NakoNode)valuenode;
@@ -916,13 +1026,22 @@ namespace Libnako.JPNCompiler.Parser
         {
             int varno;
             // local ?
-            varno = localVar.GetIndex(name);
+            if (name.Contains ("__func_var_no_local__")) {
+                varno = int.Parse (name.Replace ("__func_var_no_local__", ""));
+            }else{
+                varno = localVar.GetIndex (name);
+            }
             if (varno >= 0)
             {
                 n.scope = NakoVariableScope.Local;
                 n.varNo = varno;
+                //load function definition
+                NakoVariable variable = localVar.GetVar (varno);
+                if (variable.Type == NakoVarType.UserFunc) {//関数定義が入っている変数に代入する場合に、Bodyをnullにする
+                    n.varType = NakoVarType.UserFunc;
+                    n.value = variable;
+                }
                 //load instance information
-                NakoVariable variable = localVar.GetVar (name);
                 if (variable.Type == NakoVarType.Instance) {
                     n.instanceName = variable.InstanceType;
                     n.varType = variable.Type;
@@ -930,13 +1049,22 @@ namespace Libnako.JPNCompiler.Parser
                 return;
             }
             // global ?
-            varno = globalVar.GetIndex(name);
+            if (name.Contains ("__func_var_no_global__")) {
+                varno = int.Parse (name.Replace ("__func_var_no_global__", ""));
+            }else{
+                varno = globalVar.GetIndex(name);
+            }
             if (varno >= 0)
             {
                 n.scope = NakoVariableScope.Global;
                 n.varNo = varno;
-				//load instance information
-				NakoVariable variable = globalVar.GetVar (name);
+                NakoVariable variable = globalVar.GetVar (varno);
+                //load function definition
+                if (variable.Type == NakoVarType.UserFunc) {
+                    n.varType = NakoVarType.UserFunc;
+                    n.value = variable;
+                }
+                //load instance information
                 if (variable.Type == NakoVarType.Instance) {
                     n.instanceName = variable.InstanceType;
 					n.varType = variable.Type;
@@ -945,12 +1073,54 @@ namespace Libnako.JPNCompiler.Parser
             }
             // Create variable
             //n.scope = NakoVariableScope.Global;
-            n.varNo = globalVar.CreateVar(name);				
+            if (n.scope == NakoVariableScope.Global) {
+                n.varNo = globalVar.CreateVar (name);	
+            } else {
+                n.varNo = localVar.CreateVar (name);
+            }
+        }
+        private bool _searchForFunction ()//letの左側でのみ使う
+        {
+            TokenTry ();
+            while (!tok.IsEOF() && tok.CurrentToken.Type != NakoTokenType.EOL && !tok.IsEOF ()) {
+                if (Accept (NakoTokenType.FUNCTION_NAME)) {
+                    TokenBack ();
+                    return true;
+                }
+                else if (Accept (NakoTokenType.WORD)) {//変数に代入した関数を探す。呼び出す場合、必ずFUNC(a,b,c)という形で呼び出す。
+                    bool hasParenthesesL = false;
+                    TokenTry ();
+                    _setVariable ();
+                    if (!tok.IsEOF() && tok.CurrentToken.Type == NakoTokenType.PARENTHESES_L) {
+                        hasParenthesesL = true;
+                    }
+                    TokenBack ();
+                    if (lastNode is NakoNodeVariable) {
+                        if (hasParenthesesL) {
+                            NakoNodeVariable n = (NakoNodeVariable)lastNode;
+                            NakoVariable var;
+                            if (n.scope == NakoVariableScope.Global) {
+                                var = globalVar.GetVar (n.varNo);
+                            } else {
+                                var = localVar.GetVar (n.varNo);
+                            }
+                            if (var.Body is NakoNodeDefFunction) {
+                                TokenBack ();
+                                return true;
+                            }
+                        }
+                    }
+
+                }
+                tok.MoveNext ();
+            }
+            TokenBack ();
+            return false;
         }
 
         //> _setVariable : WORD _variable_elements
         //>              | WORD ;
-        private bool _setVariable()
+        private bool _setVariable()//letの左側でのみ使う
         {
             if (!Accept(NakoTokenType.WORD)) return false;
             // 設定用変数の取得
@@ -1067,6 +1237,31 @@ namespace Libnako.JPNCompiler.Parser
                 _canCallJFunction = tmp;
             }
         }
+        /// <summary>
+        /// 関数の定義をノードに代入する
+        /// </summary>
+        /// <returns>bool</returns>
+        protected bool _aliase ()
+        {
+            if (!Accept (NakoTokenType.FUNCTION_NAME)) return false;
+            //TODO:関数の定義の場合の処理
+            if (tok.CurrentToken.Josi == "の" && tok.NextToken.Value == "定義") {
+                NakoToken t = tok.CurrentToken;
+                string fname = t.GetValueAsName ();
+                NakoVariable var;
+                var = globalVar.GetVar (fname);//関数定義はグローバル変数にある。
+                if (var == null)
+                {
+                    throw new NakoParserException ("関数『" + fname + "』が見あたりません。", t);
+                }
+                NakoNodeDefFunction defNode = (NakoNodeDefFunction)var.Body;
+                calcStack.Push(defNode);
+				tok.MoveNext ();
+                tok.MoveNext ();
+                return true;
+            }
+            return false;
+        }
         
         //> _value : FUNCTION_NAME | _calc_fact ;
         /// <summary>
@@ -1089,6 +1284,7 @@ namespace Libnako.JPNCompiler.Parser
                 default:
                     return false;
             }
+
             // TODO:計算式の中での関数呼び出し
             // FUNCTION(with args)
             if (_callfunc_with_args())
@@ -1135,7 +1331,6 @@ namespace Libnako.JPNCompiler.Parser
             if (_variable()) return true;
             return false;
         }
-
         private bool _callfunc_with_args()
         {
             // 例外的な処理
@@ -1144,26 +1339,60 @@ namespace Libnako.JPNCompiler.Parser
             // (例) A\3を表示 → この場合、円マーク以降は明らかに関数呼び出しではない
             // OK: (A\3)を表示 NG: A (\3を表示)
             if (!_canCallJFunction) return false;
-            
+
             // 関数があるか調べる
-            if (!tok.SearchToken(NakoTokenType.FUNCTION_NAME, true)) return false;
-            
+            if (!_searchForFunction ()) {
+				return false;
+            }
+
             // 関数として処理を継続
             TokenTry();
             while (!tok.IsEOF())
             {
                 if (Accept(NakoTokenType.EOL)) break;
-                if (Accept(NakoTokenType.FUNCTION_NAME))
-                {
-                    if (!_callfunc())
-                    {
-                        TokenBack();
+                if (Accept (NakoTokenType.FUNCTION_NAME)) {
+                    if (!_callfunc ()) {
+                        TokenBack ();
                         return false;
                     }
                     // 継続した関数呼び出しがあるかチェック！
-                    _callfunc_with_args();
-                    TokenFinally();
+                    _callfunc_with_args ();
+                    TokenFinally ();
                     return true;
+                } else {//変数に代入した関数の呼び出し。呼び出し時は必ず（）をつける
+                    TokenTry ();//_setVariableはトークンを一つ移動させるので、一旦戻す
+                    bool isVariableSet = _setVariable ();
+                    TokenBack ();
+                    if (isVariableSet && lastNode is NakoNodeVariable)//代入された変数による呼び出し
+                    {
+                        NakoNodeVariable n = (NakoNodeVariable)lastNode;
+                        NakoVariable var;
+                        if (n.scope == NakoVariableScope.Global) {
+                            var = globalVar.GetVar (n.varNo);
+                        } else {
+                            var = localVar.GetVar (n.varNo);
+                        }
+                        if (var.Body is NakoNodeDefFunction) {
+                            _setVariable ();
+                            NakoNodeDefFunction defNode = (NakoNodeDefFunction)var.Body;
+                            NakoNodeCallFunction callNode = new NakoNodeCallFunction ();
+                            NakoFunc func = null;
+                            func = callNode.func = defNode.func;
+                            func.varNo = n.varNo;
+                            callNode.value = defNode;
+                            if (tok.IsEOF() || !Accept (NakoTokenType.PARENTHESES_L)) {
+                                TokenBack ();
+                                return false;
+                            }
+                            _set_args (func, callNode);
+                            calcStack.Push (callNode);
+                            this.lastNode = callNode;
+                            // 継続した関数呼び出しがあるかチェック！
+                            _callfunc_with_args ();
+                            TokenFinally ();//TODO:複数回呼び出し
+                            return true;
+                        }
+                    }
                 }
                 if (!_calc_fact())
                 {

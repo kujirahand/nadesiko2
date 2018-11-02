@@ -11,7 +11,7 @@
     <RootNamespace>NakoPluginTest</RootNamespace>
     <AssemblyName>NakoPluginTest</AssemblyName>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,21 +36,10 @@
       <HintPath>..\Libnako\bin\Debug\Libnako.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="nunit.core, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
-    <Reference Include="nunit.util, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
-    <Reference Include="nunit.mocks, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
-    <Reference Include="nunit.framework, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
-    <Reference Include="nunit-console-runner, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
-    <Reference Include="nunit.core.extensions, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
-    <Reference Include="nunit.core.interfaces, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
-    <Reference Include="nunit.framework.extensions, Version=2.4.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77" />
     <Reference Include="nunit.framework">
-      <HintPath>..\..\..\..\usr\lib\mono\gac\nunit.framework\2.5.10.0__96d09a1eb7f44a77\nunit.framework.dll</HintPath>
+      <HintPath>..\packages\NUnit.2.6.4\lib\nunit.framework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -60,7 +50,6 @@
     <Compile Include="TestNakoPluginSample.cs" />
     <Compile Include="TestNakoPluginTag.cs" />
     <Compile Include="TestNakoPluginFile.cs" />
-    <Compile Include="TestNakoADO.cs" />
     <Compile Include="TestNakoPluginSystem.cs" />
     <Compile Include="TestNakoPluginCtrl.cs" />
     <Compile Include="TestNakoPluginEval.cs" />
@@ -70,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="NakoPluginTest.nunit" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -87,14 +77,6 @@
     <ProjectReference Include="..\NakoPluginFile\NakoPluginFile.csproj">
       <Project>{29BCC59A-E35E-4096-B417-16335E41CF93}</Project>
       <Name>NakoPluginFile</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NakoPluginDateTime\NakoPluginDateTime.csproj">
-      <Project>{CD0D883A-284E-4DDE-859A-A303952EC2BC}</Project>
-      <Name>NakoPluginDateTime</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NakoPluginHttp\NakoPluginHttp.csproj">
-      <Project>{E6657194-A701-4796-B8FE-8DD7FCE17FF3}</Project>
-      <Name>NakoPluginHttp</Name>
     </ProjectReference>
     <ProjectReference Include="..\NakoPluginRegex\NakoPluginRegex.csproj">
       <Project>{A184B322-315A-415A-81DC-6F6B8AB68356}</Project>
@@ -127,6 +109,14 @@
     <ProjectReference Include="..\NakoPluginEval\NakoPluginEval.csproj">
       <Project>{81FD7FE3-0317-421E-B99C-D10BBD58F623}</Project>
       <Name>NakoPluginEval</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NakoPluginDateTime\NakoPluginDateTime.csproj">
+      <Project>{CD0D883A-284E-4DDE-859A-A303952EC2BC}</Project>
+      <Name>NakoPluginDateTime</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NakoPluginHttp\NakoPluginHttp.csproj">
+      <Project>{E6657194-A701-4796-B8FE-8DD7FCE17FF3}</Project>
+      <Name>NakoPluginHttp</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -227,5 +227,13 @@ namespace Libnako.JPNCompiler
             }
             return v.Body;
         }
+        /// <summary>
+        /// Count this instance.
+        /// </summary>
+        /// <returns>The count.</returns>
+        public int Count ()
+        {
+            return list.Count;
+        }
     }
 }
